@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FishKiller Trainer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="splash-active">
+  <section class="splash-screen" id="splash-screen" aria-label="FishKiller launch screen">
+    <div class="splash-mark" aria-hidden="true">
+      <div class="splash-fish">
+        <span class="fish-tail"></span>
+        <span class="fish-body"></span>
+        <span class="fish-eye">X</span>
+      </div>
+      <h1>FishKiller</h1>
+    </div>
+    <button class="splash-start" id="splash-start-button" type="button" aria-label="Start FishKiller">
+      <span class="power-icon" aria-hidden="true"></span>
+    </button>
+  </section>
+
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <div class="ambient ambient-three"></div>
+
+  <div class="app-shell">
+    <header class="app-topbar">
+      <div class="brand-lockup" aria-label="FishKiller">
+        <div class="splash-fish brand-fish" aria-hidden="true">
+          <span class="fish-tail"></span>
+          <span class="fish-body"></span>
+          <span class="fish-eye">X</span>
+        </div>
+        <div class="brand-copy">
+          <span>Poker trainer</span>
+          <strong>FishKiller</strong>
+        </div>
+      </div>
+
+      <button class="profile-button" id="profile-menu-button" type="button" aria-expanded="false" aria-controls="profile-menu">
+        <span class="profile-avatar" aria-hidden="true">PK</span>
+        <span class="profile-summary">
+          <span>Level <strong id="profile-level-display">1</strong></span>
+          <span class="profile-detail-row">
+            <span class="profile-xp-text" id="profile-xp-text">0 XP</span>
+            <span class="profile-heart-meter" id="profile-heart-meter" aria-label="5 hearts"></span>
+          </span>
+          <span class="profile-xp-track"><span id="profile-xp-fill"></span></span>
+        </span>
+      </button>
+    </header>
+
+    <aside class="profile-menu panel hidden" id="profile-menu">
+      <div class="profile-menu-head">
+        <div>
+          <span class="eyebrow">Profile</span>
+          <h2>Progress locker</h2>
+        </div>
+        <span class="profile-avatar large" aria-hidden="true">PK</span>
+      </div>
+
+      <div class="metric-row">
+        <article class="metric-card">
+          <span class="metric-label">Total XP</span>
+          <strong class="metric-value" id="total-xp-display">0</strong>
+          <span class="metric-subtext">All formats combined</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Selected Focus</span>
+          <strong class="metric-value" id="selected-xp-display">0</strong>
+          <span class="metric-subtext" id="selected-xp-label">6-Max mastery XP</span>
+        </article>
+      </div>
+
+      <div class="profile-resource-grid">
+        <div class="resource-pill hearts-pill">
+          <span class="pill-label">Hearts</span>
+          <div class="pill-value" id="hearts-display">5 / 5</div>
+          <span class="pill-sub" id="hearts-timer">Full stack ready</span>
+        </div>
+
+        <div class="resource-pill boost-pill">
+          <span class="pill-label">XP Boost</span>
+          <div class="pill-value" id="boost-display">0</div>
+          <span class="pill-sub" id="boost-subtitle">Earned from quests</span>
+        </div>
+      </div>
+
+      <section class="section-block">
+        <div class="section-head">
+          <h2>Daily Quests</h2>
+          <span class="section-badge">Auto-claimed</span>
+        </div>
+        <div class="quest-list" id="quest-list"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-head">
+          <h2>Card Rewards</h2>
+          <span class="section-badge">XP unlocks</span>
+        </div>
+        <div class="reward-list" id="reward-list"></div>
+      </section>
+    </aside>
+
+    <main class="workspace">
+      <section class="home-menu panel">
+        <div class="home-menu-head">
+          <span class="eyebrow">Choose your table</span>
+          <h2 id="hero-title">Pick a table size and start a fresh run.</h2>
+          <p id="hero-subtitle">Ten randomized preflop spots, three strikes max, then a separate retry round for your misses.</p>
+        </div>
+
+        <div class="table-size-list" id="table-size-list"></div>
+
+        <div class="home-menu-footer">
+          <section class="mode-panel">
+            <div class="section-head">
+              <h2>Practice Mode</h2>
+              <span class="section-badge" id="mode-table-label">6-Max</span>
+            </div>
+            <div class="mode-list" id="mode-list"></div>
+          </section>
+
+          <section class="launch-panel">
+            <span class="launch-kicker">Ready when you are</span>
+            <button class="primary-button" id="start-session-button">Start New Session</button>
+          </section>
+        </div>
+      </section>
+
+      <section class="trainer-grid">
+        <article class="scenario-panel panel">
+          <div class="scenario-topline">
+            <div class="session-chip" id="session-chip">Ready</div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="session-figures">
+              <span id="session-counter">0 / 0</span>
+              <span id="mistake-counter">0 mistakes</span>
+            </div>
+          </div>
+
+          <div class="scenario-card" id="scenario-card">
+            <div class="scenario-meta">
+              <span id="scenario-table">Current Pack: 100bb Cash</span>
+              <span id="scenario-difficulty">Core</span>
+            </div>
+
+            <div class="betting-line" id="betting-line"></div>
+
+            <div class="cards-row">
+              <div class="hero-card" id="hero-card-left">
+                <span class="card-rank">A</span>
+                <span class="card-suit suit-spade" aria-label="Spades" title="Spades">&spades;</span>
+              </div>
+              <div class="hero-card" id="hero-card-right">
+                <span class="card-rank">K</span>
+                <span class="card-suit suit-heart" aria-label="Hearts" title="Hearts">&hearts;</span>
+              </div>
+            </div>
+
+            <h3 id="scenario-title">Session waits here.</h3>
+            <p class="scenario-copy" id="scenario-copy">Choose a format and launch a short trainer. Each mistake is corrected immediately, and missed spots are saved for a retry round.</p>
+
+            <div class="fact-grid" id="scenario-facts"></div>
+            <div class="table-visual" id="table-visual"></div>
+            <div class="answer-grid" id="answer-grid"></div>
+          </div>
+
+          <div class="feedback-band neutral" id="feedback-band">
+            <div>
+              <span class="feedback-label" id="feedback-label">Warm-up</span>
+              <p id="feedback-text">Treat this build as a polished training shell with a starter pack of solver-style preflop spots across four table sizes.</p>
+            </div>
+            <div class="feedback-actions">
+              <button class="secondary-button hidden" id="gto-table-button">View GTO Table</button>
+              <button class="secondary-button" id="continue-button" disabled>Continue</button>
+            </div>
+          </div>
+        </article>
+
+        <aside class="side-panel">
+          <article class="panel session-summary-card">
+            <div class="section-head">
+              <h3>Session Rules</h3>
+              <span class="section-badge">3-5 minutes</span>
+            </div>
+            <div class="rule-list">
+              <div class="rule-item">
+                <strong>10 spots per main session</strong>
+                <span>Fast enough to feel punchy, long enough to build pattern recognition.</span>
+              </div>
+              <div class="rule-item">
+                <strong>3 mistakes ends the run</strong>
+                <span>Only a failed main session costs a heart.</span>
+              </div>
+              <div class="rule-item">
+                <strong>Retry misses at the end</strong>
+                <span>Review rounds let you clean up your leaks without burning hearts.</span>
+              </div>
+              <div class="rule-item">
+                <strong>Separate XP by format</strong>
+                <span>Heads-up, 3-max, 6-max, and 9-max all track independently.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel recent-card">
+            <div class="section-head">
+              <h3>Last Result</h3>
+              <span class="section-badge" id="last-grade">No run yet</span>
+            </div>
+            <div class="result-grid">
+              <div class="result-item">
+                <span>XP Earned</span>
+                <strong id="last-xp">0</strong>
+              </div>
+              <div class="result-item">
+                <span>Accuracy</span>
+                <strong id="last-accuracy">0%</strong>
+              </div>
+              <div class="result-item">
+                <span>Table Size</span>
+                <strong id="last-table">-</strong>
+              </div>
+              <div class="result-item">
+                <span>Missed Spots</span>
+                <strong id="last-misses">0</strong>
+              </div>
+            </div>
+            <p id="last-note">Finish a session to populate your most recent breakdown and review prompt.</p>
+          </article>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal hidden" id="summary-modal">
+    <div class="modal-card panel">
+      <span class="eyebrow" id="modal-kicker">Session complete</span>
+      <h3 id="modal-title">Sharp work.</h3>
+      <p id="modal-copy">You can jump into another run or circle back to the spots you missed.</p>
+
+      <div class="modal-stat-grid">
+        <div class="modal-stat">
+          <span>Grade</span>
+          <strong id="modal-grade">A</strong>
+        </div>
+        <div class="modal-stat">
+          <span>XP</span>
+          <strong id="modal-xp">0</strong>
+        </div>
+        <div class="modal-stat">
+          <span>Accuracy</span>
+          <strong id="modal-accuracy">0%</strong>
+        </div>
+        <div class="modal-stat">
+          <span>Misses</span>
+          <strong id="modal-misses">0</strong>
+        </div>
+        <div class="modal-stat">
+          <span>Avg Time</span>
+          <strong id="modal-average-time">0.0s</strong>
+        </div>
+      </div>
+
+      <div class="review-list" id="modal-review-list"></div>
+
+      <div class="modal-actions">
+        <button class="secondary-button" id="modal-close-button">Close</button>
+        <button class="secondary-button hidden" id="retry-misses-button">Retry Misses</button>
+        <button class="primary-button" id="modal-new-session-button">Start Fresh Session</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="gto-modal">
+    <div class="modal-card panel">
+      <span class="eyebrow" id="gto-kicker">GTO table</span>
+      <h3 id="gto-title">Baseline action table</h3>
+      <p id="gto-copy">Compare your choice against the trainer baseline for this exact spot.</p>
+      <div class="gto-legend" id="gto-legend"></div>
+      <div class="gto-matrix-wrap">
+        <div class="gto-matrix" id="gto-matrix"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="primary-button" id="gto-close-button">Back to Lesson</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toast-stack"></div>
+
+  <script src="scenarios-hu.js"></script>
+  <script src="scenarios-three.js"></script>
+  <script src="scenarios-six.js"></script>
+  <script src="scenarios-nine.js"></script>
+  <script src="solver-library.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
