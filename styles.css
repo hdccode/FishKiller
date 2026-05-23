@@ -2091,6 +2091,40 @@ select {
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.preflop-range-matrix .gto-cell {
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-items: center;
+  padding: 0.34rem 0.2rem 0.26rem;
+  line-height: 1;
+}
+
+.preflop-range-matrix .gto-cell span {
+  position: relative;
+  z-index: 1;
+}
+
+.preflop-range-matrix .gto-cell em {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.18rem;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.52rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.gto-empty-state {
+  grid-column: 1 / -1;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .gto-raise {
   background: linear-gradient(180deg, rgba(28, 197, 139, 0.78), rgba(11, 120, 85, 0.92));
 }

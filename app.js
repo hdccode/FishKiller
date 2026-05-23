@@ -1661,7 +1661,8 @@ function renderPreflopRangeAnswers(question) {
 }
 
 function renderPreflopRangeFeedback(question) {
-  elements.gtoTableButton.classList.add("hidden");
+  elements.gtoTableButton.classList.remove("hidden");
+  elements.gtoTableButton.textContent = "View Range Table";
 
   if (!question.answered) {
     elements.feedbackBand.className = "feedback-band neutral";
@@ -4322,6 +4323,7 @@ function shouldShowFinalRaiseResponseOptions(question) {
 
 function renderFeedback(spot, question) {
   elements.gtoTableButton.classList.add("hidden");
+  elements.gtoTableButton.textContent = "View GTO Table";
 
   if (question.decisionReview) {
     const review = question.decisionReview;
@@ -4517,6 +4519,11 @@ function createReviewListMarkup(items) {
 }
 
 function openGtoModal() {
+  if (activeSession?.trainingEngine === TRAINING_ENGINE_IDS.preflopRange) {
+    openPreflopRangeModal();
+    return;
+  }
+
   const question = getCurrentQuestion();
   const scenario = getCurrentScenario();
   const baseSpot = getCurrentSpot();
@@ -4533,6 +4540,7 @@ function openGtoModal() {
   }
 
   const bettingSummary = createBettingSummary(scenario);
+  elements.gtoMatrix.classList.remove("preflop-range-matrix");
   elements.gtoKicker.textContent = `${TABLES[scenario.tableSize].label} - ${scenario.pack}`;
   elements.gtoTitle.textContent = `${scenario.heroSeat} ${getStreetLabel(spot.street)} matrix`;
   elements.gtoCopy.textContent = `${formatHandForDisplay(scenario.heroHand)} in a ${getSpotPotLabel(spot, bettingSummary)} pot. Imported solved packs are used first when they match; otherwise FishSolver samples equity, estimates EV, and marks value, blocker bluffs, traps, and mixed-frequency hands.`;
@@ -4541,8 +4549,79 @@ function openGtoModal() {
   elements.gtoModal.classList.remove("hidden");
 }
 
+function openPreflopRangeModal() {
+  const question = getCurrentQuestion();
+  const spot = getActivePreflopRangeSpot();
+  const openSize = spot?.raiseSize?.label || "Open 2.3bb";
+  elements.gtoKicker.textContent = "6-Max Preflop Range";
+  elements.gtoTitle.textContent = "BTN first-in range";
+  elements.gtoCopy.textContent = `6-max 100bb - BTN first in - ${openSize}`;
+  elements.gtoLegend.innerHTML = createPreflopRangeLegend();
+
+  try {
+    if (!window.FishKillerPreflopEngine || !spot) {
+      throw new Error("Preflop range data is not loaded.");
+    }
+
+    const matrix = window.FishKillerPreflopEngine.buildPreflopRangeMatrix(spot);
+    elements.gtoMatrix.classList.add("preflop-range-matrix");
+    elements.gtoMatrix.innerHTML = createPreflopRangeMatrix(matrix, question?.handClass || "");
+  } catch (error) {
+    console.warn("Failed to render preflop range matrix", error);
+    elements.gtoMatrix.classList.remove("preflop-range-matrix");
+    elements.gtoMatrix.innerHTML = `<div class="gto-empty-state">Range matrix is unavailable right now. The trainer can still continue.</div>`;
+  }
+
+  elements.gtoModal.classList.remove("hidden");
+}
+
 function closeGtoModal() {
   elements.gtoModal.classList.add("hidden");
+  elements.gtoMatrix.classList.remove("preflop-range-matrix");
+}
+
+function createPreflopRangeLegend() {
+  return [
+    `<span class="legend-raise">Raise</span>`,
+    `<span class="legend-fold">Fold</span>`,
+    `<span class="legend-mix">Mixed</span>`,
+    `<span class="legend-hero">Current hand</span>`,
+  ].join("");
+}
+
+function createPreflopRangeMatrix(matrix, heroHandClass) {
+  const normalizedHeroHand = heroHandClass ? normalizeHandClass(heroHandClass) : "";
+  return matrix.cells.map((cell) => {
+    const actionClass = cell.dominantAction === "raise" ? "gto-raise" : "gto-fold";
+    const mixedClass = cell.mixed ? " gto-mix" : "";
+    const heroClass = cell.handClass === normalizedHeroHand ? " hero-hand" : "";
+    const frequencyText = formatPreflopCellFrequencies(cell.actions);
+    const title = `${cell.handClass}: ${getPreflopActionLabel(preflopRangeSpot?.legalActions || [], cell.dominantAction)}. ${frequencyText}`;
+    return `
+      <div class="gto-cell ${actionClass}${mixedClass}${heroClass}" title="${title}">
+        <span>${cell.handClass}</span>
+        <em>${formatPreflopCellCompact(cell.actions)}</em>
+      </div>
+    `;
+  }).join("");
+}
+
+function formatPreflopCellFrequencies(actions = {}) {
+  return Object.entries(actions)
+    .map(([actionId, frequency]) => `${getPreflopActionLabel(preflopRangeSpot?.legalActions || [], actionId)} ${formatPercent(frequency)}`)
+    .join(" / ");
+}
+
+function formatPreflopCellCompact(actions = {}) {
+  const raise = actions.raise || 0;
+  const fold = actions.fold || 0;
+  if (raise > 0 && fold > 0) {
+    return `R${formatPercent(raise)} F${formatPercent(fold)}`;
+  }
+  if (raise > 0) {
+    return `R${formatPercent(raise)}`;
+  }
+  return `F${formatPercent(fold)}`;
 }
 
 function createGtoLegend(spot) {
