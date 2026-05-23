@@ -46,8 +46,14 @@ function runModuleAssertions() {
   const packs = loadRangePacks(path.join(ROOT, "data", "preflop-ranges"));
   const ip = findSpot(packs, "demo_6max_btn_rfi_100bb");
   const oop = findSpot(packs, "demo_6max_bb_vs_btn_open_100bb");
+  const realBtnRfi = findSpot(packs, "fk_6max_100bb_btn_rfi_unopened_v1");
   assert(ip, "IP demo spot should exist");
   assert(oop, "OOP demo spot should exist");
+  assert(realBtnRfi, "Real 6-max BTN RFI spot should exist");
+  assert.equal(realBtnRfi.pack.sourceType, "manual");
+  assert.equal(realBtnRfi.pack.usableAsRealTrainingData, true);
+  assert.equal(Object.keys(realBtnRfi.spot.actionsByHand).length, 169);
+  assert.deepEqual(realBtnRfi.spot.legalActions.map((action) => action.id), ["fold", "raise"]);
 
   assert.equal(actionFrequencyToWeight({ call: 0.4, threeBet: 0.5, fold: 0.1 }, ["call", "threeBet"]), 0.9);
 

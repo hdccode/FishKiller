@@ -13,6 +13,7 @@ const ROOT = path.resolve(__dirname, "..");
 const RANGE_ROOT = path.join(ROOT, "data", "preflop-ranges");
 const REPORT_PATH = path.join(RANGE_ROOT, "validation-report.json");
 const FREQUENCY_TOLERANCE = 0.001;
+const CANONICAL_HAND_CLASSES = buildCanonicalHandClasses();
 
 main();
 
@@ -21,15 +22,24 @@ function main() {
 
   const errors = [];
   const warnings = [];
-  const packs = loadRangePacks(RANGE_ROOT);
+  let packs = [];
   const summary = {
     packs: packs.length,
     spots: 0,
     demoPacks: 0,
     realPacks: 0,
+    completeSpots: 0,
   };
+  const seenSpotIds = new Map();
 
-  packs.forEach((entry) => validatePackEntry(entry, summary, errors, warnings));
+  try {
+    packs = loadRangePacks(RANGE_ROOT);
+    summary.packs = packs.length;
+  } catch (error) {
+    errors.push(`Could not load preflop range packs. Check JSON syntax. ${error.message}`);
+  }
+
+  packs.forEach((entry) => validatePackEntry(entry, summary, errors, warnings, seenSpotIds));
 
   if (!packs.length) {
     warnings.push("No preflop range packs found.");
@@ -72,7 +82,7 @@ function ensureRangeFolders() {
   fs.mkdirSync(path.join(RANGE_ROOT, "real"), { recursive: true });
 }
 
-function validatePackEntry(entry, summary, errors, warnings) {
+function validatePackEntry(entry, summary, errors, warnings, seenSpotIds) {
   const { pack, filePath, folderType } = entry;
   const label = pack.packId || path.relative(ROOT, filePath);
 
@@ -107,16 +117,34 @@ function validatePackEntry(entry, summary, errors, warnings) {
   }
 
   summary.spots += pack.spots.length;
-  pack.spots.forEach((spot, index) => validateSpot(spot, `${label}.spots[${index}]`, errors, warnings));
+  pack.spots.forEach((spot, index) => {
+    validateUniqueSpotId(spot, label, entry.filePath, seenSpotIds, errors);
+    validateSpot(spot, `${label}.spots[${index}]`, errors, warnings, summary);
+  });
 }
 
-function validateSpot(spot, label, errors, warnings) {
+function validateUniqueSpotId(spot, packLabel, filePath, seenSpotIds, errors) {
+  if (!spot?.spotId) {
+    return;
+  }
+
+  const previous = seenSpotIds.get(spot.spotId);
+  const current = `${packLabel} (${path.relative(ROOT, filePath)})`;
+  if (previous) {
+    errors.push(`Duplicate spotId "${spot.spotId}" found in ${current}; already used in ${previous}.`);
+    return;
+  }
+
+  seenSpotIds.set(spot.spotId, current);
+}
+
+function validateSpot(spot, label, errors, warnings, summary) {
   if (!spot || typeof spot !== "object" || Array.isArray(spot)) {
     errors.push(`${label}: spot must be an object.`);
     return;
   }
 
-  ["spotId", "tableSize", "stackDepthBb", "heroPosition", "actionContext", "actionsByHand"].forEach((key) => {
+  ["spotId", "tableSize", "stackDepthBb", "heroPosition", "actionContext", "legalActions", "actionsByHand"].forEach((key) => {
     if (!(key in spot)) {
       errors.push(`${label}: missing required field ${key}.`);
     }
@@ -129,23 +157,79 @@ function validateSpot(spot, label, errors, warnings) {
     errors.push(`${label}: stackDepthBb must be a positive number.`);
   }
 
+  const legalActionIds = validateLegalActions(spot.legalActions, label, errors);
+
   if (!spot.actionsByHand || typeof spot.actionsByHand !== "object" || Array.isArray(spot.actionsByHand)) {
     errors.push(`${label}: actionsByHand must be an object.`);
     return;
   }
 
+  const normalizedHands = new Set();
   Object.entries(spot.actionsByHand).forEach(([handClass, strategyEntry]) => {
     const handLabel = `${label}.actionsByHand.${handClass}`;
     const handResult = validateHandClass(handClass);
     if (!handResult.valid) {
       errors.push(`${handLabel}: ${handResult.error}`);
+    } else {
+      if (normalizedHands.has(handResult.normalized)) {
+        errors.push(`${handLabel}: duplicate canonical hand class ${handResult.normalized}.`);
+      }
+      normalizedHands.add(handResult.normalized);
     }
 
-    validateStrategyEntry(strategyEntry, handLabel, errors, warnings);
+    validateStrategyEntry(strategyEntry, handLabel, errors, warnings, legalActionIds);
+  });
+
+  if (spot.complete === true || spot.isCompleteRange === true) {
+    summary.completeSpots += 1;
+    validateCompleteHandCoverage(normalizedHands, label, errors);
+  }
+}
+
+function validateLegalActions(legalActions, label, errors) {
+  const ids = new Set();
+  if (!Array.isArray(legalActions) || !legalActions.length) {
+    errors.push(`${label}: legalActions must be a non-empty array.`);
+    return ids;
+  }
+
+  legalActions.forEach((action, index) => {
+    const actionLabel = `${label}.legalActions[${index}]`;
+    if (!action || typeof action !== "object" || Array.isArray(action)) {
+      errors.push(`${actionLabel}: legal action must be an object.`);
+      return;
+    }
+
+    if (!action.id || typeof action.id !== "string") {
+      errors.push(`${actionLabel}: legal action is missing string id.`);
+      return;
+    }
+
+    if (ids.has(action.id)) {
+      errors.push(`${actionLabel}: duplicate legal action id "${action.id}".`);
+    }
+    ids.add(action.id);
+  });
+
+  return ids;
+}
+
+function validateCompleteHandCoverage(normalizedHands, label, errors) {
+  const expected = new Set(CANONICAL_HAND_CLASSES);
+  CANONICAL_HAND_CLASSES.forEach((handClass) => {
+    if (!normalizedHands.has(handClass)) {
+      errors.push(`${label}: complete spot is missing hand class ${handClass}.`);
+    }
+  });
+
+  normalizedHands.forEach((handClass) => {
+    if (!expected.has(handClass)) {
+      errors.push(`${label}: complete spot has unknown hand class ${handClass}.`);
+    }
   });
 }
 
-function validateStrategyEntry(strategyEntry, label, errors, warnings) {
+function validateStrategyEntry(strategyEntry, label, errors, warnings, legalActionIds) {
   if (!strategyEntry || typeof strategyEntry !== "object" || Array.isArray(strategyEntry)) {
     errors.push(`${label}: strategy entry must be an object keyed by action.`);
     return;
@@ -161,6 +245,9 @@ function validateStrategyEntry(strategyEntry, label, errors, warnings) {
   entries.forEach(([actionName, frequency]) => {
     if (!actionName.trim()) {
       errors.push(`${label}: action names must be non-empty.`);
+    }
+    if (legalActionIds.size && !legalActionIds.has(actionName)) {
+      errors.push(`${label}.${actionName}: action is not listed in legalActions.`);
     }
     if (typeof frequency !== "number" || !Number.isFinite(frequency)) {
       errors.push(`${label}.${actionName}: frequency must be a finite number.`);
@@ -181,4 +268,24 @@ function validateStrategyEntry(strategyEntry, label, errors, warnings) {
 
 function round(value) {
   return Math.round(value * 1000000) / 1000000;
+}
+
+function buildCanonicalHandClasses() {
+  const ranks = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"];
+  const hands = [];
+  ranks.forEach((rank) => hands.push(`${rank}${rank}`));
+
+  for (let first = 0; first < ranks.length; first += 1) {
+    for (let second = first + 1; second < ranks.length; second += 1) {
+      hands.push(`${ranks[first]}${ranks[second]}s`);
+    }
+  }
+
+  for (let first = 0; first < ranks.length; first += 1) {
+    for (let second = first + 1; second < ranks.length; second += 1) {
+      hands.push(`${ranks[first]}${ranks[second]}o`);
+    }
+  }
+
+  return hands;
 }

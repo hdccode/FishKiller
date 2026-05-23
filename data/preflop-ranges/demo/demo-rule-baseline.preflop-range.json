@@ -12,6 +12,10 @@
       "stackDepthBb": 100,
       "heroPosition": "BTN",
       "actionContext": "rfi",
+      "legalActions": [
+        { "id": "fold", "label": "Fold", "type": "fold" },
+        { "id": "raise", "label": "Raise", "type": "raise", "sizeBb": 2.3 }
+      ],
       "actionsByHand": {
         "AA": { "raise": 1 },
         "A5s": { "raise": 0.95, "fold": 0.05 },
@@ -25,6 +29,11 @@
       "heroPosition": "BB",
       "villainPosition": "BTN",
       "actionContext": "facing-open",
+      "legalActions": [
+        { "id": "fold", "label": "Fold", "type": "fold" },
+        { "id": "call", "label": "Call", "type": "call" },
+        { "id": "threeBet", "label": "3-bet", "type": "raise" }
+      ],
       "actionsByHand": {
         "A5s": { "call": 0.4, "threeBet": 0.5, "fold": 0.1 },
         "T8s": { "call": 0.85, "threeBet": 0.05, "fold": 0.1 },

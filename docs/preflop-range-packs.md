@@ -20,21 +20,39 @@ Each pack uses this shape:
 
 ```json
 {
-  "packId": "demo-rule-baseline",
-  "name": "Demo Rule Baseline Range Pack",
-  "sourceType": "demo",
-  "enabled": false,
-  "usableAsRealTrainingData": false,
+  "packId": "fishkiller-6max-100bb-v1",
+  "name": "FishKiller 6-Max 100bb Internal Baseline",
+  "sourceType": "manual",
+  "enabled": true,
+  "usableAsRealTrainingData": true,
+  "game": "NLHE",
+  "format": "6-max cash",
+  "stackDepthBb": 100,
+  "anteBb": 0,
+  "streets": ["preflop"],
+  "strategySource": {
+    "type": "internal-authored-baseline",
+    "solverDerived": false,
+    "proprietary": false
+  },
   "spots": [
     {
-      "spotId": "demo_6max_btn_rfi_100bb",
+      "spotId": "fk_6max_100bb_btn_rfi_unopened_v1",
       "tableSize": 6,
       "stackDepthBb": 100,
       "heroPosition": "BTN",
       "actionContext": "rfi",
+      "priorAction": "folded-to-hero",
+      "potState": "unopened",
+      "complete": true,
+      "raiseSize": { "type": "open", "sizeBb": 2.3 },
+      "legalActions": [
+        { "id": "fold", "label": "Fold", "type": "fold" },
+        { "id": "raise", "label": "Open 2.3bb", "type": "raise", "sizeBb": 2.3 }
+      ],
       "actionsByHand": {
-        "AA": { "raise": 1 },
-        "A5s": { "raise": 0.95, "fold": 0.05 }
+        "AA": { "fold": 0, "raise": 1 },
+        "72o": { "fold": 1, "raise": 0 }
       }
     }
   ]
@@ -44,6 +62,16 @@ Each pack uses this shape:
 Supported `sourceType` values are `demo`, `manual`, `generated`, and `licensed`.
 
 Supported hand classes are pairs like `AA`, suited classes like `A5s`, and offsuit classes like `KQo`. Unsuffixed non-pairs like `AK` are rejected because they blur suited and offsuit combos.
+
+Complete spots use `"complete": true` and must include all 169 canonical hand classes. Every hand entry must use only IDs from `legalActions`, and its action frequencies must sum to `1`.
+
+The first real MVP pack is:
+
+```text
+data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json
+```
+
+It currently contains one internally authored, non-proprietary baseline spot: 6-max BTN RFI at 100bb after action folds to Hero. It is not presented as solver-perfect GTO.
 
 ## Demo Versus Real
 
