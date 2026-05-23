@@ -116,6 +116,13 @@ const QUESTS = [
 
 const SCENARIOS = window.FISHKILLER_SCENARIOS || window.RIVERRISE_SCENARIOS || [];
 const SOLVER_LIBRARY = normalizeSolverLibrary(window.FISHKILLER_SOLVER_LIBRARY);
+const TRAINING_ENGINE_IDS = {
+  scenarioPack: "scenario-pack",
+  preflopRange: "preflop-range",
+};
+const PREFLOP_RANGE_PACK_URL = "data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json";
+const PREFLOP_RANGE_BTN_RFI_SPOT_ID = "fk_6max_100bb_btn_rfi_unopened_v1";
+const PREFLOP_RANGE_QUESTION_XP = 12;
 const SCENARIOS_BY_ID = Object.fromEntries(SCENARIOS.map((scenario) => [scenario.id, scenario]));
 const SCENARIOS_BY_TABLE = SCENARIOS.reduce((accumulator, scenario) => {
   accumulator[scenario.tableSize] ||= [];
@@ -198,6 +205,9 @@ const elements = {
 let state = loadState();
 let activeSession = null;
 let latestSummary = null;
+let preflopRangePack = null;
+let preflopRangeSpot = null;
+let preflopRangeStatus = "idle";
 const solverCache = new Map();
 
 boot();
@@ -207,6 +217,7 @@ function boot() {
   saveState();
   bindEvents();
   render();
+  loadPreflopRangePack();
 
   window.setInterval(() => {
     syncHearts(state);
@@ -259,6 +270,38 @@ function bindEvents() {
       closeGtoModal();
     }
   });
+}
+
+function loadPreflopRangePack() {
+  if (!window.fetch || !window.FishKillerPreflopEngine) {
+    preflopRangeStatus = "error";
+    console.warn("Preflop range engine is not available; 6-max will use scenario fallback.");
+    return;
+  }
+
+  preflopRangeStatus = "loading";
+  fetch(PREFLOP_RANGE_PACK_URL, { cache: "no-store" })
+    .then((response) => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
+    .then((pack) => {
+      const normalizedPack = window.FishKillerPreflopEngine.normalizePreflopRangePack(pack);
+      const spot = window.FishKillerPreflopEngine.getPreflopSpot(normalizedPack, PREFLOP_RANGE_BTN_RFI_SPOT_ID);
+      if (!spot) {
+        throw new Error(`Missing preflop spot ${PREFLOP_RANGE_BTN_RFI_SPOT_ID}`);
+      }
+
+      preflopRangePack = normalizedPack;
+      preflopRangeSpot = spot;
+      preflopRangeStatus = "ready";
+      renderTopline();
+      renderPracticeModes();
+      renderScenario();
+    })
+    .catch((error) => {
+      preflopRangeStatus = "error";
+      preflopRangePack = null;
+      preflopRangeSpot = null;
+      console.warn("Failed to load preflop range pack; 6-max will use scenario fallback.", error);
+    });
 }
 
 function enterAppFromSplash() {
@@ -414,6 +457,8 @@ function syncHearts(targetState) {
 
 function startMainSession(tableSize) {
   syncHearts(state);
+  const practiceMode = getPracticeMode(tableSize);
+  const sessionEngine = resolveSessionEngine(tableSize, practiceMode);
 
   if (activeSession && !window.confirm("Start a fresh session? Your current progress will be replaced.")) {
     return;
@@ -425,7 +470,6 @@ function startMainSession(tableSize) {
     return;
   }
 
-  const practiceMode = getPracticeMode(tableSize);
   if (!isPracticeModeAvailable(practiceMode)) {
     showToast("Mode paused", "Postflop practice is commented out while we rebuild the presentation layer.");
     state.modeByTable[tableSize] = "preflop";
@@ -433,15 +477,98 @@ function startMainSession(tableSize) {
     render();
     return;
   }
+
+  if (sessionEngine.engineId === TRAINING_ENGINE_IDS.preflopRange) {
+    startPreflopRangeSession(tableSize, sessionEngine);
+    return;
+  }
+
   const scenarioCount = practiceMode === "full" ? Math.ceil(MAIN_SESSION_LENGTH / FULL_HAND_STREETS.length) : MAIN_SESSION_LENGTH;
   const scenarioIds = practiceMode === "preflop"
     ? createRandomPreflopScenarioIds(tableSize, MAIN_SESSION_LENGTH)
     : pickScenarioIds(tableSize, scenarioCount, practiceMode);
   activeSession = buildSession(tableSize, scenarioIds, "main", practiceMode);
+  activeSession.trainingEngine = sessionEngine.engineId;
+  activeSession.requestedTrainingEngine = sessionEngine.requestedEngineId;
+  activeSession.usingEngineFallback = Boolean(sessionEngine.isFallback);
   latestSummary = null;
   closeSummaryModal();
   enterLessonMode();
   render();
+}
+
+function startPreflopRangeSession(tableSize, sessionEngine) {
+  const engine = window.FishKillerPreflopEngine;
+  const spot = getActivePreflopRangeSpot();
+
+  if (!engine || !preflopRangePack || !spot) {
+    console.warn("Preflop range session requested before the engine or BTN RFI spot was ready; using scenario fallback.");
+    const scenarioCount = MAIN_SESSION_LENGTH;
+    const scenarioIds = createRandomPreflopScenarioIds(tableSize, scenarioCount);
+    activeSession = buildSession(tableSize, scenarioIds, "main", "preflop");
+    activeSession.trainingEngine = TRAINING_ENGINE_IDS.scenarioPack;
+    activeSession.requestedTrainingEngine = sessionEngine.requestedEngineId;
+    activeSession.usingEngineFallback = true;
+    latestSummary = null;
+    closeSummaryModal();
+    enterLessonMode();
+    render();
+    return;
+  }
+
+  activeSession = {
+    id: `preflop-range-${Date.now()}`,
+    tableSize,
+    mode: "main",
+    practiceMode: "preflop",
+    trainingEngine: TRAINING_ENGINE_IDS.preflopRange,
+    requestedTrainingEngine: sessionEngine.requestedEngineId,
+    usingEngineFallback: false,
+    rangePackId: preflopRangePack.packId,
+    spotId: spot.spotId,
+    questionStates: Array.from({ length: MAIN_SESSION_LENGTH }, () => createPreflopRangeQuestionState()),
+    currentIndex: 0,
+    pendingAdvance: false,
+    strikes: 0,
+    correctCount: 0,
+    xpEarned: 0,
+    missedIds: [],
+    missedQuestions: [],
+    reviewCarryForward: [],
+  };
+  latestSummary = null;
+  closeSummaryModal();
+  enterLessonMode();
+  render();
+}
+
+function createPreflopRangeQuestionState() {
+  const sample = window.FishKillerPreflopEngine.samplePreflopQuestion({
+    packOrNormalizedPack: preflopRangePack,
+    spotId: PREFLOP_RANGE_BTN_RFI_SPOT_ID,
+    rng: Math.random,
+  });
+
+  return {
+    engine: TRAINING_ENGINE_IDS.preflopRange,
+    spotId: sample.spotId,
+    handClass: sample.handClass,
+    legalActions: sample.legalActions,
+    strategy: sample.strategy,
+    street: "preflop",
+    answered: false,
+    selected: "",
+    isCorrect: false,
+    isMixed: false,
+    grade: null,
+    startedAt: 0,
+    answerMs: 0,
+    preflopResponses: [
+      { seat: "UTG", action: "Folds", folded: true },
+      { seat: "HJ", action: "Folds", folded: true },
+      { seat: "CO", action: "Folds", folded: true },
+    ],
+  };
 }
 
 function startReviewSession(tableSize, scenarioIds) {
@@ -601,6 +728,11 @@ function getSolvedActionFrequency(solved, actionId) {
 function answerCurrentQuestion(selectedAction) {
   const question = getCurrentQuestion();
   if (!question || question.answered || question.decisionReview) {
+    return;
+  }
+
+  if (activeSession?.trainingEngine === TRAINING_ENGINE_IDS.preflopRange) {
+    answerPreflopRangeQuestion(selectedAction);
     return;
   }
 
@@ -842,6 +974,46 @@ function completeQuestion(question, scenario, spot, result) {
   renderScenario();
 }
 
+function answerPreflopRangeQuestion(actionId) {
+  const engine = window.FishKillerPreflopEngine;
+  const question = getCurrentQuestion();
+  const spot = getActivePreflopRangeSpot();
+
+  if (!engine || !question || !spot || question.answered) {
+    return;
+  }
+
+  const grade = engine.gradePreflopAnswer({
+    spot,
+    handClass: question.handClass,
+    actionId,
+  });
+
+  question.selected = actionId;
+  question.grade = grade;
+  question.answered = true;
+  question.isCorrect = grade.kind === "correct";
+  question.isMixed = grade.kind === "mixed";
+  question.answerMs = Math.max(0, Date.now() - (question.startedAt || Date.now()));
+  activeSession.pendingAdvance = true;
+
+  if (question.isCorrect) {
+    activeSession.correctCount += 1;
+    activeSession.xpEarned += PREFLOP_RANGE_QUESTION_XP;
+  } else if (question.isMixed) {
+    activeSession.xpEarned += Math.round(PREFLOP_RANGE_QUESTION_XP * 0.55);
+    window.setTimeout(() => {
+      showToast("Mixed action", grade.feedback, 1200, "mixed");
+    }, 80);
+  } else {
+    activeSession.strikes += 1;
+    pushUnique(activeSession.missedIds, `${question.spotId}:${question.handClass}`);
+    activeSession.missedQuestions.push(createPreflopRangeQuestionRef(question));
+  }
+
+  renderScenario();
+}
+
 function advanceSession() {
   if (!activeSession || !activeSession.pendingAdvance) {
     const question = getCurrentQuestion();
@@ -947,7 +1119,11 @@ function finishSession(outcome) {
     grade: getGrade(outcome, accuracy),
     averageAnswerMs,
     questionReview: buildQuestionReview(activeSession),
-    reviewQueue: activeSession.mode === "main" ? [...activeSession.missedQuestions] : [...activeSession.reviewCarryForward],
+    reviewQueue: activeSession.trainingEngine === TRAINING_ENGINE_IDS.preflopRange
+      ? []
+      : activeSession.mode === "main"
+      ? [...activeSession.missedQuestions]
+      : [...activeSession.reviewCarryForward],
     note: buildSummaryNote(activeSession, outcome, boostUsed),
   };
 
@@ -1077,10 +1253,18 @@ function buildSummaryNote(session, outcome, boostUsed) {
     return `Main session ended after three mistakes and cost one heart.${boostNote}`;
   }
 
+  if (session.trainingEngine === TRAINING_ENGINE_IDS.preflopRange) {
+    return `6-max BTN RFI range drill finished with ${session.missedQuestions.length} missed decision${session.missedQuestions.length === 1 ? "" : "s"}.${boostNote}`;
+  }
+
   return `Main session finished with ${session.missedQuestions.length} missed decision${session.missedQuestions.length === 1 ? "" : "s"} saved for review.${boostNote}`;
 }
 
 function buildQuestionReview(session) {
+  if (session.trainingEngine === TRAINING_ENGINE_IDS.preflopRange) {
+    return buildPreflopRangeQuestionReview(session);
+  }
+
   return session.questionStates
     .filter((question) => question.answered)
     .map((question, index) => {
@@ -1101,6 +1285,25 @@ function buildQuestionReview(session) {
         isCorrect: question.isCorrect,
         isMixed: question.isMixed,
         mixInfo: question.mixInfo,
+        answerMs: question.answerMs || 0,
+      };
+    });
+}
+
+function buildPreflopRangeQuestionReview(session) {
+  return session.questionStates
+    .filter((question) => question.answered)
+    .map((question, index) => {
+      const grade = question.grade || {};
+      return {
+        index: index + 1,
+        street: "Preflop",
+        hand: question.handClass,
+        selected: getPreflopActionLabel(question.legalActions, question.selected),
+        correctAction: getPreflopActionLabel(question.legalActions, grade.preferredActionId),
+        isCorrect: question.isCorrect,
+        isMixed: question.isMixed,
+        mixInfo: question.isMixed ? { message: grade.feedback } : null,
         answerMs: question.answerMs || 0,
       };
     });
@@ -1307,6 +1510,11 @@ function renderRewards() {
 }
 
 function renderScenario() {
+  if (activeSession?.trainingEngine === TRAINING_ENGINE_IDS.preflopRange) {
+    renderPreflopRangeScenario();
+    return;
+  }
+
   const question = getCurrentQuestion();
   const scenario = getCurrentScenario();
   const spot = getCurrentSpot();
@@ -1338,6 +1546,187 @@ function renderScenario() {
   renderTableVisual(scenario, bettingSummary, spot, question);
   renderAnswers(spot, question);
   renderFeedback(spot, question);
+}
+
+function renderPreflopRangeScenario() {
+  const question = getCurrentQuestion();
+  const spot = getActivePreflopRangeSpot();
+
+  if (!activeSession || !question || !spot) {
+    renderIdleScenario();
+    return;
+  }
+
+  if (!question.answered && !question.startedAt) {
+    question.startedAt = Date.now();
+  }
+
+  const visualScenario = createPreflopRangeVisualScenario(question);
+  const bettingSummary = createPreflopRangeBettingSummary(question);
+  renderCards(question.handClass, `${activeSession.id}-${activeSession.currentIndex}`);
+  elements.scenarioTable.textContent = "6-Max - real preflop range";
+  elements.scenarioDifficulty.textContent = "Internal baseline";
+  renderBettingLine(bettingSummary);
+  elements.scenarioTitle.textContent = "6-max 100bb - BTN first in";
+  elements.scenarioCopy.textContent = `Hero has ${question.handClass}. Choose the baseline BTN open-or-fold action from the loaded range pack.`;
+  elements.sessionChip.textContent = "Preflop Range";
+  elements.sessionCounter.textContent = `${activeSession.currentIndex + 1} / ${activeSession.questionStates.length}`;
+  elements.mistakeCounter.textContent = `${activeSession.strikes} / 3 mistakes`;
+  elements.progressFill.style.width = `${Math.round(((activeSession.currentIndex + (question.answered ? 1 : 0)) / activeSession.questionStates.length) * 100)}%`;
+  elements.scenarioFacts.innerHTML = [
+    createFactCard("Spot", "BTN RFI"),
+    createFactCard("Stack", "100bb"),
+    createFactCard("Open Size", spot.raiseSize?.label || "Raise"),
+    createFactCard("Range Pack", preflopRangePack?.name || "FishKiller 6-Max"),
+  ].join("");
+  setScenarioExplanationVisible(true);
+  renderTableVisual(visualScenario, bettingSummary, {
+    street: "preflop",
+    heroCards: getHeroCardsForScenario(visualScenario),
+    facts: [{ label: "Pot", value: formatMoney(SMALL_BLIND + BIG_BLIND) }],
+  }, question);
+  renderPreflopRangeAnswers(question);
+  renderPreflopRangeFeedback(question);
+}
+
+function createPreflopRangeVisualScenario(question) {
+  const parsed = parseHand(question.handClass, `${activeSession?.id || "preflop-range"}-${activeSession?.currentIndex || 0}`);
+  return {
+    id: `preflop-range-${question.handClass}`,
+    tableSize: "six",
+    heroSeat: "BTN",
+    heroHand: question.handClass,
+    heroCards: [
+      { rank: parsed.left, suit: parsed.leftSuit },
+      { rank: parsed.right, suit: parsed.rightSuit },
+    ],
+    actors: [
+      { seat: "UTG", label: "Folded" },
+      { seat: "HJ", label: "Folded" },
+      { seat: "CO", label: "Folded" },
+      { seat: "BTN", label: "Hero" },
+    ],
+  };
+}
+
+function createPreflopRangeBettingSummary(question) {
+  return {
+    pot: SMALL_BLIND + BIG_BLIND,
+    items: [
+      `Blinds ${formatMoney(SMALL_BLIND)} / ${formatMoney(BIG_BLIND)}`,
+      "UTG, HJ, CO fold",
+      "BTN first in",
+      `Pot ${formatMoney(SMALL_BLIND + BIG_BLIND)}`,
+    ],
+    actionBySeat: {
+      UTG: "Folded",
+      HJ: "Folded",
+      CO: "Folded",
+      BTN: question.answered ? getPreflopActionLabel(question.legalActions, question.selected) : "Hero to act",
+      SB: "Waiting",
+      BB: "Waiting",
+    },
+  };
+}
+
+function renderPreflopRangeAnswers(question) {
+  elements.answerGrid.innerHTML = "";
+  const preferredActionId = question.grade?.preferredActionId || "";
+
+  (question.legalActions || []).forEach((action) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "answer-button";
+
+    if (question.answered) {
+      if (action.id === preferredActionId) {
+        button.classList.add("correct");
+      } else if (action.id === question.selected && question.isMixed) {
+        button.classList.add("mixed");
+      } else if (action.id === question.selected) {
+        button.classList.add("wrong");
+      } else {
+        button.classList.add("locked");
+      }
+    }
+
+    button.disabled = question.answered;
+    button.innerHTML = `
+      <strong>${getPreflopActionLabel(question.legalActions, action.id)}</strong>
+      <span>${getPreflopRangeActionHint(action)}</span>
+    `;
+    button.addEventListener("click", () => answerCurrentQuestion(action.id));
+    elements.answerGrid.appendChild(button);
+  });
+}
+
+function renderPreflopRangeFeedback(question) {
+  elements.gtoTableButton.classList.add("hidden");
+
+  if (!question.answered) {
+    elements.feedbackBand.className = "feedback-band neutral";
+    elements.feedbackLabel.textContent = "Choose your line";
+    elements.feedbackText.textContent = "Use the loaded FishKiller 6-max BTN first-in range. Only supported actions for this spot are shown.";
+    elements.continueButton.disabled = true;
+    elements.continueButton.textContent = "Continue";
+    return;
+  }
+
+  const grade = question.grade || {};
+  const preferredLabel = getPreflopActionLabel(question.legalActions, grade.preferredActionId);
+  const selectedLabel = getPreflopActionLabel(question.legalActions, grade.chosenActionId);
+  const frequencyText = formatPreflopRangeFrequencies(question);
+
+  if (grade.kind === "correct") {
+    elements.feedbackBand.className = "feedback-band correct";
+    elements.feedbackLabel.textContent = "Correct";
+    elements.feedbackText.textContent = `${selectedLabel} is preferred here. Frequencies: ${frequencyText}.`;
+  } else if (grade.kind === "mixed") {
+    elements.feedbackBand.className = "feedback-band mixed";
+    elements.feedbackLabel.textContent = "Mixed";
+    elements.feedbackText.textContent = `${selectedLabel} is in the mix, but ${preferredLabel} is preferred. Frequencies: ${frequencyText}.`;
+  } else if (grade.kind === "illegal") {
+    elements.feedbackBand.className = "feedback-band wrong";
+    elements.feedbackLabel.textContent = "Unsupported";
+    elements.feedbackText.textContent = `${selectedLabel || grade.chosenActionId} is not legal in this range spot. Available actions: ${(question.legalActions || []).map((action) => getPreflopActionLabel(question.legalActions, action.id)).join(" / ")}.`;
+  } else {
+    elements.feedbackBand.className = "feedback-band wrong";
+    elements.feedbackLabel.textContent = "Correction";
+    elements.feedbackText.textContent = `Prefer ${preferredLabel}. Your choice frequency is ${formatPercent(grade.chosenFrequency || 0)}; preferred frequency is ${formatPercent(grade.preferredFrequency || 0)}.`;
+  }
+
+  const lastQuestion = activeSession.currentIndex >= activeSession.questionStates.length - 1;
+  const failedMain = activeSession.mode === "main" && activeSession.strikes >= 3;
+  elements.continueButton.disabled = false;
+  elements.continueButton.textContent = failedMain ? "End Session" : lastQuestion ? "See Summary" : "Next Hand";
+}
+
+function getPreflopActionLabel(actions = [], actionId = "") {
+  const action = actions.find((item) => item.id === actionId);
+  if (action?.id === "raise") {
+    return "Raise";
+  }
+  if (action?.id === "fold") {
+    return "Fold";
+  }
+  return action?.label || actionId;
+}
+
+function getPreflopRangeActionHint(action) {
+  if (action.id === "raise") {
+    return action.sizeBb ? `Open to ${action.sizeBb}bb and take the initiative.` : "Open the BTN range.";
+  }
+  if (action.id === "fold") {
+    return "Release hands outside the BTN first-in range.";
+  }
+  return "Choose a supported action from this range spot.";
+}
+
+function formatPreflopRangeFrequencies(question) {
+  const strategy = question.grade?.strategy || question.strategy?.actions || {};
+  return (question.legalActions || [])
+    .map((action) => `${getPreflopActionLabel(question.legalActions, action.id)} ${formatPercent(strategy[action.id] || 0)}`)
+    .join(" / ");
 }
 
 function renderIdleScenario() {
@@ -4027,6 +4416,10 @@ function getNextButtonLabel() {
     return "Continue";
   }
 
+  if (activeSession.trainingEngine === TRAINING_ENGINE_IDS.preflopRange) {
+    return activeSession.currentIndex >= activeSession.questionStates.length - 1 ? "See Summary" : "Next Hand";
+  }
+
   if (currentQuestion.showdownResult?.type === "fold") {
     return getNextQuestionIndexAfterCurrentFold() === -1 ? "See Summary" : "Next Hand";
   }
@@ -5809,6 +6202,43 @@ function getPracticeMode(tableSize) {
   return isPracticeModeAvailable(mode) ? mode : "preflop";
 }
 
+function resolveSessionEngine(tableSize, practiceMode) {
+  const wantsPreflopRange = tableSize === "six" && practiceMode === "preflop";
+  const engineId = wantsPreflopRange && isPreflopRangeEngineReady()
+    ? TRAINING_ENGINE_IDS.preflopRange
+    : TRAINING_ENGINE_IDS.scenarioPack;
+
+  return {
+    tableSize,
+    practiceMode,
+    engineId,
+    requestedEngineId: wantsPreflopRange ? TRAINING_ENGINE_IDS.preflopRange : TRAINING_ENGINE_IDS.scenarioPack,
+    fallbackEngineId: wantsPreflopRange ? TRAINING_ENGINE_IDS.scenarioPack : "",
+    isFallback: wantsPreflopRange && engineId !== TRAINING_ENGINE_IDS.preflopRange,
+  };
+}
+
+function isPreflopRangeEngineReady() {
+  if (!window.FishKillerPreflopEngine || !preflopRangePack) {
+    return false;
+  }
+
+  return Boolean(getActivePreflopRangeSpot());
+}
+
+function getActivePreflopRangeSpot() {
+  if (!window.FishKillerPreflopEngine || !preflopRangePack) {
+    return null;
+  }
+
+  if (preflopRangeSpot?.spotId === PREFLOP_RANGE_BTN_RFI_SPOT_ID) {
+    return preflopRangeSpot;
+  }
+
+  preflopRangeSpot = window.FishKillerPreflopEngine.getPreflopSpot(preflopRangePack, PREFLOP_RANGE_BTN_RFI_SPOT_ID);
+  return preflopRangeSpot;
+}
+
 function isPracticeModeAvailable(modeId) {
   const mode = PRACTICE_MODES[modeId];
   return Boolean(mode && !mode.disabled);
@@ -5918,6 +6348,15 @@ function createQuestionRef(question) {
     scenarioId: question.scenarioId,
     street: question.street || "preflop",
     runoutSeed: question.runoutSeed || question.scenarioId,
+  };
+}
+
+function createPreflopRangeQuestionRef(question) {
+  return {
+    engine: TRAINING_ENGINE_IDS.preflopRange,
+    spotId: question.spotId,
+    handClass: question.handClass,
+    street: "preflop",
   };
 }
 
