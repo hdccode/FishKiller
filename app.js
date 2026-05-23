@@ -123,6 +123,7 @@ const TRAINING_ENGINE_IDS = {
 const PREFLOP_RANGE_PACK_URL = "data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json";
 const PREFLOP_RANGE_BTN_RFI_SPOT_ID = "fk_6max_100bb_btn_rfi_unopened_v1";
 const PREFLOP_RANGE_QUESTION_XP = 12;
+const PREFLOP_PROGRESS = window.FishKillerPreflopProgress || null;
 const SCENARIOS_BY_ID = Object.fromEntries(SCENARIOS.map((scenario) => [scenario.id, scenario]));
 const SCENARIOS_BY_TABLE = SCENARIOS.reduce((accumulator, scenario) => {
   accumulator[scenario.tableSize] ||= [];
@@ -258,6 +259,11 @@ function bindEvents() {
     }
 
     closeSummaryModal();
+    if (latestSummary.reviewType === TRAINING_ENGINE_IDS.preflopRange) {
+      startPreflopRangeReviewSession(latestSummary.tableSize);
+      return;
+    }
+
     startReviewSession(latestSummary.tableSize, latestSummary.reviewQueue);
   });
   elements.summaryModal.addEventListener("click", (event) => {
@@ -366,6 +372,7 @@ function createDefaultState() {
     xpBoostSessions: 0,
     cardStyle: "reef",
     daily: createDailyState(),
+    preflop6maxProgress: createDefaultPreflop6maxProgress(),
     lastResult: {
       grade: "No run yet",
       xp: 0,
@@ -385,6 +392,18 @@ function createDailyState() {
     tableSizesPlayed: {},
     claimedQuestIds: [],
   };
+}
+
+function createDefaultPreflop6maxProgress() {
+  return PREFLOP_PROGRESS
+    ? PREFLOP_PROGRESS.createPreflop6maxProgress()
+    : { attemptsBySpotHand: {}, mistakes: [], totals: { attempts: 0, correct: 0, mixed: 0, mistakes: 0 } };
+}
+
+function normalizePreflop6maxProgress(progress) {
+  return PREFLOP_PROGRESS
+    ? PREFLOP_PROGRESS.normalizePreflop6maxProgress(progress)
+    : { ...createDefaultPreflop6maxProgress(), ...(progress || {}) };
 }
 
 function loadState() {
@@ -409,6 +428,7 @@ function loadState() {
         tableSizesPlayed: { ...defaults.daily.tableSizesPlayed, ...(parsed.daily?.tableSizesPlayed || {}) },
         claimedQuestIds: Array.isArray(parsed.daily?.claimedQuestIds) ? parsed.daily.claimedQuestIds : [],
       },
+      preflop6maxProgress: normalizePreflop6maxProgress(parsed.preflop6maxProgress),
       lastResult: { ...defaults.lastResult, ...(parsed.lastResult || {}) },
     };
 
@@ -497,7 +517,7 @@ function startMainSession(tableSize) {
   render();
 }
 
-function startPreflopRangeSession(tableSize, sessionEngine) {
+function startPreflopRangeSession(tableSize, sessionEngine, options = {}) {
   const engine = window.FishKillerPreflopEngine;
   const spot = getActivePreflopRangeSpot();
 
@@ -519,14 +539,18 @@ function startPreflopRangeSession(tableSize, sessionEngine) {
   activeSession = {
     id: `preflop-range-${Date.now()}`,
     tableSize,
-    mode: "main",
+    mode: options.reviewMode ? "review" : "main",
+    reviewType: options.reviewMode ? TRAINING_ENGINE_IDS.preflopRange : "",
     practiceMode: "preflop",
     trainingEngine: TRAINING_ENGINE_IDS.preflopRange,
     requestedTrainingEngine: sessionEngine.requestedEngineId,
     usingEngineFallback: false,
     rangePackId: preflopRangePack.packId,
     spotId: spot.spotId,
-    questionStates: Array.from({ length: MAIN_SESSION_LENGTH }, () => createPreflopRangeQuestionState()),
+    questionStates: Array.from(
+      { length: getPreflopRangeSessionLength(options.reviewMode) },
+      () => createPreflopRangeQuestionState({ reviewMode: options.reviewMode })
+    ),
     currentIndex: 0,
     pendingAdvance: false,
     strikes: 0,
@@ -542,12 +566,36 @@ function startPreflopRangeSession(tableSize, sessionEngine) {
   render();
 }
 
-function createPreflopRangeQuestionState() {
-  const sample = window.FishKillerPreflopEngine.samplePreflopQuestion({
-    packOrNormalizedPack: preflopRangePack,
-    spotId: PREFLOP_RANGE_BTN_RFI_SPOT_ID,
-    rng: Math.random,
-  });
+function startPreflopRangeReviewSession(tableSize) {
+  if (!PREFLOP_PROGRESS?.hasPreflop6maxMistakes(state.preflop6maxProgress)) {
+    showToast("No range mistakes yet", "Miss a 6-max range spot first, then review it here.");
+    closeSummaryModal();
+    render();
+    return;
+  }
+
+  startPreflopRangeSession(tableSize, {
+    tableSize,
+    practiceMode: "preflop",
+    engineId: TRAINING_ENGINE_IDS.preflopRange,
+    requestedEngineId: TRAINING_ENGINE_IDS.preflopRange,
+    fallbackEngineId: TRAINING_ENGINE_IDS.scenarioPack,
+    isFallback: false,
+  }, { reviewMode: true });
+}
+
+function getPreflopRangeSessionLength(reviewMode = false) {
+  if (!reviewMode) {
+    return MAIN_SESSION_LENGTH;
+  }
+
+  return Math.max(1, Math.min(MAIN_SESSION_LENGTH, state.preflop6maxProgress?.mistakes?.length || 0));
+}
+
+function createPreflopRangeQuestionState(options = {}) {
+  const sample = options.reviewMode
+    ? samplePreflopRangeReviewQuestion() || samplePreflopRangeQuestion()
+    : samplePreflopRangeQuestion();
 
   return {
     engine: TRAINING_ENGINE_IDS.preflopRange,
@@ -568,6 +616,35 @@ function createPreflopRangeQuestionState() {
       { seat: "HJ", action: "Folds", folded: true },
       { seat: "CO", action: "Folds", folded: true },
     ],
+  };
+}
+
+function samplePreflopRangeQuestion() {
+  return window.FishKillerPreflopEngine.samplePreflopQuestion({
+    packOrNormalizedPack: preflopRangePack,
+    spotId: PREFLOP_RANGE_BTN_RFI_SPOT_ID,
+    rng: Math.random,
+  });
+}
+
+function samplePreflopRangeReviewQuestion() {
+  const mistake = PREFLOP_PROGRESS?.samplePreflop6maxMistake(state.preflop6maxProgress, { rng: Math.random });
+  const spot = getActivePreflopRangeSpot();
+  if (!mistake || !spot) {
+    return null;
+  }
+
+  const strategy = window.FishKillerPreflopEngine.getPreflopHandStrategy(spot, mistake.handClass);
+  if (!strategy) {
+    return null;
+  }
+
+  return {
+    spotId: spot.spotId,
+    handClass: mistake.handClass,
+    legalActions: spot.legalActions,
+    strategy,
+    reviewSource: mistake,
   };
 }
 
@@ -996,6 +1073,7 @@ function answerPreflopRangeQuestion(actionId) {
   question.isMixed = grade.kind === "mixed";
   question.answerMs = Math.max(0, Date.now() - (question.startedAt || Date.now()));
   activeSession.pendingAdvance = true;
+  recordPreflopRangeAttempt(question, grade);
 
   if (question.isCorrect) {
     activeSession.correctCount += 1;
@@ -1009,9 +1087,29 @@ function answerPreflopRangeQuestion(actionId) {
     activeSession.strikes += 1;
     pushUnique(activeSession.missedIds, `${question.spotId}:${question.handClass}`);
     activeSession.missedQuestions.push(createPreflopRangeQuestionRef(question));
+    if (activeSession.mode === "review") {
+      activeSession.reviewCarryForward.push(createPreflopRangeQuestionRef(question));
+    }
   }
 
   renderScenario();
+}
+
+function recordPreflopRangeAttempt(question, grade) {
+  if (!PREFLOP_PROGRESS) {
+    return;
+  }
+
+  state.preflop6maxProgress = PREFLOP_PROGRESS.recordPreflop6maxAttempt(state.preflop6maxProgress, {
+    spotId: question.spotId,
+    handClass: question.handClass,
+    chosenActionId: grade.chosenActionId,
+    preferredActionId: grade.preferredActionId,
+    chosenFrequency: grade.chosenFrequency,
+    preferredFrequency: grade.preferredFrequency,
+    resultKind: grade.kind,
+  });
+  saveState();
 }
 
 function advanceSession() {
@@ -1087,6 +1185,7 @@ function finishSession(outcome) {
     baseXp += 10;
   }
 
+  const isPreflopRangeSession = activeSession.trainingEngine === TRAINING_ENGINE_IDS.preflopRange;
   const boostUsed = activeSession.mode === "main" && state.xpBoostSessions > 0;
   const finalXp = boostUsed ? Math.round(baseXp * 1.25) : baseXp;
 
@@ -1111,6 +1210,7 @@ function finishSession(outcome) {
   const summary = {
     mode: activeSession.mode,
     outcome,
+    reviewType: isPreflopRangeSession ? TRAINING_ENGINE_IDS.preflopRange : "",
     tableSize: activeSession.tableSize,
     tableLabel: TABLES[activeSession.tableSize].label,
     xp: finalXp,
@@ -1119,8 +1219,8 @@ function finishSession(outcome) {
     grade: getGrade(outcome, accuracy),
     averageAnswerMs,
     questionReview: buildQuestionReview(activeSession),
-    reviewQueue: activeSession.trainingEngine === TRAINING_ENGINE_IDS.preflopRange
-      ? []
+    reviewQueue: isPreflopRangeSession
+      ? createPreflopRangeReviewQueue(activeSession)
       : activeSession.mode === "main"
       ? [...activeSession.missedQuestions]
       : [...activeSession.reviewCarryForward],
@@ -1307,6 +1407,19 @@ function buildPreflopRangeQuestionReview(session) {
         answerMs: question.answerMs || 0,
       };
     });
+}
+
+function createPreflopRangeReviewQueue(session) {
+  if (session.mode === "review") {
+    return [...session.reviewCarryForward];
+  }
+
+  return (state.preflop6maxProgress?.mistakes || []).map((mistake) => ({
+    engine: TRAINING_ENGINE_IDS.preflopRange,
+    spotId: mistake.spotId,
+    handClass: mistake.handClass,
+    street: "preflop",
+  }));
 }
 
 function render() {
@@ -1569,15 +1682,17 @@ function renderPreflopRangeScenario() {
   renderBettingLine(bettingSummary);
   elements.scenarioTitle.textContent = "6-max 100bb - BTN first in";
   elements.scenarioCopy.textContent = `Hero has ${question.handClass}. Choose the baseline BTN open-or-fold action from the loaded range pack.`;
-  elements.sessionChip.textContent = "Preflop Range";
+  elements.sessionChip.textContent = activeSession.mode === "review" ? "Range Review" : "Preflop Range";
   elements.sessionCounter.textContent = `${activeSession.currentIndex + 1} / ${activeSession.questionStates.length}`;
-  elements.mistakeCounter.textContent = `${activeSession.strikes} / 3 mistakes`;
+  elements.mistakeCounter.textContent = activeSession.mode === "main"
+    ? `${activeSession.strikes} / 3 mistakes - ${getPreflopRangeSessionAccuracyLabel()}`
+    : `Review mistakes - ${getPreflopRangeSessionAccuracyLabel()}`;
   elements.progressFill.style.width = `${Math.round(((activeSession.currentIndex + (question.answered ? 1 : 0)) / activeSession.questionStates.length) * 100)}%`;
   elements.scenarioFacts.innerHTML = [
     createFactCard("Spot", "BTN RFI"),
     createFactCard("Stack", "100bb"),
     createFactCard("Open Size", spot.raiseSize?.label || "Raise"),
-    createFactCard("Range Pack", preflopRangePack?.name || "FishKiller 6-Max"),
+    createFactCard("Lifetime Reps", state.preflop6maxProgress?.totals?.attempts || 0),
   ].join("");
   setScenarioExplanationVisible(true);
   renderTableVisual(visualScenario, bettingSummary, {
@@ -1587,6 +1702,14 @@ function renderPreflopRangeScenario() {
   }, question);
   renderPreflopRangeAnswers(question);
   renderPreflopRangeFeedback(question);
+}
+
+function getPreflopRangeSessionAccuracyLabel() {
+  const answered = activeSession?.questionStates?.filter((question) => question.answered).length || 0;
+  if (!answered) {
+    return "0% accuracy";
+  }
+  return `${Math.round((activeSession.correctCount / answered) * 100)}% accuracy`;
 }
 
 function createPreflopRangeVisualScenario(question) {
@@ -4483,7 +4606,9 @@ function openSummaryModal(summary) {
 
   if (summary.reviewQueue.length) {
     elements.retryMissesButton.classList.remove("hidden");
-    elements.retryMissesButton.textContent = summary.mode === "review" ? "Retry Remaining Misses" : "Retry Misses";
+    elements.retryMissesButton.textContent = summary.reviewType === TRAINING_ENGINE_IDS.preflopRange
+      ? "Review Range Mistakes"
+      : summary.mode === "review" ? "Retry Remaining Misses" : "Retry Misses";
   } else {
     elements.retryMissesButton.classList.add("hidden");
   }
