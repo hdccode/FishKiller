@@ -3,3 +3,10 @@ server.stdout.log
 server.stderr.log
 *.log
 .DS_Store
+exports/
+data/preflop-ranges/validation-report.json
+data/texassolver/logs/
+data/texassolver/raw/*.json
+data/texassolver/raw/*.zip
+data/texassolver/generated-ranges/
+data/texassolver/generated-inputs/

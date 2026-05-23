@@ -24,6 +24,25 @@ function main() {
   const initialBoard = parseBoard(args.board || "");
   const maxActionDepth = Number(args.maxActionDepth ?? 0);
   const pot = Number(args.pot || 0);
+
+  const packId = args.packId || slugify(path.basename(inputPath, path.extname(inputPath)));
+  if (args.schema === "solved-tree") {
+    const tree = convertRawToSolvedTree(raw, args, pot, packId, inputPath, initialBoard);
+    const json = JSON.stringify(tree, null, 2);
+    const output = shouldWriteJson(args, outputPath)
+      ? `${json}\n`
+      : `window.FISHKILLER_SOLVED_TREES = (window.FISHKILLER_SOLVED_TREES || []).concat(${JSON.stringify([tree], null, 2)});\n`;
+
+    if (args.output === "-") {
+      process.stdout.write(output);
+    } else {
+      fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+      fs.writeFileSync(outputPath, output, "utf8");
+      console.log(`Converted ${Object.keys(tree.nodes || {}).length} TexasSolver node(s) into solved tree ${outputPath}`);
+    }
+    return;
+  }
+
   const nodes = collectActionNodes(raw, {
     board: initialBoard,
     actionPath: [],
@@ -35,7 +54,6 @@ function main() {
     throw new Error("No TexasSolver action nodes with strategy data were found. Try --max-action-depth 2 for deeper nodes.");
   }
 
-  const packId = args.packId || slugify(path.basename(inputPath, path.extname(inputPath)));
   const pack = {
     id: packId,
     name: args.packName || `TexasSolver ${packId}`,
@@ -54,9 +72,293 @@ function main() {
   if (args.output === "-") {
     process.stdout.write(output);
   } else {
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, output, "utf8");
     console.log(`Converted ${nodes.length} TexasSolver node(s) into ${outputPath}`);
   }
+}
+
+function convertRawToSolvedTree(raw, args, pot, packId, inputPath, initialBoard) {
+  const convertedNodes = {};
+  const counters = { action: 0, chance: 0, terminal: 0 };
+  const maxActionDepth = Number.isFinite(Number(args.maxActionDepth)) ? Number(args.maxActionDepth) : Infinity;
+  const effectiveStackBb = Number(args.effectiveStackBb || args.stackDepthBb || 100);
+  const rootId = convertRawNodeToSolvedNode(raw, {
+    args,
+    convertedNodes,
+    counters,
+    board: initialBoard,
+    potBb: pot,
+    effectiveStackBb,
+    path: [],
+    actionDepth: 0,
+    maxActionDepth,
+    incomingAction: "",
+    parentActor: "",
+  });
+
+  if (!rootId || !convertedNodes[rootId]) {
+    throw new Error("No TexasSolver action nodes with strategy data were found in the raw export.");
+  }
+
+  if (rootId !== "root") {
+    convertedNodes.root = { ...convertedNodes[rootId], nodeId: "root" };
+    delete convertedNodes[rootId];
+    Object.values(convertedNodes).forEach((node) => {
+      Object.entries(node.children || {}).forEach(([actionId, childId]) => {
+        if (childId === rootId) node.children[actionId] = "root";
+      });
+      (node.cardOptions || []).forEach((option) => {
+        if (option.childNodeId === rootId) option.childNodeId = "root";
+      });
+    });
+  }
+
+  const board = initialBoard.length ? initialBoard : parseBoard(args.board || "");
+  return {
+    treeId: args.treeId || packId,
+    label: args.treeName || args.packName || `TexasSolver ${packId}`,
+    isDemo: false,
+    metadata: {
+      formation: args.formation || "BTN_vs_BB_SRP",
+      heroPosition: args.heroPosition || args.heroSeat || "BTN",
+      villainPosition: args.villainPosition || "BB",
+      stackDepthBb: Number(args.stackDepthBb || 100),
+      potType: args.potType || "single-raised-pot",
+      flop: board.slice(0, 3).map(formatCardKey),
+      availableFlopSizes: convertedNodes.root?.legalActions?.map((action) => action.id) || [],
+      heroCombos: getAllHeroCombos(convertedNodes),
+      source: args.source || `TexasSolver export: ${path.basename(inputPath)}`,
+    },
+    nodes: convertedNodes,
+  };
+}
+
+function convertRawNodeToSolvedNode(rawNode, context) {
+  if (!rawNode || typeof rawNode !== "object") {
+    return createTerminalSolvedNode(context, { type: "terminal", reason: "Missing TexasSolver child node." });
+  }
+
+  if (rawNode.node_type === "chance_node" || rawNode.dealcards) {
+    return convertChanceNode(rawNode, context);
+  }
+
+  const strategyPayload = getStrategyPayload(rawNode);
+  if (strategyPayload) {
+    return convertActionNode(rawNode, strategyPayload, context);
+  }
+
+  return createTerminalSolvedNode(context, inferTerminalForMissingChild(context));
+}
+
+function convertActionNode(rawNode, strategyPayload, context) {
+  const nodeId = context.path.length === 0 ? "root" : `node_${++context.counters.action}`;
+  const legalActions = strategyPayload.actions.map((action) => normalizeTexasSolverActionObject(action, context.potBb));
+  const strategyByCombo = aggregateSolvedTreeStrategy(strategyPayload, legalActions);
+  const children = {};
+
+  if (context.actionDepth >= context.maxActionDepth) {
+    legalActions.forEach((action) => {
+      children[action.id] = createTerminalSolvedNode(
+        { ...context, path: [...context.path, action.id], incomingAction: action.id, parentActor: getActorFromTexasSolverPlayer(rawNode.player, context.args) },
+        { type: "terminal", reason: "Converter action-depth limit reached." }
+      );
+    });
+  } else {
+    strategyPayload.actions.forEach((rawAction, index) => {
+      const action = legalActions[index];
+      const child = rawNode.childrens?.[rawAction];
+      const nextContext = {
+        ...context,
+        potBb: getPotAfterAction(context.potBb, action),
+        path: [...context.path, action.id],
+        actionDepth: context.actionDepth + 1,
+        incomingAction: action.id,
+        parentActor: getActorFromTexasSolverPlayer(rawNode.player, context.args),
+      };
+      children[action.id] = child
+        ? convertRawNodeToSolvedNode(child, nextContext)
+        : createTerminalSolvedNode(nextContext, inferTerminalForAction(action, nextContext.parentActor));
+    });
+  }
+
+  context.convertedNodes[nodeId] = {
+    nodeId,
+    street: context.args.street || getStreetFromBoard(context.board),
+    board: context.board.map(formatCardKey),
+    actor: getActorFromTexasSolverPlayer(rawNode.player, context.args),
+    potBb: round(context.potBb),
+    effectiveStackBb: round(context.effectiveStackBb),
+    legalActions,
+    strategyByCombo,
+    defaultStrategy: aggregateDefaultStrategy(strategyPayload, legalActions),
+    children,
+  };
+  return nodeId;
+}
+
+function convertChanceNode(rawNode, context) {
+  const nodeId = `chance_${++context.counters.chance}`;
+  const children = {};
+  const cardOptions = [];
+  Object.entries(rawNode.dealcards || {}).forEach(([card, child]) => {
+    const parsed = parseCard(card);
+    const board = [...context.board, parsed];
+    const childNodeId = convertRawNodeToSolvedNode(child, {
+      ...context,
+      board,
+      path: [...context.path, `deal_${formatCardKey(parsed)}`],
+      incomingAction: `deal_${formatCardKey(parsed)}`,
+      parentActor: "dealer",
+    });
+    const cardKey = formatCardKey(parsed);
+    children[cardKey] = childNodeId;
+    cardOptions.push({
+      card: cardKey,
+      board: board.map(formatCardKey),
+      childNodeId,
+    });
+  });
+
+  context.convertedNodes[nodeId] = {
+    nodeId,
+    street: getStreetFromBoard(context.board),
+    board: context.board.map(formatCardKey),
+    actor: "chance",
+    potBb: round(context.potBb),
+    effectiveStackBb: round(context.effectiveStackBb),
+    legalActions: [],
+    strategyByCombo: {},
+    children,
+    cardOptions,
+  };
+  return nodeId;
+}
+
+function createTerminalSolvedNode(context, terminal) {
+  const nodeId = `terminal_${++context.counters.terminal}`;
+  context.convertedNodes[nodeId] = {
+    nodeId,
+    street: getStreetFromBoard(context.board),
+    board: context.board.map(formatCardKey),
+    actor: "terminal",
+    potBb: round(context.potBb),
+    effectiveStackBb: round(context.effectiveStackBb),
+    legalActions: [],
+    strategyByCombo: {},
+    children: {},
+    terminal: {
+      ...terminal,
+      potBb: round(context.potBb),
+      summary: terminal.summary || getTerminalSummary(terminal, context),
+    },
+  };
+  return nodeId;
+}
+
+function inferTerminalForMissingChild(context) {
+  if (String(context.incomingAction).includes("fold")) {
+    return inferTerminalForAction({ type: "fold" }, context.parentActor);
+  }
+  return { type: "showdown" };
+}
+
+function inferTerminalForAction(action, actor) {
+  if (action.type === "fold") {
+    return {
+      type: "fold",
+      winner: actor === "hero" ? "villain" : "hero",
+    };
+  }
+
+  if (action.type === "call") {
+    return { type: "showdown" };
+  }
+
+  return { type: "terminal" };
+}
+
+function getTerminalSummary(terminal, context) {
+  if (terminal.type === "fold") {
+    const winner = terminal.winner === "hero" ? "Hero" : "Villain";
+    return `${winner} wins the pot after a fold.`;
+  }
+
+  if (terminal.type === "showdown") {
+    return "The hand reaches showdown in the solved tree.";
+  }
+
+  return terminal.reason || "The solved branch ends here.";
+}
+
+function getActorFromTexasSolverPlayer(player, args) {
+  const numericPlayer = Number(player);
+  if (numericPlayer === 0) return args.ipActor || "hero";
+  if (numericPlayer === 1) return args.oopActor || "villain";
+  return args.rootActor || "hero";
+}
+
+function getPotAfterAction(potBb, action) {
+  const amount = Number(action.amountBb || 0);
+  if (amount > 0) {
+    return round(potBb + amount);
+  }
+
+  if (action.type === "bet" && action.sizePctPot) {
+    return round(potBb + potBb * (action.sizePctPot / 100));
+  }
+
+  return round(potBb);
+}
+
+function aggregateDefaultStrategy(payload, legalActions) {
+  const actionsByIndex = legalActions.map((action) => action.id);
+  const totals = {};
+  let comboCount = 0;
+
+  Object.values(payload.strategy || {}).forEach((frequencies) => {
+    if (!Array.isArray(frequencies)) {
+      return;
+    }
+    comboCount += 1;
+    frequencies.forEach((frequency, index) => {
+      const actionId = actionsByIndex[index];
+      if (!actionId || typeof frequency !== "number") {
+        return;
+      }
+      totals[actionId] = (totals[actionId] || 0) + frequency;
+    });
+  });
+
+  const actions = {};
+  Object.entries(totals).forEach(([actionId, total]) => {
+    actions[actionId] = {
+      frequency: comboCount ? round(total / comboCount) : 0,
+      evBb: null,
+    };
+  });
+  normalizeActionFrequencies(actions);
+  return {
+    actions,
+    bestActionId: getBestActionIdFromSolvedActions(actions) || legalActions[0]?.id || "",
+    approximate: false,
+    note: comboCount ? `Range-average TexasSolver strategy across ${comboCount} combos.` : "TexasSolver strategy missing for this node.",
+  };
+}
+
+function getAllHeroCombos(nodes) {
+  const combos = new Set();
+  Object.values(nodes || {}).forEach((node) => {
+    if (node.actor !== "hero") {
+      return;
+    }
+    Object.keys(node.strategyByCombo || {}).forEach((combo) => combos.add(combo));
+  });
+  return [...combos].slice(0, 200);
+}
+
+function shouldWriteJson(args, outputPath) {
+  return args.format === "json" || path.extname(outputPath).toLowerCase() === ".json";
 }
 
 function parseArgs(argv) {
@@ -97,6 +399,8 @@ Common options:
   --pot <number>                    TexasSolver pot amount, used for bet-size mapping
   --pot-bb-range <min,max>          Match range in big blinds
   --max-action-depth <number>       0 exports root action nodes only; increase for child nodes
+  --schema <legacy|solved-tree>     Use solved-tree for the MVP full-hand trainer schema
+  --format <js|json>                With --schema solved-tree, write plain JSON for /data/solves/real
 `);
 }
 
@@ -183,6 +487,175 @@ function convertNodeToSpot(nodeInfo, args, pot, index) {
       originalActions: nodeInfo.strategyPayload.actions,
     },
   };
+}
+
+function convertNodesToSolvedTree(nodes, args, pot, packId, inputPath) {
+  const nodeByPath = new Map(nodes.map((nodeInfo, index) => [getSolvedNodePathKey(nodeInfo.actionPath), { nodeInfo, index }]));
+  const convertedNodes = {};
+
+  nodes.forEach((nodeInfo, index) => {
+    const nodeId = index === 0 && nodeInfo.actionPath.length === 0
+      ? "root"
+      : getSolvedNodeId(nodeInfo.actionPath, index);
+    convertedNodes[nodeId] = convertNodeToSolvedNode(nodeInfo, args, pot, nodeByPath, index);
+  });
+
+  if (!convertedNodes.root) {
+    const firstKey = Object.keys(convertedNodes)[0];
+    convertedNodes.root = { ...convertedNodes[firstKey], nodeId: "root" };
+    delete convertedNodes[firstKey];
+  }
+
+  const board = nodes[0]?.board?.length ? nodes[0].board : parseBoard(args.board || "");
+  return {
+    treeId: args.treeId || packId,
+    label: args.treeName || args.packName || `TexasSolver ${packId}`,
+    isDemo: false,
+    metadata: {
+      formation: args.formation || "BTN_vs_BB_SRP",
+      heroPosition: args.heroPosition || args.heroSeat || "BTN",
+      villainPosition: args.villainPosition || "BB",
+      stackDepthBb: Number(args.stackDepthBb || 100),
+      potType: args.potType || "single-raised-pot",
+      flop: board.slice(0, 3).map(formatCardKey),
+      availableFlopSizes: convertedNodes.root?.legalActions?.map((action) => action.id) || [],
+      source: args.source || `TexasSolver export: ${path.basename(inputPath)}`,
+    },
+    nodes: convertedNodes,
+  };
+}
+
+function convertNodeToSolvedNode(nodeInfo, args, pot, nodeByPath, index) {
+  const nodeId = index === 0 && nodeInfo.actionPath.length === 0
+    ? "root"
+    : getSolvedNodeId(nodeInfo.actionPath, index);
+  const board = nodeInfo.board.length ? nodeInfo.board : parseBoard(args.board || "");
+  const legalActions = nodeInfo.strategyPayload.actions.map((action) => normalizeTexasSolverActionObject(action, pot));
+  const strategyByCombo = aggregateSolvedTreeStrategy(nodeInfo.strategyPayload, legalActions);
+  const children = {};
+
+  Object.keys(nodeInfo.node.childrens || {}).forEach((action) => {
+    const actionId = normalizeTexasSolverActionObject(action, pot).id;
+    const childKey = getSolvedNodePathKey([...nodeInfo.actionPath, action]);
+    const child = nodeByPath.get(childKey);
+    if (child) {
+      children[actionId] = getSolvedNodeId(child.nodeInfo.actionPath, child.index);
+    }
+  });
+
+  return {
+    nodeId,
+    street: args.street || getStreetFromBoard(board),
+    board: board.map(formatCardKey),
+    actor: inferActorForSolvedNode(nodeInfo, args),
+    potBb: Number(args.potBb || args.pot || 0),
+    effectiveStackBb: Number(args.effectiveStackBb || args.stackDepthBb || 100),
+    legalActions,
+    strategyByCombo,
+    children,
+  };
+}
+
+function aggregateSolvedTreeStrategy(payload, legalActions) {
+  const actionsByIndex = legalActions.map((action) => action.id);
+  const result = {};
+
+  Object.entries(payload.strategy || {}).forEach(([combo, frequencies]) => {
+    if (!Array.isArray(frequencies)) {
+      return;
+    }
+
+    const actions = {};
+    frequencies.forEach((frequency, index) => {
+      const actionId = actionsByIndex[index];
+      if (!actionId || typeof frequency !== "number") {
+        return;
+      }
+      actions[actionId] = {
+        frequency: round(frequency),
+        evBb: null,
+      };
+    });
+    normalizeActionFrequencies(actions);
+    result[normalizeComboKey(combo)] = {
+      actions,
+      bestActionId: Object.entries(actions).sort((a, b) => b[1].frequency - a[1].frequency)[0]?.[0] || legalActions[0]?.id || "",
+    };
+  });
+
+  return result;
+}
+
+function normalizeTexasSolverActionObject(action, pot) {
+  const text = String(action).trim();
+  const upper = text.toUpperCase();
+  const amount = Number(upper.match(/-?\d+(?:\.\d+)?/)?.[0] || 0);
+  const sizePctPot = pot > 0 && amount > 0 ? Math.round((amount / pot) * 100) : null;
+
+  if (upper.includes("CHECK")) return { id: "check", label: "Check", type: "check" };
+  if (upper.includes("CALL")) return { id: "call", label: "Call", type: "call", amountBb: amount || null };
+  if (upper.includes("FOLD")) return { id: "fold", label: "Fold", type: "fold" };
+  if (upper.includes("ALLIN")) return { id: "jam", label: "Jam", type: "raise", amountBb: amount || null };
+  if (upper.includes("RAISE")) {
+    const id = sizePctPot ? `raise_${sizePctPot}` : amount ? `raise_${String(amount).replace(".", "_")}` : "raise";
+    return { id, label: sizePctPot ? `Raise ${sizePctPot}%` : "Raise", type: "raise", amountBb: amount || null, sizePctPot };
+  }
+  if (upper.includes("BET")) {
+    const id = sizePctPot ? `bet_${sizePctPot}` : amount ? `bet_${String(amount).replace(".", "_")}` : "bet";
+    return { id, label: sizePctPot ? `Bet ${sizePctPot}%` : "Bet", type: "bet", amountBb: amount || null, sizePctPot };
+  }
+  const fallbackId = slugify(text) || "action";
+  return { id: fallbackId, label: text, type: "action", amountBb: amount || null, sizePctPot };
+}
+
+function getBestActionIdFromSolvedActions(actions) {
+  return Object.entries(actions || {})
+    .sort(([, first], [, second]) => {
+      const firstEv = Number.isFinite(first.evBb) ? first.evBb : -Infinity;
+      const secondEv = Number.isFinite(second.evBb) ? second.evBb : -Infinity;
+      if (secondEv !== firstEv) return secondEv - firstEv;
+      return (second.frequency || 0) - (first.frequency || 0);
+    })[0]?.[0] || "";
+}
+
+function normalizeActionFrequencies(actions) {
+  const total = Object.values(actions).reduce((sum, action) => sum + (action.frequency || 0), 0) || 1;
+  Object.values(actions).forEach((action) => {
+    action.frequency = round((action.frequency || 0) / total);
+  });
+}
+
+function normalizeComboKey(combo) {
+  const cards = String(combo).match(/[2-9TJQKA][cdhs]/gi);
+  if (!cards || cards.length !== 2) {
+    return comboToHandClass(combo);
+  }
+
+  return cards
+    .map((card) => card[0].toUpperCase() + card[1].toLowerCase())
+    .sort((a, b) => RANKS.indexOf(a[0]) - RANKS.indexOf(b[0]))
+    .join("");
+}
+
+function getSolvedNodePathKey(actionPath = []) {
+  return actionPath.join("|") || "root";
+}
+
+function getSolvedNodeId(actionPath = [], index = 0) {
+  if (!actionPath.length) return "root";
+  return slugify(`node-${index + 1}-${actionPath.join("-")}`);
+}
+
+function inferActorForSolvedNode(nodeInfo, args) {
+  if (args.actor) {
+    return args.actor;
+  }
+
+  return nodeInfo.actionPath.length % 2 === 0 ? "hero" : "villain";
+}
+
+function formatCardKey(card) {
+  return `${card.rank}${card.suit}`;
 }
 
 function aggregateStrategy(payload, normalizedActions) {

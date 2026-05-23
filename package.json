@@ -5,6 +5,18 @@
   "description": "Local website for the FishKiller poker trainer",
   "scripts": {
     "convert:texassolver": "node tools/convert-texassolver.js",
-    "start": "node server.js"
+    "import:k72": "node tools/convert-texassolver.js --input data/texassolver/raw/btn_bb_srp_100bb_k72r.json --output data/solves/real/btn_bb_srp_100bb_k72r.json --schema solved-tree --format json --tree-id btn_bb_srp_100bb_k72r --tree-name \"BTN vs BB SRP 100bb K72r\" --formation BTN_vs_BB_SRP --hero-position BTN --villain-position BB --board Ks,7d,2c --pot 5.5 --stack-depth-bb 100 --max-action-depth 2 --source \"TexasSolver real solve: BTN vs BB SRP 100bb K72r\"",
+    "solves:bundle": "node tools/bundle-solves.js",
+    "solves:convert": "node tools/convert-texassolver.js",
+    "solves:smoke": "node tools/smoke-test-solves.js",
+    "solves:validate": "node tools/validate-solves.js",
+    "start": "node server.js",
+    "test": "node tests/training-engine.test.js",
+    "test:preflop": "node tests/training-engine.test.js",
+    "preflop:ranges:validate": "node tools/validate-preflop-range-packs.js",
+    "preflop:ranges:texassolver:smoke": "node tools/test-range-pack-to-texassolver.js",
+    "texassolver:input:check": "node tools/check-texassolver-input.js",
+    "texassolver:input:check:smoke": "node tools/test-check-texassolver-input.js",
+    "texassolver:input:smoke": "node tools/test-generate-texassolver-input.js"
   }
 }

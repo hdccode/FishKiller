@@ -1,0 +1,35 @@
+{
+  "packId": "demo-rule-baseline",
+  "name": "Demo Rule Baseline Range Pack",
+  "sourceType": "demo",
+  "enabled": false,
+  "usableAsRealTrainingData": false,
+  "notes": "Tiny disabled demo pack for local smoke tests only. Do not use for real training, solver jobs, or strategy claims.",
+  "spots": [
+    {
+      "spotId": "demo_6max_btn_rfi_100bb",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "heroPosition": "BTN",
+      "actionContext": "rfi",
+      "actionsByHand": {
+        "AA": { "raise": 1 },
+        "A5s": { "raise": 0.95, "fold": 0.05 },
+        "KQo": { "raise": 0, "fold": 1 }
+      }
+    },
+    {
+      "spotId": "demo_6max_bb_vs_btn_open_100bb",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "heroPosition": "BB",
+      "villainPosition": "BTN",
+      "actionContext": "facing-open",
+      "actionsByHand": {
+        "A5s": { "call": 0.4, "threeBet": 0.5, "fold": 0.1 },
+        "T8s": { "call": 0.85, "threeBet": 0.05, "fold": 0.1 },
+        "72o": { "fold": 1 }
+      }
+    }
+  ]
+}
