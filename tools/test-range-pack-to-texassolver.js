@@ -16,6 +16,13 @@ const {
 const ROOT = path.resolve(__dirname, "..");
 const VALIDATOR = path.join(ROOT, "tools", "validate-preflop-range-packs.js");
 const GENERATOR = path.join(ROOT, "tools", "generate-texassolver-ranges.js");
+const REAL_RFI_SPOT_IDS = [
+  "fk_6max_100bb_lj_rfi_unopened_v1",
+  "fk_6max_100bb_hj_rfi_unopened_v1",
+  "fk_6max_100bb_co_rfi_unopened_v1",
+  "fk_6max_100bb_btn_rfi_unopened_v1",
+  "fk_6max_100bb_sb_rfi_unopened_v1",
+];
 
 main();
 
@@ -54,6 +61,13 @@ function runModuleAssertions() {
   assert.equal(realBtnRfi.pack.usableAsRealTrainingData, true);
   assert.equal(Object.keys(realBtnRfi.spot.actionsByHand).length, 169);
   assert.deepEqual(realBtnRfi.spot.legalActions.map((action) => action.id), ["fold", "raise"]);
+  REAL_RFI_SPOT_IDS.forEach((spotId) => {
+    const realRfi = findSpot(packs, spotId);
+    assert(realRfi, `Real 6-max RFI spot should exist: ${spotId}`);
+    assert.equal(realRfi.pack.sourceType, "manual");
+    assert.equal(Object.keys(realRfi.spot.actionsByHand).length, 169);
+    assert.deepEqual(realRfi.spot.legalActions.map((action) => action.id), ["fold", "raise"]);
+  });
 
   assert.equal(actionFrequencyToWeight({ call: 0.4, threeBet: 0.5, fold: 0.1 }, ["call", "threeBet"]), 0.9);
 

@@ -71,7 +71,15 @@ The first real MVP pack is:
 data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json
 ```
 
-It currently contains one internally authored, non-proprietary baseline spot: 6-max BTN RFI at 100bb after action folds to Hero. It is not presented as solver-perfect GTO.
+It currently contains internally authored, non-proprietary baseline 6-max RFI spots at 100bb after action folds to Hero:
+
+- `fk_6max_100bb_lj_rfi_unopened_v1`
+- `fk_6max_100bb_hj_rfi_unopened_v1`
+- `fk_6max_100bb_co_rfi_unopened_v1`
+- `fk_6max_100bb_btn_rfi_unopened_v1`
+- `fk_6max_100bb_sb_rfi_unopened_v1`
+
+LJ/HJ/CO/BTN use 2.3bb opens. SB uses a 3bb open. These are FishKiller internal baseline training ranges, not solver-perfect GTO and not copied commercial charts.
 
 ## Demo Versus Real
 

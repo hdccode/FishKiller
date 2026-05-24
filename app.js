@@ -121,7 +121,13 @@ const TRAINING_ENGINE_IDS = {
   preflopRange: "preflop-range",
 };
 const PREFLOP_RANGE_PACK_URL = "data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json";
-const PREFLOP_RANGE_BTN_RFI_SPOT_ID = "fk_6max_100bb_btn_rfi_unopened_v1";
+const PREFLOP_RANGE_RFI_SPOT_IDS = [
+  "fk_6max_100bb_lj_rfi_unopened_v1",
+  "fk_6max_100bb_hj_rfi_unopened_v1",
+  "fk_6max_100bb_co_rfi_unopened_v1",
+  "fk_6max_100bb_btn_rfi_unopened_v1",
+  "fk_6max_100bb_sb_rfi_unopened_v1",
+];
 const PREFLOP_RANGE_QUESTION_XP = 12;
 const PREFLOP_PROGRESS = window.FishKillerPreflopProgress || null;
 const SCENARIOS_BY_ID = Object.fromEntries(SCENARIOS.map((scenario) => [scenario.id, scenario]));
@@ -208,6 +214,7 @@ let activeSession = null;
 let latestSummary = null;
 let preflopRangePack = null;
 let preflopRangeSpot = null;
+let preflopRangeSpots = [];
 let preflopRangeStatus = "idle";
 const solverCache = new Map();
 
@@ -290,13 +297,14 @@ function loadPreflopRangePack() {
     .then((response) => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
     .then((pack) => {
       const normalizedPack = window.FishKillerPreflopEngine.normalizePreflopRangePack(pack);
-      const spot = window.FishKillerPreflopEngine.getPreflopSpot(normalizedPack, PREFLOP_RANGE_BTN_RFI_SPOT_ID);
-      if (!spot) {
-        throw new Error(`Missing preflop spot ${PREFLOP_RANGE_BTN_RFI_SPOT_ID}`);
+      const spots = getPreflopRangeTrainableSpots(normalizedPack);
+      if (!spots.length) {
+        throw new Error("Missing complete 6-max unopened RFI preflop spots.");
       }
 
       preflopRangePack = normalizedPack;
-      preflopRangeSpot = spot;
+      preflopRangeSpots = spots;
+      preflopRangeSpot = spots[0];
       preflopRangeStatus = "ready";
       renderTopline();
       renderPracticeModes();
@@ -306,6 +314,7 @@ function loadPreflopRangePack() {
       preflopRangeStatus = "error";
       preflopRangePack = null;
       preflopRangeSpot = null;
+      preflopRangeSpots = [];
       console.warn("Failed to load preflop range pack; 6-max will use scenario fallback.", error);
     });
 }
@@ -596,6 +605,7 @@ function createPreflopRangeQuestionState(options = {}) {
   const sample = options.reviewMode
     ? samplePreflopRangeReviewQuestion() || samplePreflopRangeQuestion()
     : samplePreflopRangeQuestion();
+  const spot = getPreflopRangeSpot(sample.spotId);
 
   return {
     engine: TRAINING_ENGINE_IDS.preflopRange,
@@ -611,25 +621,26 @@ function createPreflopRangeQuestionState(options = {}) {
     grade: null,
     startedAt: 0,
     answerMs: 0,
-    preflopResponses: [
-      { seat: "UTG", action: "Folds", folded: true },
-      { seat: "HJ", action: "Folds", folded: true },
-      { seat: "CO", action: "Folds", folded: true },
-    ],
+    preflopResponses: createPreflopRangeResponses(spot),
   };
 }
 
 function samplePreflopRangeQuestion() {
+  const spot = samplePreflopRangeSpot();
+  if (!spot) {
+    throw new Error("No trainable 6-max RFI preflop spots are loaded.");
+  }
+
   return window.FishKillerPreflopEngine.samplePreflopQuestion({
     packOrNormalizedPack: preflopRangePack,
-    spotId: PREFLOP_RANGE_BTN_RFI_SPOT_ID,
+    spotId: spot.spotId,
     rng: Math.random,
   });
 }
 
 function samplePreflopRangeReviewQuestion() {
   const mistake = PREFLOP_PROGRESS?.samplePreflop6maxMistake(state.preflop6maxProgress, { rng: Math.random });
-  const spot = getActivePreflopRangeSpot();
+  const spot = getPreflopRangeSpot(mistake?.spotId);
   if (!mistake || !spot) {
     return null;
   }
@@ -1054,7 +1065,7 @@ function completeQuestion(question, scenario, spot, result) {
 function answerPreflopRangeQuestion(actionId) {
   const engine = window.FishKillerPreflopEngine;
   const question = getCurrentQuestion();
-  const spot = getActivePreflopRangeSpot();
+  const spot = getPreflopRangeSpot(question?.spotId);
 
   if (!engine || !question || !spot || question.answered) {
     return;
@@ -1354,7 +1365,7 @@ function buildSummaryNote(session, outcome, boostUsed) {
   }
 
   if (session.trainingEngine === TRAINING_ENGINE_IDS.preflopRange) {
-    return `6-max BTN RFI range drill finished with ${session.missedQuestions.length} missed decision${session.missedQuestions.length === 1 ? "" : "s"}.${boostNote}`;
+    return `6-max RFI range drill finished with ${session.missedQuestions.length} missed decision${session.missedQuestions.length === 1 ? "" : "s"}.${boostNote}`;
   }
 
   return `Main session finished with ${session.missedQuestions.length} missed decision${session.missedQuestions.length === 1 ? "" : "s"} saved for review.${boostNote}`;
@@ -1663,7 +1674,7 @@ function renderScenario() {
 
 function renderPreflopRangeScenario() {
   const question = getCurrentQuestion();
-  const spot = getActivePreflopRangeSpot();
+  const spot = getPreflopRangeSpot(question?.spotId);
 
   if (!activeSession || !question || !spot) {
     renderIdleScenario();
@@ -1680,8 +1691,8 @@ function renderPreflopRangeScenario() {
   elements.scenarioTable.textContent = "6-Max - real preflop range";
   elements.scenarioDifficulty.textContent = "Internal baseline";
   renderBettingLine(bettingSummary);
-  elements.scenarioTitle.textContent = "6-max 100bb - BTN first in";
-  elements.scenarioCopy.textContent = `Hero has ${question.handClass}. Choose the baseline BTN open-or-fold action from the loaded range pack.`;
+  elements.scenarioTitle.textContent = formatPreflopRangeSpotTitle(spot);
+  elements.scenarioCopy.textContent = `Hero has ${question.handClass}. Choose the baseline ${spot.heroPosition} open-or-fold action from the loaded range pack.`;
   elements.sessionChip.textContent = activeSession.mode === "review" ? "Range Review" : "Preflop Range";
   elements.sessionCounter.textContent = `${activeSession.currentIndex + 1} / ${activeSession.questionStates.length}`;
   elements.mistakeCounter.textContent = activeSession.mode === "main"
@@ -1689,7 +1700,7 @@ function renderPreflopRangeScenario() {
     : `Review mistakes - ${getPreflopRangeSessionAccuracyLabel()}`;
   elements.progressFill.style.width = `${Math.round(((activeSession.currentIndex + (question.answered ? 1 : 0)) / activeSession.questionStates.length) * 100)}%`;
   elements.scenarioFacts.innerHTML = [
-    createFactCard("Spot", "BTN RFI"),
+    createFactCard("Spot", `${spot.heroPosition} RFI`),
     createFactCard("Stack", "100bb"),
     createFactCard("Open Size", spot.raiseSize?.label || "Raise"),
     createFactCard("Lifetime Reps", state.preflop6maxProgress?.totals?.attempts || 0),
@@ -1713,43 +1724,92 @@ function getPreflopRangeSessionAccuracyLabel() {
 }
 
 function createPreflopRangeVisualScenario(question) {
+  const spot = getPreflopRangeSpot(question?.spotId);
   const parsed = parseHand(question.handClass, `${activeSession?.id || "preflop-range"}-${activeSession?.currentIndex || 0}`);
+  const heroSeat = getPreflopRangeTableSeat(spot?.heroPosition || "BTN");
   return {
     id: `preflop-range-${question.handClass}`,
     tableSize: "six",
-    heroSeat: "BTN",
+    heroSeat,
     heroHand: question.handClass,
     heroCards: [
       { rank: parsed.left, suit: parsed.leftSuit },
       { rank: parsed.right, suit: parsed.rightSuit },
     ],
-    actors: [
-      { seat: "UTG", label: "Folded" },
-      { seat: "HJ", label: "Folded" },
-      { seat: "CO", label: "Folded" },
-      { seat: "BTN", label: "Hero" },
-    ],
+    actors: createPreflopRangeActors(spot),
   };
 }
 
 function createPreflopRangeBettingSummary(question) {
+  const spot = getPreflopRangeSpot(question?.spotId);
+  const actionBySeat = createPreflopRangeActionBySeat(spot, question);
+  const foldedPositions = getPreflopRangePriorPositions(spot?.heroPosition || "BTN");
+  const foldedText = foldedPositions.length
+    ? `${foldedPositions.join(", ")} fold`
+    : "Action starts first in";
+
   return {
     pot: SMALL_BLIND + BIG_BLIND,
     items: [
       `Blinds ${formatMoney(SMALL_BLIND)} / ${formatMoney(BIG_BLIND)}`,
-      "UTG, HJ, CO fold",
-      "BTN first in",
+      foldedText,
+      `${spot?.heroPosition || "BTN"} first in`,
       `Pot ${formatMoney(SMALL_BLIND + BIG_BLIND)}`,
     ],
-    actionBySeat: {
-      UTG: "Folded",
-      HJ: "Folded",
-      CO: "Folded",
-      BTN: question.answered ? getPreflopActionLabel(question.legalActions, question.selected) : "Hero to act",
-      SB: "Waiting",
-      BB: "Waiting",
-    },
+    actionBySeat,
   };
+}
+
+function createPreflopRangeResponses(spot) {
+  return getPreflopRangePriorPositions(spot?.heroPosition || "BTN").map((position) => ({
+    seat: getPreflopRangeTableSeat(position),
+    action: "Folds",
+    folded: true,
+  }));
+}
+
+function createPreflopRangeActors(spot) {
+  const heroPosition = spot?.heroPosition || "BTN";
+  return [
+    ...getPreflopRangePriorPositions(heroPosition).map((position) => ({
+      seat: getPreflopRangeTableSeat(position),
+      label: "Folded",
+    })),
+    { seat: getPreflopRangeTableSeat(heroPosition), label: "Hero" },
+  ];
+}
+
+function createPreflopRangeActionBySeat(spot, question) {
+  const heroPosition = spot?.heroPosition || "BTN";
+  const heroSeat = getPreflopRangeTableSeat(heroPosition);
+  const actionBySeat = {};
+  getPreflopRangePriorPositions(heroPosition).forEach((position) => {
+    actionBySeat[getPreflopRangeTableSeat(position)] = "Folded";
+  });
+  actionBySeat[heroSeat] = question.answered ? getPreflopActionLabel(question.legalActions, question.selected) : "Hero to act";
+
+  if (heroSeat !== "SB") {
+    actionBySeat.SB = "Waiting";
+  }
+  if (heroSeat !== "BB") {
+    actionBySeat.BB = "Waiting";
+  }
+
+  return actionBySeat;
+}
+
+function getPreflopRangePriorPositions(heroPosition) {
+  const order = ["LJ", "HJ", "CO", "BTN", "SB"];
+  const index = order.indexOf(heroPosition);
+  return index > 0 ? order.slice(0, index) : [];
+}
+
+function getPreflopRangeTableSeat(position) {
+  return position === "LJ" ? "UTG" : position;
+}
+
+function formatPreflopRangeSpotTitle(spot) {
+  return `6-max ${spot?.stackDepthBb || 100}bb - ${spot?.heroPosition || "BTN"} first in`;
 }
 
 function renderPreflopRangeAnswers(question) {
@@ -1790,7 +1850,7 @@ function renderPreflopRangeFeedback(question) {
   if (!question.answered) {
     elements.feedbackBand.className = "feedback-band neutral";
     elements.feedbackLabel.textContent = "Choose your line";
-    elements.feedbackText.textContent = "Use the loaded FishKiller 6-max BTN first-in range. Only supported actions for this spot are shown.";
+    elements.feedbackText.textContent = "Use the loaded FishKiller 6-max first-in range. Only supported actions for this spot are shown.";
     elements.continueButton.disabled = true;
     elements.continueButton.textContent = "Continue";
     return;
@@ -1838,10 +1898,10 @@ function getPreflopActionLabel(actions = [], actionId = "") {
 
 function getPreflopRangeActionHint(action) {
   if (action.id === "raise") {
-    return action.sizeBb ? `Open to ${action.sizeBb}bb and take the initiative.` : "Open the BTN range.";
+    return action.sizeBb ? `Open to ${action.sizeBb}bb and take the initiative.` : "Open the range.";
   }
   if (action.id === "fold") {
-    return "Release hands outside the BTN first-in range.";
+    return "Release hands outside this first-in range.";
   }
   return "Choose a supported action from this range spot.";
 }
@@ -4676,11 +4736,10 @@ function openGtoModal() {
 
 function openPreflopRangeModal() {
   const question = getCurrentQuestion();
-  const spot = getActivePreflopRangeSpot();
-  const openSize = spot?.raiseSize?.label || "Open 2.3bb";
+  const spot = getPreflopRangeSpot(question?.spotId) || getActivePreflopRangeSpot();
   elements.gtoKicker.textContent = "6-Max Preflop Range";
-  elements.gtoTitle.textContent = "BTN first-in range";
-  elements.gtoCopy.textContent = `6-max 100bb - BTN first in - ${openSize}`;
+  elements.gtoTitle.textContent = `${spot?.heroPosition || "BTN"} first-in range`;
+  elements.gtoCopy.textContent = `${formatPreflopRangeSpotTitle(spot)} - ${spot?.raiseSize?.label || "Open"}`;
   elements.gtoLegend.innerHTML = createPreflopRangeLegend();
 
   try {
@@ -6427,7 +6486,7 @@ function isPreflopRangeEngineReady() {
     return false;
   }
 
-  return Boolean(getActivePreflopRangeSpot());
+  return getPreflopRangeTrainableSpots().length > 0;
 }
 
 function getActivePreflopRangeSpot() {
@@ -6435,12 +6494,72 @@ function getActivePreflopRangeSpot() {
     return null;
   }
 
-  if (preflopRangeSpot?.spotId === PREFLOP_RANGE_BTN_RFI_SPOT_ID) {
-    return preflopRangeSpot;
+  const questionSpot = getPreflopRangeSpot(getCurrentQuestion()?.spotId);
+  if (questionSpot) return questionSpot;
+
+  const sessionSpot = getPreflopRangeSpot(activeSession?.spotId);
+  if (sessionSpot) return sessionSpot;
+
+  preflopRangeSpot = getPreflopRangeTrainableSpots()[0] || null;
+  return preflopRangeSpot;
+}
+
+function getPreflopRangeSpot(spotId) {
+  if (!window.FishKillerPreflopEngine || !preflopRangePack || !spotId) {
+    return null;
   }
 
-  preflopRangeSpot = window.FishKillerPreflopEngine.getPreflopSpot(preflopRangePack, PREFLOP_RANGE_BTN_RFI_SPOT_ID);
+  const cached = preflopRangeSpots.find((spot) => spot.spotId === spotId);
+  preflopRangeSpot = cached || window.FishKillerPreflopEngine.getPreflopSpot(preflopRangePack, spotId);
   return preflopRangeSpot;
+}
+
+function samplePreflopRangeSpot() {
+  const spots = getPreflopRangeTrainableSpots();
+  if (!spots.length) {
+    return null;
+  }
+
+  return spots[Math.floor(Math.random() * spots.length)];
+}
+
+function getPreflopRangeTrainableSpots(pack = preflopRangePack) {
+  if (!pack) {
+    return [];
+  }
+
+  const spots = Array.isArray(pack.spots) ? pack.spots : [];
+  const discovered = spots.filter(isTrainablePreflopRangeRfiSpot);
+  if (discovered.length) {
+    return discovered.sort((left, right) => {
+      return getPreflopRangeSpotOrder(left.spotId) - getPreflopRangeSpotOrder(right.spotId);
+    });
+  }
+
+  return PREFLOP_RANGE_RFI_SPOT_IDS
+    .map((spotId) => window.FishKillerPreflopEngine?.getPreflopSpot(pack, spotId))
+    .filter(Boolean);
+}
+
+function isTrainablePreflopRangeRfiSpot(spot) {
+  if (!spot || spot.tableSize !== 6 || spot.stackDepthBb !== 100) {
+    return false;
+  }
+
+  const actionIds = new Set((spot.legalActions || []).map((action) => action.id));
+  return (
+    spot.complete === true &&
+    spot.actionContext === "rfi" &&
+    spot.priorAction === "folded-to-hero" &&
+    spot.potState === "unopened" &&
+    actionIds.has("fold") &&
+    actionIds.has("raise")
+  );
+}
+
+function getPreflopRangeSpotOrder(spotId) {
+  const index = PREFLOP_RANGE_RFI_SPOT_IDS.indexOf(spotId);
+  return index === -1 ? Number.MAX_SAFE_INTEGER : index;
 }
 
 function isPracticeModeAvailable(modeId) {
