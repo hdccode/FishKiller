@@ -121,6 +121,7 @@ Run:
 
 ```powershell
 npm run preflop:ranges:validate
+npm run preflop:ranges:coverage
 ```
 
 This checks metadata, spot fields, hand syntax, and per-hand action frequencies. It writes:
@@ -128,6 +129,8 @@ This checks metadata, spot fields, hand syntax, and per-hand action frequencies.
 ```text
 data/preflop-ranges/validation-report.json
 ```
+
+The coverage check verifies the launch-supported live 6-max trainer families: five RFI spots, five BB defense spots, and five selected 3-bet versus open spots. It also checks 169-hand coverage, expected legal actions by family, drill-to-spot mappings, range-matrix construction, and question sampling.
 
 ## TexasSolver Range Generation
 
