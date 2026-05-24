@@ -194,8 +194,8 @@
   }
 
   function formatPreflopSpotLabel(spot) {
-    if (spot?.actionContext === "facing-open" && spot?.heroPosition === "BB") {
-      return `BB vs ${spot.villainPosition || "opener"} open`;
+    if (spot?.actionContext === "facing-open") {
+      return `${spot.heroPosition || "Hero"} vs ${spot.villainPosition || "opener"} open`;
     }
 
     return `${spot?.heroPosition || "BTN"} first in`;

@@ -135,9 +135,17 @@ const PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS = [
   "fk_6max_100bb_bb_vs_btn_open_v1",
   "fk_6max_100bb_bb_vs_sb_open_v1",
 ];
+const PREFLOP_RANGE_THREE_BET_SPOT_IDS = [
+  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
+  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
+  "fk_6max_100bb_hj_vs_lj_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
+];
 const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = [
   ...PREFLOP_RANGE_RFI_SPOT_IDS,
   ...PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS,
+  ...PREFLOP_RANGE_THREE_BET_SPOT_IDS,
 ];
 const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-rfi";
 const PREFLOP_RANGE_REVIEW_DRILL_ID = "review-mistakes";
@@ -155,6 +163,12 @@ const PREFLOP_RANGE_DRILL_OPTIONS = [
   { id: "bb-vs-co", label: "BB vs CO", spotIds: ["fk_6max_100bb_bb_vs_co_open_v1"] },
   { id: "bb-vs-btn", label: "BB vs BTN", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
   { id: "bb-vs-sb", label: "BB vs SB", spotIds: ["fk_6max_100bb_bb_vs_sb_open_v1"] },
+  { id: "all-three-bet", label: "All 3-bet", spotIds: PREFLOP_RANGE_THREE_BET_SPOT_IDS },
+  { id: "btn-vs-co-3bet", label: "BTN vs CO", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
+  { id: "co-vs-hj-3bet", label: "CO vs HJ", spotIds: ["fk_6max_100bb_co_vs_hj_open_3bet_v1"] },
+  { id: "hj-vs-lj-3bet", label: "HJ vs LJ", spotIds: ["fk_6max_100bb_hj_vs_lj_open_3bet_v1"] },
+  { id: "sb-vs-btn-3bet", label: "SB vs BTN", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
+  { id: "sb-vs-co-3bet", label: "SB vs CO", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
   { id: PREFLOP_RANGE_REVIEW_DRILL_ID, label: "Review mistakes", reviewMode: true, spotIds: [] },
 ];
 const PREFLOP_RANGE_QUESTION_XP = 12;
@@ -1866,8 +1880,8 @@ function createPreflopRangeVisualScenario(question) {
 
 function createPreflopRangeBettingSummary(question) {
   const spot = getPreflopRangeSpot(question?.spotId);
-  if (isPreflopRangeBbDefenseSpot(spot)) {
-    return createPreflopRangeBbDefenseBettingSummary(spot, question);
+  if (isPreflopRangeFacingOpenSpot(spot)) {
+    return createPreflopRangeFacingOpenBettingSummary(spot, question);
   }
 
   const actionBySeat = createPreflopRangeActionBySeat(spot, question);
@@ -1889,8 +1903,8 @@ function createPreflopRangeBettingSummary(question) {
 }
 
 function createPreflopRangeResponses(spot) {
-  if (isPreflopRangeBbDefenseSpot(spot)) {
-    return createPreflopRangeBbDefenseResponses(spot);
+  if (isPreflopRangeFacingOpenSpot(spot)) {
+    return createPreflopRangeFacingOpenResponses(spot);
   }
 
   return getPreflopRangePriorPositions(spot?.heroPosition || "BTN").map((position) => ({
@@ -1901,8 +1915,8 @@ function createPreflopRangeResponses(spot) {
 }
 
 function createPreflopRangeActors(spot) {
-  if (isPreflopRangeBbDefenseSpot(spot)) {
-    return createPreflopRangeBbDefenseActors(spot);
+  if (isPreflopRangeFacingOpenSpot(spot)) {
+    return createPreflopRangeFacingOpenActors(spot);
   }
 
   const heroPosition = spot?.heroPosition || "BTN";
@@ -1916,8 +1930,8 @@ function createPreflopRangeActors(spot) {
 }
 
 function createPreflopRangeActionBySeat(spot, question) {
-  if (isPreflopRangeBbDefenseSpot(spot)) {
-    return createPreflopRangeBbDefenseActionBySeat(spot, question);
+  if (isPreflopRangeFacingOpenSpot(spot)) {
+    return createPreflopRangeFacingOpenActionBySeat(spot, question);
   }
 
   const heroPosition = spot?.heroPosition || "BTN";
@@ -1952,11 +1966,12 @@ function formatPreflopRangeSpotTitle(spot) {
   return `6-max ${spot?.stackDepthBb || 100}bb - ${formatPreflopSpotLabel(spot)}`;
 }
 
-function createPreflopRangeBbDefenseBettingSummary(spot, question) {
-  const actionBySeat = createPreflopRangeBbDefenseActionBySeat(spot, question);
+function createPreflopRangeFacingOpenBettingSummary(spot, question) {
+  const actionBySeat = createPreflopRangeFacingOpenActionBySeat(spot, question);
   const opener = spot?.villainPosition || "BTN";
+  const heroPosition = spot?.heroPosition || "BB";
   const openLabel = getPreflopRangeOpenLabel(spot);
-  const foldedPositions = getPreflopRangeBbDefenseFoldedPositions(opener);
+  const foldedPositions = getPreflopRangeFacingOpenFoldedPositions(opener, heroPosition);
   const foldedText = foldedPositions.length
     ? `${foldedPositions.join(", ")} fold`
     : "Action starts with opener";
@@ -1967,14 +1982,15 @@ function createPreflopRangeBbDefenseBettingSummary(spot, question) {
       `Blinds ${formatMoney(SMALL_BLIND)} / ${formatMoney(BIG_BLIND)}`,
       foldedText,
       openLabel,
-      "BB to respond",
+      `${heroPosition} to respond`,
     ],
     actionBySeat,
   };
 }
 
-function createPreflopRangeBbDefenseResponses(spot) {
+function createPreflopRangeFacingOpenResponses(spot) {
   const opener = spot?.villainPosition || "BTN";
+  const heroPosition = spot?.heroPosition || "BB";
   return [
     ...getPreflopRangePriorPositions(opener).map((position) => ({
       seat: getPreflopRangeTableSeat(position),
@@ -1982,7 +1998,7 @@ function createPreflopRangeBbDefenseResponses(spot) {
       folded: true,
     })),
     { seat: getPreflopRangeTableSeat(opener), action: "Opens", amount: spot?.facingOpen?.sizeBb || null },
-    ...getPreflopRangePositionsBetweenOpenerAndBb(opener).map((position) => ({
+    ...getPreflopRangePositionsBetweenOpenerAndHero(opener, heroPosition).map((position) => ({
       seat: getPreflopRangeTableSeat(position),
       action: "Folds",
       folded: true,
@@ -1990,51 +2006,72 @@ function createPreflopRangeBbDefenseResponses(spot) {
   ];
 }
 
-function createPreflopRangeBbDefenseActors(spot) {
+function createPreflopRangeFacingOpenActors(spot) {
   const opener = spot?.villainPosition || "BTN";
+  const heroPosition = spot?.heroPosition || "BB";
   return [
     ...getPreflopRangePriorPositions(opener).map((position) => ({
       seat: getPreflopRangeTableSeat(position),
       label: "Folded",
     })),
     { seat: getPreflopRangeTableSeat(opener), label: "Opener" },
-    ...getPreflopRangePositionsBetweenOpenerAndBb(opener).map((position) => ({
+    ...getPreflopRangePositionsBetweenOpenerAndHero(opener, heroPosition).map((position) => ({
       seat: getPreflopRangeTableSeat(position),
       label: "Folded",
     })),
-    { seat: "BB", label: "Hero" },
+    { seat: getPreflopRangeTableSeat(heroPosition), label: "Hero" },
+    ...getPreflopRangePositionsAfterHero(heroPosition).map((position) => ({
+      seat: getPreflopRangeTableSeat(position),
+      label: "Waiting",
+    })),
   ];
 }
 
-function createPreflopRangeBbDefenseActionBySeat(spot, question) {
+function createPreflopRangeFacingOpenActionBySeat(spot, question) {
   const opener = spot?.villainPosition || "BTN";
+  const heroPosition = spot?.heroPosition || "BB";
+  const heroSeat = getPreflopRangeTableSeat(heroPosition);
   const actionBySeat = {};
   getPreflopRangePriorPositions(opener).forEach((position) => {
     actionBySeat[getPreflopRangeTableSeat(position)] = "Folded";
   });
   actionBySeat[getPreflopRangeTableSeat(opener)] = getPreflopRangeOpenLabel(spot);
-  getPreflopRangePositionsBetweenOpenerAndBb(opener).forEach((position) => {
+  getPreflopRangePositionsBetweenOpenerAndHero(opener, heroPosition).forEach((position) => {
     actionBySeat[getPreflopRangeTableSeat(position)] = "Folded";
   });
-  actionBySeat.BB = question.answered ? getPreflopActionLabel(question.legalActions, question.selected) : "Hero to act";
+  actionBySeat[heroSeat] = question.answered ? getPreflopActionLabel(question.legalActions, question.selected) : "Hero to act";
+  getPreflopRangePositionsAfterHero(heroPosition).forEach((position) => {
+    actionBySeat[getPreflopRangeTableSeat(position)] = "Waiting";
+  });
   return actionBySeat;
 }
 
-function getPreflopRangeBbDefenseFoldedPositions(opener) {
+function getPreflopRangeFacingOpenFoldedPositions(opener, heroPosition) {
   return [
     ...getPreflopRangePriorPositions(opener),
-    ...getPreflopRangePositionsBetweenOpenerAndBb(opener),
+    ...getPreflopRangePositionsBetweenOpenerAndHero(opener, heroPosition),
   ];
 }
 
-function getPreflopRangePositionsBetweenOpenerAndBb(opener) {
-  const order = ["LJ", "HJ", "CO", "BTN", "SB"];
+function getPreflopRangePositionsBetweenOpenerAndHero(opener, heroPosition) {
+  const order = ["LJ", "HJ", "CO", "BTN", "SB", "BB"];
   const index = order.indexOf(opener);
+  const heroIndex = order.indexOf(heroPosition);
+  return index >= 0 && heroIndex > index ? order.slice(index + 1, heroIndex) : [];
+}
+
+function getPreflopRangePositionsAfterHero(heroPosition) {
+  const order = ["LJ", "HJ", "CO", "BTN", "SB", "BB"];
+  const index = order.indexOf(heroPosition);
   return index >= 0 ? order.slice(index + 1) : [];
 }
 
+function isPreflopRangeFacingOpenSpot(spot) {
+  return spot?.actionContext === "facing-open" && Boolean(spot?.heroPosition) && Boolean(spot?.villainPosition);
+}
+
 function isPreflopRangeBbDefenseSpot(spot) {
-  return spot?.actionContext === "facing-open" && spot?.heroPosition === "BB";
+  return isPreflopRangeFacingOpenSpot(spot) && spot?.heroPosition === "BB";
 }
 
 function getPreflopRangeSpotShortLabel(spot) {
@@ -2042,8 +2079,8 @@ function getPreflopRangeSpotShortLabel(spot) {
 }
 
 function formatPreflopRangeDecisionLabel(spot) {
-  return isPreflopRangeBbDefenseSpot(spot)
-    ? `BB defense versus ${spot.villainPosition} open`
+  return isPreflopRangeFacingOpenSpot(spot)
+    ? `${spot.heroPosition} versus ${spot.villainPosition} open`
     : `${spot?.heroPosition || "BTN"} first-in`;
 }
 
@@ -2052,7 +2089,7 @@ function getPreflopRangeOpenLabel(spot) {
 }
 
 function getPreflopRangeSizeFactLabel(spot) {
-  return isPreflopRangeBbDefenseSpot(spot) ? "Facing Size" : "Open Size";
+  return isPreflopRangeFacingOpenSpot(spot) ? "Facing Size" : "Open Size";
 }
 
 function createPreflopRangeScenarioCopy(spot, question) {
@@ -2076,8 +2113,8 @@ function formatPreflopActionLabel(actionId) {
 function formatPreflopSpotLabel(spot) {
   const formatted = window.FishKillerPreflopEngine?.formatPreflopSpotLabel?.(spot);
   if (formatted) return formatted;
-  if (isPreflopRangeBbDefenseSpot(spot)) {
-    return `BB vs ${spot?.villainPosition || "opener"} open`;
+  if (isPreflopRangeFacingOpenSpot(spot)) {
+    return `${spot?.heroPosition || "Hero"} vs ${spot?.villainPosition || "opener"} open`;
   }
   return `${spot?.heroPosition || "BTN"} first in`;
 }
@@ -2090,7 +2127,7 @@ function formatPreflopSizeLabel(spot) {
     return "Open size unavailable";
   }
   const label = Number.isInteger(Number(size)) ? `${Number(size)}bb` : `${Number(size).toFixed(1)}bb`;
-  return isPreflopRangeBbDefenseSpot(spot)
+  return isPreflopRangeFacingOpenSpot(spot)
     ? `${spot?.villainPosition || "Opener"} opens ${label}`
     : `Open ${label}`;
 }
@@ -6971,7 +7008,17 @@ function isTrainablePreflopRangeSpot(spot) {
     actionIds.has("call") &&
     actionIds.has("threeBet")
   );
-  return isRfi || isBbDefense;
+  const isThreeBetVsOpen = (
+    spot.complete === true &&
+    spot.actionContext === "facing-open" &&
+    spot.spotType === "three-bet-vs-open" &&
+    Boolean(spot.heroPosition) &&
+    Boolean(spot.villainPosition) &&
+    actionIds.has("fold") &&
+    actionIds.has("call") &&
+    actionIds.has("threeBet")
+  );
+  return isRfi || isBbDefense || isThreeBetVsOpen;
 }
 
 function getPreflopRangeSpotOrder(spotId) {

@@ -19,6 +19,13 @@ const BB_DEFENSE_SPOT_IDS = [
   "fk_6max_100bb_bb_vs_btn_open_v1",
   "fk_6max_100bb_bb_vs_sb_open_v1",
 ];
+const THREE_BET_SPOT_IDS = [
+  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
+  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
+  "fk_6max_100bb_hj_vs_lj_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
+];
 
 function fixedRng(value) {
   return () => value;
@@ -32,6 +39,7 @@ function run() {
   loadsAndFindsRealPack(normalized, spot);
   loadsAllCoreRfiSpots(normalized);
   loadsAllBbDefenseSpots(normalized);
+  loadsAllThreeBetSpots(normalized);
   prefersRaiseWithAces(spot);
   prefersFoldWithTrash(spot);
   checksPositionSpecificRfiStrategy(normalized);
@@ -69,6 +77,19 @@ function loadsAllBbDefenseSpots(pack) {
     assert(spot, `${spotId} should exist`);
     assert.equal(spot.heroPosition, "BB");
     assert.equal(spot.actionContext, "facing-open");
+    assert.equal(Object.keys(spot.actionsByHand).length, 169);
+    assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "threeBet"]);
+  });
+}
+
+function loadsAllThreeBetSpots(pack) {
+  THREE_BET_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    assert(spot, `${spotId} should exist`);
+    assert.notEqual(spot.heroPosition, "BB");
+    assert(spot.villainPosition, `${spotId} should define opener position`);
+    assert.equal(spot.actionContext, "facing-open");
+    assert.equal(spot.spotType, "three-bet-vs-open");
     assert.equal(Object.keys(spot.actionsByHand).length, 169);
     assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "threeBet"]);
   });
@@ -157,12 +178,16 @@ function resolvesDrillSpotIds() {
     { id: "co-rfi", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
     { id: "all-bb-defense", spotIds: BB_DEFENSE_SPOT_IDS },
     { id: "bb-vs-btn", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
+    { id: "all-three-bet", spotIds: THREE_BET_SPOT_IDS },
+    { id: "btn-vs-co-3bet", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
     { id: "review-mistakes", reviewMode: true, spotIds: [] },
   ];
 
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("co-rfi", options), ["fk_6max_100bb_co_rfi_unopened_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-bb-defense", options), BB_DEFENSE_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("bb-vs-btn", options), ["fk_6max_100bb_bb_vs_btn_open_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-three-bet", options), THREE_BET_SPOT_IDS);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("btn-vs-co-3bet", options), ["fk_6max_100bb_btn_vs_co_open_3bet_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), RFI_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("review-mistakes", options), []);
 }
@@ -172,6 +197,7 @@ function formatsPreflopLabels(pack) {
   const sb = preflop.getPreflopSpot(pack, "fk_6max_100bb_sb_rfi_unopened_v1");
   const bbVsBtn = preflop.getPreflopSpot(pack, "fk_6max_100bb_bb_vs_btn_open_v1");
   const bbVsSb = preflop.getPreflopSpot(pack, "fk_6max_100bb_bb_vs_sb_open_v1");
+  const btnVsCo = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_vs_co_open_3bet_v1");
 
   assert.equal(preflop.formatPreflopActionLabel("fold"), "Fold");
   assert.equal(preflop.formatPreflopActionLabel("call"), "Call");
@@ -179,10 +205,12 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopActionLabel("threeBet"), "3-bet");
   assert.equal(preflop.formatPreflopSpotLabel(btn), "BTN first in");
   assert.equal(preflop.formatPreflopSpotLabel(bbVsBtn), "BB vs BTN open");
+  assert.equal(preflop.formatPreflopSpotLabel(btnVsCo), "BTN vs CO open");
   assert.equal(preflop.formatPreflopSizeLabel(btn), "Open 2.3bb");
   assert.equal(preflop.formatPreflopSizeLabel(sb), "Open 3bb");
   assert.equal(preflop.formatPreflopSizeLabel(bbVsBtn), "BTN opens 2.3bb");
   assert.equal(preflop.formatPreflopSizeLabel(bbVsSb), "SB opens 3bb");
+  assert.equal(preflop.formatPreflopSizeLabel(btnVsCo), "CO opens 2.3bb");
 }
 
 run();

@@ -91,6 +91,16 @@ It also contains internally authored BB defense spots against first-in opens:
 
 These spots use `fold`, `call`, and `threeBet` as legal actions. LJ/HJ/CO/BTN open sizes are 2.3bb; SB open size is 3bb. The defense ranges are still FishKiller MVP baseline data rather than universal GTO charts.
 
+The pack also contains internally authored 3-bet versus open drills:
+
+- `fk_6max_100bb_btn_vs_co_open_3bet_v1`
+- `fk_6max_100bb_co_vs_hj_open_3bet_v1`
+- `fk_6max_100bb_hj_vs_lj_open_3bet_v1`
+- `fk_6max_100bb_sb_vs_btn_open_3bet_v1`
+- `fk_6max_100bb_sb_vs_co_open_3bet_v1`
+
+These spots use `fold`, `call`, and `threeBet` as legal actions. The facing open size is 2.3bb for all five MVP spots. They are intended for preflop trainer drills only; facing-3bet and 4bet response spots are not included yet.
+
 ## Demo Versus Real
 
 Demo packs must have:
