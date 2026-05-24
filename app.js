@@ -37,7 +37,7 @@ const TABLES = {
     id: "hu",
     label: "Heads-Up",
     shortLabel: "HU",
-    subtitle: "Pure pressure, wide ranges, fast feedback.",
+    subtitle: "Starter heads-up drills using the legacy scenario pack.",
     seats: [
       { seat: "SB / BTN", x: "50%", y: "18%" },
       { seat: "BB", x: "50%", y: "82%" },
@@ -47,7 +47,7 @@ const TABLES = {
     id: "three",
     label: "3-Max",
     shortLabel: "3M",
-    subtitle: "Short-handed aggression and blind warfare.",
+    subtitle: "Starter 3-max drills using the legacy scenario pack.",
     seats: [
       { seat: "BTN", x: "50%", y: "16%" },
       { seat: "SB", x: "24%", y: "76%" },
@@ -58,7 +58,7 @@ const TABLES = {
     id: "six",
     label: "6-Max",
     shortLabel: "6M",
-    subtitle: "Cash-game fundamentals and range discipline.",
+    subtitle: "Flagship 20-spot preflop trainer for RFI, defense, 3-bet, and facing 3-bet.",
     seats: [
       { seat: "UTG", x: "18%", y: "40%" },
       { seat: "HJ", x: "33%", y: "17%" },
@@ -72,7 +72,7 @@ const TABLES = {
     id: "nine",
     label: "9-Max",
     shortLabel: "9M",
-    subtitle: "Full-ring precision with tighter opening lanes.",
+    subtitle: "Starter full-ring drills using the legacy scenario pack.",
     seats: [
       { seat: "UTG", x: "12%", y: "46%" },
       { seat: "UTG+1", x: "20%", y: "24%" },
@@ -159,31 +159,31 @@ const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-rfi";
 const PREFLOP_RANGE_REVIEW_DRILL_ID = "review-mistakes";
 const PREFLOP_RANGE_MIN_WEAK_SPOT_ATTEMPTS = 5;
 const PREFLOP_RANGE_DRILL_OPTIONS = [
-  { id: "all-rfi", label: "All RFI", default: true, spotIds: PREFLOP_RANGE_RFI_SPOT_IDS },
-  { id: "lj-rfi", label: "LJ RFI", spotIds: ["fk_6max_100bb_lj_rfi_unopened_v1"] },
-  { id: "hj-rfi", label: "HJ RFI", spotIds: ["fk_6max_100bb_hj_rfi_unopened_v1"] },
-  { id: "co-rfi", label: "CO RFI", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
-  { id: "btn-rfi", label: "BTN RFI", spotIds: ["fk_6max_100bb_btn_rfi_unopened_v1"] },
-  { id: "sb-rfi", label: "SB RFI", spotIds: ["fk_6max_100bb_sb_rfi_unopened_v1"] },
-  { id: "all-bb-defense", label: "All BB Defense", spotIds: PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS },
-  { id: "bb-vs-lj", label: "BB vs LJ", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
-  { id: "bb-vs-hj", label: "BB vs HJ", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
-  { id: "bb-vs-co", label: "BB vs CO", spotIds: ["fk_6max_100bb_bb_vs_co_open_v1"] },
-  { id: "bb-vs-btn", label: "BB vs BTN", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
-  { id: "bb-vs-sb", label: "BB vs SB", spotIds: ["fk_6max_100bb_bb_vs_sb_open_v1"] },
-  { id: "all-three-bet", label: "All 3-bet", spotIds: PREFLOP_RANGE_THREE_BET_SPOT_IDS },
-  { id: "btn-vs-co-3bet", label: "BTN vs CO", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
-  { id: "co-vs-hj-3bet", label: "CO vs HJ", spotIds: ["fk_6max_100bb_co_vs_hj_open_3bet_v1"] },
-  { id: "hj-vs-lj-3bet", label: "HJ vs LJ", spotIds: ["fk_6max_100bb_hj_vs_lj_open_3bet_v1"] },
-  { id: "sb-vs-btn-3bet", label: "SB vs BTN", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
-  { id: "sb-vs-co-3bet", label: "SB vs CO", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
-  { id: "all-facing-3bet", label: "All Facing 3-bet", spotIds: PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS },
-  { id: "btn-open-vs-bb-3bet", label: "BTN open vs BB 3-bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
-  { id: "co-open-vs-btn-3bet", label: "CO open vs BTN 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_btn_3bet_v1"] },
-  { id: "co-open-vs-sb-3bet", label: "CO open vs SB 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_sb_3bet_v1"] },
-  { id: "hj-open-vs-btn-3bet", label: "HJ open vs BTN 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
-  { id: "lj-open-vs-hj-3bet", label: "LJ open vs HJ 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
-  { id: PREFLOP_RANGE_REVIEW_DRILL_ID, label: "Review mistakes", reviewMode: true, spotIds: [] },
+  { id: "all-rfi", label: "All RFI", group: "RFI", default: true, spotIds: PREFLOP_RANGE_RFI_SPOT_IDS },
+  { id: "lj-rfi", label: "LJ RFI", group: "RFI", spotIds: ["fk_6max_100bb_lj_rfi_unopened_v1"] },
+  { id: "hj-rfi", label: "HJ RFI", group: "RFI", spotIds: ["fk_6max_100bb_hj_rfi_unopened_v1"] },
+  { id: "co-rfi", label: "CO RFI", group: "RFI", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
+  { id: "btn-rfi", label: "BTN RFI", group: "RFI", spotIds: ["fk_6max_100bb_btn_rfi_unopened_v1"] },
+  { id: "sb-rfi", label: "SB RFI", group: "RFI", spotIds: ["fk_6max_100bb_sb_rfi_unopened_v1"] },
+  { id: "all-bb-defense", label: "All BB Defense", group: "BB Defense", spotIds: PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS },
+  { id: "bb-vs-lj", label: "BB vs LJ", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
+  { id: "bb-vs-hj", label: "BB vs HJ", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
+  { id: "bb-vs-co", label: "BB vs CO", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_co_open_v1"] },
+  { id: "bb-vs-btn", label: "BB vs BTN", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
+  { id: "bb-vs-sb", label: "BB vs SB", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_sb_open_v1"] },
+  { id: "all-three-bet", label: "All 3-bet", group: "3-bet", spotIds: PREFLOP_RANGE_THREE_BET_SPOT_IDS },
+  { id: "btn-vs-co-3bet", label: "BTN vs CO", group: "3-bet", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
+  { id: "co-vs-hj-3bet", label: "CO vs HJ", group: "3-bet", spotIds: ["fk_6max_100bb_co_vs_hj_open_3bet_v1"] },
+  { id: "hj-vs-lj-3bet", label: "HJ vs LJ", group: "3-bet", spotIds: ["fk_6max_100bb_hj_vs_lj_open_3bet_v1"] },
+  { id: "sb-vs-btn-3bet", label: "SB vs BTN", group: "3-bet", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
+  { id: "sb-vs-co-3bet", label: "SB vs CO", group: "3-bet", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
+  { id: "all-facing-3bet", label: "All Facing 3-bet", group: "Facing 3-bet", spotIds: PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS },
+  { id: "btn-open-vs-bb-3bet", label: "BTN open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
+  { id: "co-open-vs-btn-3bet", label: "CO open vs BTN 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_btn_3bet_v1"] },
+  { id: "co-open-vs-sb-3bet", label: "CO open vs SB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_sb_3bet_v1"] },
+  { id: "hj-open-vs-btn-3bet", label: "HJ open vs BTN 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
+  { id: "lj-open-vs-hj-3bet", label: "LJ open vs HJ 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
+  { id: PREFLOP_RANGE_REVIEW_DRILL_ID, label: "Review mistakes", group: "Review", reviewMode: true, spotIds: [] },
 ];
 const PREFLOP_RANGE_QUESTION_XP = 12;
 const PREFLOP_PROGRESS = window.FishKillerPreflopProgress || null;
@@ -1547,13 +1547,45 @@ function renderTopline() {
         ? "Pick the solver baseline, absorb instant corrections, and protect your last two strikes."
         : "These are the spots you missed. Clean them up without spending hearts.";
   } else {
-    const practiceMode = getPracticeMode(selectedTable.id);
-    elements.heroTitle.textContent = `${selectedTable.label} trainer ready.`;
-    elements.heroSubtitle.textContent = `${selectedTable.subtitle} ${PRACTICE_MODES[practiceMode].description}`;
+    elements.heroTitle.textContent = selectedTable.id === "six"
+      ? "6-Max preflop trainer ready."
+      : `${selectedTable.label} starter drills ready.`;
+    elements.heroSubtitle.textContent = getTableIntroCopy(selectedTable.id);
   }
 
   elements.startSessionButton.textContent = `Start ${PRACTICE_MODES[getPracticeMode(selectedTable.id)].label}`;
   elements.startSessionButton.disabled = state.hearts <= 0 && !activeSession;
+}
+
+function getPreflopCoverageLabel() {
+  return "RFI / BB Defense / 3-bet / Facing 3-bet";
+}
+
+function getTableIntroCopy(tableSize) {
+  if (tableSize === "six") {
+    return `Flagship local range-pack trainer: ${getPreflopCoverageLabel()}. Internal baseline ranges, not universal GTO.`;
+  }
+
+  const table = TABLES[tableSize] || TABLES.six;
+  return `${table.subtitle} The full range-pack trainer is currently focused on 6-max preflop.`;
+}
+
+function getTableTrainingLabel(tableSize) {
+  return tableSize === "six" ? "20-spot preflop range" : "Starter scenario drills";
+}
+
+function getTablePillLabel(tableSize) {
+  return tableSize === "six" ? "Live range pack" : "Legacy drills";
+}
+
+function getPracticeModeDescription(mode, tableSize) {
+  if (mode.id !== "preflop") {
+    return mode.description;
+  }
+
+  return tableSize === "six"
+    ? `Flagship 20-spot preflop range trainer: ${getPreflopCoverageLabel()}.`
+    : "Starter scenario-pack preflop drills for quick reps; the full range-pack trainer is currently 6-max.";
 }
 
 function renderHeartIcons(count) {
@@ -1585,9 +1617,9 @@ function renderTableSizes() {
       <div class="table-card-bottom">
         <div>
           <strong>${formatNumber(xp)} XP</strong>
-          <p>Level ${level} - ${PRACTICE_MODES[getPracticeMode(table.id)].label}</p>
+          <p>Level ${level} - ${getTableTrainingLabel(table.id)}</p>
         </div>
-        <div class="table-pill">Fresh random deals</div>
+        <div class="table-pill">${getTablePillLabel(table.id)}</div>
       </div>
       <div class="progress-mini">
         <div class="progress-mini-fill" style="width: ${progress}%;"></div>
@@ -1621,7 +1653,7 @@ function renderPracticeModes() {
     ].filter(Boolean).join(" ");
     button.innerHTML = `
       <strong>${mode.label}</strong>
-      <span>${mode.description}</span>
+      <span>${getPracticeModeDescription(mode, selectedTable.id)}</span>
       ${disabled ? `<em>Postflop solver commented out</em>` : ""}
     `;
     button.addEventListener("click", () => {
@@ -1775,6 +1807,7 @@ function renderPreflopRangeScenario() {
   elements.scenarioFacts.innerHTML = [
     createFactCard("Spot", getPreflopRangeSpotShortLabel(spot)),
     createFactCard("Drill", getPreflopRangeDrill(getActivePreflopRangeDrillId())?.label || "All RFI"),
+    createFactCard("Coverage", getPreflopCoverageLabel()),
     createFactCard("Stack", "100bb"),
     createFactCard(getPreflopRangeSizeFactLabel(spot), getPreflopRangeOpenLabel(spot)),
     createFactCard("Lifetime Reps", state.preflop6maxProgress?.totals?.attempts || 0),
@@ -1816,7 +1849,7 @@ function createPreflopRangeProgressSummaryMarkup(summary) {
       <div class="preflop-progress-summary empty">
         <span>6-max progress</span>
         <strong>No preflop reps yet</strong>
-        <em>Answer a few RFI, defense, 3-bet, or facing-3bet hands and this panel will show your strongest and weakest spots.</em>
+        <em>Local lifetime stats appear here after a few RFI, defense, 3-bet, or facing-3bet reps.</em>
       </div>
     `;
   }
@@ -1833,10 +1866,10 @@ function createPreflopRangeProgressSummaryMarkup(summary) {
 
   return `
     <div class="preflop-progress-summary">
-      <span>Total reps<strong>${summary.totalAttempts}</strong></span>
-      <span>Correct rate<strong>${formatPercent(summary.accuracy)}</strong></span>
-      <span>Good or mixed<strong>${formatPercent(summary.playableAccuracy)}</strong></span>
-      <span>Needs work<strong>${weakestLabel}</strong></span>
+      <span>Local lifetime reps<strong>${summary.totalAttempts}</strong></span>
+      <span>Top-action rate<strong>${formatPercent(summary.accuracy)}</strong></span>
+      <span>Good or mixed rate<strong>${formatPercent(summary.playableAccuracy)}</strong></span>
+      <span>Weakest local spot<strong>${weakestLabel}</strong></span>
       <span>Recent miss<strong>${recentLabel}</strong></span>
       <span>Pattern<strong>${leakLabel}</strong></span>
     </div>
@@ -2346,14 +2379,23 @@ function renderPreflopRangeDrillSelector() {
   const hasMistakes = Boolean(PREFLOP_PROGRESS?.hasPreflop6maxMistakes(state.preflop6maxProgress));
   wrapper.innerHTML = `<span>${activeSession?.mode === "review" ? "Reviewing mistakes" : "Drill"}</span>`;
 
+  let currentGroup = "";
   PREFLOP_RANGE_DRILL_OPTIONS.forEach((drill) => {
+    if (drill.group && drill.group !== currentGroup) {
+      const groupLabel = document.createElement("span");
+      groupLabel.className = "preflop-drill-group";
+      groupLabel.textContent = drill.group;
+      wrapper.appendChild(groupLabel);
+      currentGroup = drill.group;
+    }
+
     const button = document.createElement("button");
     button.type = "button";
     button.className = `preflop-drill-option${drill.id === activeDrillId ? " active" : ""}`;
     button.textContent = drill.label;
     button.disabled = drill.reviewMode && !hasMistakes;
     button.title = drill.reviewMode && !hasMistakes
-      ? "No missed 6-max preflop hands yet."
+      ? "No missed 6-max preflop hands yet across RFI, defense, 3-bet, or facing 3-bet."
       : `Train ${drill.label}`;
     button.addEventListener("click", () => selectPreflopRangeDrill(drill.id));
     wrapper.appendChild(button);
@@ -2369,7 +2411,7 @@ function renderPreflopRangeFeedback(question) {
   if (!question.answered) {
     elements.feedbackBand.className = "feedback-band neutral";
     elements.feedbackLabel.textContent = "Choose your line";
-    elements.feedbackText.textContent = "Use the loaded FishKiller 6-max preflop range. Only supported actions for this spot are shown.";
+    elements.feedbackText.textContent = "Use the loaded FishKiller 6-max preflop range pack. Only supported actions for this exact spot are shown.";
     elements.continueButton.disabled = true;
     elements.continueButton.textContent = "Continue";
     return;
@@ -2383,19 +2425,19 @@ function renderPreflopRangeFeedback(question) {
   if (grade.kind === "correct") {
     elements.feedbackBand.className = "feedback-band correct";
     elements.feedbackLabel.textContent = "Correct";
-    elements.feedbackText.textContent = `${selectedLabel} is preferred here. Frequencies: ${frequencyText}.`;
+    elements.feedbackText.textContent = `Good. ${selectedLabel} is the top-frequency action here. Frequencies: ${frequencyText}.`;
   } else if (grade.kind === "mixed") {
     elements.feedbackBand.className = "feedback-band mixed";
     elements.feedbackLabel.textContent = "Mixed";
-    elements.feedbackText.textContent = `${selectedLabel} is in the mix, but ${preferredLabel} is preferred. Frequencies: ${frequencyText}.`;
+    elements.feedbackText.textContent = `${selectedLabel} has meaningful frequency, so it is playable, but ${preferredLabel} is the top action. Frequencies: ${frequencyText}.`;
   } else if (grade.kind === "illegal") {
     elements.feedbackBand.className = "feedback-band wrong";
     elements.feedbackLabel.textContent = "Unsupported";
-    elements.feedbackText.textContent = `${selectedLabel || grade.chosenActionId} is not legal in this range spot. Available actions: ${(question.legalActions || []).map((action) => getPreflopActionLabel(question.legalActions, action.id)).join(" / ")}.`;
+    elements.feedbackText.textContent = `${selectedLabel || grade.chosenActionId} is not available in this exact range spot. Available actions: ${(question.legalActions || []).map((action) => getPreflopActionLabel(question.legalActions, action.id)).join(" / ")}.`;
   } else {
     elements.feedbackBand.className = "feedback-band wrong";
     elements.feedbackLabel.textContent = "Correction";
-    elements.feedbackText.textContent = `Prefer ${preferredLabel}. Your choice frequency is ${formatPercent(grade.chosenFrequency || 0)}; preferred frequency is ${formatPercent(grade.preferredFrequency || 0)}.`;
+    elements.feedbackText.textContent = `Prefer ${preferredLabel}. ${selectedLabel || grade.chosenActionId} is ${formatPercent(grade.chosenFrequency || 0)}; ${preferredLabel} is ${formatPercent(grade.preferredFrequency || 0)}. Full mix: ${frequencyText}.`;
   }
 
   const lastQuestion = activeSession.currentIndex >= activeSession.questionStates.length - 1;
@@ -2454,16 +2496,23 @@ function renderIdleScenario() {
     actionBySeat: {},
   });
   elements.scenarioTitle.textContent = "Start a new session whenever you want.";
-  elements.scenarioCopy.textContent = "This trainer skips path progression entirely. Pick a format, play a short session, and jump straight back in.";
+  elements.scenarioCopy.textContent = selectedTable.id === "six"
+    ? `6-max is the flagship preflop trainer: 20 internal baseline spots across ${getPreflopCoverageLabel()}.`
+    : `${selectedTable.label} currently uses starter scenario-pack drills. The full range-pack trainer is focused on 6-max preflop.`;
   elements.sessionChip.textContent = "Ready";
   elements.sessionCounter.textContent = "0 / 10";
   elements.mistakeCounter.textContent = "0 mistakes";
   elements.progressFill.style.width = "0%";
-  elements.scenarioFacts.innerHTML = [
+  const idleFacts = [
     createFactCard("Format", selectedTable.label),
     createFactCard("Session", "10 spots"),
+    createFactCard("Engine", getTableTrainingLabel(selectedTable.id)),
     createFactCard("Heart Rule", "3 strikes max"),
-  ].join("");
+  ];
+  if (selectedTable.id === "six") {
+    idleFacts.splice(3, 0, createFactCard("Coverage", getPreflopCoverageLabel()));
+  }
+  elements.scenarioFacts.innerHTML = idleFacts.join("");
   setScenarioExplanationVisible(true);
 
   renderTableVisual({
@@ -2475,7 +2524,7 @@ function renderIdleScenario() {
   elements.answerGrid.innerHTML = `
     <button class="answer-button" type="button" onclick="window.__fishkillerStartFromCard()">
       <strong>Launch Session</strong>
-      <span>Start a fresh ${selectedTable.label.toLowerCase()} run with randomized preflop spots.</span>
+      <span>${selectedTable.id === "six" ? "Start a 20-spot range-pack run." : "Start a starter scenario-pack run."}</span>
     </button>
     <button class="answer-button" type="button" disabled>
       <strong>Instant Corrections</strong>
@@ -2493,7 +2542,9 @@ function renderIdleScenario() {
 
   elements.feedbackBand.className = "feedback-band neutral";
   elements.feedbackLabel.textContent = "Warm-up";
-  elements.feedbackText.textContent = "Main sessions cost a heart only if you hit three mistakes. Review rounds let you revisit misses without penalty.";
+  elements.feedbackText.textContent = selectedTable.id === "six"
+    ? "6-max uses the live range pack. Main sessions cost a heart only if you hit three mistakes; review rounds are free."
+    : "Starter scenario drills are still available for this table size. Main sessions cost a heart only if you hit three mistakes.";
   elements.gtoTableButton.classList.add("hidden");
   elements.continueButton.disabled = true;
   elements.continueButton.textContent = "Continue";
@@ -7193,7 +7244,17 @@ function isTrainablePreflopRangeSpot(spot) {
     actionIds.has("call") &&
     actionIds.has("threeBet")
   );
-  return isRfi || isBbDefense || isThreeBetVsOpen;
+  const isFacingThreeBet = (
+    spot.complete === true &&
+    spot.actionContext === "facing-3bet" &&
+    spot.spotType === "facing-3bet" &&
+    Boolean(spot.heroPosition) &&
+    Boolean(spot.villainPosition) &&
+    actionIds.has("fold") &&
+    actionIds.has("call") &&
+    actionIds.has("fourBet")
+  );
+  return isRfi || isBbDefense || isThreeBetVsOpen || isFacingThreeBet;
 }
 
 function getPreflopRangeSpotOrder(spotId) {

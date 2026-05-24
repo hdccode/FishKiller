@@ -71,6 +71,8 @@ The first real MVP pack is:
 data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json
 ```
 
+It contains 20 complete 6-max 100bb preflop spots for the live trainer. This is the flagship range-pack path in the current app; HU, 3-max, and 9-max remain starter scenario-pack drills for now.
+
 It currently contains internally authored, non-proprietary baseline 6-max RFI spots at 100bb after action folds to Hero:
 
 - `fk_6max_100bb_lj_rfi_unopened_v1`
@@ -109,7 +111,7 @@ The pack also contains internally authored opener responses after facing a 3-bet
 - `fk_6max_100bb_hj_open_vs_btn_3bet_v1`
 - `fk_6max_100bb_lj_open_vs_hj_3bet_v1`
 
-These spots use `fold`, `call`, and `fourBet` as legal actions. LJ/HJ/CO/BTN opens use 2.3bb. IP 3-bets use 7.5bb, blind 3-bets use 9bb to 9.5bb, and 4-bet sizes are simple MVP metadata rather than a universal sizing claim. They are intended for preflop trainer drills only; squeeze, limp/iso, and full 4bet response trees are not included yet.
+These spots use `fold`, `call`, and `fourBet` as legal actions. LJ/HJ/CO/BTN opens use 2.3bb. IP 3-bets use 7.5bb, blind 3-bets use 9bb to 9.5bb, and 4-bet sizes are simple MVP metadata rather than a universal sizing claim. They are intended for preflop trainer drills only; squeeze, limp/iso, postflop, and full 4bet response trees are not included yet.
 
 ## Demo Versus Real
 

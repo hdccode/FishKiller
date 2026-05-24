@@ -7,6 +7,7 @@ const preflop = require("../preflop-engine");
 const ROOT = path.resolve(__dirname, "..");
 const PACK_PATH = path.join(ROOT, "data", "preflop-ranges", "real", "fishkiller-6max-100bb-v1.preflop-range.json");
 const EXPECTED_HAND_COUNT = 169;
+const EXPECTED_REAL_SPOT_COUNT = 20;
 
 const RFI_SPOT_IDS = [
   "fk_6max_100bb_lj_rfi_unopened_v1",
@@ -103,6 +104,10 @@ function main() {
   if (!pack) {
     report(errors);
     return;
+  }
+
+  if ((pack.spots || []).length !== EXPECTED_REAL_SPOT_COUNT) {
+    errors.push(`Expected ${EXPECTED_REAL_SPOT_COUNT} real 6-max preflop spots, found ${(pack.spots || []).length}.`);
   }
 
   validateFamilyCounts(pack, errors);
