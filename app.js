@@ -128,6 +128,17 @@ const PREFLOP_RANGE_RFI_SPOT_IDS = [
   "fk_6max_100bb_btn_rfi_unopened_v1",
   "fk_6max_100bb_sb_rfi_unopened_v1",
 ];
+const PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS = [
+  "fk_6max_100bb_bb_vs_lj_open_v1",
+  "fk_6max_100bb_bb_vs_hj_open_v1",
+  "fk_6max_100bb_bb_vs_co_open_v1",
+  "fk_6max_100bb_bb_vs_btn_open_v1",
+  "fk_6max_100bb_bb_vs_sb_open_v1",
+];
+const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = [
+  ...PREFLOP_RANGE_RFI_SPOT_IDS,
+  ...PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS,
+];
 const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-rfi";
 const PREFLOP_RANGE_REVIEW_DRILL_ID = "review-mistakes";
 const PREFLOP_RANGE_DRILL_OPTIONS = [
@@ -137,6 +148,12 @@ const PREFLOP_RANGE_DRILL_OPTIONS = [
   { id: "co-rfi", label: "CO RFI", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
   { id: "btn-rfi", label: "BTN RFI", spotIds: ["fk_6max_100bb_btn_rfi_unopened_v1"] },
   { id: "sb-rfi", label: "SB RFI", spotIds: ["fk_6max_100bb_sb_rfi_unopened_v1"] },
+  { id: "all-bb-defense", label: "All BB Defense", spotIds: PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS },
+  { id: "bb-vs-lj", label: "BB vs LJ", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
+  { id: "bb-vs-hj", label: "BB vs HJ", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
+  { id: "bb-vs-co", label: "BB vs CO", spotIds: ["fk_6max_100bb_bb_vs_co_open_v1"] },
+  { id: "bb-vs-btn", label: "BB vs BTN", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
+  { id: "bb-vs-sb", label: "BB vs SB", spotIds: ["fk_6max_100bb_bb_vs_sb_open_v1"] },
   { id: PREFLOP_RANGE_REVIEW_DRILL_ID, label: "Review mistakes", reviewMode: true, spotIds: [] },
 ];
 const PREFLOP_RANGE_QUESTION_XP = 12;
@@ -1715,7 +1732,7 @@ function renderPreflopRangeScenario() {
   elements.scenarioDifficulty.textContent = "Internal baseline";
   renderBettingLine(bettingSummary);
   elements.scenarioTitle.textContent = formatPreflopRangeSpotTitle(spot);
-  elements.scenarioCopy.textContent = `Hero has ${question.handClass}. Choose the baseline ${spot.heroPosition} open-or-fold action from the loaded range pack.`;
+  elements.scenarioCopy.textContent = `Hero has ${question.handClass}. Choose the baseline ${formatPreflopRangeDecisionLabel(spot)} action from the loaded range pack.`;
   elements.sessionChip.textContent = activeSession.mode === "review" ? "Range Review" : "Preflop Range";
   elements.sessionCounter.textContent = `${activeSession.currentIndex + 1} / ${activeSession.questionStates.length}`;
   elements.mistakeCounter.textContent = activeSession.mode === "main"
@@ -1723,17 +1740,17 @@ function renderPreflopRangeScenario() {
     : `Review mistakes - ${getPreflopRangeSessionAccuracyLabel()}`;
   elements.progressFill.style.width = `${Math.round(((activeSession.currentIndex + (question.answered ? 1 : 0)) / activeSession.questionStates.length) * 100)}%`;
   elements.scenarioFacts.innerHTML = [
-    createFactCard("Spot", `${spot.heroPosition} RFI`),
+    createFactCard("Spot", getPreflopRangeSpotShortLabel(spot)),
     createFactCard("Drill", getPreflopRangeDrill(getActivePreflopRangeDrillId())?.label || "All RFI"),
     createFactCard("Stack", "100bb"),
-    createFactCard("Open Size", spot.raiseSize?.label || "Raise"),
+    createFactCard("Open Size", getPreflopRangeOpenLabel(spot)),
     createFactCard("Lifetime Reps", state.preflop6maxProgress?.totals?.attempts || 0),
   ].join("");
   setScenarioExplanationVisible(true);
   renderTableVisual(visualScenario, bettingSummary, {
     street: "preflop",
     heroCards: getHeroCardsForScenario(visualScenario),
-    facts: [{ label: "Pot", value: formatMoney(SMALL_BLIND + BIG_BLIND) }],
+    facts: [{ label: "Pot", value: formatMoney(bettingSummary.pot || SMALL_BLIND + BIG_BLIND) }],
   }, question);
   renderPreflopRangeAnswers(question);
   renderPreflopRangeFeedback(question);
@@ -1766,6 +1783,10 @@ function createPreflopRangeVisualScenario(question) {
 
 function createPreflopRangeBettingSummary(question) {
   const spot = getPreflopRangeSpot(question?.spotId);
+  if (isPreflopRangeBbDefenseSpot(spot)) {
+    return createPreflopRangeBbDefenseBettingSummary(spot, question);
+  }
+
   const actionBySeat = createPreflopRangeActionBySeat(spot, question);
   const foldedPositions = getPreflopRangePriorPositions(spot?.heroPosition || "BTN");
   const foldedText = foldedPositions.length
@@ -1785,6 +1806,10 @@ function createPreflopRangeBettingSummary(question) {
 }
 
 function createPreflopRangeResponses(spot) {
+  if (isPreflopRangeBbDefenseSpot(spot)) {
+    return createPreflopRangeBbDefenseResponses(spot);
+  }
+
   return getPreflopRangePriorPositions(spot?.heroPosition || "BTN").map((position) => ({
     seat: getPreflopRangeTableSeat(position),
     action: "Folds",
@@ -1793,6 +1818,10 @@ function createPreflopRangeResponses(spot) {
 }
 
 function createPreflopRangeActors(spot) {
+  if (isPreflopRangeBbDefenseSpot(spot)) {
+    return createPreflopRangeBbDefenseActors(spot);
+  }
+
   const heroPosition = spot?.heroPosition || "BTN";
   return [
     ...getPreflopRangePriorPositions(heroPosition).map((position) => ({
@@ -1804,6 +1833,10 @@ function createPreflopRangeActors(spot) {
 }
 
 function createPreflopRangeActionBySeat(spot, question) {
+  if (isPreflopRangeBbDefenseSpot(spot)) {
+    return createPreflopRangeBbDefenseActionBySeat(spot, question);
+  }
+
   const heroPosition = spot?.heroPosition || "BTN";
   const heroSeat = getPreflopRangeTableSeat(heroPosition);
   const actionBySeat = {};
@@ -1833,7 +1866,117 @@ function getPreflopRangeTableSeat(position) {
 }
 
 function formatPreflopRangeSpotTitle(spot) {
+  if (isPreflopRangeBbDefenseSpot(spot)) {
+    return `6-max ${spot?.stackDepthBb || 100}bb - BB vs ${spot.villainPosition} open`;
+  }
+
   return `6-max ${spot?.stackDepthBb || 100}bb - ${spot?.heroPosition || "BTN"} first in`;
+}
+
+function createPreflopRangeBbDefenseBettingSummary(spot, question) {
+  const actionBySeat = createPreflopRangeBbDefenseActionBySeat(spot, question);
+  const opener = spot?.villainPosition || "BTN";
+  const openLabel = getPreflopRangeOpenLabel(spot);
+  const foldedPositions = getPreflopRangeBbDefenseFoldedPositions(opener);
+  const foldedText = foldedPositions.length
+    ? `${foldedPositions.join(", ")} fold`
+    : "Action starts with opener";
+
+  return {
+    pot: getPreflopRangeFacingOpenPot(spot),
+    items: [
+      `Blinds ${formatMoney(SMALL_BLIND)} / ${formatMoney(BIG_BLIND)}`,
+      foldedText,
+      openLabel,
+      "BB to respond",
+    ],
+    actionBySeat,
+  };
+}
+
+function createPreflopRangeBbDefenseResponses(spot) {
+  const opener = spot?.villainPosition || "BTN";
+  return [
+    ...getPreflopRangePriorPositions(opener).map((position) => ({
+      seat: getPreflopRangeTableSeat(position),
+      action: "Folds",
+      folded: true,
+    })),
+    { seat: getPreflopRangeTableSeat(opener), action: "Opens", amount: spot?.facingOpen?.sizeBb || null },
+    ...getPreflopRangePositionsBetweenOpenerAndBb(opener).map((position) => ({
+      seat: getPreflopRangeTableSeat(position),
+      action: "Folds",
+      folded: true,
+    })),
+  ];
+}
+
+function createPreflopRangeBbDefenseActors(spot) {
+  const opener = spot?.villainPosition || "BTN";
+  return [
+    ...getPreflopRangePriorPositions(opener).map((position) => ({
+      seat: getPreflopRangeTableSeat(position),
+      label: "Folded",
+    })),
+    { seat: getPreflopRangeTableSeat(opener), label: "Opener" },
+    ...getPreflopRangePositionsBetweenOpenerAndBb(opener).map((position) => ({
+      seat: getPreflopRangeTableSeat(position),
+      label: "Folded",
+    })),
+    { seat: "BB", label: "Hero" },
+  ];
+}
+
+function createPreflopRangeBbDefenseActionBySeat(spot, question) {
+  const opener = spot?.villainPosition || "BTN";
+  const actionBySeat = {};
+  getPreflopRangePriorPositions(opener).forEach((position) => {
+    actionBySeat[getPreflopRangeTableSeat(position)] = "Folded";
+  });
+  actionBySeat[getPreflopRangeTableSeat(opener)] = getPreflopRangeOpenLabel(spot);
+  getPreflopRangePositionsBetweenOpenerAndBb(opener).forEach((position) => {
+    actionBySeat[getPreflopRangeTableSeat(position)] = "Folded";
+  });
+  actionBySeat.BB = question.answered ? getPreflopActionLabel(question.legalActions, question.selected) : "Hero to act";
+  return actionBySeat;
+}
+
+function getPreflopRangeBbDefenseFoldedPositions(opener) {
+  return [
+    ...getPreflopRangePriorPositions(opener),
+    ...getPreflopRangePositionsBetweenOpenerAndBb(opener),
+  ];
+}
+
+function getPreflopRangePositionsBetweenOpenerAndBb(opener) {
+  const order = ["LJ", "HJ", "CO", "BTN", "SB"];
+  const index = order.indexOf(opener);
+  return index >= 0 ? order.slice(index + 1) : [];
+}
+
+function isPreflopRangeBbDefenseSpot(spot) {
+  return spot?.actionContext === "facing-open" && spot?.heroPosition === "BB";
+}
+
+function getPreflopRangeSpotShortLabel(spot) {
+  return isPreflopRangeBbDefenseSpot(spot)
+    ? `BB vs ${spot.villainPosition}`
+    : `${spot?.heroPosition || "BTN"} RFI`;
+}
+
+function formatPreflopRangeDecisionLabel(spot) {
+  return isPreflopRangeBbDefenseSpot(spot)
+    ? `BB defense versus ${spot.villainPosition} open`
+    : `${spot?.heroPosition || "BTN"} open-or-fold`;
+}
+
+function getPreflopRangeOpenLabel(spot) {
+  return spot?.raiseSize?.label || spot?.facingOpen?.label || "Open";
+}
+
+function getPreflopRangeFacingOpenPot(spot) {
+  const openSize = spot?.facingOpen?.sizeBb || 0;
+  return spot?.villainPosition === "SB" ? openSize + BIG_BLIND : openSize + SMALL_BLIND + BIG_BLIND;
 }
 
 function renderPreflopRangeAnswers(question) {
@@ -1898,7 +2041,7 @@ function renderPreflopRangeFeedback(question) {
   if (!question.answered) {
     elements.feedbackBand.className = "feedback-band neutral";
     elements.feedbackLabel.textContent = "Choose your line";
-    elements.feedbackText.textContent = "Use the loaded FishKiller 6-max first-in range. Only supported actions for this spot are shown.";
+    elements.feedbackText.textContent = "Use the loaded FishKiller 6-max preflop range. Only supported actions for this spot are shown.";
     elements.continueButton.disabled = true;
     elements.continueButton.textContent = "Continue";
     return;
@@ -1938,6 +2081,12 @@ function getPreflopActionLabel(actions = [], actionId = "") {
   if (action?.id === "raise") {
     return "Raise";
   }
+  if (action?.id === "threeBet") {
+    return "3-bet";
+  }
+  if (action?.id === "call") {
+    return "Call";
+  }
   if (action?.id === "fold") {
     return "Fold";
   }
@@ -1948,8 +2097,14 @@ function getPreflopRangeActionHint(action) {
   if (action.id === "raise") {
     return action.sizeBb ? `Open to ${action.sizeBb}bb and take the initiative.` : "Open the range.";
   }
+  if (action.id === "threeBet") {
+    return action.sizeBb ? `Re-raise to ${action.sizeBb}bb with pressure.` : "Re-raise from the big blind.";
+  }
+  if (action.id === "call") {
+    return action.callAmountBb ? `Defend by adding ${action.callAmountBb}bb.` : "Defend and see a flop.";
+  }
   if (action.id === "fold") {
-    return "Release hands outside this first-in range.";
+    return "Release hands outside this range.";
   }
   return "Choose a supported action from this range spot.";
 }
@@ -4786,9 +4941,9 @@ function openPreflopRangeModal() {
   const question = getCurrentQuestion();
   const spot = getPreflopRangeSpot(question?.spotId) || getActivePreflopRangeSpot();
   elements.gtoKicker.textContent = "6-Max Preflop Range";
-  elements.gtoTitle.textContent = `${spot?.heroPosition || "BTN"} first-in range`;
-  elements.gtoCopy.textContent = `${formatPreflopRangeSpotTitle(spot)} - ${spot?.raiseSize?.label || "Open"}`;
-  elements.gtoLegend.innerHTML = createPreflopRangeLegend();
+  elements.gtoTitle.textContent = `${getPreflopRangeSpotShortLabel(spot)} range`;
+  elements.gtoCopy.textContent = `${formatPreflopRangeSpotTitle(spot)} - ${getPreflopRangeOpenLabel(spot)}`;
+  elements.gtoLegend.innerHTML = createPreflopRangeLegend(spot);
 
   try {
     if (!window.FishKillerPreflopEngine || !spot) {
@@ -4812,9 +4967,12 @@ function closeGtoModal() {
   elements.gtoMatrix.classList.remove("preflop-range-matrix");
 }
 
-function createPreflopRangeLegend() {
+function createPreflopRangeLegend(spot) {
+  const actionLegend = (spot?.legalActions || [])
+    .filter((action) => action.id !== "fold")
+    .map((action) => `<span class="${getPreflopLegendClass(action.id)}">${getPreflopActionLabel(spot.legalActions, action.id)}</span>`);
   return [
-    `<span class="legend-raise">Raise</span>`,
+    ...actionLegend,
     `<span class="legend-fold">Fold</span>`,
     `<span class="legend-mix">Mixed</span>`,
     `<span class="legend-hero">Current hand</span>`,
@@ -4824,7 +4982,7 @@ function createPreflopRangeLegend() {
 function createPreflopRangeMatrix(matrix, heroHandClass) {
   const normalizedHeroHand = heroHandClass ? normalizeHandClass(heroHandClass) : "";
   return matrix.cells.map((cell) => {
-    const actionClass = cell.dominantAction === "raise" ? "gto-raise" : "gto-fold";
+    const actionClass = getPreflopMatrixActionClass(cell.dominantAction);
     const mixedClass = cell.mixed ? " gto-mix" : "";
     const heroClass = cell.handClass === normalizedHeroHand ? " hero-hand" : "";
     const frequencyText = formatPreflopCellFrequencies(cell.actions);
@@ -4838,6 +4996,20 @@ function createPreflopRangeMatrix(matrix, heroHandClass) {
   }).join("");
 }
 
+function getPreflopMatrixActionClass(actionId) {
+  if (actionId === "raise") return "gto-raise";
+  if (actionId === "threeBet") return "gto-threebet";
+  if (actionId === "call") return "gto-call";
+  return "gto-fold";
+}
+
+function getPreflopLegendClass(actionId) {
+  if (actionId === "raise") return "legend-raise";
+  if (actionId === "threeBet") return "legend-threebet";
+  if (actionId === "call") return "legend-call";
+  return "legend-fold";
+}
+
 function formatPreflopCellFrequencies(actions = {}) {
   return Object.entries(actions)
     .map(([actionId, frequency]) => `${getPreflopActionLabel(preflopRangeSpot?.legalActions || [], actionId)} ${formatPercent(frequency)}`)
@@ -4845,15 +5017,11 @@ function formatPreflopCellFrequencies(actions = {}) {
 }
 
 function formatPreflopCellCompact(actions = {}) {
-  const raise = actions.raise || 0;
-  const fold = actions.fold || 0;
-  if (raise > 0 && fold > 0) {
-    return `R${formatPercent(raise)} F${formatPercent(fold)}`;
-  }
-  if (raise > 0) {
-    return `R${formatPercent(raise)}`;
-  }
-  return `F${formatPercent(fold)}`;
+  const labels = { raise: "R", threeBet: "3B", call: "C", fold: "F" };
+  return Object.entries(actions)
+    .filter(([, frequency]) => frequency > 0)
+    .map(([actionId, frequency]) => `${labels[actionId] || actionId.toUpperCase()}${formatPercent(frequency)}`)
+    .join(" ");
 }
 
 function createGtoLegend(spot) {
@@ -6641,7 +6809,7 @@ function getPreflopRangeTrainableSpotsForDrill(drillId = getSelectedPreflopRange
   const spotIds = window.FishKillerPreflopEngine?.resolvePreflopDrillSpotIds(
     drillId,
     PREFLOP_RANGE_DRILL_OPTIONS
-  ) || PREFLOP_RANGE_RFI_SPOT_IDS;
+  ) || PREFLOP_RANGE_TRAINABLE_SPOT_IDS;
   const allowed = new Set(spotIds.length ? spotIds : PREFLOP_RANGE_RFI_SPOT_IDS);
   const spots = getPreflopRangeTrainableSpots();
   const filtered = spots.filter((spot) => allowed.has(spot.spotId));
@@ -6654,25 +6822,25 @@ function getPreflopRangeTrainableSpots(pack = preflopRangePack) {
   }
 
   const spots = Array.isArray(pack.spots) ? pack.spots : [];
-  const discovered = spots.filter(isTrainablePreflopRangeRfiSpot);
+  const discovered = spots.filter(isTrainablePreflopRangeSpot);
   if (discovered.length) {
     return discovered.sort((left, right) => {
       return getPreflopRangeSpotOrder(left.spotId) - getPreflopRangeSpotOrder(right.spotId);
     });
   }
 
-  return PREFLOP_RANGE_RFI_SPOT_IDS
+  return PREFLOP_RANGE_TRAINABLE_SPOT_IDS
     .map((spotId) => window.FishKillerPreflopEngine?.getPreflopSpot(pack, spotId))
     .filter(Boolean);
 }
 
-function isTrainablePreflopRangeRfiSpot(spot) {
+function isTrainablePreflopRangeSpot(spot) {
   if (!spot || spot.tableSize !== 6 || spot.stackDepthBb !== 100) {
     return false;
   }
 
   const actionIds = new Set((spot.legalActions || []).map((action) => action.id));
-  return (
+  const isRfi = (
     spot.complete === true &&
     spot.actionContext === "rfi" &&
     spot.priorAction === "folded-to-hero" &&
@@ -6680,10 +6848,20 @@ function isTrainablePreflopRangeRfiSpot(spot) {
     actionIds.has("fold") &&
     actionIds.has("raise")
   );
+  const isBbDefense = (
+    spot.complete === true &&
+    spot.actionContext === "facing-open" &&
+    spot.heroPosition === "BB" &&
+    Boolean(spot.villainPosition) &&
+    actionIds.has("fold") &&
+    actionIds.has("call") &&
+    actionIds.has("threeBet")
+  );
+  return isRfi || isBbDefense;
 }
 
 function getPreflopRangeSpotOrder(spotId) {
-  const index = PREFLOP_RANGE_RFI_SPOT_IDS.indexOf(spotId);
+  const index = PREFLOP_RANGE_TRAINABLE_SPOT_IDS.indexOf(spotId);
   return index === -1 ? Number.MAX_SAFE_INTEGER : index;
 }
 

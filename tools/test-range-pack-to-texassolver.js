@@ -23,6 +23,13 @@ const REAL_RFI_SPOT_IDS = [
   "fk_6max_100bb_btn_rfi_unopened_v1",
   "fk_6max_100bb_sb_rfi_unopened_v1",
 ];
+const REAL_BB_DEFENSE_SPOT_IDS = [
+  "fk_6max_100bb_bb_vs_lj_open_v1",
+  "fk_6max_100bb_bb_vs_hj_open_v1",
+  "fk_6max_100bb_bb_vs_co_open_v1",
+  "fk_6max_100bb_bb_vs_btn_open_v1",
+  "fk_6max_100bb_bb_vs_sb_open_v1",
+];
 
 main();
 
@@ -67,6 +74,13 @@ function runModuleAssertions() {
     assert.equal(realRfi.pack.sourceType, "manual");
     assert.equal(Object.keys(realRfi.spot.actionsByHand).length, 169);
     assert.deepEqual(realRfi.spot.legalActions.map((action) => action.id), ["fold", "raise"]);
+  });
+  REAL_BB_DEFENSE_SPOT_IDS.forEach((spotId) => {
+    const realDefense = findSpot(packs, spotId);
+    assert(realDefense, `Real 6-max BB defense spot should exist: ${spotId}`);
+    assert.equal(realDefense.pack.sourceType, "manual");
+    assert.equal(Object.keys(realDefense.spot.actionsByHand).length, 169);
+    assert.deepEqual(realDefense.spot.legalActions.map((action) => action.id), ["fold", "call", "threeBet"]);
   });
 
   assert.equal(actionFrequencyToWeight({ call: 0.4, threeBet: 0.5, fold: 0.1 }, ["call", "threeBet"]), 0.9);

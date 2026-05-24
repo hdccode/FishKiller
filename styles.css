@@ -2056,6 +2056,11 @@ select {
   color: #cfeeff;
 }
 
+.legend-threebet {
+  background: rgba(240, 187, 89, 0.24);
+  color: var(--gold-strong);
+}
+
 .legend-check {
   background: rgba(76, 174, 255, 0.18);
   color: #cfeeff;
@@ -2185,6 +2190,11 @@ select {
 
 .gto-call {
   background: linear-gradient(180deg, rgba(76, 174, 255, 0.72), rgba(20, 87, 136, 0.92));
+}
+
+.gto-threebet {
+  background: linear-gradient(180deg, rgba(240, 187, 89, 0.88), rgba(152, 97, 22, 0.94));
+  color: #fff7dc;
 }
 
 .gto-check {

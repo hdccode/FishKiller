@@ -12,6 +12,13 @@ const RFI_SPOT_IDS = [
   "fk_6max_100bb_btn_rfi_unopened_v1",
   "fk_6max_100bb_sb_rfi_unopened_v1",
 ];
+const BB_DEFENSE_SPOT_IDS = [
+  "fk_6max_100bb_bb_vs_lj_open_v1",
+  "fk_6max_100bb_bb_vs_hj_open_v1",
+  "fk_6max_100bb_bb_vs_co_open_v1",
+  "fk_6max_100bb_bb_vs_btn_open_v1",
+  "fk_6max_100bb_bb_vs_sb_open_v1",
+];
 
 function fixedRng(value) {
   return () => value;
@@ -24,6 +31,7 @@ function run() {
 
   loadsAndFindsRealPack(normalized, spot);
   loadsAllCoreRfiSpots(normalized);
+  loadsAllBbDefenseSpots(normalized);
   prefersRaiseWithAces(spot);
   prefersFoldWithTrash(spot);
   checksPositionSpecificRfiStrategy(normalized);
@@ -51,6 +59,17 @@ function loadsAllCoreRfiSpots(pack) {
     assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "raise"]);
     assert.equal(spot.actionContext, "rfi");
     assert.equal(spot.priorAction, "folded-to-hero");
+  });
+}
+
+function loadsAllBbDefenseSpots(pack) {
+  BB_DEFENSE_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    assert(spot, `${spotId} should exist`);
+    assert.equal(spot.heroPosition, "BB");
+    assert.equal(spot.actionContext, "facing-open");
+    assert.equal(Object.keys(spot.actionsByHand).length, 169);
+    assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "threeBet"]);
   });
 }
 
@@ -135,10 +154,14 @@ function resolvesDrillSpotIds() {
   const options = [
     { id: "all-rfi", default: true, spotIds: RFI_SPOT_IDS },
     { id: "co-rfi", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
+    { id: "all-bb-defense", spotIds: BB_DEFENSE_SPOT_IDS },
+    { id: "bb-vs-btn", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
     { id: "review-mistakes", reviewMode: true, spotIds: [] },
   ];
 
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("co-rfi", options), ["fk_6max_100bb_co_rfi_unopened_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-bb-defense", options), BB_DEFENSE_SPOT_IDS);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("bb-vs-btn", options), ["fk_6max_100bb_bb_vs_btn_open_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), RFI_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("review-mistakes", options), []);
 }

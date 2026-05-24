@@ -81,6 +81,16 @@ It currently contains internally authored, non-proprietary baseline 6-max RFI sp
 
 LJ/HJ/CO/BTN use 2.3bb opens. SB uses a 3bb open. These are FishKiller internal baseline training ranges, not solver-perfect GTO and not copied commercial charts.
 
+It also contains internally authored BB defense spots against first-in opens:
+
+- `fk_6max_100bb_bb_vs_lj_open_v1`
+- `fk_6max_100bb_bb_vs_hj_open_v1`
+- `fk_6max_100bb_bb_vs_co_open_v1`
+- `fk_6max_100bb_bb_vs_btn_open_v1`
+- `fk_6max_100bb_bb_vs_sb_open_v1`
+
+These spots use `fold`, `call`, and `threeBet` as legal actions. LJ/HJ/CO/BTN open sizes are 2.3bb; SB open size is 3bb. The defense ranges are still FishKiller MVP baseline data rather than universal GTO charts.
+
 ## Demo Versus Real
 
 Demo packs must have:
