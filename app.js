@@ -128,6 +128,17 @@ const PREFLOP_RANGE_RFI_SPOT_IDS = [
   "fk_6max_100bb_btn_rfi_unopened_v1",
   "fk_6max_100bb_sb_rfi_unopened_v1",
 ];
+const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-rfi";
+const PREFLOP_RANGE_REVIEW_DRILL_ID = "review-mistakes";
+const PREFLOP_RANGE_DRILL_OPTIONS = [
+  { id: "all-rfi", label: "All RFI", default: true, spotIds: PREFLOP_RANGE_RFI_SPOT_IDS },
+  { id: "lj-rfi", label: "LJ RFI", spotIds: ["fk_6max_100bb_lj_rfi_unopened_v1"] },
+  { id: "hj-rfi", label: "HJ RFI", spotIds: ["fk_6max_100bb_hj_rfi_unopened_v1"] },
+  { id: "co-rfi", label: "CO RFI", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
+  { id: "btn-rfi", label: "BTN RFI", spotIds: ["fk_6max_100bb_btn_rfi_unopened_v1"] },
+  { id: "sb-rfi", label: "SB RFI", spotIds: ["fk_6max_100bb_sb_rfi_unopened_v1"] },
+  { id: PREFLOP_RANGE_REVIEW_DRILL_ID, label: "Review mistakes", reviewMode: true, spotIds: [] },
+];
 const PREFLOP_RANGE_QUESTION_XP = 12;
 const PREFLOP_PROGRESS = window.FishKillerPreflopProgress || null;
 const SCENARIOS_BY_ID = Object.fromEntries(SCENARIOS.map((scenario) => [scenario.id, scenario]));
@@ -382,6 +393,7 @@ function createDefaultState() {
     cardStyle: "reef",
     daily: createDailyState(),
     preflop6maxProgress: createDefaultPreflop6maxProgress(),
+    preflop6maxDrillId: PREFLOP_RANGE_DEFAULT_DRILL_ID,
     lastResult: {
       grade: "No run yet",
       xp: 0,
@@ -438,6 +450,7 @@ function loadState() {
         claimedQuestIds: Array.isArray(parsed.daily?.claimedQuestIds) ? parsed.daily.claimedQuestIds : [],
       },
       preflop6maxProgress: normalizePreflop6maxProgress(parsed.preflop6maxProgress),
+      preflop6maxDrillId: normalizePreflopRangeDrillId(parsed.preflop6maxDrillId),
       lastResult: { ...defaults.lastResult, ...(parsed.lastResult || {}) },
     };
 
@@ -529,9 +542,10 @@ function startMainSession(tableSize) {
 function startPreflopRangeSession(tableSize, sessionEngine, options = {}) {
   const engine = window.FishKillerPreflopEngine;
   const spot = getActivePreflopRangeSpot();
+  const drillId = options.reviewMode ? PREFLOP_RANGE_REVIEW_DRILL_ID : getSelectedPreflopRangeDrillId();
 
   if (!engine || !preflopRangePack || !spot) {
-    console.warn("Preflop range session requested before the engine or BTN RFI spot was ready; using scenario fallback.");
+    console.warn("Preflop range session requested before the engine or RFI spots were ready; using scenario fallback.");
     const scenarioCount = MAIN_SESSION_LENGTH;
     const scenarioIds = createRandomPreflopScenarioIds(tableSize, scenarioCount);
     activeSession = buildSession(tableSize, scenarioIds, "main", "preflop");
@@ -550,6 +564,7 @@ function startPreflopRangeSession(tableSize, sessionEngine, options = {}) {
     tableSize,
     mode: options.reviewMode ? "review" : "main",
     reviewType: options.reviewMode ? TRAINING_ENGINE_IDS.preflopRange : "",
+    drillId,
     practiceMode: "preflop",
     trainingEngine: TRAINING_ENGINE_IDS.preflopRange,
     requestedTrainingEngine: sessionEngine.requestedEngineId,
@@ -558,7 +573,7 @@ function startPreflopRangeSession(tableSize, sessionEngine, options = {}) {
     spotId: spot.spotId,
     questionStates: Array.from(
       { length: getPreflopRangeSessionLength(options.reviewMode) },
-      () => createPreflopRangeQuestionState({ reviewMode: options.reviewMode })
+      () => createPreflopRangeQuestionState({ reviewMode: options.reviewMode, drillId })
     ),
     currentIndex: 0,
     pendingAdvance: false,
@@ -569,6 +584,7 @@ function startPreflopRangeSession(tableSize, sessionEngine, options = {}) {
     missedQuestions: [],
     reviewCarryForward: [],
   };
+  activeSession.spotId = activeSession.questionStates[0]?.spotId || spot.spotId;
   latestSummary = null;
   closeSummaryModal();
   enterLessonMode();
@@ -603,8 +619,8 @@ function getPreflopRangeSessionLength(reviewMode = false) {
 
 function createPreflopRangeQuestionState(options = {}) {
   const sample = options.reviewMode
-    ? samplePreflopRangeReviewQuestion() || samplePreflopRangeQuestion()
-    : samplePreflopRangeQuestion();
+    ? samplePreflopRangeReviewQuestion() || samplePreflopRangeQuestion(options.drillId)
+    : samplePreflopRangeQuestion(options.drillId);
   const spot = getPreflopRangeSpot(sample.spotId);
 
   return {
@@ -625,8 +641,8 @@ function createPreflopRangeQuestionState(options = {}) {
   };
 }
 
-function samplePreflopRangeQuestion() {
-  const spot = samplePreflopRangeSpot();
+function samplePreflopRangeQuestion(drillId = getSelectedPreflopRangeDrillId()) {
+  const spot = samplePreflopRangeSpot(drillId);
   if (!spot) {
     throw new Error("No trainable 6-max RFI preflop spots are loaded.");
   }
@@ -1149,6 +1165,13 @@ function advanceSession() {
   if (activeSession.currentIndex >= activeSession.questionStates.length) {
     finishSession("completed");
     return;
+  }
+
+  if (activeSession.trainingEngine === TRAINING_ENGINE_IDS.preflopRange && activeSession.mode === "main") {
+    activeSession.questionStates[activeSession.currentIndex] = createPreflopRangeQuestionState({
+      drillId: activeSession.drillId || getSelectedPreflopRangeDrillId(),
+    });
+    activeSession.spotId = activeSession.questionStates[activeSession.currentIndex]?.spotId || activeSession.spotId;
   }
 
   activeSession.pendingAdvance = false;
@@ -1701,6 +1724,7 @@ function renderPreflopRangeScenario() {
   elements.progressFill.style.width = `${Math.round(((activeSession.currentIndex + (question.answered ? 1 : 0)) / activeSession.questionStates.length) * 100)}%`;
   elements.scenarioFacts.innerHTML = [
     createFactCard("Spot", `${spot.heroPosition} RFI`),
+    createFactCard("Drill", getPreflopRangeDrill(getActivePreflopRangeDrillId())?.label || "All RFI"),
     createFactCard("Stack", "100bb"),
     createFactCard("Open Size", spot.raiseSize?.label || "Raise"),
     createFactCard("Lifetime Reps", state.preflop6maxProgress?.totals?.attempts || 0),
@@ -1814,6 +1838,7 @@ function formatPreflopRangeSpotTitle(spot) {
 
 function renderPreflopRangeAnswers(question) {
   elements.answerGrid.innerHTML = "";
+  renderPreflopRangeDrillSelector();
   const preferredActionId = question.grade?.preferredActionId || "";
 
   (question.legalActions || []).forEach((action) => {
@@ -1841,6 +1866,29 @@ function renderPreflopRangeAnswers(question) {
     button.addEventListener("click", () => answerCurrentQuestion(action.id));
     elements.answerGrid.appendChild(button);
   });
+}
+
+function renderPreflopRangeDrillSelector() {
+  const wrapper = document.createElement("div");
+  wrapper.className = "preflop-drill-selector";
+  const activeDrillId = getActivePreflopRangeDrillId();
+  const hasMistakes = Boolean(PREFLOP_PROGRESS?.hasPreflop6maxMistakes(state.preflop6maxProgress));
+  wrapper.innerHTML = `<span>Drill</span>`;
+
+  PREFLOP_RANGE_DRILL_OPTIONS.forEach((drill) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `preflop-drill-option${drill.id === activeDrillId ? " active" : ""}`;
+    button.textContent = drill.label;
+    button.disabled = drill.reviewMode && !hasMistakes;
+    button.title = drill.reviewMode && !hasMistakes
+      ? "Miss a 6-max range spot first, then review it here."
+      : `Train ${drill.label}`;
+    button.addEventListener("click", () => selectPreflopRangeDrill(drill.id));
+    wrapper.appendChild(button);
+  });
+
+  elements.answerGrid.appendChild(wrapper);
 }
 
 function renderPreflopRangeFeedback(question) {
@@ -6481,6 +6529,72 @@ function resolveSessionEngine(tableSize, practiceMode) {
   };
 }
 
+function selectPreflopRangeDrill(drillId) {
+  const requestedDrill = getPreflopRangeDrill(drillId);
+  if (requestedDrill?.reviewMode) {
+    startPreflopRangeReviewSession(activeSession?.tableSize || "six");
+    return;
+  }
+
+  const normalizedDrillId = normalizePreflopRangeDrillId(drillId);
+
+  state.preflop6maxDrillId = normalizedDrillId;
+  saveState();
+
+  if (activeSession?.trainingEngine === TRAINING_ENGINE_IDS.preflopRange) {
+    if (activeSession.mode === "review") {
+      startPreflopRangeSession(activeSession.tableSize || "six", {
+        tableSize: activeSession.tableSize || "six",
+        practiceMode: "preflop",
+        engineId: TRAINING_ENGINE_IDS.preflopRange,
+        requestedEngineId: TRAINING_ENGINE_IDS.preflopRange,
+        fallbackEngineId: TRAINING_ENGINE_IDS.scenarioPack,
+        isFallback: false,
+      });
+      return;
+    }
+
+    activeSession.mode = "main";
+    activeSession.reviewType = "";
+    activeSession.drillId = normalizedDrillId;
+    refreshPreflopRangeQuestionsForDrill(normalizedDrillId);
+  }
+
+  render();
+}
+
+function refreshPreflopRangeQuestionsForDrill(drillId) {
+  if (!activeSession?.questionStates?.length || activeSession.trainingEngine !== TRAINING_ENGINE_IDS.preflopRange) {
+    return;
+  }
+
+  for (let index = activeSession.currentIndex; index < activeSession.questionStates.length; index += 1) {
+    if (!activeSession.questionStates[index]?.answered) {
+      activeSession.questionStates[index] = createPreflopRangeQuestionState({ drillId });
+    }
+  }
+
+  activeSession.spotId = activeSession.questionStates[activeSession.currentIndex]?.spotId || activeSession.spotId;
+  activeSession.pendingAdvance = false;
+}
+
+function getSelectedPreflopRangeDrillId() {
+  return normalizePreflopRangeDrillId(state.preflop6maxDrillId);
+}
+
+function getActivePreflopRangeDrillId() {
+  return activeSession?.mode === "review" ? PREFLOP_RANGE_REVIEW_DRILL_ID : getSelectedPreflopRangeDrillId();
+}
+
+function normalizePreflopRangeDrillId(drillId) {
+  const drill = getPreflopRangeDrill(drillId);
+  return drill && !drill.reviewMode ? drill.id : PREFLOP_RANGE_DEFAULT_DRILL_ID;
+}
+
+function getPreflopRangeDrill(drillId) {
+  return PREFLOP_RANGE_DRILL_OPTIONS.find((drill) => drill.id === drillId) || null;
+}
+
 function isPreflopRangeEngineReady() {
   if (!window.FishKillerPreflopEngine || !preflopRangePack) {
     return false;
@@ -6514,13 +6628,24 @@ function getPreflopRangeSpot(spotId) {
   return preflopRangeSpot;
 }
 
-function samplePreflopRangeSpot() {
-  const spots = getPreflopRangeTrainableSpots();
+function samplePreflopRangeSpot(drillId = getSelectedPreflopRangeDrillId()) {
+  const spots = getPreflopRangeTrainableSpotsForDrill(drillId);
   if (!spots.length) {
     return null;
   }
 
   return spots[Math.floor(Math.random() * spots.length)];
+}
+
+function getPreflopRangeTrainableSpotsForDrill(drillId = getSelectedPreflopRangeDrillId()) {
+  const spotIds = window.FishKillerPreflopEngine?.resolvePreflopDrillSpotIds(
+    drillId,
+    PREFLOP_RANGE_DRILL_OPTIONS
+  ) || PREFLOP_RANGE_RFI_SPOT_IDS;
+  const allowed = new Set(spotIds.length ? spotIds : PREFLOP_RANGE_RFI_SPOT_IDS);
+  const spots = getPreflopRangeTrainableSpots();
+  const filtered = spots.filter((spot) => allowed.has(spot.spotId));
+  return filtered.length ? filtered : spots;
 }
 
 function getPreflopRangeTrainableSpots(pack = preflopRangePack) {

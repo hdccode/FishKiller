@@ -31,6 +31,7 @@ function run() {
   rejectsIllegalAction(spot);
   buildsFullMatrix(spot);
   samplesDeterministicQuestion(normalized);
+  resolvesDrillSpotIds();
   console.log("preflop-engine tests passed");
 }
 
@@ -128,6 +129,18 @@ function samplesDeterministicQuestion(pack) {
   assert.equal(question.handClass, "AA");
   assert.deepEqual(question.legalActions.map((action) => action.id), ["fold", "raise"]);
   assert(question.strategy.actions);
+}
+
+function resolvesDrillSpotIds() {
+  const options = [
+    { id: "all-rfi", default: true, spotIds: RFI_SPOT_IDS },
+    { id: "co-rfi", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
+    { id: "review-mistakes", reviewMode: true, spotIds: [] },
+  ];
+
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("co-rfi", options), ["fk_6max_100bb_co_rfi_unopened_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), RFI_SPOT_IDS);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("review-mistakes", options), []);
 }
 
 run();

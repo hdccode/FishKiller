@@ -167,6 +167,24 @@
     };
   }
 
+  function resolvePreflopDrillSpotIds(drillId, drillOptions = []) {
+    const options = Array.isArray(drillOptions) ? drillOptions : [];
+    if (!options.length) {
+      return [];
+    }
+
+    const selected = options.find((option) => option.id === drillId)
+      || options.find((option) => option.default)
+      || options[0];
+    if (!selected || selected.reviewMode) {
+      return [];
+    }
+
+    return Array.isArray(selected.spotIds)
+      ? selected.spotIds.filter((spotId) => typeof spotId === "string" && spotId)
+      : [];
+  }
+
   function normalizePreflopSpot(spot) {
     if (!spot || typeof spot !== "object" || Array.isArray(spot)) {
       throw new Error("Preflop spot must be an object.");
@@ -308,6 +326,7 @@
     gradePreflopAnswer,
     buildPreflopRangeMatrix,
     samplePreflopQuestion,
+    resolvePreflopDrillSpotIds,
     normalizeHandClass,
   };
 
