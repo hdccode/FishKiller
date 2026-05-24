@@ -32,6 +32,14 @@ const THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_sb_vs_co_open_3bet_v1",
 ];
 
+const FACING_THREE_BET_SPOT_IDS = [
+  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_co_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_co_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+];
+
 const DRILL_OPTIONS = [
   { id: "all-rfi", default: true, spotIds: RFI_SPOT_IDS },
   { id: "lj-rfi", spotIds: ["fk_6max_100bb_lj_rfi_unopened_v1"] },
@@ -51,6 +59,12 @@ const DRILL_OPTIONS = [
   { id: "hj-vs-lj-3bet", spotIds: ["fk_6max_100bb_hj_vs_lj_open_3bet_v1"] },
   { id: "sb-vs-btn-3bet", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
   { id: "sb-vs-co-3bet", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
+  { id: "all-facing-3bet", spotIds: FACING_THREE_BET_SPOT_IDS },
+  { id: "btn-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
+  { id: "co-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_co_open_vs_btn_3bet_v1"] },
+  { id: "co-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_co_open_vs_sb_3bet_v1"] },
+  { id: "hj-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
+  { id: "lj-open-vs-hj-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
   { id: "review-mistakes", reviewMode: true, spotIds: [] },
 ];
 
@@ -72,6 +86,12 @@ const FAMILY_DEFINITIONS = [
     spotIds: THREE_BET_SPOT_IDS,
     legalActions: ["fold", "call", "threeBet"],
     matches: (spot) => spot.actionContext === "facing-open" && spot.spotType === "three-bet-vs-open",
+  },
+  {
+    name: "facing 3-bet",
+    spotIds: FACING_THREE_BET_SPOT_IDS,
+    legalActions: ["fold", "call", "fourBet"],
+    matches: (spot) => spot.actionContext === "facing-3bet" && spot.spotType === "facing-3bet",
   },
 ];
 
@@ -222,6 +242,7 @@ function report(errors, pack = null) {
   console.log(
     `Preflop range coverage passed: ${spotCount} real spots, ` +
       `${RFI_SPOT_IDS.length} RFI, ${BB_DEFENSE_SPOT_IDS.length} BB defense, ` +
-      `${THREE_BET_SPOT_IDS.length} 3-bet-vs-open.`
+      `${THREE_BET_SPOT_IDS.length} 3-bet-vs-open, ` +
+      `${FACING_THREE_BET_SPOT_IDS.length} facing-3bet.`
   );
 }

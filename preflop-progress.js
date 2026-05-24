@@ -240,7 +240,7 @@
   }
 
   function isAggressivePreflopAction(actionId) {
-    return actionId === "raise" || actionId === "threeBet";
+    return actionId === "raise" || actionId === "threeBet" || actionId === "fourBet";
   }
 
   function normalizeMistakes(mistakes) {

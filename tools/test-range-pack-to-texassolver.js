@@ -37,6 +37,13 @@ const REAL_THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
   "fk_6max_100bb_sb_vs_co_open_3bet_v1",
 ];
+const REAL_FACING_THREE_BET_SPOT_IDS = [
+  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_co_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_co_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+];
 
 main();
 
@@ -97,8 +104,17 @@ function runModuleAssertions() {
     assert.deepEqual(realThreeBet.spot.legalActions.map((action) => action.id), ["fold", "call", "threeBet"]);
     assert.equal(realThreeBet.spot.spotType, "three-bet-vs-open");
   });
+  REAL_FACING_THREE_BET_SPOT_IDS.forEach((spotId) => {
+    const realFacingThreeBet = findSpot(packs, spotId);
+    assert(realFacingThreeBet, `Real 6-max facing-3bet spot should exist: ${spotId}`);
+    assert.equal(realFacingThreeBet.pack.sourceType, "manual");
+    assert.equal(Object.keys(realFacingThreeBet.spot.actionsByHand).length, 169);
+    assert.deepEqual(realFacingThreeBet.spot.legalActions.map((action) => action.id), ["fold", "call", "fourBet"]);
+    assert.equal(realFacingThreeBet.spot.spotType, "facing-3bet");
+  });
 
   assert.equal(actionFrequencyToWeight({ call: 0.4, threeBet: 0.5, fold: 0.1 }, ["call", "threeBet"]), 0.9);
+  assert.equal(actionFrequencyToWeight({ call: 0.4, fourBet: 0.5, fold: 0.1 }, ["call", "fourBet"]), 0.9);
 
   const ipRange = buildTexasSolverRangeString(ip.spot, ["raise"]).range;
   assert.equal(ipRange, "AA,A5s:0.95");

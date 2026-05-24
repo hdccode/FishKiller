@@ -190,10 +190,15 @@
     if (actionId === "call") return "Call";
     if (actionId === "raise") return "Raise";
     if (actionId === "threeBet") return "3-bet";
+    if (actionId === "fourBet") return "4-bet";
     return "";
   }
 
   function formatPreflopSpotLabel(spot) {
+    if (spot?.actionContext === "facing-3bet" || spot?.spotType === "facing-3bet") {
+      return `${spot.heroPosition || "Hero"} open vs ${spot.villainPosition || "3-bettor"} 3-bet`;
+    }
+
     if (spot?.actionContext === "facing-open") {
       return `${spot.heroPosition || "Hero"} vs ${spot.villainPosition || "opener"} open`;
     }
@@ -202,6 +207,10 @@
   }
 
   function formatPreflopSizeLabel(spot) {
+    if (spot?.facingThreeBet) {
+      return `${spot.villainPosition || "3-bettor"} 3-bets ${formatBbSize(spot.facingThreeBet.sizeBb)}`;
+    }
+
     if (spot?.facingOpen) {
       return `${spot.villainPosition || "Opener"} opens ${formatBbSize(spot.facingOpen.sizeBb)}`;
     }

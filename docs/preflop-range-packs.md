@@ -99,7 +99,17 @@ The pack also contains internally authored 3-bet versus open drills:
 - `fk_6max_100bb_sb_vs_btn_open_3bet_v1`
 - `fk_6max_100bb_sb_vs_co_open_3bet_v1`
 
-These spots use `fold`, `call`, and `threeBet` as legal actions. The facing open size is 2.3bb for all five MVP spots. They are intended for preflop trainer drills only; facing-3bet and 4bet response spots are not included yet.
+These spots use `fold`, `call`, and `threeBet` as legal actions. The facing open size is 2.3bb for all five MVP spots.
+
+The pack also contains internally authored opener responses after facing a 3-bet:
+
+- `fk_6max_100bb_btn_open_vs_bb_3bet_v1`
+- `fk_6max_100bb_co_open_vs_btn_3bet_v1`
+- `fk_6max_100bb_co_open_vs_sb_3bet_v1`
+- `fk_6max_100bb_hj_open_vs_btn_3bet_v1`
+- `fk_6max_100bb_lj_open_vs_hj_3bet_v1`
+
+These spots use `fold`, `call`, and `fourBet` as legal actions. LJ/HJ/CO/BTN opens use 2.3bb. IP 3-bets use 7.5bb, blind 3-bets use 9bb to 9.5bb, and 4-bet sizes are simple MVP metadata rather than a universal sizing claim. They are intended for preflop trainer drills only; squeeze, limp/iso, and full 4bet response trees are not included yet.
 
 ## Demo Versus Real
 
@@ -130,7 +140,7 @@ This checks metadata, spot fields, hand syntax, and per-hand action frequencies.
 data/preflop-ranges/validation-report.json
 ```
 
-The coverage check verifies the launch-supported live 6-max trainer families: five RFI spots, five BB defense spots, and five selected 3-bet versus open spots. It also checks 169-hand coverage, expected legal actions by family, drill-to-spot mappings, range-matrix construction, and question sampling.
+The coverage check verifies the launch-supported live 6-max trainer families: five RFI spots, five BB defense spots, five selected 3-bet versus open spots, and five facing-3bet spots. It also checks 169-hand coverage, expected legal actions by family, drill-to-spot mappings, range-matrix construction, and question sampling.
 
 ## TexasSolver Range Generation
 
