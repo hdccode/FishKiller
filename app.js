@@ -1746,6 +1746,7 @@ function renderPreflopRangeScenario() {
     createFactCard("Open Size", getPreflopRangeOpenLabel(spot)),
     createFactCard("Lifetime Reps", state.preflop6maxProgress?.totals?.attempts || 0),
   ].join("");
+  renderPreflopRangeProgressSummary();
   setScenarioExplanationVisible(true);
   renderTableVisual(visualScenario, bettingSummary, {
     street: "preflop",
@@ -1762,6 +1763,83 @@ function getPreflopRangeSessionAccuracyLabel() {
     return "0% accuracy";
   }
   return `${Math.round((activeSession.correctCount / answered) * 100)}% accuracy`;
+}
+
+function renderPreflopRangeProgressSummary() {
+  if (!PREFLOP_PROGRESS?.summarizePreflop6maxProgress || !elements.scenarioFacts) {
+    return;
+  }
+
+  const summary = PREFLOP_PROGRESS.summarizePreflop6maxProgress(state.preflop6maxProgress, {
+    minimumSpotAttempts: 3,
+    recentMistakeLimit: 3,
+  });
+  elements.scenarioFacts.insertAdjacentHTML("beforeend", createPreflopRangeProgressSummaryMarkup(summary));
+}
+
+function createPreflopRangeProgressSummaryMarkup(summary) {
+  if (!summary || !summary.totalAttempts) {
+    return `
+      <div class="preflop-progress-summary empty">
+        <span>Progress</span>
+        <strong>No 6-max reps yet</strong>
+        <em>Answer a few RFI or BB defense spots to reveal your first leaks.</em>
+      </div>
+    `;
+  }
+
+  const weakestSpot = summary.weakestSpots?.[0];
+  const weakestLabel = weakestSpot
+    ? `${formatPreflopProgressSpotLabel(weakestSpot.spotId)} (${formatPercent(weakestSpot.mistakeRate)} mistakes)`
+    : "Need 3+ reps per spot";
+  const recentMistake = summary.recentMistakes?.[0];
+  const recentLabel = recentMistake
+    ? `${recentMistake.handClass} in ${formatPreflopProgressSpotLabel(recentMistake.spotId)}`
+    : "No recent mistakes";
+  const leakLabel = getPreflopProgressLeakLabel(summary.actionPatterns);
+
+  return `
+    <div class="preflop-progress-summary">
+      <span>Total reps<strong>${summary.totalAttempts}</strong></span>
+      <span>Accuracy<strong>${formatPercent(summary.accuracy)}</strong></span>
+      <span>Playable<strong>${formatPercent(summary.playableAccuracy)}</strong></span>
+      <span>Weakest spot<strong>${weakestLabel}</strong></span>
+      <span>Recent miss<strong>${recentLabel}</strong></span>
+      <span>Pattern<strong>${leakLabel}</strong></span>
+    </div>
+  `;
+}
+
+function getPreflopProgressLeakLabel(patterns = {}) {
+  const entries = [
+    ["overfold", "Overfolding"],
+    ["overcall", "Overcalling"],
+    ["overraise", "Over-raising"],
+    ["missedAggression", "Passing on aggression"],
+    ["missedCalls", "Missing calls"],
+    ["illegal", "Unsupported clicks"],
+  ].filter(([key]) => patterns[key] > 0);
+
+  if (!entries.length) {
+    return "Clean so far";
+  }
+
+  const [key, label] = entries.sort((left, right) => patterns[right[0]] - patterns[left[0]])[0];
+  return `${label} (${patterns[key]})`;
+}
+
+function formatPreflopProgressSpotLabel(spotId = "") {
+  const bbMatch = String(spotId).match(/bb_vs_(lj|hj|co|btn|sb)_open/i);
+  if (bbMatch) {
+    return `BB vs ${bbMatch[1].toUpperCase()}`;
+  }
+
+  const rfiMatch = String(spotId).match(/100bb_(lj|hj|co|btn|sb)_rfi/i);
+  if (rfiMatch) {
+    return `${rfiMatch[1].toUpperCase()} RFI`;
+  }
+
+  return spotId || "Unknown spot";
 }
 
 function createPreflopRangeVisualScenario(question) {

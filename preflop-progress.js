@@ -107,8 +107,140 @@
     return normalizePreflop6maxProgress(progress).mistakes.length > 0;
   }
 
+  function summarizePreflop6maxProgress(progress, options = {}) {
+    const normalized = normalizePreflop6maxProgress(progress);
+    const minimumSpotAttempts = Math.max(1, toCount(options.minimumSpotAttempts) || 3);
+    const recentMistakeLimit = Math.max(0, toCount(options.recentMistakeLimit) || 5);
+    const totalAttempts = normalized.totals.attempts;
+    const correctCount = normalized.totals.correct;
+    const mixedCount = normalized.totals.mixed;
+    const mistakeCount = normalized.totals.mistakes;
+    const accuracy = totalAttempts ? correctCount / totalAttempts : 0;
+    const playableAccuracy = totalAttempts ? (correctCount + mixedCount) / totalAttempts : 0;
+    const accuracyBySpotId = {};
+
+    Object.entries(normalized.attemptsBySpotHand).forEach(([key, value]) => {
+      const { spotId } = splitSpotHandKey(key);
+      if (!spotId) {
+        return;
+      }
+
+      if (!accuracyBySpotId[spotId]) {
+        accuracyBySpotId[spotId] = createEmptySpotSummary(spotId);
+      }
+
+      const spot = accuracyBySpotId[spotId];
+      spot.attempts += value.attempts;
+      spot.correct += value.correct;
+      spot.mixed += value.mixed;
+      spot.mistakes += value.mistakes;
+    });
+
+    Object.values(accuracyBySpotId).forEach(finalizeSpotSummary);
+
+    const weakestSpots = Object.values(accuracyBySpotId)
+      .filter((spot) => spot.attempts >= minimumSpotAttempts)
+      .sort((left, right) => {
+        if (right.mistakeRate !== left.mistakeRate) {
+          return right.mistakeRate - left.mistakeRate;
+        }
+        if (left.accuracy !== right.accuracy) {
+          return left.accuracy - right.accuracy;
+        }
+        return right.attempts - left.attempts;
+      });
+
+    const recentMistakes = [...normalized.mistakes]
+      .sort((left, right) => right.updatedAt - left.updatedAt)
+      .slice(0, recentMistakeLimit);
+
+    return {
+      totalAttempts,
+      correctCount,
+      mixedCount,
+      mistakeCount,
+      accuracy,
+      playableAccuracy,
+      accuracyBySpotId,
+      weakestSpots,
+      recentMistakes,
+      actionPatterns: summarizeActionPatterns(normalized.mistakes),
+    };
+  }
+
   function getSpotHandKey(spotId, handClass) {
     return `${spotId}|${handClass}`;
+  }
+
+  function splitSpotHandKey(key) {
+    const separatorIndex = String(key || "").lastIndexOf("|");
+    if (separatorIndex < 0) {
+      return { spotId: "", handClass: "" };
+    }
+
+    return {
+      spotId: key.slice(0, separatorIndex),
+      handClass: key.slice(separatorIndex + 1),
+    };
+  }
+
+  function createEmptySpotSummary(spotId) {
+    return {
+      spotId,
+      attempts: 0,
+      correct: 0,
+      mixed: 0,
+      mistakes: 0,
+      accuracy: 0,
+      playableAccuracy: 0,
+      mistakeRate: 0,
+    };
+  }
+
+  function finalizeSpotSummary(spot) {
+    spot.accuracy = spot.attempts ? spot.correct / spot.attempts : 0;
+    spot.playableAccuracy = spot.attempts ? (spot.correct + spot.mixed) / spot.attempts : 0;
+    spot.mistakeRate = spot.attempts ? spot.mistakes / spot.attempts : 0;
+    return spot;
+  }
+
+  function summarizeActionPatterns(mistakes) {
+    return normalizeMistakes(mistakes).reduce((patterns, mistake) => {
+      const chosen = mistake.chosenActionId;
+      const preferred = mistake.preferredActionId;
+
+      if (mistake.resultKind === "illegal") {
+        patterns.illegal += 1;
+      }
+      if (chosen === "fold" && preferred && preferred !== "fold") {
+        patterns.overfold += 1;
+      }
+      if (chosen === "call" && preferred && preferred !== "call") {
+        patterns.overcall += 1;
+      }
+      if (isAggressivePreflopAction(chosen) && preferred && preferred !== chosen) {
+        patterns.overraise += 1;
+      }
+      if (isAggressivePreflopAction(preferred) && !isAggressivePreflopAction(chosen)) {
+        patterns.missedAggression += 1;
+      }
+      if (preferred === "call" && chosen !== "call") {
+        patterns.missedCalls += 1;
+      }
+
+      return patterns;
+    }, {
+      overfold: 0,
+      overcall: 0,
+      overraise: 0,
+      missedAggression: 0,
+      missedCalls: 0,
+      illegal: 0,
+    });
+  }
+
+  function isAggressivePreflopAction(actionId) {
+    return actionId === "raise" || actionId === "threeBet";
   }
 
   function normalizeMistakes(mistakes) {
@@ -162,6 +294,7 @@
     recordPreflop6maxAttempt,
     samplePreflop6maxMistake,
     hasPreflop6maxMistakes,
+    summarizePreflop6maxProgress,
     getSpotHandKey,
   };
 
