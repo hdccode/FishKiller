@@ -141,6 +141,7 @@ const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = [
 ];
 const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-rfi";
 const PREFLOP_RANGE_REVIEW_DRILL_ID = "review-mistakes";
+const PREFLOP_RANGE_MIN_WEAK_SPOT_ATTEMPTS = 5;
 const PREFLOP_RANGE_DRILL_OPTIONS = [
   { id: "all-rfi", label: "All RFI", default: true, spotIds: PREFLOP_RANGE_RFI_SPOT_IDS },
   { id: "lj-rfi", label: "LJ RFI", spotIds: ["fk_6max_100bb_lj_rfi_unopened_v1"] },
@@ -562,7 +563,11 @@ function startPreflopRangeSession(tableSize, sessionEngine, options = {}) {
   const drillId = options.reviewMode ? PREFLOP_RANGE_REVIEW_DRILL_ID : getSelectedPreflopRangeDrillId();
 
   if (!engine || !preflopRangePack || !spot) {
-    console.warn("Preflop range session requested before the engine or RFI spots were ready; using scenario fallback.");
+    console.warn("6-max preflop range trainer is unavailable; using the legacy scenario fallback.", {
+      engineLoaded: Boolean(engine),
+      rangePackLoaded: Boolean(preflopRangePack),
+      hasActiveSpot: Boolean(spot),
+    });
     const scenarioCount = MAIN_SESSION_LENGTH;
     const scenarioIds = createRandomPreflopScenarioIds(tableSize, scenarioCount);
     activeSession = buildSession(tableSize, scenarioIds, "main", "preflop");
@@ -661,7 +666,7 @@ function createPreflopRangeQuestionState(options = {}) {
 function samplePreflopRangeQuestion(drillId = getSelectedPreflopRangeDrillId()) {
   const spot = samplePreflopRangeSpot(drillId);
   if (!spot) {
-    throw new Error("No trainable 6-max RFI preflop spots are loaded.");
+    throw new Error("No trainable 6-max preflop range spots are loaded.");
   }
 
   return window.FishKillerPreflopEngine.samplePreflopQuestion({
@@ -1732,7 +1737,7 @@ function renderPreflopRangeScenario() {
   elements.scenarioDifficulty.textContent = "Internal baseline";
   renderBettingLine(bettingSummary);
   elements.scenarioTitle.textContent = formatPreflopRangeSpotTitle(spot);
-  elements.scenarioCopy.textContent = `Hero has ${question.handClass}. Choose the baseline ${formatPreflopRangeDecisionLabel(spot)} action from the loaded range pack.`;
+  elements.scenarioCopy.textContent = createPreflopRangeScenarioCopy(spot, question);
   elements.sessionChip.textContent = activeSession.mode === "review" ? "Range Review" : "Preflop Range";
   elements.sessionCounter.textContent = `${activeSession.currentIndex + 1} / ${activeSession.questionStates.length}`;
   elements.mistakeCounter.textContent = activeSession.mode === "main"
@@ -1743,7 +1748,7 @@ function renderPreflopRangeScenario() {
     createFactCard("Spot", getPreflopRangeSpotShortLabel(spot)),
     createFactCard("Drill", getPreflopRangeDrill(getActivePreflopRangeDrillId())?.label || "All RFI"),
     createFactCard("Stack", "100bb"),
-    createFactCard("Open Size", getPreflopRangeOpenLabel(spot)),
+    createFactCard(getPreflopRangeSizeFactLabel(spot), getPreflopRangeOpenLabel(spot)),
     createFactCard("Lifetime Reps", state.preflop6maxProgress?.totals?.attempts || 0),
   ].join("");
   renderPreflopRangeProgressSummary();
@@ -1771,7 +1776,7 @@ function renderPreflopRangeProgressSummary() {
   }
 
   const summary = PREFLOP_PROGRESS.summarizePreflop6maxProgress(state.preflop6maxProgress, {
-    minimumSpotAttempts: 3,
+    minimumSpotAttempts: PREFLOP_RANGE_MIN_WEAK_SPOT_ATTEMPTS,
     recentMistakeLimit: 3,
   });
   elements.scenarioFacts.insertAdjacentHTML("beforeend", createPreflopRangeProgressSummaryMarkup(summary));
@@ -1781,9 +1786,9 @@ function createPreflopRangeProgressSummaryMarkup(summary) {
   if (!summary || !summary.totalAttempts) {
     return `
       <div class="preflop-progress-summary empty">
-        <span>Progress</span>
-        <strong>No 6-max reps yet</strong>
-        <em>Answer a few RFI or BB defense spots to reveal your first leaks.</em>
+        <span>6-max progress</span>
+        <strong>No preflop reps yet</strong>
+        <em>Answer a few RFI or BB defense hands and this panel will show your strongest and weakest spots.</em>
       </div>
     `;
   }
@@ -1791,7 +1796,7 @@ function createPreflopRangeProgressSummaryMarkup(summary) {
   const weakestSpot = summary.weakestSpots?.[0];
   const weakestLabel = weakestSpot
     ? `${formatPreflopProgressSpotLabel(weakestSpot.spotId)} (${formatPercent(weakestSpot.mistakeRate)} mistakes)`
-    : "Need 3+ reps per spot";
+    : `Need ${PREFLOP_RANGE_MIN_WEAK_SPOT_ATTEMPTS}+ reps in a spot`;
   const recentMistake = summary.recentMistakes?.[0];
   const recentLabel = recentMistake
     ? `${recentMistake.handClass} in ${formatPreflopProgressSpotLabel(recentMistake.spotId)}`
@@ -1801,9 +1806,9 @@ function createPreflopRangeProgressSummaryMarkup(summary) {
   return `
     <div class="preflop-progress-summary">
       <span>Total reps<strong>${summary.totalAttempts}</strong></span>
-      <span>Accuracy<strong>${formatPercent(summary.accuracy)}</strong></span>
-      <span>Playable<strong>${formatPercent(summary.playableAccuracy)}</strong></span>
-      <span>Weakest spot<strong>${weakestLabel}</strong></span>
+      <span>Correct rate<strong>${formatPercent(summary.accuracy)}</strong></span>
+      <span>Good or mixed<strong>${formatPercent(summary.playableAccuracy)}</strong></span>
+      <span>Needs work<strong>${weakestLabel}</strong></span>
       <span>Recent miss<strong>${recentLabel}</strong></span>
       <span>Pattern<strong>${leakLabel}</strong></span>
     </div>
@@ -1831,12 +1836,12 @@ function getPreflopProgressLeakLabel(patterns = {}) {
 function formatPreflopProgressSpotLabel(spotId = "") {
   const bbMatch = String(spotId).match(/bb_vs_(lj|hj|co|btn|sb)_open/i);
   if (bbMatch) {
-    return `BB vs ${bbMatch[1].toUpperCase()}`;
+    return `BB vs ${bbMatch[1].toUpperCase()} open`;
   }
 
   const rfiMatch = String(spotId).match(/100bb_(lj|hj|co|btn|sb)_rfi/i);
   if (rfiMatch) {
-    return `${rfiMatch[1].toUpperCase()} RFI`;
+    return `${rfiMatch[1].toUpperCase()} first in`;
   }
 
   return spotId || "Unknown spot";
@@ -1944,11 +1949,7 @@ function getPreflopRangeTableSeat(position) {
 }
 
 function formatPreflopRangeSpotTitle(spot) {
-  if (isPreflopRangeBbDefenseSpot(spot)) {
-    return `6-max ${spot?.stackDepthBb || 100}bb - BB vs ${spot.villainPosition} open`;
-  }
-
-  return `6-max ${spot?.stackDepthBb || 100}bb - ${spot?.heroPosition || "BTN"} first in`;
+  return `6-max ${spot?.stackDepthBb || 100}bb - ${formatPreflopSpotLabel(spot)}`;
 }
 
 function createPreflopRangeBbDefenseBettingSummary(spot, question) {
@@ -2037,19 +2038,61 @@ function isPreflopRangeBbDefenseSpot(spot) {
 }
 
 function getPreflopRangeSpotShortLabel(spot) {
-  return isPreflopRangeBbDefenseSpot(spot)
-    ? `BB vs ${spot.villainPosition}`
-    : `${spot?.heroPosition || "BTN"} RFI`;
+  return formatPreflopSpotLabel(spot);
 }
 
 function formatPreflopRangeDecisionLabel(spot) {
   return isPreflopRangeBbDefenseSpot(spot)
     ? `BB defense versus ${spot.villainPosition} open`
-    : `${spot?.heroPosition || "BTN"} open-or-fold`;
+    : `${spot?.heroPosition || "BTN"} first-in`;
 }
 
 function getPreflopRangeOpenLabel(spot) {
-  return spot?.raiseSize?.label || spot?.facingOpen?.label || "Open";
+  return formatPreflopSizeLabel(spot);
+}
+
+function getPreflopRangeSizeFactLabel(spot) {
+  return isPreflopRangeBbDefenseSpot(spot) ? "Facing Size" : "Open Size";
+}
+
+function createPreflopRangeScenarioCopy(spot, question) {
+  const legalLabels = (question?.legalActions || [])
+    .map((action) => getPreflopActionLabel(question.legalActions, action.id))
+    .join(" / ");
+  const reviewPrefix = activeSession?.mode === "review" ? "Review mode. " : "";
+  return `${reviewPrefix}Hero has ${question.handClass}. Choose ${legalLabels} for ${formatPreflopSpotLabel(spot)}.`;
+}
+
+function formatPreflopActionLabel(actionId) {
+  const formatted = window.FishKillerPreflopEngine?.formatPreflopActionLabel?.(actionId);
+  if (formatted) return formatted;
+  if (actionId === "fold") return "Fold";
+  if (actionId === "call") return "Call";
+  if (actionId === "raise") return "Raise";
+  if (actionId === "threeBet") return "3-bet";
+  return "";
+}
+
+function formatPreflopSpotLabel(spot) {
+  const formatted = window.FishKillerPreflopEngine?.formatPreflopSpotLabel?.(spot);
+  if (formatted) return formatted;
+  if (isPreflopRangeBbDefenseSpot(spot)) {
+    return `BB vs ${spot?.villainPosition || "opener"} open`;
+  }
+  return `${spot?.heroPosition || "BTN"} first in`;
+}
+
+function formatPreflopSizeLabel(spot) {
+  const formatted = window.FishKillerPreflopEngine?.formatPreflopSizeLabel?.(spot);
+  if (formatted) return formatted;
+  const size = spot?.facingOpen?.sizeBb || spot?.raiseSize?.sizeBb || 0;
+  if (!size) {
+    return "Open size unavailable";
+  }
+  const label = Number.isInteger(Number(size)) ? `${Number(size)}bb` : `${Number(size).toFixed(1)}bb`;
+  return isPreflopRangeBbDefenseSpot(spot)
+    ? `${spot?.villainPosition || "Opener"} opens ${label}`
+    : `Open ${label}`;
 }
 
 function getPreflopRangeFacingOpenPot(spot) {
@@ -2094,7 +2137,7 @@ function renderPreflopRangeDrillSelector() {
   wrapper.className = "preflop-drill-selector";
   const activeDrillId = getActivePreflopRangeDrillId();
   const hasMistakes = Boolean(PREFLOP_PROGRESS?.hasPreflop6maxMistakes(state.preflop6maxProgress));
-  wrapper.innerHTML = `<span>Drill</span>`;
+  wrapper.innerHTML = `<span>${activeSession?.mode === "review" ? "Reviewing mistakes" : "Drill"}</span>`;
 
   PREFLOP_RANGE_DRILL_OPTIONS.forEach((drill) => {
     const button = document.createElement("button");
@@ -2103,7 +2146,7 @@ function renderPreflopRangeDrillSelector() {
     button.textContent = drill.label;
     button.disabled = drill.reviewMode && !hasMistakes;
     button.title = drill.reviewMode && !hasMistakes
-      ? "Miss a 6-max range spot first, then review it here."
+      ? "No missed 6-max preflop hands yet."
       : `Train ${drill.label}`;
     button.addEventListener("click", () => selectPreflopRangeDrill(drill.id));
     wrapper.appendChild(button);
@@ -2155,19 +2198,12 @@ function renderPreflopRangeFeedback(question) {
 }
 
 function getPreflopActionLabel(actions = [], actionId = "") {
+  const formatted = formatPreflopActionLabel(actionId);
+  if (formatted) {
+    return formatted;
+  }
+
   const action = actions.find((item) => item.id === actionId);
-  if (action?.id === "raise") {
-    return "Raise";
-  }
-  if (action?.id === "threeBet") {
-    return "3-bet";
-  }
-  if (action?.id === "call") {
-    return "Call";
-  }
-  if (action?.id === "fold") {
-    return "Fold";
-  }
   return action?.label || actionId;
 }
 
@@ -5019,8 +5055,8 @@ function openPreflopRangeModal() {
   const question = getCurrentQuestion();
   const spot = getPreflopRangeSpot(question?.spotId) || getActivePreflopRangeSpot();
   elements.gtoKicker.textContent = "6-Max Preflop Range";
-  elements.gtoTitle.textContent = `${getPreflopRangeSpotShortLabel(spot)} range`;
-  elements.gtoCopy.textContent = `${formatPreflopRangeSpotTitle(spot)} - ${getPreflopRangeOpenLabel(spot)}`;
+  elements.gtoTitle.textContent = `${formatPreflopSpotLabel(spot)} range`;
+  elements.gtoCopy.textContent = `${formatPreflopRangeSpotTitle(spot)} - ${getPreflopRangeOpenLabel(spot)}. Internal baseline range, not a universal GTO claim.`;
   elements.gtoLegend.innerHTML = createPreflopRangeLegend(spot);
 
   try {
@@ -5030,7 +5066,7 @@ function openPreflopRangeModal() {
 
     const matrix = window.FishKillerPreflopEngine.buildPreflopRangeMatrix(spot);
     elements.gtoMatrix.classList.add("preflop-range-matrix");
-    elements.gtoMatrix.innerHTML = createPreflopRangeMatrix(matrix, question?.handClass || "");
+    elements.gtoMatrix.innerHTML = createPreflopRangeMatrix(matrix, question?.handClass || "", spot);
   } catch (error) {
     console.warn("Failed to render preflop range matrix", error);
     elements.gtoMatrix.classList.remove("preflop-range-matrix");
@@ -5046,25 +5082,25 @@ function closeGtoModal() {
 }
 
 function createPreflopRangeLegend(spot) {
-  const actionLegend = (spot?.legalActions || [])
-    .filter((action) => action.id !== "fold")
-    .map((action) => `<span class="${getPreflopLegendClass(action.id)}">${getPreflopActionLabel(spot.legalActions, action.id)}</span>`);
+  const legalActionIds = new Set((spot?.legalActions || []).map((action) => action.id));
+  const actionLegend = ["fold", "call", "raise", "threeBet"]
+    .filter((actionId) => legalActionIds.has(actionId))
+    .map((actionId) => `<span class="${getPreflopLegendClass(actionId)}">${getPreflopActionLabel(spot.legalActions, actionId)}</span>`);
   return [
     ...actionLegend,
-    `<span class="legend-fold">Fold</span>`,
     `<span class="legend-mix">Mixed</span>`,
     `<span class="legend-hero">Current hand</span>`,
   ].join("");
 }
 
-function createPreflopRangeMatrix(matrix, heroHandClass) {
+function createPreflopRangeMatrix(matrix, heroHandClass, spot = null) {
   const normalizedHeroHand = heroHandClass ? normalizeHandClass(heroHandClass) : "";
   return matrix.cells.map((cell) => {
     const actionClass = getPreflopMatrixActionClass(cell.dominantAction);
     const mixedClass = cell.mixed ? " gto-mix" : "";
     const heroClass = cell.handClass === normalizedHeroHand ? " hero-hand" : "";
-    const frequencyText = formatPreflopCellFrequencies(cell.actions);
-    const title = `${cell.handClass}: ${getPreflopActionLabel(preflopRangeSpot?.legalActions || [], cell.dominantAction)}. ${frequencyText}`;
+    const frequencyText = formatPreflopCellFrequencies(cell.actions, spot);
+    const title = `${cell.handClass}: ${getPreflopActionLabel(spot?.legalActions || [], cell.dominantAction)}. ${frequencyText}`;
     return `
       <div class="gto-cell ${actionClass}${mixedClass}${heroClass}" title="${title}">
         <span>${cell.handClass}</span>
@@ -5088,9 +5124,9 @@ function getPreflopLegendClass(actionId) {
   return "legend-fold";
 }
 
-function formatPreflopCellFrequencies(actions = {}) {
+function formatPreflopCellFrequencies(actions = {}, spot = preflopRangeSpot) {
   return Object.entries(actions)
-    .map(([actionId, frequency]) => `${getPreflopActionLabel(preflopRangeSpot?.legalActions || [], actionId)} ${formatPercent(frequency)}`)
+    .map(([actionId, frequency]) => `${getPreflopActionLabel(spot?.legalActions || [], actionId)} ${formatPercent(frequency)}`)
     .join(" / ");
 }
 

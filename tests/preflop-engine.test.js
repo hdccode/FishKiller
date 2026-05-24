@@ -40,6 +40,7 @@ function run() {
   buildsFullMatrix(spot);
   samplesDeterministicQuestion(normalized);
   resolvesDrillSpotIds();
+  formatsPreflopLabels(normalized);
   console.log("preflop-engine tests passed");
 }
 
@@ -164,6 +165,24 @@ function resolvesDrillSpotIds() {
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("bb-vs-btn", options), ["fk_6max_100bb_bb_vs_btn_open_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), RFI_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("review-mistakes", options), []);
+}
+
+function formatsPreflopLabels(pack) {
+  const btn = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_rfi_unopened_v1");
+  const sb = preflop.getPreflopSpot(pack, "fk_6max_100bb_sb_rfi_unopened_v1");
+  const bbVsBtn = preflop.getPreflopSpot(pack, "fk_6max_100bb_bb_vs_btn_open_v1");
+  const bbVsSb = preflop.getPreflopSpot(pack, "fk_6max_100bb_bb_vs_sb_open_v1");
+
+  assert.equal(preflop.formatPreflopActionLabel("fold"), "Fold");
+  assert.equal(preflop.formatPreflopActionLabel("call"), "Call");
+  assert.equal(preflop.formatPreflopActionLabel("raise"), "Raise");
+  assert.equal(preflop.formatPreflopActionLabel("threeBet"), "3-bet");
+  assert.equal(preflop.formatPreflopSpotLabel(btn), "BTN first in");
+  assert.equal(preflop.formatPreflopSpotLabel(bbVsBtn), "BB vs BTN open");
+  assert.equal(preflop.formatPreflopSizeLabel(btn), "Open 2.3bb");
+  assert.equal(preflop.formatPreflopSizeLabel(sb), "Open 3bb");
+  assert.equal(preflop.formatPreflopSizeLabel(bbVsBtn), "BTN opens 2.3bb");
+  assert.equal(preflop.formatPreflopSizeLabel(bbVsSb), "SB opens 3bb");
 }
 
 run();

@@ -185,6 +185,34 @@
       : [];
   }
 
+  function formatPreflopActionLabel(actionId) {
+    if (actionId === "fold") return "Fold";
+    if (actionId === "call") return "Call";
+    if (actionId === "raise") return "Raise";
+    if (actionId === "threeBet") return "3-bet";
+    return "";
+  }
+
+  function formatPreflopSpotLabel(spot) {
+    if (spot?.actionContext === "facing-open" && spot?.heroPosition === "BB") {
+      return `BB vs ${spot.villainPosition || "opener"} open`;
+    }
+
+    return `${spot?.heroPosition || "BTN"} first in`;
+  }
+
+  function formatPreflopSizeLabel(spot) {
+    if (spot?.facingOpen) {
+      return `${spot.villainPosition || "Opener"} opens ${formatBbSize(spot.facingOpen.sizeBb)}`;
+    }
+
+    if (spot?.raiseSize) {
+      return `Open ${formatBbSize(spot.raiseSize.sizeBb)}`;
+    }
+
+    return "Open size unavailable";
+  }
+
   function normalizePreflopSpot(spot) {
     if (!spot || typeof spot !== "object" || Array.isArray(spot)) {
       throw new Error("Preflop spot must be an object.");
@@ -300,7 +328,16 @@
   }
 
   function formatAction(actionId, legalActions) {
-    return legalActions.find((action) => action.id === actionId)?.label || actionId;
+    return formatPreflopActionLabel(actionId) || legalActions.find((action) => action.id === actionId)?.label || actionId;
+  }
+
+  function formatBbSize(sizeBb) {
+    const numeric = Number(sizeBb);
+    if (!Number.isFinite(numeric) || numeric <= 0) {
+      return "unknown";
+    }
+
+    return `${Number.isInteger(numeric) ? numeric : numeric.toFixed(1).replace(/\.0$/, "")}bb`;
   }
 
   function rankIndex(rank) {
@@ -327,6 +364,9 @@
     buildPreflopRangeMatrix,
     samplePreflopQuestion,
     resolvePreflopDrillSpotIds,
+    formatPreflopActionLabel,
+    formatPreflopSpotLabel,
+    formatPreflopSizeLabel,
     normalizeHandClass,
   };
 
