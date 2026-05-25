@@ -32163,6 +32163,4696 @@
           "fourBet": 0
         }
       }
+    },
+    {
+      "spotId": "fk_6max_100bb_hj_3bet_vs_lj_open_lj_4bet_v1",
+      "name": "6-Max HJ 3-Bet vs LJ Open / LJ 4-Bet 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "facingFourBet",
+      "spotType": "facing-4bet",
+      "heroPosition": "HJ",
+      "villainPosition": "LJ",
+      "openerPosition": "LJ",
+      "aggressorPosition": "LJ",
+      "defenderPosition": "HJ",
+      "threeBettorPosition": "HJ",
+      "fourBettorPosition": "LJ",
+      "actionContext": "facing-4bet",
+      "priorAction": "hj-3bet-vs-lj-open-lj-4bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "HJ",
+          "actionId": "threeBet",
+          "sizeBb": 7.5
+        },
+        {
+          "position": "LJ",
+          "actionId": "fourBet",
+          "sizeBb": 21
+        }
+      ],
+      "potState": "facing-4bet",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bettor responses versus 4-bets. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "LJ",
+        "label": "LJ opened 2.3bb"
+      },
+      "threeBetSize": {
+        "type": "threeBet",
+        "sizeBb": 7.5,
+        "threeBettorPosition": "HJ",
+        "label": "HJ 3-bet 7.5bb"
+      },
+      "facingFourBet": {
+        "type": "fourBet",
+        "sizeBb": 21,
+        "fourBettorPosition": "LJ",
+        "label": "LJ 4-bets 21bb"
+      },
+      "fiveBetJamSize": {
+        "type": "fiveBetJam",
+        "sizeBb": 100,
+        "label": "5-bet jam"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 13.5
+        },
+        {
+          "id": "fiveBetJam",
+          "label": "5-bet jam",
+          "type": "allIn",
+          "sizeBb": 100
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "33": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "44": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "55": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "66": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "77": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "88": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "99": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.3,
+          "fiveBetJam": 0.7
+        },
+        "JJ": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "TT": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQs": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AJs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "ATs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KJs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "AJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "ATo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_co_3bet_vs_hj_open_hj_4bet_v1",
+      "name": "6-Max CO 3-Bet vs HJ Open / HJ 4-Bet 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "facingFourBet",
+      "spotType": "facing-4bet",
+      "heroPosition": "CO",
+      "villainPosition": "HJ",
+      "openerPosition": "HJ",
+      "aggressorPosition": "HJ",
+      "defenderPosition": "CO",
+      "threeBettorPosition": "CO",
+      "fourBettorPosition": "HJ",
+      "actionContext": "facing-4bet",
+      "priorAction": "co-3bet-vs-hj-open-hj-4bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "CO",
+          "actionId": "threeBet",
+          "sizeBb": 7.5
+        },
+        {
+          "position": "HJ",
+          "actionId": "fourBet",
+          "sizeBb": 21
+        }
+      ],
+      "potState": "facing-4bet",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bettor responses versus 4-bets. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "HJ",
+        "label": "HJ opened 2.3bb"
+      },
+      "threeBetSize": {
+        "type": "threeBet",
+        "sizeBb": 7.5,
+        "threeBettorPosition": "CO",
+        "label": "CO 3-bet 7.5bb"
+      },
+      "facingFourBet": {
+        "type": "fourBet",
+        "sizeBb": 21,
+        "fourBettorPosition": "HJ",
+        "label": "HJ 4-bets 21bb"
+      },
+      "fiveBetJamSize": {
+        "type": "fiveBetJam",
+        "sizeBb": 100,
+        "label": "5-bet jam"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 13.5
+        },
+        {
+          "id": "fiveBetJam",
+          "label": "5-bet jam",
+          "type": "allIn",
+          "sizeBb": 100
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "33": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "44": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "55": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "66": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "77": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "88": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "99": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "JJ": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "TT": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQs": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AJs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "ATs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A4s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "KJs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQo": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "ATo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1",
+      "name": "6-Max BTN 3-Bet vs CO Open / CO 4-Bet 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "facingFourBet",
+      "spotType": "facing-4bet",
+      "heroPosition": "BTN",
+      "villainPosition": "CO",
+      "openerPosition": "CO",
+      "aggressorPosition": "CO",
+      "defenderPosition": "BTN",
+      "threeBettorPosition": "BTN",
+      "fourBettorPosition": "CO",
+      "actionContext": "facing-4bet",
+      "priorAction": "btn-3bet-vs-co-open-co-4bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "BTN",
+          "actionId": "threeBet",
+          "sizeBb": 7.5
+        },
+        {
+          "position": "CO",
+          "actionId": "fourBet",
+          "sizeBb": 21
+        }
+      ],
+      "potState": "facing-4bet",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bettor responses versus 4-bets. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "CO",
+        "label": "CO opened 2.3bb"
+      },
+      "threeBetSize": {
+        "type": "threeBet",
+        "sizeBb": 7.5,
+        "threeBettorPosition": "BTN",
+        "label": "BTN 3-bet 7.5bb"
+      },
+      "facingFourBet": {
+        "type": "fourBet",
+        "sizeBb": 21,
+        "fourBettorPosition": "CO",
+        "label": "CO 4-bets 21bb"
+      },
+      "fiveBetJamSize": {
+        "type": "fiveBetJam",
+        "sizeBb": 100,
+        "label": "5-bet jam"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 13.5
+        },
+        {
+          "id": "fiveBetJam",
+          "label": "5-bet jam",
+          "type": "allIn",
+          "sizeBb": 100
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "33": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "44": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "55": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "66": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "77": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "88": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "99": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.3,
+          "fiveBetJam": 0.7
+        },
+        "TT": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQs": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AJs": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "ATs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "A9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A4s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "KJs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "KTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "K4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "QTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQo": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "ATo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1",
+      "name": "6-Max SB 3-Bet vs BTN Open / BTN 4-Bet 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "facingFourBet",
+      "spotType": "facing-4bet",
+      "heroPosition": "SB",
+      "villainPosition": "BTN",
+      "openerPosition": "BTN",
+      "aggressorPosition": "BTN",
+      "defenderPosition": "SB",
+      "threeBettorPosition": "SB",
+      "fourBettorPosition": "BTN",
+      "actionContext": "facing-4bet",
+      "priorAction": "sb-3bet-vs-btn-open-btn-4bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "SB",
+          "actionId": "threeBet",
+          "sizeBb": 9
+        },
+        {
+          "position": "BTN",
+          "actionId": "fourBet",
+          "sizeBb": 22
+        }
+      ],
+      "potState": "facing-4bet",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bettor responses versus 4-bets. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "BTN",
+        "label": "BTN opened 2.3bb"
+      },
+      "threeBetSize": {
+        "type": "threeBet",
+        "sizeBb": 9,
+        "threeBettorPosition": "SB",
+        "label": "SB 3-bet 9bb"
+      },
+      "facingFourBet": {
+        "type": "fourBet",
+        "sizeBb": 22,
+        "fourBettorPosition": "BTN",
+        "label": "BTN 4-bets 22bb"
+      },
+      "fiveBetJamSize": {
+        "type": "fiveBetJam",
+        "sizeBb": 100,
+        "label": "5-bet jam"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 13
+        },
+        {
+          "id": "fiveBetJam",
+          "label": "5-bet jam",
+          "type": "allIn",
+          "sizeBb": 100
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "33": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "44": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "55": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "66": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "77": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "88": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "99": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.3,
+          "fiveBetJam": 0.7
+        },
+        "TT": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.3,
+          "fiveBetJam": 0.7
+        },
+        "AJs": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "ATs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "A9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A4s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A3s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQs": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "KJs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "KTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "K4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "QTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "J9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQo": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "ATo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1",
+      "name": "6-Max BB 3-Bet vs BTN Open / BTN 4-Bet 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "facingFourBet",
+      "spotType": "facing-4bet",
+      "heroPosition": "BB",
+      "villainPosition": "BTN",
+      "openerPosition": "BTN",
+      "aggressorPosition": "BTN",
+      "defenderPosition": "BB",
+      "threeBettorPosition": "BB",
+      "fourBettorPosition": "BTN",
+      "actionContext": "facing-4bet",
+      "priorAction": "bb-3bet-vs-btn-open-btn-4bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "SB",
+          "actionId": "fold"
+        },
+        {
+          "position": "BB",
+          "actionId": "threeBet",
+          "sizeBb": 9.5
+        },
+        {
+          "position": "BTN",
+          "actionId": "fourBet",
+          "sizeBb": 22
+        }
+      ],
+      "potState": "facing-4bet",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bettor responses versus 4-bets. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "BTN",
+        "label": "BTN opened 2.3bb"
+      },
+      "threeBetSize": {
+        "type": "threeBet",
+        "sizeBb": 9.5,
+        "threeBettorPosition": "BB",
+        "label": "BB 3-bet 9.5bb"
+      },
+      "facingFourBet": {
+        "type": "fourBet",
+        "sizeBb": 22,
+        "fourBettorPosition": "BTN",
+        "label": "BTN 4-bets 22bb"
+      },
+      "fiveBetJamSize": {
+        "type": "fiveBetJam",
+        "sizeBb": 100,
+        "label": "5-bet jam"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 12.5
+        },
+        {
+          "id": "fiveBetJam",
+          "label": "5-bet jam",
+          "type": "allIn",
+          "sizeBb": 100
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "33": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "44": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "55": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "66": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "77": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "88": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "99": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.3,
+          "fiveBetJam": 0.7
+        },
+        "TT": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.3,
+          "fiveBetJam": 0.7
+        },
+        "AJs": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "ATs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "A9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A4s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A3s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "A2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQs": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "KJs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "KTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5s": {
+          "fold": 0.7,
+          "call": 0,
+          "fiveBetJam": 0.3
+        },
+        "K4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "QTs": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTs": {
+          "fold": 0.25,
+          "call": 0.75,
+          "fiveBetJam": 0
+        },
+        "J9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.15,
+          "fiveBetJam": 0.85
+        },
+        "AQo": {
+          "fold": 0.25,
+          "call": 0.45,
+          "fiveBetJam": 0.3
+        },
+        "AJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "ATo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "A2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KQo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "KTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "K2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QJo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "QTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "JTo": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T9o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T8o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T7o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "98o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "fiveBetJam": 0
+        }
+      }
     }
   ]
 }

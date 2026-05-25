@@ -252,7 +252,7 @@
   function formatPreflopSpotLabel(spot) {
     const family = getPreflopSpotFamily(spot);
     if (family === PREFLOP_SPOT_FAMILIES.facingFourBet) {
-      return `${spot?.heroPosition || "Hero"} vs ${spot?.aggressorPosition || spot?.villainPosition || "4-bettor"} 4-bet`;
+      return `${spot?.heroPosition || "Hero"} 3-bet vs ${spot?.openerPosition || spot?.villainPosition || "opener"} open, ${spot?.fourBettorPosition || spot?.aggressorPosition || spot?.villainPosition || "opener"} 4-bet`;
     }
 
     if (family === PREFLOP_SPOT_FAMILIES.facingThreeBet) {

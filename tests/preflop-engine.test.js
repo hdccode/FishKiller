@@ -51,6 +51,13 @@ const FACING_THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
   "fk_6max_100bb_sb_open_vs_bb_3bet_v1",
 ];
+const FACING_FOUR_BET_SPOT_IDS = [
+  "fk_6max_100bb_hj_3bet_vs_lj_open_lj_4bet_v1",
+  "fk_6max_100bb_co_3bet_vs_hj_open_hj_4bet_v1",
+  "fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1",
+  "fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1",
+  "fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1",
+];
 const FACING_OPEN_COVERAGE_SPOT_IDS = [
   "fk_6max_100bb_hj_vs_lj_open_v1",
   "fk_6max_100bb_co_vs_lj_open_v1",
@@ -81,6 +88,7 @@ function run() {
   loadsAllBbDefenseSpots(normalized);
   loadsAllThreeBetSpots(normalized);
   loadsAllFacingThreeBetSpots(normalized);
+  loadsAllFacingFourBetSpots(normalized);
   classifiesCurrentSpotFamilies(normalized);
   prefersRaiseWithAces(spot);
   prefersFoldWithTrash(spot);
@@ -199,6 +207,26 @@ function loadsAllFacingThreeBetSpots(pack) {
   });
 }
 
+function loadsAllFacingFourBetSpots(pack) {
+  FACING_FOUR_BET_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    assert(spot, `${spotId} should exist`);
+    assert.equal(spot.family, "facingFourBet");
+    assert.equal(spot.spotType, "facing-4bet");
+    assert(spot.heroPosition, `${spotId} should define 3-bettor position`);
+    assert(spot.villainPosition, `${spotId} should define 4-bettor position`);
+    assert.equal(spot.openerPosition, spot.villainPosition);
+    assert.equal(spot.aggressorPosition, spot.villainPosition);
+    assert.equal(spot.defenderPosition, spot.heroPosition);
+    assert.equal(spot.threeBettorPosition, spot.heroPosition);
+    assert.equal(spot.fourBettorPosition, spot.villainPosition);
+    assert(Array.isArray(spot.priorActions));
+    assert.equal(spot.actionContext, "facing-4bet");
+    assert.equal(Object.keys(spot.actionsByHand).length, 169);
+    assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "fiveBetJam"]);
+  });
+}
+
 function classifiesCurrentSpotFamilies(pack) {
   RFI_SPOT_IDS.forEach((spotId) => {
     assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "rfi");
@@ -214,6 +242,9 @@ function classifiesCurrentSpotFamilies(pack) {
   });
   FACING_THREE_BET_SPOT_IDS.forEach((spotId) => {
     assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "facingThreeBet");
+  });
+  FACING_FOUR_BET_SPOT_IDS.forEach((spotId) => {
+    assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "facingFourBet");
   });
 }
 
@@ -308,6 +339,9 @@ function resolvesDrillSpotIds() {
     { id: "lj-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_bb_3bet_v1"] },
     { id: "btn-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
     { id: "sb-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_sb_open_vs_bb_3bet_v1"] },
+    { id: "all-facing-4bet", spotIds: FACING_FOUR_BET_SPOT_IDS },
+    { id: "btn-3bet-vs-co-open-co-4bet", spotIds: ["fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1"] },
+    { id: "bb-3bet-vs-btn-open-btn-4bet", spotIds: ["fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1"] },
     { id: "review-mistakes", reviewMode: true, spotIds: [] },
   ];
 
@@ -322,6 +356,9 @@ function resolvesDrillSpotIds() {
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("lj-open-vs-bb-3bet", options), ["fk_6max_100bb_lj_open_vs_bb_3bet_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("btn-open-vs-bb-3bet", options), ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("sb-open-vs-bb-3bet", options), ["fk_6max_100bb_sb_open_vs_bb_3bet_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-facing-4bet", options), FACING_FOUR_BET_SPOT_IDS);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("btn-3bet-vs-co-open-co-4bet", options), ["fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("bb-3bet-vs-btn-open-btn-4bet", options), ["fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), RFI_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("review-mistakes", options), []);
 }
@@ -334,6 +371,7 @@ function formatsPreflopLabels(pack) {
   const btnVsCo = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_vs_co_open_3bet_v1");
   const btnVsHj = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_vs_hj_open_v1");
   const btnOpenVsBb = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_open_vs_bb_3bet_v1");
+  const btnThreeBetVsCoFourBet = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1");
 
   assert.equal(preflop.formatPreflopActionLabel("fold"), "Fold");
   assert.equal(preflop.formatPreflopActionLabel("call"), "Call");
@@ -351,11 +389,13 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopSpotLabel(btnVsHj), "BTN vs HJ open");
   assert.equal(preflop.formatPreflopSpotLabel(btnVsCo), "BTN vs CO open");
   assert.equal(preflop.formatPreflopSpotLabel(btnOpenVsBb), "BTN open vs BB 3-bet");
+  assert.equal(preflop.formatPreflopSpotLabel(btnThreeBetVsCoFourBet), "BTN 3-bet vs CO open, CO 4-bet");
   assert.equal(preflop.formatPreflopSpotLabel({
     family: "facingFourBet",
     heroPosition: "BTN",
+    openerPosition: "CO",
     aggressorPosition: "CO",
-  }), "BTN vs CO 4-bet");
+  }), "BTN 3-bet vs CO open, CO 4-bet");
   assert.equal(preflop.formatPreflopSpotLabel({
     family: "limpedPot",
     heroPosition: "BB",
@@ -378,6 +418,7 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopSizeLabel(btnVsHj), "HJ opens 2.3bb");
   assert.equal(preflop.formatPreflopSizeLabel(btnVsCo), "CO opens 2.3bb");
   assert.equal(preflop.formatPreflopSizeLabel(btnOpenVsBb), "BB 3-bets 9.5bb");
+  assert.equal(preflop.formatPreflopSizeLabel(btnThreeBetVsCoFourBet), "CO 4-bets 21bb");
 }
 
 run();

@@ -7,7 +7,7 @@ const preflop = require("../preflop-engine");
 const ROOT = path.resolve(__dirname, "..");
 const PACK_PATH = path.join(ROOT, "data", "preflop-ranges", "real", "fishkiller-6max-100bb-v1.preflop-range.json");
 const EXPECTED_HAND_COUNT = 169;
-const EXPECTED_REAL_SPOT_COUNT = 36;
+const EXPECTED_REAL_SPOT_COUNT = 41;
 
 const RFI_SPOT_IDS = [
   "fk_6max_100bb_lj_rfi_unopened_v1",
@@ -60,6 +60,14 @@ const FACING_THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_sb_open_vs_bb_3bet_v1",
 ];
 
+const FACING_FOUR_BET_SPOT_IDS = [
+  "fk_6max_100bb_hj_3bet_vs_lj_open_lj_4bet_v1",
+  "fk_6max_100bb_co_3bet_vs_hj_open_hj_4bet_v1",
+  "fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1",
+  "fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1",
+  "fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1",
+];
+
 const FACING_OPEN_COVERAGE_SPOT_IDS = [
   "fk_6max_100bb_hj_vs_lj_open_v1",
   "fk_6max_100bb_co_vs_lj_open_v1",
@@ -75,7 +83,6 @@ const FACING_OPEN_COVERAGE_SPOT_IDS = [
 ];
 
 const FUTURE_TARGET_FAMILIES = [
-  "facing 4-bet",
   "blind-vs-blind limp",
   "iso vs limper",
   "squeeze",
@@ -132,6 +139,12 @@ const DRILL_OPTIONS = [
   { id: "btn-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_sb_3bet_v1"] },
   { id: "btn-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
   { id: "sb-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_sb_open_vs_bb_3bet_v1"] },
+  { id: "all-facing-4bet", spotIds: FACING_FOUR_BET_SPOT_IDS },
+  { id: "hj-3bet-vs-lj-open-lj-4bet", spotIds: ["fk_6max_100bb_hj_3bet_vs_lj_open_lj_4bet_v1"] },
+  { id: "co-3bet-vs-hj-open-hj-4bet", spotIds: ["fk_6max_100bb_co_3bet_vs_hj_open_hj_4bet_v1"] },
+  { id: "btn-3bet-vs-co-open-co-4bet", spotIds: ["fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1"] },
+  { id: "sb-3bet-vs-btn-open-btn-4bet", spotIds: ["fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1"] },
+  { id: "bb-3bet-vs-btn-open-btn-4bet", spotIds: ["fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1"] },
   { id: "review-mistakes", reviewMode: true, spotIds: [] },
 ];
 
@@ -170,6 +183,13 @@ const FAMILY_DEFINITIONS = [
     legalActions: ["fold", "call", "fourBet"],
     family: "facingThreeBet",
     matches: (spot) => preflop.getPreflopSpotFamily(spot) === "facingThreeBet" && spot.spotType === "facing-3bet",
+  },
+  {
+    name: "facing 4-bet",
+    spotIds: FACING_FOUR_BET_SPOT_IDS,
+    legalActions: ["fold", "call", "fiveBetJam"],
+    family: "facingFourBet",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "facingFourBet" && spot.spotType === "facing-4bet",
   },
 ];
 
@@ -363,7 +383,8 @@ function report(errors, pack = null) {
       `${RFI_SPOT_IDS.length} RFI, ${BB_DEFENSE_SPOT_IDS.length} BB defense, ` +
       `${FACING_OPEN_COVERAGE_SPOT_IDS.length} facing-open coverage spots, ` +
       `${THREE_BET_SPOT_IDS.length} 3-bet-vs-open, ` +
-      `${FACING_THREE_BET_SPOT_IDS.length} facing-3bet.`
+      `${FACING_THREE_BET_SPOT_IDS.length} facing-3bet, ` +
+      `${FACING_FOUR_BET_SPOT_IDS.length} facing-4bet.`
   );
   console.log(`Future complete-preflop targets are documented but not required yet: ${FUTURE_TARGET_FAMILIES.join(", ")}.`);
 }
