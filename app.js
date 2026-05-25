@@ -58,7 +58,7 @@ const TABLES = {
     id: "six",
     label: "6-Max",
     shortLabel: "6M",
-    subtitle: "Flagship 26-spot preflop trainer for RFI, facing-open, defense, 3-bet, and facing 3-bet.",
+    subtitle: "Flagship 36-spot preflop trainer for RFI, facing-open, defense, 3-bet, and facing 3-bet.",
     seats: [
       { seat: "UTG", x: "18%", y: "40%" },
       { seat: "HJ", x: "33%", y: "17%" },
@@ -156,11 +156,21 @@ const PREFLOP_RANGE_THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_sb_vs_co_open_3bet_v1",
 ];
 const PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_co_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_co_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_bb_3bet_v1",
   "fk_6max_100bb_co_open_vs_btn_3bet_v1",
   "fk_6max_100bb_co_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+  "fk_6max_100bb_co_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_btn_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_sb_open_vs_bb_3bet_v1",
 ];
 const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = [
   ...new Set([
@@ -210,11 +220,21 @@ const PREFLOP_RANGE_DRILL_OPTIONS = [
   { id: "sb-vs-btn-3bet", label: "SB vs BTN", group: "3-bet", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
   { id: "sb-vs-co-3bet", label: "SB vs CO", group: "3-bet", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
   { id: "all-facing-3bet", label: "All Facing 3-bet", group: "Facing 3-bet", spotIds: PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS },
-  { id: "btn-open-vs-bb-3bet", label: "BTN open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
+  { id: "lj-open-vs-hj-3bet", label: "LJ open vs HJ 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
+  { id: "lj-open-vs-co-3bet", label: "LJ open vs CO 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_co_3bet_v1"] },
+  { id: "lj-open-vs-btn-3bet", label: "LJ open vs BTN 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_btn_3bet_v1"] },
+  { id: "lj-open-vs-sb-3bet", label: "LJ open vs SB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_sb_3bet_v1"] },
+  { id: "lj-open-vs-bb-3bet", label: "LJ open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_bb_3bet_v1"] },
+  { id: "hj-open-vs-co-3bet", label: "HJ open vs CO 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_co_3bet_v1"] },
+  { id: "hj-open-vs-btn-3bet", label: "HJ open vs BTN 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
+  { id: "hj-open-vs-sb-3bet", label: "HJ open vs SB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_sb_3bet_v1"] },
+  { id: "hj-open-vs-bb-3bet", label: "HJ open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_bb_3bet_v1"] },
   { id: "co-open-vs-btn-3bet", label: "CO open vs BTN 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_btn_3bet_v1"] },
   { id: "co-open-vs-sb-3bet", label: "CO open vs SB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_sb_3bet_v1"] },
-  { id: "hj-open-vs-btn-3bet", label: "HJ open vs BTN 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
-  { id: "lj-open-vs-hj-3bet", label: "LJ open vs HJ 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
+  { id: "co-open-vs-bb-3bet", label: "CO open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_bb_3bet_v1"] },
+  { id: "btn-open-vs-sb-3bet", label: "BTN open vs SB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_btn_open_vs_sb_3bet_v1"] },
+  { id: "btn-open-vs-bb-3bet", label: "BTN open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
+  { id: "sb-open-vs-bb-3bet", label: "SB open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_sb_open_vs_bb_3bet_v1"] },
   { id: PREFLOP_RANGE_REVIEW_DRILL_ID, label: "Review mistakes", group: "Review", reviewMode: true, spotIds: [] },
 ];
 const PREFLOP_RANGE_QUESTION_XP = 12;
@@ -1603,7 +1623,7 @@ function getTableIntroCopy(tableSize) {
 }
 
 function getTableTrainingLabel(tableSize) {
-  return tableSize === "six" ? "26-spot preflop range" : "Starter scenario drills";
+  return tableSize === "six" ? "36-spot preflop range" : "Starter scenario drills";
 }
 
 function getTablePillLabel(tableSize) {
@@ -1616,7 +1636,7 @@ function getPracticeModeDescription(mode, tableSize) {
   }
 
   return tableSize === "six"
-    ? `Flagship 26-spot preflop range trainer: ${getPreflopCoverageLabel()}.`
+    ? `Flagship 36-spot preflop range trainer: ${getPreflopCoverageLabel()}.`
     : "Starter scenario-pack preflop drills for quick reps; the full range-pack trainer is currently 6-max.";
 }
 
@@ -2573,7 +2593,7 @@ function renderIdleScenario() {
   });
   elements.scenarioTitle.textContent = "Start a new session whenever you want.";
   elements.scenarioCopy.textContent = selectedTable.id === "six"
-    ? `6-max is the flagship preflop trainer: 26 internal baseline spots across ${getPreflopCoverageLabel()}.`
+    ? `6-max is the flagship preflop trainer: 36 internal baseline spots across ${getPreflopCoverageLabel()}.`
     : `${selectedTable.label} currently uses starter scenario-pack drills. The full range-pack trainer is focused on 6-max preflop.`;
   elements.sessionChip.textContent = "Ready";
   elements.sessionCounter.textContent = "0 / 10";
@@ -2600,7 +2620,7 @@ function renderIdleScenario() {
   elements.answerGrid.innerHTML = `
     <button class="answer-button" type="button" onclick="window.__fishkillerStartFromCard()">
       <strong>Launch Session</strong>
-      <span>${selectedTable.id === "six" ? "Start a 26-spot range-pack run." : "Start a starter scenario-pack run."}</span>
+      <span>${selectedTable.id === "six" ? "Start a 36-spot range-pack run." : "Start a starter scenario-pack run."}</span>
     </button>
     <button class="answer-button" type="button" disabled>
       <strong>Instant Corrections</strong>

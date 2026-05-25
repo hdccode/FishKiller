@@ -35,11 +35,21 @@ const THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_sb_vs_co_open_3bet_v1",
 ];
 const FACING_THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_co_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_co_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_bb_3bet_v1",
   "fk_6max_100bb_co_open_vs_btn_3bet_v1",
   "fk_6max_100bb_co_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+  "fk_6max_100bb_co_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_btn_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_sb_open_vs_bb_3bet_v1",
 ];
 const FACING_OPEN_COVERAGE_SPOT_IDS = [
   "fk_6max_100bb_hj_vs_lj_open_v1",
@@ -295,7 +305,9 @@ function resolvesDrillSpotIds() {
     { id: "all-three-bet", spotIds: THREE_BET_SPOT_IDS },
     { id: "btn-vs-co-3bet", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
     { id: "all-facing-3bet", spotIds: FACING_THREE_BET_SPOT_IDS },
+    { id: "lj-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_bb_3bet_v1"] },
     { id: "btn-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
+    { id: "sb-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_sb_open_vs_bb_3bet_v1"] },
     { id: "review-mistakes", reviewMode: true, spotIds: [] },
   ];
 
@@ -307,7 +319,9 @@ function resolvesDrillSpotIds() {
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-three-bet", options), THREE_BET_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("btn-vs-co-3bet", options), ["fk_6max_100bb_btn_vs_co_open_3bet_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-facing-3bet", options), FACING_THREE_BET_SPOT_IDS);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("lj-open-vs-bb-3bet", options), ["fk_6max_100bb_lj_open_vs_bb_3bet_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("btn-open-vs-bb-3bet", options), ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("sb-open-vs-bb-3bet", options), ["fk_6max_100bb_sb_open_vs_bb_3bet_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), RFI_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("review-mistakes", options), []);
 }

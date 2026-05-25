@@ -7,7 +7,7 @@ const preflop = require("../preflop-engine");
 const ROOT = path.resolve(__dirname, "..");
 const PACK_PATH = path.join(ROOT, "data", "preflop-ranges", "real", "fishkiller-6max-100bb-v1.preflop-range.json");
 const EXPECTED_HAND_COUNT = 169;
-const EXPECTED_REAL_SPOT_COUNT = 26;
+const EXPECTED_REAL_SPOT_COUNT = 36;
 
 const RFI_SPOT_IDS = [
   "fk_6max_100bb_lj_rfi_unopened_v1",
@@ -43,11 +43,21 @@ const THREE_BET_SPOT_IDS = [
 ];
 
 const FACING_THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_co_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_co_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_bb_3bet_v1",
   "fk_6max_100bb_co_open_vs_btn_3bet_v1",
   "fk_6max_100bb_co_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+  "fk_6max_100bb_co_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_btn_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_sb_open_vs_bb_3bet_v1",
 ];
 
 const FACING_OPEN_COVERAGE_SPOT_IDS = [
@@ -107,11 +117,21 @@ const DRILL_OPTIONS = [
   { id: "sb-vs-btn-3bet", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
   { id: "sb-vs-co-3bet", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
   { id: "all-facing-3bet", spotIds: FACING_THREE_BET_SPOT_IDS },
-  { id: "btn-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
+  { id: "lj-open-vs-hj-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
+  { id: "lj-open-vs-co-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_co_3bet_v1"] },
+  { id: "lj-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_btn_3bet_v1"] },
+  { id: "lj-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_sb_3bet_v1"] },
+  { id: "lj-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_bb_3bet_v1"] },
+  { id: "hj-open-vs-co-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_co_3bet_v1"] },
+  { id: "hj-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
+  { id: "hj-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_sb_3bet_v1"] },
+  { id: "hj-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_bb_3bet_v1"] },
   { id: "co-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_co_open_vs_btn_3bet_v1"] },
   { id: "co-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_co_open_vs_sb_3bet_v1"] },
-  { id: "hj-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
-  { id: "lj-open-vs-hj-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
+  { id: "co-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_co_open_vs_bb_3bet_v1"] },
+  { id: "btn-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_sb_3bet_v1"] },
+  { id: "btn-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
+  { id: "sb-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_sb_open_vs_bb_3bet_v1"] },
   { id: "review-mistakes", reviewMode: true, spotIds: [] },
 ];
 

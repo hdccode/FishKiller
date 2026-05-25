@@ -88,7 +88,7 @@ The first real MVP pack is:
 data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json
 ```
 
-It contains 26 complete 6-max 100bb preflop spots for the live trainer. This is the flagship range-pack path in the current app; HU, 3-max, and 9-max remain starter scenario-pack drills for now.
+It contains 36 complete 6-max 100bb preflop spots for the live trainer. This is the flagship range-pack path in the current app; HU, 3-max, and 9-max remain starter scenario-pack drills for now.
 
 It currently contains internally authored, non-proprietary baseline 6-max RFI spots at 100bb after action folds to Hero:
 
@@ -133,13 +133,23 @@ These spots use `fold`, `call`, and `threeBet` as legal actions. The facing open
 
 The pack also contains internally authored opener responses after facing a 3-bet:
 
-- `fk_6max_100bb_btn_open_vs_bb_3bet_v1`
+- `fk_6max_100bb_lj_open_vs_hj_3bet_v1`
+- `fk_6max_100bb_lj_open_vs_co_3bet_v1`
+- `fk_6max_100bb_lj_open_vs_btn_3bet_v1`
+- `fk_6max_100bb_lj_open_vs_sb_3bet_v1`
+- `fk_6max_100bb_lj_open_vs_bb_3bet_v1`
+- `fk_6max_100bb_hj_open_vs_co_3bet_v1`
+- `fk_6max_100bb_hj_open_vs_btn_3bet_v1`
+- `fk_6max_100bb_hj_open_vs_sb_3bet_v1`
+- `fk_6max_100bb_hj_open_vs_bb_3bet_v1`
 - `fk_6max_100bb_co_open_vs_btn_3bet_v1`
 - `fk_6max_100bb_co_open_vs_sb_3bet_v1`
-- `fk_6max_100bb_hj_open_vs_btn_3bet_v1`
-- `fk_6max_100bb_lj_open_vs_hj_3bet_v1`
+- `fk_6max_100bb_co_open_vs_bb_3bet_v1`
+- `fk_6max_100bb_btn_open_vs_sb_3bet_v1`
+- `fk_6max_100bb_btn_open_vs_bb_3bet_v1`
+- `fk_6max_100bb_sb_open_vs_bb_3bet_v1`
 
-These spots use `fold`, `call`, and `fourBet` as legal actions. LJ/HJ/CO/BTN opens use 2.3bb. IP 3-bets use 7.5bb, blind 3-bets use 9bb to 9.5bb, and 4-bet sizes are simple MVP metadata rather than a universal sizing claim. They are intended for preflop trainer drills only; squeeze, limp/iso, postflop, and full 4bet response trees are not included yet.
+These spots use `fold`, `call`, and `fourBet` as legal actions. LJ/HJ/CO/BTN opens use 2.3bb, and SB opens use 3bb. IP 3-bets use 7.5bb, blind 3-bets use 9bb to 9.5bb, and 4-bet sizes are simple MVP metadata rather than a universal sizing claim. They are intended for preflop trainer drills only; squeeze, limp/iso, postflop, facing-4bet, and full 4bet response trees are not included yet.
 
 ## Full 6-Max Preflop MVP Target
 
@@ -190,7 +200,7 @@ This checks metadata, spot fields, hand syntax, and per-hand action frequencies.
 data/preflop-ranges/validation-report.json
 ```
 
-The coverage check verifies the launch-supported live 6-max trainer families: five RFI spots, six non-BB facing-open response spots, five BB defense spots, five selected 3-bet versus open spots, and five facing-3bet spots. It also verifies the 15-spot Facing Open coverage umbrella, 169-hand coverage, expected legal actions by family, drill-to-spot mappings, range-matrix construction, and question sampling.
+The coverage check verifies the launch-supported live 6-max trainer families: five RFI spots, six non-BB facing-open response spots, five BB defense spots, five selected 3-bet versus open spots, and 15 facing-3bet spots. It also verifies the 15-spot Facing Open coverage umbrella, 169-hand coverage, expected legal actions by family, drill-to-spot mappings, range-matrix construction, and question sampling.
 
 ## TexasSolver Range Generation
 

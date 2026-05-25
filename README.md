@@ -5,7 +5,7 @@ FishKiller is a local-first poker training website. The current live MVP is a 6-
 ## Current MVP
 
 - 6-max is the flagship trainer.
-- The live 6-max range pack contains 26 complete preflop spots.
+- The live 6-max range pack contains 36 complete preflop spots.
 - Supported 6-max families are RFI, Facing Open, BB Defense, 3-bet, and Facing 3-bet.
 - Each live 6-max spot has 169 starting hand classes, frequency-based grading, a range matrix, progress tracking, mistake review, and a compact progress summary.
 - HU, 3-max, and 9-max remain starter/legacy scenario-pack drills.
