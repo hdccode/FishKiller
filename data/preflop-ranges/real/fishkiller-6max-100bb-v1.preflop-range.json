@@ -27,9 +27,27 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "rfi",
+      "spotType": "rfi",
       "heroPosition": "BTN",
+      "openerPosition": "BTN",
+      "aggressorPosition": "BTN",
       "actionContext": "rfi",
       "priorAction": "folded-to-hero",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        }
+      ],
       "potState": "unopened",
       "complete": true,
       "raiseSize": {
@@ -738,9 +756,23 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "rfi",
+      "spotType": "rfi",
       "heroPosition": "CO",
+      "openerPosition": "CO",
+      "aggressorPosition": "CO",
       "actionContext": "rfi",
       "priorAction": "folded-to-hero",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        }
+      ],
       "potState": "unopened",
       "complete": true,
       "raiseSize": {
@@ -1449,9 +1481,19 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "rfi",
+      "spotType": "rfi",
       "heroPosition": "HJ",
+      "openerPosition": "HJ",
+      "aggressorPosition": "HJ",
       "actionContext": "rfi",
       "priorAction": "folded-to-hero",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        }
+      ],
       "potState": "unopened",
       "complete": true,
       "raiseSize": {
@@ -2160,9 +2202,14 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "rfi",
+      "spotType": "rfi",
       "heroPosition": "LJ",
+      "openerPosition": "LJ",
+      "aggressorPosition": "LJ",
       "actionContext": "rfi",
       "priorAction": "folded-to-hero",
+      "priorActions": [],
       "potState": "unopened",
       "complete": true,
       "raiseSize": {
@@ -2871,9 +2918,31 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "rfi",
+      "spotType": "rfi",
       "heroPosition": "SB",
+      "openerPosition": "SB",
+      "aggressorPosition": "SB",
       "actionContext": "rfi",
       "priorAction": "folded-to-hero",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "fold"
+        }
+      ],
       "potState": "unopened",
       "complete": true,
       "raiseSize": {
@@ -3582,10 +3651,22 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "bbDefense",
+      "spotType": "bb-defense-vs-open",
       "heroPosition": "BB",
       "villainPosition": "LJ",
+      "openerPosition": "LJ",
+      "aggressorPosition": "LJ",
+      "defenderPosition": "BB",
       "actionContext": "facing-open",
       "priorAction": "lj-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "facingOpen": {
@@ -4475,10 +4556,26 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "bbDefense",
+      "spotType": "bb-defense-vs-open",
       "heroPosition": "BB",
       "villainPosition": "HJ",
+      "openerPosition": "HJ",
+      "aggressorPosition": "HJ",
+      "defenderPosition": "BB",
       "actionContext": "facing-open",
       "priorAction": "hj-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "facingOpen": {
@@ -5368,10 +5465,30 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "bbDefense",
+      "spotType": "bb-defense-vs-open",
       "heroPosition": "BB",
       "villainPosition": "CO",
+      "openerPosition": "CO",
+      "aggressorPosition": "CO",
+      "defenderPosition": "BB",
       "actionContext": "facing-open",
       "priorAction": "co-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "facingOpen": {
@@ -6261,10 +6378,34 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "bbDefense",
+      "spotType": "bb-defense-vs-open",
       "heroPosition": "BB",
       "villainPosition": "BTN",
+      "openerPosition": "BTN",
+      "aggressorPosition": "BTN",
+      "defenderPosition": "BB",
       "actionContext": "facing-open",
       "priorAction": "btn-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "facingOpen": {
@@ -7154,10 +7295,38 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "bbDefense",
+      "spotType": "bb-defense-vs-open",
       "heroPosition": "BB",
       "villainPosition": "SB",
+      "openerPosition": "SB",
+      "aggressorPosition": "SB",
+      "defenderPosition": "BB",
       "actionContext": "facing-open",
       "priorAction": "sb-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "fold"
+        },
+        {
+          "position": "SB",
+          "actionId": "raise",
+          "sizeBb": 3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "facingOpen": {
@@ -8047,11 +8216,30 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "threeBetVsOpen",
+      "spotType": "three-bet-vs-open",
       "heroPosition": "BTN",
       "villainPosition": "CO",
+      "openerPosition": "CO",
+      "aggressorPosition": "CO",
+      "defenderPosition": "BTN",
       "actionContext": "facing-open",
-      "spotType": "three-bet-vs-open",
       "priorAction": "co-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bet versus open drills. Not claimed as universal GTO.",
@@ -8942,11 +9130,26 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "threeBetVsOpen",
+      "spotType": "three-bet-vs-open",
       "heroPosition": "CO",
       "villainPosition": "HJ",
+      "openerPosition": "HJ",
+      "aggressorPosition": "HJ",
+      "defenderPosition": "CO",
       "actionContext": "facing-open",
-      "spotType": "three-bet-vs-open",
       "priorAction": "hj-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bet versus open drills. Not claimed as universal GTO.",
@@ -9837,11 +10040,22 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "threeBetVsOpen",
+      "spotType": "three-bet-vs-open",
       "heroPosition": "HJ",
       "villainPosition": "LJ",
+      "openerPosition": "LJ",
+      "aggressorPosition": "LJ",
+      "defenderPosition": "HJ",
       "actionContext": "facing-open",
-      "spotType": "three-bet-vs-open",
       "priorAction": "lj-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bet versus open drills. Not claimed as universal GTO.",
@@ -10732,11 +10946,34 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "threeBetVsOpen",
+      "spotType": "three-bet-vs-open",
       "heroPosition": "SB",
       "villainPosition": "BTN",
+      "openerPosition": "BTN",
+      "aggressorPosition": "BTN",
+      "defenderPosition": "SB",
       "actionContext": "facing-open",
-      "spotType": "three-bet-vs-open",
       "priorAction": "btn-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bet versus open drills. Not claimed as universal GTO.",
@@ -11627,11 +11864,30 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "threeBetVsOpen",
+      "spotType": "three-bet-vs-open",
       "heroPosition": "SB",
       "villainPosition": "CO",
+      "openerPosition": "CO",
+      "aggressorPosition": "CO",
+      "defenderPosition": "SB",
       "actionContext": "facing-open",
-      "spotType": "three-bet-vs-open",
       "priorAction": "co-open",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        }
+      ],
       "potState": "facing-open",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for 3-bet versus open drills. Not claimed as universal GTO.",
@@ -12522,11 +12778,43 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "facingThreeBet",
+      "spotType": "facing-3bet",
       "heroPosition": "BTN",
       "villainPosition": "BB",
+      "openerPosition": "BTN",
+      "aggressorPosition": "BB",
+      "defenderPosition": "BTN",
       "actionContext": "facing-3bet",
-      "spotType": "facing-3bet",
       "priorAction": "btn-open-bb-3bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "SB",
+          "actionId": "fold"
+        },
+        {
+          "position": "BB",
+          "actionId": "threeBet",
+          "sizeBb": 9.5
+        }
+      ],
       "potState": "facing-3bet",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for opener responses versus 3-bets. Not claimed as universal GTO.",
@@ -13423,11 +13711,35 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "facingThreeBet",
+      "spotType": "facing-3bet",
       "heroPosition": "CO",
       "villainPosition": "BTN",
+      "openerPosition": "CO",
+      "aggressorPosition": "BTN",
+      "defenderPosition": "CO",
       "actionContext": "facing-3bet",
-      "spotType": "facing-3bet",
       "priorAction": "co-open-btn-3bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "BTN",
+          "actionId": "threeBet",
+          "sizeBb": 7.5
+        }
+      ],
       "potState": "facing-3bet",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for opener responses versus 3-bets. Not claimed as universal GTO.",
@@ -14324,11 +14636,39 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "facingThreeBet",
+      "spotType": "facing-3bet",
       "heroPosition": "CO",
       "villainPosition": "SB",
+      "openerPosition": "CO",
+      "aggressorPosition": "SB",
+      "defenderPosition": "CO",
       "actionContext": "facing-3bet",
-      "spotType": "facing-3bet",
       "priorAction": "co-open-sb-3bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "BTN",
+          "actionId": "fold"
+        },
+        {
+          "position": "SB",
+          "actionId": "threeBet",
+          "sizeBb": 9
+        }
+      ],
       "potState": "facing-3bet",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for opener responses versus 3-bets. Not claimed as universal GTO.",
@@ -15225,11 +15565,35 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "facingThreeBet",
+      "spotType": "facing-3bet",
       "heroPosition": "HJ",
       "villainPosition": "BTN",
+      "openerPosition": "HJ",
+      "aggressorPosition": "BTN",
+      "defenderPosition": "HJ",
       "actionContext": "facing-3bet",
-      "spotType": "facing-3bet",
       "priorAction": "hj-open-btn-3bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "threeBet",
+          "sizeBb": 7.5
+        }
+      ],
       "potState": "facing-3bet",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for opener responses versus 3-bets. Not claimed as universal GTO.",
@@ -16126,11 +16490,27 @@
       "stackDepthBb": 100,
       "anteBb": 0,
       "street": "preflop",
+      "family": "facingThreeBet",
+      "spotType": "facing-3bet",
       "heroPosition": "LJ",
       "villainPosition": "HJ",
+      "openerPosition": "LJ",
+      "aggressorPosition": "HJ",
+      "defenderPosition": "LJ",
       "actionContext": "facing-3bet",
-      "spotType": "facing-3bet",
       "priorAction": "lj-open-hj-3bet",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "HJ",
+          "actionId": "threeBet",
+          "sizeBb": 7.5
+        }
+      ],
       "potState": "facing-3bet",
       "complete": true,
       "sourceNotes": "FishKiller internal-authored MVP baseline for opener responses versus 3-bets. Not claimed as universal GTO.",

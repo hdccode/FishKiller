@@ -48,6 +48,7 @@ function run() {
   loadsAllBbDefenseSpots(normalized);
   loadsAllThreeBetSpots(normalized);
   loadsAllFacingThreeBetSpots(normalized);
+  classifiesCurrentSpotFamilies(normalized);
   prefersRaiseWithAces(spot);
   prefersFoldWithTrash(spot);
   checksPositionSpecificRfiStrategy(normalized);
@@ -72,6 +73,11 @@ function loadsAllCoreRfiSpots(pack) {
   RFI_SPOT_IDS.forEach((spotId) => {
     const spot = preflop.getPreflopSpot(pack, spotId);
     assert(spot, `${spotId} should exist`);
+    assert.equal(spot.family, "rfi");
+    assert.equal(spot.spotType, "rfi");
+    assert.equal(spot.openerPosition, spot.heroPosition);
+    assert.equal(spot.aggressorPosition, spot.heroPosition);
+    assert(Array.isArray(spot.priorActions));
     assert.equal(Object.keys(spot.actionsByHand).length, 169);
     assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "raise"]);
     assert.equal(spot.actionContext, "rfi");
@@ -83,7 +89,13 @@ function loadsAllBbDefenseSpots(pack) {
   BB_DEFENSE_SPOT_IDS.forEach((spotId) => {
     const spot = preflop.getPreflopSpot(pack, spotId);
     assert(spot, `${spotId} should exist`);
+    assert.equal(spot.family, "bbDefense");
+    assert.equal(spot.spotType, "bb-defense-vs-open");
     assert.equal(spot.heroPosition, "BB");
+    assert.equal(spot.defenderPosition, "BB");
+    assert.equal(spot.openerPosition, spot.villainPosition);
+    assert.equal(spot.aggressorPosition, spot.villainPosition);
+    assert(Array.isArray(spot.priorActions));
     assert.equal(spot.actionContext, "facing-open");
     assert.equal(Object.keys(spot.actionsByHand).length, 169);
     assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "threeBet"]);
@@ -94,8 +106,13 @@ function loadsAllThreeBetSpots(pack) {
   THREE_BET_SPOT_IDS.forEach((spotId) => {
     const spot = preflop.getPreflopSpot(pack, spotId);
     assert(spot, `${spotId} should exist`);
+    assert.equal(spot.family, "threeBetVsOpen");
     assert.notEqual(spot.heroPosition, "BB");
     assert(spot.villainPosition, `${spotId} should define opener position`);
+    assert.equal(spot.openerPosition, spot.villainPosition);
+    assert.equal(spot.aggressorPosition, spot.villainPosition);
+    assert.equal(spot.defenderPosition, spot.heroPosition);
+    assert(Array.isArray(spot.priorActions));
     assert.equal(spot.actionContext, "facing-open");
     assert.equal(spot.spotType, "three-bet-vs-open");
     assert.equal(Object.keys(spot.actionsByHand).length, 169);
@@ -107,12 +124,32 @@ function loadsAllFacingThreeBetSpots(pack) {
   FACING_THREE_BET_SPOT_IDS.forEach((spotId) => {
     const spot = preflop.getPreflopSpot(pack, spotId);
     assert(spot, `${spotId} should exist`);
+    assert.equal(spot.family, "facingThreeBet");
     assert.notEqual(spot.heroPosition, "BB");
     assert(spot.villainPosition, `${spotId} should define 3-bettor position`);
+    assert.equal(spot.openerPosition, spot.heroPosition);
+    assert.equal(spot.aggressorPosition, spot.villainPosition);
+    assert.equal(spot.defenderPosition, spot.heroPosition);
+    assert(Array.isArray(spot.priorActions));
     assert.equal(spot.actionContext, "facing-3bet");
     assert.equal(spot.spotType, "facing-3bet");
     assert.equal(Object.keys(spot.actionsByHand).length, 169);
     assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "fourBet"]);
+  });
+}
+
+function classifiesCurrentSpotFamilies(pack) {
+  RFI_SPOT_IDS.forEach((spotId) => {
+    assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "rfi");
+  });
+  BB_DEFENSE_SPOT_IDS.forEach((spotId) => {
+    assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "bbDefense");
+  });
+  THREE_BET_SPOT_IDS.forEach((spotId) => {
+    assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "threeBetVsOpen");
+  });
+  FACING_THREE_BET_SPOT_IDS.forEach((spotId) => {
+    assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "facingThreeBet");
   });
 }
 
@@ -230,10 +267,36 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopActionLabel("raise"), "Raise");
   assert.equal(preflop.formatPreflopActionLabel("threeBet"), "3-bet");
   assert.equal(preflop.formatPreflopActionLabel("fourBet"), "4-bet");
+  assert.equal(preflop.formatPreflopActionLabel("limp"), "Limp");
+  assert.equal(preflop.formatPreflopActionLabel("check"), "Check");
+  assert.equal(preflop.formatPreflopActionLabel("isoRaise"), "Iso-raise");
+  assert.equal(preflop.formatPreflopActionLabel("threeBet", { family: "squeeze" }), "Squeeze");
+  assert.equal(preflop.formatPreflopActionLabel("squeeze"), "Squeeze");
+  assert.equal(preflop.formatPreflopActionLabel("fiveBetJam"), "5-bet jam");
   assert.equal(preflop.formatPreflopSpotLabel(btn), "BTN first in");
   assert.equal(preflop.formatPreflopSpotLabel(bbVsBtn), "BB vs BTN open");
   assert.equal(preflop.formatPreflopSpotLabel(btnVsCo), "BTN vs CO open");
   assert.equal(preflop.formatPreflopSpotLabel(btnOpenVsBb), "BTN open vs BB 3-bet");
+  assert.equal(preflop.formatPreflopSpotLabel({
+    family: "facingFourBet",
+    heroPosition: "BTN",
+    aggressorPosition: "CO",
+  }), "BTN vs CO 4-bet");
+  assert.equal(preflop.formatPreflopSpotLabel({
+    family: "limpedPot",
+    heroPosition: "BB",
+  }), "BB in limped pot");
+  assert.equal(preflop.formatPreflopSpotLabel({
+    family: "isoVsLimper",
+    heroPosition: "CO",
+    limperPosition: "LJ",
+  }), "CO iso vs LJ");
+  assert.equal(preflop.formatPreflopSpotLabel({
+    family: "squeeze",
+    heroPosition: "SB",
+    openerPosition: "CO",
+    callerPosition: "BTN",
+  }), "SB squeeze vs CO + BTN");
   assert.equal(preflop.formatPreflopSizeLabel(btn), "Open 2.3bb");
   assert.equal(preflop.formatPreflopSizeLabel(sb), "Open 3bb");
   assert.equal(preflop.formatPreflopSizeLabel(bbVsBtn), "BTN opens 2.3bb");

@@ -40,9 +40,18 @@ Each pack uses this shape:
       "spotId": "fk_6max_100bb_btn_rfi_unopened_v1",
       "tableSize": 6,
       "stackDepthBb": 100,
+      "family": "rfi",
+      "spotType": "rfi",
       "heroPosition": "BTN",
+      "openerPosition": "BTN",
+      "aggressorPosition": "BTN",
       "actionContext": "rfi",
       "priorAction": "folded-to-hero",
+      "priorActions": [
+        { "position": "LJ", "actionId": "fold" },
+        { "position": "HJ", "actionId": "fold" },
+        { "position": "CO", "actionId": "fold" }
+      ],
       "potState": "unopened",
       "complete": true,
       "raiseSize": { "type": "open", "sizeBb": 2.3 },
@@ -64,6 +73,14 @@ Supported `sourceType` values are `demo`, `manual`, `generated`, and `licensed`.
 Supported hand classes are pairs like `AA`, suited classes like `A5s`, and offsuit classes like `KQo`. Unsuffixed non-pairs like `AK` are rejected because they blur suited and offsuit combos.
 
 Complete spots use `"complete": true` and must include all 169 canonical hand classes. Every hand entry must use only IDs from `legalActions`, and its action frequencies must sum to `1`.
+
+Spot metadata should make the family and action path explicit. Current and future range packs should prefer:
+
+- `family`: stable trainer family such as `rfi`, `bbDefense`, `threeBetVsOpen`, `facingThreeBet`, `facingFourBet`, `limpedPot`, `isoVsLimper`, or `squeeze`.
+- `spotType`: a more granular path label such as `rfi`, `bb-defense-vs-open`, `three-bet-vs-open`, or `facing-3bet`.
+- `heroPosition`, `openerPosition`, `aggressorPosition`, and `defenderPosition` where those roles exist.
+- `priorActions`: ordered preflop actions leading to Hero's decision, including folds, opens, calls, 3-bets, 4-bets, limps, or squeeze-triggering calls as needed.
+- Size metadata such as `raiseSize`, `facingOpen`, `threeBetSize`, `facingThreeBet`, `fourBetSize`, or future equivalent fields.
 
 The first real MVP pack is:
 
@@ -112,6 +129,26 @@ The pack also contains internally authored opener responses after facing a 3-bet
 - `fk_6max_100bb_lj_open_vs_hj_3bet_v1`
 
 These spots use `fold`, `call`, and `fourBet` as legal actions. LJ/HJ/CO/BTN opens use 2.3bb. IP 3-bets use 7.5bb, blind 3-bets use 9bb to 9.5bb, and 4-bet sizes are simple MVP metadata rather than a universal sizing claim. They are intended for preflop trainer drills only; squeeze, limp/iso, postflop, and full 4bet response trees are not included yet.
+
+## Full 6-Max Preflop MVP Target
+
+The current live MVP is deliberately smaller than the intended complete 6-max 100bb preflop trainer. The full preflop target is to support local range-pack spots for:
+
+- RFI: unopened pots by LJ/HJ/CO/BTN/SB.
+- Facing open: calls, 3-bets, and folds versus first-in opens from relevant positions.
+- Facing 3-bet: opener responses with fold/call/4-bet.
+- Facing 4-bet: 3-bettor responses, including future jam/fold/call mixes where applicable.
+- Blind-vs-blind limp: SB limp and BB check/raise/iso decisions.
+- Iso vs limper: raises and overlimp/check branches against limps.
+- Squeeze: 3-bet squeeze decisions after an open and at least one caller.
+
+Explicit exclusions for this MVP target:
+
+- No tournaments or ICM.
+- No antes.
+- No stack-depth variants beyond 100bb.
+- No multiple rake models yet.
+- No postflop strategy in this preflop MVP.
 
 ## Demo Versus Real
 

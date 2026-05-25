@@ -3,6 +3,17 @@
   const MIXED_ACTION_MIN_FREQUENCY = 0.2;
   const TINY_ACTION_MAX_FREQUENCY = 0.05;
   const PURE_ACTION_MIN_FREQUENCY = 0.999;
+  const PREFLOP_SPOT_FAMILIES = Object.freeze({
+    rfi: "rfi",
+    facingOpen: "facingOpen",
+    bbDefense: "bbDefense",
+    threeBetVsOpen: "threeBetVsOpen",
+    facingThreeBet: "facingThreeBet",
+    facingFourBet: "facingFourBet",
+    limpedPot: "limpedPot",
+    isoVsLimper: "isoVsLimper",
+    squeeze: "squeeze",
+  });
 
   function normalizePreflopRangePack(pack) {
     if (!pack || typeof pack !== "object" || Array.isArray(pack)) {
@@ -185,28 +196,106 @@
       : [];
   }
 
-  function formatPreflopActionLabel(actionId) {
+  function getPreflopSpotFamily(spot) {
+    const explicitFamily = typeof spot?.family === "string" ? spot.family : "";
+    if (Object.values(PREFLOP_SPOT_FAMILIES).includes(explicitFamily)) {
+      return explicitFamily;
+    }
+
+    if (spot?.actionContext === "rfi" || spot?.spotType === "rfi") {
+      return PREFLOP_SPOT_FAMILIES.rfi;
+    }
+    if (spot?.actionContext === "facing-4bet" || spot?.spotType === "facing-4bet") {
+      return PREFLOP_SPOT_FAMILIES.facingFourBet;
+    }
+    if (spot?.actionContext === "facing-3bet" || spot?.spotType === "facing-3bet") {
+      return PREFLOP_SPOT_FAMILIES.facingThreeBet;
+    }
+    if (spot?.spotType === "three-bet-vs-open") {
+      return PREFLOP_SPOT_FAMILIES.threeBetVsOpen;
+    }
+    if (spot?.spotType === "squeeze" || spot?.actionContext === "squeeze") {
+      return PREFLOP_SPOT_FAMILIES.squeeze;
+    }
+    if (spot?.spotType === "iso-vs-limper" || spot?.actionContext === "iso-vs-limper") {
+      return PREFLOP_SPOT_FAMILIES.isoVsLimper;
+    }
+    if (spot?.spotType === "limped-pot" || spot?.actionContext === "limped-pot") {
+      return PREFLOP_SPOT_FAMILIES.limpedPot;
+    }
+    if (spot?.actionContext === "facing-open" && spot?.heroPosition === "BB") {
+      return PREFLOP_SPOT_FAMILIES.bbDefense;
+    }
+    if (spot?.actionContext === "facing-open") {
+      return PREFLOP_SPOT_FAMILIES.facingOpen;
+    }
+
+    return "";
+  }
+
+  function formatPreflopActionLabel(actionId, context = {}) {
+    const family = typeof context === "string" ? context : getPreflopSpotFamily(context?.spot || context);
     if (actionId === "fold") return "Fold";
     if (actionId === "call") return "Call";
+    if (actionId === "check") return "Check";
+    if (actionId === "limp") return "Limp";
     if (actionId === "raise") return "Raise";
+    if (actionId === "isoRaise") return "Iso-raise";
+    if (actionId === "squeeze") return "Squeeze";
+    if (actionId === "threeBet" && family === PREFLOP_SPOT_FAMILIES.squeeze) return "Squeeze";
     if (actionId === "threeBet") return "3-bet";
     if (actionId === "fourBet") return "4-bet";
+    if (actionId === "fiveBetJam") return "5-bet jam";
     return "";
   }
 
   function formatPreflopSpotLabel(spot) {
-    if (spot?.actionContext === "facing-3bet" || spot?.spotType === "facing-3bet") {
+    const family = getPreflopSpotFamily(spot);
+    if (family === PREFLOP_SPOT_FAMILIES.facingFourBet) {
+      return `${spot?.heroPosition || "Hero"} vs ${spot?.aggressorPosition || spot?.villainPosition || "4-bettor"} 4-bet`;
+    }
+
+    if (family === PREFLOP_SPOT_FAMILIES.facingThreeBet) {
       return `${spot.heroPosition || "Hero"} open vs ${spot.villainPosition || "3-bettor"} 3-bet`;
     }
 
-    if (spot?.actionContext === "facing-open") {
-      return `${spot.heroPosition || "Hero"} vs ${spot.villainPosition || "opener"} open`;
+    if (family === PREFLOP_SPOT_FAMILIES.isoVsLimper) {
+      return `${spot?.heroPosition || "Hero"} iso vs ${spot?.limperPosition || spot?.villainPosition || "limper"}`;
+    }
+
+    if (family === PREFLOP_SPOT_FAMILIES.squeeze) {
+      return `${spot?.heroPosition || "Hero"} squeeze vs ${spot?.openerPosition || spot?.villainPosition || "open"}${spot?.callerPosition ? ` + ${spot.callerPosition}` : ""}`;
+    }
+
+    if (family === PREFLOP_SPOT_FAMILIES.limpedPot) {
+      return `${spot?.heroPosition || "Hero"} in limped pot`;
+    }
+
+    if (family === PREFLOP_SPOT_FAMILIES.bbDefense || family === PREFLOP_SPOT_FAMILIES.facingOpen || spot?.actionContext === "facing-open") {
+      return `${spot.heroPosition || "Hero"} vs ${spot.openerPosition || spot.villainPosition || "opener"} open`;
     }
 
     return `${spot?.heroPosition || "BTN"} first in`;
   }
 
   function formatPreflopSizeLabel(spot) {
+    const family = getPreflopSpotFamily(spot);
+    if (spot?.facingFourBet) {
+      return `${spot.aggressorPosition || spot.villainPosition || "4-bettor"} 4-bets ${formatBbSize(spot.facingFourBet.sizeBb)}`;
+    }
+
+    if (family === PREFLOP_SPOT_FAMILIES.isoVsLimper && spot?.isoRaiseSize) {
+      return `Iso ${formatBbSize(spot.isoRaiseSize.sizeBb)}`;
+    }
+
+    if (family === PREFLOP_SPOT_FAMILIES.squeeze && spot?.squeezeSize) {
+      return `Squeeze ${formatBbSize(spot.squeezeSize.sizeBb)}`;
+    }
+
+    if (family === PREFLOP_SPOT_FAMILIES.limpedPot) {
+      return "Limped pot";
+    }
+
     if (spot?.facingThreeBet) {
       return `${spot.villainPosition || "3-bettor"} 3-bets ${formatBbSize(spot.facingThreeBet.sizeBb)}`;
     }
@@ -373,6 +462,8 @@
     buildPreflopRangeMatrix,
     samplePreflopQuestion,
     resolvePreflopDrillSpotIds,
+    PREFLOP_SPOT_FAMILIES,
+    getPreflopSpotFamily,
     formatPreflopActionLabel,
     formatPreflopSpotLabel,
     formatPreflopSizeLabel,

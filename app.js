@@ -2287,25 +2287,42 @@ function createPreflopRangeScenarioCopy(spot, question) {
   return `${reviewPrefix}Hero has ${question.handClass}. Choose ${legalLabels} for ${formatPreflopSpotLabel(spot)}.`;
 }
 
-function formatPreflopActionLabel(actionId) {
-  const formatted = window.FishKillerPreflopEngine?.formatPreflopActionLabel?.(actionId);
+function formatPreflopActionLabel(actionId, context = null) {
+  const formatted = window.FishKillerPreflopEngine?.formatPreflopActionLabel?.(actionId, context || undefined);
   if (formatted) return formatted;
   if (actionId === "fold") return "Fold";
   if (actionId === "call") return "Call";
+  if (actionId === "check") return "Check";
+  if (actionId === "limp") return "Limp";
   if (actionId === "raise") return "Raise";
+  if (actionId === "isoRaise") return "Iso-raise";
+  if (actionId === "squeeze") return "Squeeze";
   if (actionId === "threeBet") return "3-bet";
   if (actionId === "fourBet") return "4-bet";
+  if (actionId === "fiveBetJam") return "5-bet jam";
   return "";
 }
 
 function formatPreflopSpotLabel(spot) {
   const formatted = window.FishKillerPreflopEngine?.formatPreflopSpotLabel?.(spot);
   if (formatted) return formatted;
+  if (spot?.actionContext === "facing-4bet" || spot?.spotType === "facing-4bet") {
+    return `${spot?.heroPosition || "Hero"} vs ${spot?.aggressorPosition || spot?.villainPosition || "4-bettor"} 4-bet`;
+  }
   if (isPreflopRangeFacingThreeBetSpot(spot)) {
     return `${spot?.heroPosition || "Hero"} open vs ${spot?.villainPosition || "3-bettor"} 3-bet`;
   }
+  if (spot?.actionContext === "iso-vs-limper" || spot?.spotType === "iso-vs-limper") {
+    return `${spot?.heroPosition || "Hero"} iso vs ${spot?.limperPosition || spot?.villainPosition || "limper"}`;
+  }
+  if (spot?.actionContext === "squeeze" || spot?.spotType === "squeeze") {
+    return `${spot?.heroPosition || "Hero"} squeeze vs ${spot?.openerPosition || spot?.villainPosition || "open"}${spot?.callerPosition ? ` + ${spot.callerPosition}` : ""}`;
+  }
+  if (spot?.actionContext === "limped-pot" || spot?.spotType === "limped-pot") {
+    return `${spot?.heroPosition || "Hero"} in limped pot`;
+  }
   if (isPreflopRangeFacingOpenSpot(spot)) {
-    return `${spot?.heroPosition || "Hero"} vs ${spot?.villainPosition || "opener"} open`;
+    return `${spot?.heroPosition || "Hero"} vs ${spot?.openerPosition || spot?.villainPosition || "opener"} open`;
   }
   return `${spot?.heroPosition || "BTN"} first in`;
 }
@@ -2313,6 +2330,18 @@ function formatPreflopSpotLabel(spot) {
 function formatPreflopSizeLabel(spot) {
   const formatted = window.FishKillerPreflopEngine?.formatPreflopSizeLabel?.(spot);
   if (formatted) return formatted;
+  if (spot?.facingFourBet?.sizeBb) {
+    return `${spot?.aggressorPosition || spot?.villainPosition || "4-bettor"} 4-bets ${formatBbAmount(spot.facingFourBet.sizeBb)}bb`;
+  }
+  if ((spot?.actionContext === "iso-vs-limper" || spot?.spotType === "iso-vs-limper") && spot?.isoRaiseSize?.sizeBb) {
+    return `Iso ${formatBbAmount(spot.isoRaiseSize.sizeBb)}bb`;
+  }
+  if ((spot?.actionContext === "squeeze" || spot?.spotType === "squeeze") && spot?.squeezeSize?.sizeBb) {
+    return `Squeeze ${formatBbAmount(spot.squeezeSize.sizeBb)}bb`;
+  }
+  if (spot?.actionContext === "limped-pot" || spot?.spotType === "limped-pot") {
+    return "Limped pot";
+  }
   if (spot?.facingThreeBet?.sizeBb) {
     return `${spot?.villainPosition || "Villain"} 3-bets ${formatBbAmount(spot.facingThreeBet.sizeBb)}bb`;
   }
@@ -2446,8 +2475,8 @@ function renderPreflopRangeFeedback(question) {
   elements.continueButton.textContent = failedMain ? "End Session" : lastQuestion ? "See Summary" : "Next Hand";
 }
 
-function getPreflopActionLabel(actions = [], actionId = "") {
-  const formatted = formatPreflopActionLabel(actionId);
+function getPreflopActionLabel(actions = [], actionId = "", spot = preflopRangeSpot) {
+  const formatted = formatPreflopActionLabel(actionId, spot);
   if (formatted) {
     return formatted;
   }
@@ -2457,14 +2486,29 @@ function getPreflopActionLabel(actions = [], actionId = "") {
 }
 
 function getPreflopRangeActionHint(action) {
+  if (action.id === "check") {
+    return "Take the free option when raising is not required.";
+  }
+  if (action.id === "limp") {
+    return "Complete into the pot with the limp portion of the range.";
+  }
   if (action.id === "raise") {
     return action.sizeBb ? `Open to ${action.sizeBb}bb and take the initiative.` : "Open the range.";
+  }
+  if (action.id === "isoRaise") {
+    return action.sizeBb ? `Isolate to ${action.sizeBb}bb against the limper.` : "Raise over the limp.";
   }
   if (action.id === "threeBet") {
     return action.sizeBb ? `Re-raise to ${action.sizeBb}bb with pressure.` : "Re-raise from the big blind.";
   }
+  if (action.id === "squeeze") {
+    return action.sizeBb ? `Squeeze to ${action.sizeBb}bb after open and call.` : "Squeeze over the open and caller.";
+  }
   if (action.id === "fourBet") {
     return action.sizeBb ? `4-bet to ${action.sizeBb}bb or release weaker opens.` : "4-bet the continue range.";
+  }
+  if (action.id === "fiveBetJam") {
+    return "Jam the 5-bet portion of the range.";
   }
   if (action.id === "call") {
     return action.callAmountBb ? `Defend by adding ${action.callAmountBb}bb.` : "Defend and see a flop.";
@@ -5344,7 +5388,7 @@ function closeGtoModal() {
 
 function createPreflopRangeLegend(spot) {
   const legalActionIds = new Set((spot?.legalActions || []).map((action) => action.id));
-  const actionLegend = ["fold", "call", "raise", "threeBet", "fourBet"]
+  const actionLegend = ["fold", "check", "limp", "call", "raise", "isoRaise", "threeBet", "squeeze", "fourBet", "fiveBetJam"]
     .filter((actionId) => legalActionIds.has(actionId))
     .map((actionId) => `<span class="${getPreflopLegendClass(actionId)}">${getPreflopActionLabel(spot.legalActions, actionId)}</span>`);
   return [
@@ -5372,18 +5416,20 @@ function createPreflopRangeMatrix(matrix, heroHandClass, spot = null) {
 }
 
 function getPreflopMatrixActionClass(actionId) {
-  if (actionId === "raise") return "gto-raise";
-  if (actionId === "threeBet") return "gto-threebet";
-  if (actionId === "fourBet") return "gto-threebet";
+  if (actionId === "raise" || actionId === "isoRaise") return "gto-raise";
+  if (actionId === "threeBet" || actionId === "squeeze") return "gto-threebet";
+  if (actionId === "fourBet" || actionId === "fiveBetJam") return "gto-threebet";
   if (actionId === "call") return "gto-call";
+  if (actionId === "check" || actionId === "limp") return "gto-call";
   return "gto-fold";
 }
 
 function getPreflopLegendClass(actionId) {
-  if (actionId === "raise") return "legend-raise";
-  if (actionId === "threeBet") return "legend-threebet";
-  if (actionId === "fourBet") return "legend-threebet";
+  if (actionId === "raise" || actionId === "isoRaise") return "legend-raise";
+  if (actionId === "threeBet" || actionId === "squeeze") return "legend-threebet";
+  if (actionId === "fourBet" || actionId === "fiveBetJam") return "legend-threebet";
   if (actionId === "call") return "legend-call";
+  if (actionId === "check" || actionId === "limp") return "legend-call";
   return "legend-fold";
 }
 
@@ -5394,7 +5440,18 @@ function formatPreflopCellFrequencies(actions = {}, spot = preflopRangeSpot) {
 }
 
 function formatPreflopCellCompact(actions = {}) {
-  const labels = { raise: "R", threeBet: "3B", fourBet: "4B", call: "C", fold: "F" };
+  const labels = {
+    raise: "R",
+    threeBet: "3B",
+    fourBet: "4B",
+    fiveBetJam: "5J",
+    isoRaise: "ISO",
+    squeeze: "SQZ",
+    call: "C",
+    check: "X",
+    limp: "L",
+    fold: "F",
+  };
   return Object.entries(actions)
     .filter(([, frequency]) => frequency > 0)
     .map(([actionId, frequency]) => `${labels[actionId] || actionId.toUpperCase()}${formatPercent(frequency)}`)

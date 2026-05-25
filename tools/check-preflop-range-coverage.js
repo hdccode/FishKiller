@@ -41,6 +41,14 @@ const FACING_THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
 ];
 
+const FUTURE_TARGET_FAMILIES = [
+  "facing open outside current BB defense and selected 3-bets",
+  "facing 4-bet",
+  "blind-vs-blind limp",
+  "iso vs limper",
+  "squeeze",
+];
+
 const DRILL_OPTIONS = [
   { id: "all-rfi", default: true, spotIds: RFI_SPOT_IDS },
   { id: "lj-rfi", spotIds: ["fk_6max_100bb_lj_rfi_unopened_v1"] },
@@ -74,25 +82,29 @@ const FAMILY_DEFINITIONS = [
     name: "RFI",
     spotIds: RFI_SPOT_IDS,
     legalActions: ["fold", "raise"],
-    matches: (spot) => spot.actionContext === "rfi" && spot.priorAction === "folded-to-hero",
+    family: "rfi",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "rfi" && spot.priorAction === "folded-to-hero",
   },
   {
     name: "BB defense",
     spotIds: BB_DEFENSE_SPOT_IDS,
     legalActions: ["fold", "call", "threeBet"],
-    matches: (spot) => spot.actionContext === "facing-open" && spot.heroPosition === "BB",
+    family: "bbDefense",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "bbDefense" && spot.heroPosition === "BB",
   },
   {
     name: "3-bet vs open",
     spotIds: THREE_BET_SPOT_IDS,
     legalActions: ["fold", "call", "threeBet"],
-    matches: (spot) => spot.actionContext === "facing-open" && spot.spotType === "three-bet-vs-open",
+    family: "threeBetVsOpen",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "threeBetVsOpen" && spot.spotType === "three-bet-vs-open",
   },
   {
     name: "facing 3-bet",
     spotIds: FACING_THREE_BET_SPOT_IDS,
     legalActions: ["fold", "call", "fourBet"],
-    matches: (spot) => spot.actionContext === "facing-3bet" && spot.spotType === "facing-3bet",
+    family: "facingThreeBet",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "facingThreeBet" && spot.spotType === "facing-3bet",
   },
 ];
 
@@ -147,9 +159,31 @@ function validateFamilyCounts(pack, errors) {
       if (!family.matches(spot)) {
         errors.push(`${spotId}: metadata does not match ${family.name}.`);
       }
+      assertFamilyMetadata(spot, family, errors);
       assertLegalActions(spot, family.legalActions, errors);
     });
   });
+}
+
+function assertFamilyMetadata(spot, family, errors) {
+  if (spot.family !== family.family) {
+    errors.push(`${spot.spotId}: expected family "${family.family}", got "${spot.family || ""}".`);
+  }
+  if (!spot.spotType) {
+    errors.push(`${spot.spotId}: missing spotType metadata.`);
+  }
+  if (!Array.isArray(spot.priorActions)) {
+    errors.push(`${spot.spotId}: priorActions must be an array.`);
+  }
+  if (!spot.openerPosition) {
+    errors.push(`${spot.spotId}: missing openerPosition metadata.`);
+  }
+  if (family.family !== "rfi" && !spot.defenderPosition) {
+    errors.push(`${spot.spotId}: missing defenderPosition metadata.`);
+  }
+  if (family.family !== "rfi" && !spot.aggressorPosition) {
+    errors.push(`${spot.spotId}: missing aggressorPosition metadata.`);
+  }
 }
 
 function validateCompleteSpots(pack, errors) {
@@ -250,4 +284,5 @@ function report(errors, pack = null) {
       `${THREE_BET_SPOT_IDS.length} 3-bet-vs-open, ` +
       `${FACING_THREE_BET_SPOT_IDS.length} facing-3bet.`
   );
+  console.log(`Future complete-preflop targets are documented but not required yet: ${FUTURE_TARGET_FAMILIES.join(", ")}.`);
 }
