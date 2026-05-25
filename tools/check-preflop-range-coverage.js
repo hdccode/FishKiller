@@ -7,7 +7,7 @@ const preflop = require("../preflop-engine");
 const ROOT = path.resolve(__dirname, "..");
 const PACK_PATH = path.join(ROOT, "data", "preflop-ranges", "real", "fishkiller-6max-100bb-v1.preflop-range.json");
 const EXPECTED_HAND_COUNT = 169;
-const EXPECTED_REAL_SPOT_COUNT = 20;
+const EXPECTED_REAL_SPOT_COUNT = 26;
 
 const RFI_SPOT_IDS = [
   "fk_6max_100bb_lj_rfi_unopened_v1",
@@ -23,6 +23,15 @@ const BB_DEFENSE_SPOT_IDS = [
   "fk_6max_100bb_bb_vs_co_open_v1",
   "fk_6max_100bb_bb_vs_btn_open_v1",
   "fk_6max_100bb_bb_vs_sb_open_v1",
+];
+
+const FACING_OPEN_RESPONSE_SPOT_IDS = [
+  "fk_6max_100bb_hj_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_hj_open_v1",
+  "fk_6max_100bb_sb_vs_lj_open_v1",
+  "fk_6max_100bb_sb_vs_hj_open_v1",
 ];
 
 const THREE_BET_SPOT_IDS = [
@@ -41,8 +50,21 @@ const FACING_THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
 ];
 
+const FACING_OPEN_COVERAGE_SPOT_IDS = [
+  "fk_6max_100bb_hj_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
+  "fk_6max_100bb_btn_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_hj_open_v1",
+  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_lj_open_v1",
+  "fk_6max_100bb_sb_vs_hj_open_v1",
+  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
+  ...BB_DEFENSE_SPOT_IDS,
+];
+
 const FUTURE_TARGET_FAMILIES = [
-  "facing open outside current BB defense and selected 3-bets",
   "facing 4-bet",
   "blind-vs-blind limp",
   "iso vs limper",
@@ -56,6 +78,22 @@ const DRILL_OPTIONS = [
   { id: "co-rfi", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
   { id: "btn-rfi", spotIds: ["fk_6max_100bb_btn_rfi_unopened_v1"] },
   { id: "sb-rfi", spotIds: ["fk_6max_100bb_sb_rfi_unopened_v1"] },
+  { id: "all-facing-open", spotIds: FACING_OPEN_COVERAGE_SPOT_IDS },
+  { id: "fo-hj-vs-lj", spotIds: ["fk_6max_100bb_hj_vs_lj_open_v1"] },
+  { id: "fo-co-vs-lj", spotIds: ["fk_6max_100bb_co_vs_lj_open_v1"] },
+  { id: "fo-co-vs-hj", spotIds: ["fk_6max_100bb_co_vs_hj_open_3bet_v1"] },
+  { id: "fo-btn-vs-lj", spotIds: ["fk_6max_100bb_btn_vs_lj_open_v1"] },
+  { id: "fo-btn-vs-hj", spotIds: ["fk_6max_100bb_btn_vs_hj_open_v1"] },
+  { id: "fo-btn-vs-co", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
+  { id: "fo-sb-vs-lj", spotIds: ["fk_6max_100bb_sb_vs_lj_open_v1"] },
+  { id: "fo-sb-vs-hj", spotIds: ["fk_6max_100bb_sb_vs_hj_open_v1"] },
+  { id: "fo-sb-vs-co", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
+  { id: "fo-sb-vs-btn", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
+  { id: "fo-bb-vs-lj", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
+  { id: "fo-bb-vs-hj", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
+  { id: "fo-bb-vs-co", spotIds: ["fk_6max_100bb_bb_vs_co_open_v1"] },
+  { id: "fo-bb-vs-btn", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
+  { id: "fo-bb-vs-sb", spotIds: ["fk_6max_100bb_bb_vs_sb_open_v1"] },
   { id: "all-bb-defense", spotIds: BB_DEFENSE_SPOT_IDS },
   { id: "bb-vs-lj", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
   { id: "bb-vs-hj", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
@@ -84,6 +122,13 @@ const FAMILY_DEFINITIONS = [
     legalActions: ["fold", "raise"],
     family: "rfi",
     matches: (spot) => preflop.getPreflopSpotFamily(spot) === "rfi" && spot.priorAction === "folded-to-hero",
+  },
+  {
+    name: "facing open response",
+    spotIds: FACING_OPEN_RESPONSE_SPOT_IDS,
+    legalActions: ["fold", "call", "threeBet"],
+    family: "facingOpen",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "facingOpen" && spot.spotType === "facing-open-response",
   },
   {
     name: "BB defense",
@@ -123,6 +168,7 @@ function main() {
   }
 
   validateFamilyCounts(pack, errors);
+  validateFacingOpenCoverage(pack, errors);
   validateCompleteSpots(pack, errors);
   validateDrillMappings(pack, errors);
 
@@ -146,8 +192,8 @@ function loadRealPack(errors) {
 function validateFamilyCounts(pack, errors) {
   FAMILY_DEFINITIONS.forEach((family) => {
     const found = family.spotIds.map((spotId) => preflop.getPreflopSpot(pack, spotId)).filter(Boolean);
-    if (found.length !== 5) {
-      errors.push(`${family.name}: expected 5 supported spots, found ${found.length}.`);
+    if (found.length !== family.spotIds.length) {
+      errors.push(`${family.name}: expected ${family.spotIds.length} supported spots, found ${found.length}.`);
     }
 
     family.spotIds.forEach((spotId) => {
@@ -162,6 +208,20 @@ function validateFamilyCounts(pack, errors) {
       assertFamilyMetadata(spot, family, errors);
       assertLegalActions(spot, family.legalActions, errors);
     });
+  });
+}
+
+function validateFacingOpenCoverage(pack, errors) {
+  FACING_OPEN_COVERAGE_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    if (!spot) {
+      errors.push(`Facing open coverage: missing spot ${spotId}.`);
+      return;
+    }
+    if (spot.actionContext !== "facing-open") {
+      errors.push(`${spotId}: expected actionContext facing-open for Facing Open coverage.`);
+    }
+    assertLegalActions(spot, ["fold", "call", "threeBet"], errors);
   });
 }
 
@@ -281,6 +341,7 @@ function report(errors, pack = null) {
   console.log(
     `Preflop range coverage passed: ${spotCount} real spots, ` +
       `${RFI_SPOT_IDS.length} RFI, ${BB_DEFENSE_SPOT_IDS.length} BB defense, ` +
+      `${FACING_OPEN_COVERAGE_SPOT_IDS.length} facing-open coverage spots, ` +
       `${THREE_BET_SPOT_IDS.length} 3-bet-vs-open, ` +
       `${FACING_THREE_BET_SPOT_IDS.length} facing-3bet.`
   );

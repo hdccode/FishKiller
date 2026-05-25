@@ -19,6 +19,14 @@ const BB_DEFENSE_SPOT_IDS = [
   "fk_6max_100bb_bb_vs_btn_open_v1",
   "fk_6max_100bb_bb_vs_sb_open_v1",
 ];
+const FACING_OPEN_RESPONSE_SPOT_IDS = [
+  "fk_6max_100bb_hj_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_hj_open_v1",
+  "fk_6max_100bb_sb_vs_lj_open_v1",
+  "fk_6max_100bb_sb_vs_hj_open_v1",
+];
 const THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_btn_vs_co_open_3bet_v1",
   "fk_6max_100bb_co_vs_hj_open_3bet_v1",
@@ -33,6 +41,19 @@ const FACING_THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
   "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
 ];
+const FACING_OPEN_COVERAGE_SPOT_IDS = [
+  "fk_6max_100bb_hj_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
+  "fk_6max_100bb_btn_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_hj_open_v1",
+  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_lj_open_v1",
+  "fk_6max_100bb_sb_vs_hj_open_v1",
+  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
+  ...BB_DEFENSE_SPOT_IDS,
+];
 
 function fixedRng(value) {
   return () => value;
@@ -45,6 +66,8 @@ function run() {
 
   loadsAndFindsRealPack(normalized, spot);
   loadsAllCoreRfiSpots(normalized);
+  loadsAllFacingOpenResponseSpots(normalized);
+  loadsFacingOpenCoverage(normalized);
   loadsAllBbDefenseSpots(normalized);
   loadsAllThreeBetSpots(normalized);
   loadsAllFacingThreeBetSpots(normalized);
@@ -102,6 +125,34 @@ function loadsAllBbDefenseSpots(pack) {
   });
 }
 
+function loadsAllFacingOpenResponseSpots(pack) {
+  FACING_OPEN_RESPONSE_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    assert(spot, `${spotId} should exist`);
+    assert.equal(spot.family, "facingOpen");
+    assert.equal(spot.spotType, "facing-open-response");
+    assert.notEqual(spot.heroPosition, "BB");
+    assert(spot.openerPosition, `${spotId} should define opener position`);
+    assert.equal(spot.villainPosition, spot.openerPosition);
+    assert.equal(spot.aggressorPosition, spot.openerPosition);
+    assert.equal(spot.defenderPosition, spot.heroPosition);
+    assert.equal(spot.actionContext, "facing-open");
+    assert(Array.isArray(spot.priorActions));
+    assert.equal(Object.keys(spot.actionsByHand).length, 169);
+    assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "threeBet"]);
+  });
+}
+
+function loadsFacingOpenCoverage(pack) {
+  FACING_OPEN_COVERAGE_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    assert(spot, `${spotId} should exist in Facing Open coverage`);
+    assert.equal(spot.actionContext, "facing-open");
+    assert.equal(Object.keys(spot.actionsByHand).length, 169);
+    assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "threeBet"]);
+  });
+}
+
 function loadsAllThreeBetSpots(pack) {
   THREE_BET_SPOT_IDS.forEach((spotId) => {
     const spot = preflop.getPreflopSpot(pack, spotId);
@@ -141,6 +192,9 @@ function loadsAllFacingThreeBetSpots(pack) {
 function classifiesCurrentSpotFamilies(pack) {
   RFI_SPOT_IDS.forEach((spotId) => {
     assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "rfi");
+  });
+  FACING_OPEN_RESPONSE_SPOT_IDS.forEach((spotId) => {
+    assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "facingOpen");
   });
   BB_DEFENSE_SPOT_IDS.forEach((spotId) => {
     assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "bbDefense");
@@ -234,6 +288,8 @@ function resolvesDrillSpotIds() {
   const options = [
     { id: "all-rfi", default: true, spotIds: RFI_SPOT_IDS },
     { id: "co-rfi", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
+    { id: "all-facing-open", spotIds: FACING_OPEN_COVERAGE_SPOT_IDS },
+    { id: "fo-btn-vs-hj", spotIds: ["fk_6max_100bb_btn_vs_hj_open_v1"] },
     { id: "all-bb-defense", spotIds: BB_DEFENSE_SPOT_IDS },
     { id: "bb-vs-btn", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
     { id: "all-three-bet", spotIds: THREE_BET_SPOT_IDS },
@@ -244,6 +300,8 @@ function resolvesDrillSpotIds() {
   ];
 
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("co-rfi", options), ["fk_6max_100bb_co_rfi_unopened_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-facing-open", options), FACING_OPEN_COVERAGE_SPOT_IDS);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("fo-btn-vs-hj", options), ["fk_6max_100bb_btn_vs_hj_open_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-bb-defense", options), BB_DEFENSE_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("bb-vs-btn", options), ["fk_6max_100bb_bb_vs_btn_open_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-three-bet", options), THREE_BET_SPOT_IDS);
@@ -260,6 +318,7 @@ function formatsPreflopLabels(pack) {
   const bbVsBtn = preflop.getPreflopSpot(pack, "fk_6max_100bb_bb_vs_btn_open_v1");
   const bbVsSb = preflop.getPreflopSpot(pack, "fk_6max_100bb_bb_vs_sb_open_v1");
   const btnVsCo = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_vs_co_open_3bet_v1");
+  const btnVsHj = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_vs_hj_open_v1");
   const btnOpenVsBb = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_open_vs_bb_3bet_v1");
 
   assert.equal(preflop.formatPreflopActionLabel("fold"), "Fold");
@@ -275,6 +334,7 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopActionLabel("fiveBetJam"), "5-bet jam");
   assert.equal(preflop.formatPreflopSpotLabel(btn), "BTN first in");
   assert.equal(preflop.formatPreflopSpotLabel(bbVsBtn), "BB vs BTN open");
+  assert.equal(preflop.formatPreflopSpotLabel(btnVsHj), "BTN vs HJ open");
   assert.equal(preflop.formatPreflopSpotLabel(btnVsCo), "BTN vs CO open");
   assert.equal(preflop.formatPreflopSpotLabel(btnOpenVsBb), "BTN open vs BB 3-bet");
   assert.equal(preflop.formatPreflopSpotLabel({
@@ -301,6 +361,7 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopSizeLabel(sb), "Open 3bb");
   assert.equal(preflop.formatPreflopSizeLabel(bbVsBtn), "BTN opens 2.3bb");
   assert.equal(preflop.formatPreflopSizeLabel(bbVsSb), "SB opens 3bb");
+  assert.equal(preflop.formatPreflopSizeLabel(btnVsHj), "HJ opens 2.3bb");
   assert.equal(preflop.formatPreflopSizeLabel(btnVsCo), "CO opens 2.3bb");
   assert.equal(preflop.formatPreflopSizeLabel(btnOpenVsBb), "BB 3-bets 9.5bb");
 }

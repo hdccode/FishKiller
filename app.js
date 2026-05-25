@@ -58,7 +58,7 @@ const TABLES = {
     id: "six",
     label: "6-Max",
     shortLabel: "6M",
-    subtitle: "Flagship 20-spot preflop trainer for RFI, defense, 3-bet, and facing 3-bet.",
+    subtitle: "Flagship 26-spot preflop trainer for RFI, facing-open, defense, 3-bet, and facing 3-bet.",
     seats: [
       { seat: "UTG", x: "18%", y: "40%" },
       { seat: "HJ", x: "33%", y: "17%" },
@@ -135,6 +135,19 @@ const PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS = [
   "fk_6max_100bb_bb_vs_btn_open_v1",
   "fk_6max_100bb_bb_vs_sb_open_v1",
 ];
+const PREFLOP_RANGE_FACING_OPEN_SPOT_IDS = [
+  "fk_6max_100bb_hj_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
+  "fk_6max_100bb_btn_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_hj_open_v1",
+  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_lj_open_v1",
+  "fk_6max_100bb_sb_vs_hj_open_v1",
+  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
+  ...PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS,
+];
 const PREFLOP_RANGE_THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_btn_vs_co_open_3bet_v1",
   "fk_6max_100bb_co_vs_hj_open_3bet_v1",
@@ -150,10 +163,13 @@ const PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
 ];
 const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = [
-  ...PREFLOP_RANGE_RFI_SPOT_IDS,
-  ...PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS,
-  ...PREFLOP_RANGE_THREE_BET_SPOT_IDS,
-  ...PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS,
+  ...new Set([
+    ...PREFLOP_RANGE_RFI_SPOT_IDS,
+    ...PREFLOP_RANGE_FACING_OPEN_SPOT_IDS,
+    ...PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS,
+    ...PREFLOP_RANGE_THREE_BET_SPOT_IDS,
+    ...PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS,
+  ]),
 ];
 const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-rfi";
 const PREFLOP_RANGE_REVIEW_DRILL_ID = "review-mistakes";
@@ -165,6 +181,22 @@ const PREFLOP_RANGE_DRILL_OPTIONS = [
   { id: "co-rfi", label: "CO RFI", group: "RFI", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
   { id: "btn-rfi", label: "BTN RFI", group: "RFI", spotIds: ["fk_6max_100bb_btn_rfi_unopened_v1"] },
   { id: "sb-rfi", label: "SB RFI", group: "RFI", spotIds: ["fk_6max_100bb_sb_rfi_unopened_v1"] },
+  { id: "all-facing-open", label: "All Facing Open", group: "Facing Open", spotIds: PREFLOP_RANGE_FACING_OPEN_SPOT_IDS },
+  { id: "fo-hj-vs-lj", label: "HJ vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_hj_vs_lj_open_v1"] },
+  { id: "fo-co-vs-lj", label: "CO vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_co_vs_lj_open_v1"] },
+  { id: "fo-co-vs-hj", label: "CO vs HJ", group: "Facing Open", spotIds: ["fk_6max_100bb_co_vs_hj_open_3bet_v1"] },
+  { id: "fo-btn-vs-lj", label: "BTN vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_btn_vs_lj_open_v1"] },
+  { id: "fo-btn-vs-hj", label: "BTN vs HJ", group: "Facing Open", spotIds: ["fk_6max_100bb_btn_vs_hj_open_v1"] },
+  { id: "fo-btn-vs-co", label: "BTN vs CO", group: "Facing Open", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
+  { id: "fo-sb-vs-lj", label: "SB vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_sb_vs_lj_open_v1"] },
+  { id: "fo-sb-vs-hj", label: "SB vs HJ", group: "Facing Open", spotIds: ["fk_6max_100bb_sb_vs_hj_open_v1"] },
+  { id: "fo-sb-vs-co", label: "SB vs CO", group: "Facing Open", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
+  { id: "fo-sb-vs-btn", label: "SB vs BTN", group: "Facing Open", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
+  { id: "fo-bb-vs-lj", label: "BB vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
+  { id: "fo-bb-vs-hj", label: "BB vs HJ", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
+  { id: "fo-bb-vs-co", label: "BB vs CO", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_co_open_v1"] },
+  { id: "fo-bb-vs-btn", label: "BB vs BTN", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
+  { id: "fo-bb-vs-sb", label: "BB vs SB", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_sb_open_v1"] },
   { id: "all-bb-defense", label: "All BB Defense", group: "BB Defense", spotIds: PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS },
   { id: "bb-vs-lj", label: "BB vs LJ", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
   { id: "bb-vs-hj", label: "BB vs HJ", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
@@ -1558,7 +1590,7 @@ function renderTopline() {
 }
 
 function getPreflopCoverageLabel() {
-  return "RFI / BB Defense / 3-bet / Facing 3-bet";
+  return "RFI / Facing Open / BB Defense / 3-bet / Facing 3-bet";
 }
 
 function getTableIntroCopy(tableSize) {
@@ -1571,7 +1603,7 @@ function getTableIntroCopy(tableSize) {
 }
 
 function getTableTrainingLabel(tableSize) {
-  return tableSize === "six" ? "20-spot preflop range" : "Starter scenario drills";
+  return tableSize === "six" ? "26-spot preflop range" : "Starter scenario drills";
 }
 
 function getTablePillLabel(tableSize) {
@@ -1584,7 +1616,7 @@ function getPracticeModeDescription(mode, tableSize) {
   }
 
   return tableSize === "six"
-    ? `Flagship 20-spot preflop range trainer: ${getPreflopCoverageLabel()}.`
+    ? `Flagship 26-spot preflop range trainer: ${getPreflopCoverageLabel()}.`
     : "Starter scenario-pack preflop drills for quick reps; the full range-pack trainer is currently 6-max.";
 }
 
@@ -2541,7 +2573,7 @@ function renderIdleScenario() {
   });
   elements.scenarioTitle.textContent = "Start a new session whenever you want.";
   elements.scenarioCopy.textContent = selectedTable.id === "six"
-    ? `6-max is the flagship preflop trainer: 20 internal baseline spots across ${getPreflopCoverageLabel()}.`
+    ? `6-max is the flagship preflop trainer: 26 internal baseline spots across ${getPreflopCoverageLabel()}.`
     : `${selectedTable.label} currently uses starter scenario-pack drills. The full range-pack trainer is focused on 6-max preflop.`;
   elements.sessionChip.textContent = "Ready";
   elements.sessionCounter.textContent = "0 / 10";
@@ -2568,7 +2600,7 @@ function renderIdleScenario() {
   elements.answerGrid.innerHTML = `
     <button class="answer-button" type="button" onclick="window.__fishkillerStartFromCard()">
       <strong>Launch Session</strong>
-      <span>${selectedTable.id === "six" ? "Start a 20-spot range-pack run." : "Start a starter scenario-pack run."}</span>
+      <span>${selectedTable.id === "six" ? "Start a 26-spot range-pack run." : "Start a starter scenario-pack run."}</span>
     </button>
     <button class="answer-button" type="button" disabled>
       <strong>Instant Corrections</strong>
@@ -7291,6 +7323,17 @@ function isTrainablePreflopRangeSpot(spot) {
     actionIds.has("call") &&
     actionIds.has("threeBet")
   );
+  const isFacingOpen = (
+    spot.complete === true &&
+    spot.actionContext === "facing-open" &&
+    spot.family === "facingOpen" &&
+    spot.spotType === "facing-open-response" &&
+    Boolean(spot.heroPosition) &&
+    Boolean(spot.openerPosition || spot.villainPosition) &&
+    actionIds.has("fold") &&
+    actionIds.has("call") &&
+    actionIds.has("threeBet")
+  );
   const isThreeBetVsOpen = (
     spot.complete === true &&
     spot.actionContext === "facing-open" &&
@@ -7311,7 +7354,7 @@ function isTrainablePreflopRangeSpot(spot) {
     actionIds.has("call") &&
     actionIds.has("fourBet")
   );
-  return isRfi || isBbDefense || isThreeBetVsOpen || isFacingThreeBet;
+  return isRfi || isFacingOpen || isBbDefense || isThreeBetVsOpen || isFacingThreeBet;
 }
 
 function getPreflopRangeSpotOrder(spotId) {
