@@ -4,8 +4,10 @@ server.stderr.log
 *.log
 .DS_Store
 exports/
+third_party/
 data/preflop-ranges/validation-report.json
 data/texassolver/logs/
+data/texassolver/raw/
 data/texassolver/raw/*.json
 data/texassolver/raw/*.zip
 data/texassolver/generated-ranges/
