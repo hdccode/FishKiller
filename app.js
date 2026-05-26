@@ -15,7 +15,7 @@ const PRACTICE_MODES = {
   preflop: {
     id: "preflop",
     label: "Preflop Action",
-    description: "One decision per hand: open, call, 3-bet, 4-bet, or fold.",
+    description: "One decision per hand: open, limp, call, squeeze, 3-bet, 4-bet, jam, or fold.",
   },
   full: {
     id: "full",
@@ -1652,7 +1652,7 @@ function renderTopline() {
     elements.heroTitle.textContent = activeSession.mode === "main" ? `${activeTable.label} ${modeLabel.toLowerCase()} in motion.` : `${activeTable.label} review round is live.`;
     elements.heroSubtitle.textContent =
       activeSession.mode === "main"
-        ? "Pick the solver baseline, absorb instant corrections, and protect your last two strikes."
+        ? "Pick the range-pack baseline, absorb instant corrections, and protect your last two strikes."
         : "These are the spots you missed. Clean them up without spending hearts.";
   } else {
     elements.heroTitle.textContent = selectedTable.id === "six"
@@ -1671,7 +1671,7 @@ function getPreflopCoverageLabel() {
 
 function getTableIntroCopy(tableSize) {
   if (tableSize === "six") {
-    return `Flagship local range-pack trainer: ${getPreflopCoverageLabel()}. Internal baseline ranges, not universal GTO.`;
+    return `Flagship 6-max 100bb cash preflop trainer: ${getPreflopCoverageLabel()}. Internal baseline ranges, not universal GTO.`;
   }
 
   const table = TABLES[tableSize] || TABLES.six;
@@ -1692,7 +1692,7 @@ function getPracticeModeDescription(mode, tableSize) {
   }
 
   return tableSize === "six"
-    ? `Flagship 56-spot preflop range trainer: ${getPreflopCoverageLabel()}.`
+    ? `Flagship 56-spot 6-max 100bb cash preflop range trainer: ${getPreflopCoverageLabel()}.`
     : "Starter scenario-pack preflop drills for quick reps; the full range-pack trainer is currently 6-max.";
 }
 
@@ -1957,7 +1957,7 @@ function createPreflopRangeProgressSummaryMarkup(summary) {
       <div class="preflop-progress-summary empty">
         <span>6-max progress</span>
         <strong>No preflop reps yet</strong>
-        <em>Local lifetime stats appear here after a few RFI, defense, 3-bet, or facing-3bet reps.</em>
+        <em>Local lifetime stats appear here after a few reps in the supported preflop families.</em>
       </div>
     `;
   }

@@ -90,6 +90,16 @@ data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json
 
 It contains 56 complete 6-max 100bb preflop spots for the live trainer. This is the flagship range-pack path in the current app; HU, 3-max, and 9-max remain starter scenario-pack drills for now.
 
+The expanded MVP contract currently enforced by `npm run preflop:ranges:coverage` is:
+
+- RFI: 5 spots.
+- Facing Open coverage: 15 spots, including the BB Defense convenience subgroup.
+- Facing 3-bet: 15 spots.
+- Selected Facing 4-bet: 5 spots.
+- BvB Limp: 3 spots.
+- Iso vs Limp: 6 spots.
+- Squeeze: 6 spots.
+
 It currently contains internally authored, non-proprietary baseline 6-max RFI spots at 100bb after action folds to Hero:
 
 - `fk_6max_100bb_lj_rfi_unopened_v1`

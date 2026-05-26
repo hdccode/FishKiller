@@ -13,6 +13,16 @@ FishKiller is a local-first poker training website. The current live MVP is a 6-
 
 The shipped 6-max ranges are FishKiller internal-authored baseline training ranges. They are not universal GTO claims and are not copied commercial charts.
 
+The coverage checker currently locks this expanded 6-max MVP contract:
+
+- 5 RFI spots
+- 15 Facing Open coverage spots
+- 15 Facing 3-bet spots
+- 5 selected Facing 4-bet spots
+- 3 BvB Limp spots
+- 6 Iso vs Limp spots
+- 6 Squeeze spots
+
 ## Install
 
 ```powershell

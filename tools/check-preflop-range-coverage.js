@@ -7,7 +7,19 @@ const preflop = require("../preflop-engine");
 const ROOT = path.resolve(__dirname, "..");
 const PACK_PATH = path.join(ROOT, "data", "preflop-ranges", "real", "fishkiller-6max-100bb-v1.preflop-range.json");
 const EXPECTED_HAND_COUNT = 169;
-const EXPECTED_REAL_SPOT_COUNT = 56;
+const MVP_CONTRACT = Object.freeze({
+  totalRealSpots: 56,
+  rfi: 5,
+  facingOpenCoverage: 15,
+  facingOpenResponse: 6,
+  bbDefense: 5,
+  threeBetVsOpen: 5,
+  facingThreeBet: 15,
+  selectedFacingFourBet: 5,
+  bvbLimp: 3,
+  isoVsLimp: 6,
+  squeeze: 6,
+});
 
 const RFI_SPOT_IDS = [
   "fk_6max_100bb_lj_rfi_unopened_v1",
@@ -104,6 +116,18 @@ const FACING_OPEN_COVERAGE_SPOT_IDS = [
   "fk_6max_100bb_sb_vs_co_open_3bet_v1",
   "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
   ...BB_DEFENSE_SPOT_IDS,
+];
+
+const LIVE_SPOT_IDS = [
+  ...RFI_SPOT_IDS,
+  ...FACING_OPEN_RESPONSE_SPOT_IDS,
+  ...BB_DEFENSE_SPOT_IDS,
+  ...THREE_BET_SPOT_IDS,
+  ...FACING_THREE_BET_SPOT_IDS,
+  ...FACING_FOUR_BET_SPOT_IDS,
+  ...BVB_LIMP_SPOT_IDS,
+  ...ISO_VS_LIMP_SPOT_IDS,
+  ...SQUEEZE_SPOT_IDS,
 ];
 
 const FUTURE_TARGET_FAMILIES = [
@@ -278,10 +302,12 @@ function main() {
     return;
   }
 
-  if ((pack.spots || []).length !== EXPECTED_REAL_SPOT_COUNT) {
-    errors.push(`Expected ${EXPECTED_REAL_SPOT_COUNT} real 6-max preflop spots, found ${(pack.spots || []).length}.`);
+  if ((pack.spots || []).length !== MVP_CONTRACT.totalRealSpots) {
+    errors.push(`Expected ${MVP_CONTRACT.totalRealSpots} real 6-max preflop spots, found ${(pack.spots || []).length}.`);
   }
 
+  validateStaticContract(errors);
+  validatePackSpotIds(pack, errors);
   validateFamilyCounts(pack, errors);
   validateFacingOpenCoverage(pack, errors);
   validateCompleteSpots(pack, errors);
@@ -302,6 +328,51 @@ function loadRealPack(errors) {
     errors.push(`Could not load real preflop range pack: ${error.message}`);
     return null;
   }
+}
+
+function validateStaticContract(errors) {
+  const checks = [
+    ["RFI", RFI_SPOT_IDS, MVP_CONTRACT.rfi],
+    ["Facing Open coverage", FACING_OPEN_COVERAGE_SPOT_IDS, MVP_CONTRACT.facingOpenCoverage],
+    ["Facing Open response", FACING_OPEN_RESPONSE_SPOT_IDS, MVP_CONTRACT.facingOpenResponse],
+    ["BB Defense", BB_DEFENSE_SPOT_IDS, MVP_CONTRACT.bbDefense],
+    ["3-bet vs open", THREE_BET_SPOT_IDS, MVP_CONTRACT.threeBetVsOpen],
+    ["Facing 3-bet", FACING_THREE_BET_SPOT_IDS, MVP_CONTRACT.facingThreeBet],
+    ["Selected Facing 4-bet", FACING_FOUR_BET_SPOT_IDS, MVP_CONTRACT.selectedFacingFourBet],
+    ["BvB Limp", BVB_LIMP_SPOT_IDS, MVP_CONTRACT.bvbLimp],
+    ["Iso vs Limp", ISO_VS_LIMP_SPOT_IDS, MVP_CONTRACT.isoVsLimp],
+    ["Squeeze", SQUEEZE_SPOT_IDS, MVP_CONTRACT.squeeze],
+  ];
+
+  checks.forEach(([label, spotIds, expectedCount]) => {
+    if (spotIds.length !== expectedCount) {
+      errors.push(`${label}: contract expects ${expectedCount} configured spot ids, found ${spotIds.length}.`);
+    }
+    assertUniqueIds(spotIds, `${label} configured spot ids`, errors);
+  });
+
+  if (LIVE_SPOT_IDS.length !== MVP_CONTRACT.totalRealSpots) {
+    errors.push(`Live spot-id contract expects ${MVP_CONTRACT.totalRealSpots} ids, configured ${LIVE_SPOT_IDS.length}.`);
+  }
+  assertUniqueIds(LIVE_SPOT_IDS, "live launch spot ids", errors);
+}
+
+function validatePackSpotIds(pack, errors) {
+  const packSpotIds = (pack.spots || []).map((spot) => spot?.spotId || "");
+  assertUniqueIds(packSpotIds, "real pack spot ids", errors);
+
+  const expected = new Set(LIVE_SPOT_IDS);
+  const actual = new Set(packSpotIds);
+  LIVE_SPOT_IDS.forEach((spotId) => {
+    if (!actual.has(spotId)) {
+      errors.push(`Real pack is missing live launch spot ${spotId}.`);
+    }
+  });
+  packSpotIds.forEach((spotId) => {
+    if (!expected.has(spotId)) {
+      errors.push(`Real pack contains unsupported live MVP spot ${spotId}. Update the coverage contract before adding it.`);
+    }
+  });
 }
 
 function validateFamilyCounts(pack, errors) {
@@ -404,6 +475,11 @@ function validateMappedSpot(pack, drillId, spotId, errors) {
     return;
   }
 
+  const handCount = Object.keys(spot.actionsByHand || {}).length;
+  if (handCount !== EXPECTED_HAND_COUNT) {
+    errors.push(`${drillId}/${spotId}: expected ${EXPECTED_HAND_COUNT} hands, found ${handCount}.`);
+  }
+
   const matrix = preflop.buildPreflopRangeMatrix(spot);
   if (!matrix || matrix.cells.length !== EXPECTED_HAND_COUNT) {
     errors.push(`${drillId}/${spotId}: expected a ${EXPECTED_HAND_COUNT}-cell matrix.`);
@@ -445,6 +521,24 @@ function getLegalActionIds(spot) {
   return (spot.legalActions || []).map((action) => action.id);
 }
 
+function assertUniqueIds(values, label, errors) {
+  const seen = new Set();
+  const duplicates = new Set();
+  values.forEach((value) => {
+    if (!value) {
+      errors.push(`${label}: contains an empty id.`);
+      return;
+    }
+    if (seen.has(value)) {
+      duplicates.add(value);
+    }
+    seen.add(value);
+  });
+  if (duplicates.size) {
+    errors.push(`${label}: duplicate ids ${[...duplicates].join(", ")}.`);
+  }
+}
+
 function report(errors, pack = null) {
   if (errors.length) {
     errors.forEach((error) => console.error(`ERROR: ${error}`));
@@ -454,7 +548,7 @@ function report(errors, pack = null) {
 
   const spotCount = pack?.spots?.length || 0;
   console.log(
-    `Preflop range coverage passed: ${spotCount} real spots, ` +
+    `Expanded 6-max preflop MVP contract passed: ${spotCount} real spots, ` +
       `${RFI_SPOT_IDS.length} RFI, ${BB_DEFENSE_SPOT_IDS.length} BB defense, ` +
       `${FACING_OPEN_COVERAGE_SPOT_IDS.length} facing-open coverage spots, ` +
       `${THREE_BET_SPOT_IDS.length} 3-bet-vs-open, ` +
