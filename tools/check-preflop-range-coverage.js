@@ -7,7 +7,7 @@ const preflop = require("../preflop-engine");
 const ROOT = path.resolve(__dirname, "..");
 const PACK_PATH = path.join(ROOT, "data", "preflop-ranges", "real", "fishkiller-6max-100bb-v1.preflop-range.json");
 const EXPECTED_HAND_COUNT = 169;
-const EXPECTED_REAL_SPOT_COUNT = 41;
+const EXPECTED_REAL_SPOT_COUNT = 44;
 
 const RFI_SPOT_IDS = [
   "fk_6max_100bb_lj_rfi_unopened_v1",
@@ -68,6 +68,12 @@ const FACING_FOUR_BET_SPOT_IDS = [
   "fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1",
 ];
 
+const BVB_LIMP_SPOT_IDS = [
+  "fk_6max_100bb_sb_first_in_limp_or_raise_v1",
+  "fk_6max_100bb_bb_vs_sb_limp_v1",
+  "fk_6max_100bb_sb_limp_vs_bb_raise_v1",
+];
+
 const FACING_OPEN_COVERAGE_SPOT_IDS = [
   "fk_6max_100bb_hj_vs_lj_open_v1",
   "fk_6max_100bb_co_vs_lj_open_v1",
@@ -83,7 +89,6 @@ const FACING_OPEN_COVERAGE_SPOT_IDS = [
 ];
 
 const FUTURE_TARGET_FAMILIES = [
-  "blind-vs-blind limp",
   "iso vs limper",
   "squeeze",
 ];
@@ -145,6 +150,10 @@ const DRILL_OPTIONS = [
   { id: "btn-3bet-vs-co-open-co-4bet", spotIds: ["fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1"] },
   { id: "sb-3bet-vs-btn-open-btn-4bet", spotIds: ["fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1"] },
   { id: "bb-3bet-vs-btn-open-btn-4bet", spotIds: ["fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1"] },
+  { id: "all-bvb-limp", spotIds: BVB_LIMP_SPOT_IDS },
+  { id: "sb-first-limp-or-raise", spotIds: ["fk_6max_100bb_sb_first_in_limp_or_raise_v1"] },
+  { id: "bb-vs-sb-limp", spotIds: ["fk_6max_100bb_bb_vs_sb_limp_v1"] },
+  { id: "sb-limp-vs-bb-raise", spotIds: ["fk_6max_100bb_sb_limp_vs_bb_raise_v1"] },
   { id: "review-mistakes", reviewMode: true, spotIds: [] },
 ];
 
@@ -190,6 +199,27 @@ const FAMILY_DEFINITIONS = [
     legalActions: ["fold", "call", "fiveBetJam"],
     family: "facingFourBet",
     matches: (spot) => preflop.getPreflopSpotFamily(spot) === "facingFourBet" && spot.spotType === "facing-4bet",
+  },
+  {
+    name: "BvB SB first-in limp or raise",
+    spotIds: ["fk_6max_100bb_sb_first_in_limp_or_raise_v1"],
+    legalActions: ["fold", "limp", "raise"],
+    family: "limpedPot",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "limpedPot" && spot.spotType === "sb-first-in-limp-or-raise",
+  },
+  {
+    name: "BvB BB vs SB limp",
+    spotIds: ["fk_6max_100bb_bb_vs_sb_limp_v1"],
+    legalActions: ["check", "raise"],
+    family: "limpedPot",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "limpedPot" && spot.spotType === "bb-vs-sb-limp",
+  },
+  {
+    name: "BvB SB limp vs BB raise",
+    spotIds: ["fk_6max_100bb_sb_limp_vs_bb_raise_v1"],
+    legalActions: ["fold", "call", "threeBet"],
+    family: "limpedPot",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "limpedPot" && spot.spotType === "sb-limp-vs-bb-raise",
   },
 ];
 
@@ -384,7 +414,8 @@ function report(errors, pack = null) {
       `${FACING_OPEN_COVERAGE_SPOT_IDS.length} facing-open coverage spots, ` +
       `${THREE_BET_SPOT_IDS.length} 3-bet-vs-open, ` +
       `${FACING_THREE_BET_SPOT_IDS.length} facing-3bet, ` +
-      `${FACING_FOUR_BET_SPOT_IDS.length} facing-4bet.`
+      `${FACING_FOUR_BET_SPOT_IDS.length} facing-4bet, ` +
+      `${BVB_LIMP_SPOT_IDS.length} BvB limp.`
   );
   console.log(`Future complete-preflop targets are documented but not required yet: ${FUTURE_TARGET_FAMILIES.join(", ")}.`);
 }

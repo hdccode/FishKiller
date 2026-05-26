@@ -88,7 +88,7 @@ The first real MVP pack is:
 data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json
 ```
 
-It contains 41 complete 6-max 100bb preflop spots for the live trainer. This is the flagship range-pack path in the current app; HU, 3-max, and 9-max remain starter scenario-pack drills for now.
+It contains 44 complete 6-max 100bb preflop spots for the live trainer. This is the flagship range-pack path in the current app; HU, 3-max, and 9-max remain starter scenario-pack drills for now.
 
 It currently contains internally authored, non-proprietary baseline 6-max RFI spots at 100bb after action folds to Hero:
 
@@ -159,7 +159,15 @@ The pack also contains selected internally authored 3-bettor responses after fac
 - `fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1`
 - `fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1`
 
-These selected spots use `fold`, `call`, and `fiveBetJam` as legal actions. They cover high-volume 3-bet versus open paths first; they are not exhaustive facing-4bet coverage. The current live pack still excludes limp, iso, and squeeze spots.
+These selected spots use `fold`, `call`, and `fiveBetJam` as legal actions. They cover high-volume 3-bet versus open paths first; they are not exhaustive facing-4bet coverage.
+
+The pack also contains selected internally authored blind-vs-blind limp spots:
+
+- `fk_6max_100bb_sb_first_in_limp_or_raise_v1`
+- `fk_6max_100bb_bb_vs_sb_limp_v1`
+- `fk_6max_100bb_sb_limp_vs_bb_raise_v1`
+
+These selected spots use `fold`/`limp`/`raise`, `check`/`raise`, and `fold`/`call`/`threeBet` respectively. SB limp metadata uses a 1bb completed small blind, SB first-in raises use 3bb, and BB raises versus SB limp use 4.5bb. The current live pack still excludes multi-limper, iso, and squeeze spots.
 
 ## Full 6-Max Preflop MVP Target
 
@@ -169,8 +177,8 @@ The current live MVP is deliberately smaller than the intended complete 6-max 10
 - Facing open: calls, 3-bets, and folds versus first-in opens from relevant positions.
 - Facing 3-bet: opener responses with fold/call/4-bet.
 - Facing 4-bet: selected 3-bettor responses now, with more pairings to add later.
-- Blind-vs-blind limp: SB limp and BB check/raise/iso decisions.
-- Iso vs limper: raises and overlimp/check branches against limps.
+- Blind-vs-blind limp: selected SB limp/raise, BB check/raise, and SB response spots.
+- Iso vs limper: future raises and overlimp/check branches against limps outside the current BvB module.
 - Squeeze: 3-bet squeeze decisions after an open and at least one caller.
 
 Explicit exclusions for this MVP target:
@@ -179,6 +187,7 @@ Explicit exclusions for this MVP target:
 - No antes.
 - No stack-depth variants beyond 100bb.
 - No multiple rake models yet.
+- No multi-limper, iso, or squeeze spots yet.
 - No postflop strategy in this preflop MVP.
 
 ## Demo Versus Real
@@ -210,7 +219,7 @@ This checks metadata, spot fields, hand syntax, and per-hand action frequencies.
 data/preflop-ranges/validation-report.json
 ```
 
-The coverage check verifies the launch-supported live 6-max trainer families: five RFI spots, six non-BB facing-open response spots, five BB defense spots, five selected 3-bet versus open spots, 15 facing-3bet spots, and five selected facing-4bet spots. It also verifies the 15-spot Facing Open coverage umbrella, 169-hand coverage, expected legal actions by family, drill-to-spot mappings, range-matrix construction, and question sampling.
+The coverage check verifies the launch-supported live 6-max trainer families: five RFI spots, six non-BB facing-open response spots, five BB defense spots, five selected 3-bet versus open spots, 15 facing-3bet spots, five selected facing-4bet spots, and three selected BvB limp spots. It also verifies the 15-spot Facing Open coverage umbrella, 169-hand coverage, expected legal actions by family, drill-to-spot mappings, range-matrix construction, and question sampling.
 
 ## TexasSolver Range Generation
 

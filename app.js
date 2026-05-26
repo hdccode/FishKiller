@@ -58,7 +58,7 @@ const TABLES = {
     id: "six",
     label: "6-Max",
     shortLabel: "6M",
-    subtitle: "Flagship 41-spot preflop trainer for RFI, facing-open, defense, 3-bet, facing 3-bet, and facing 4-bet.",
+    subtitle: "Flagship 44-spot preflop trainer for RFI, facing-open, defense, 3-bet, facing 3-bet, facing 4-bet, and BvB limp.",
     seats: [
       { seat: "UTG", x: "18%", y: "40%" },
       { seat: "HJ", x: "33%", y: "17%" },
@@ -179,6 +179,11 @@ const PREFLOP_RANGE_FACING_FOUR_BET_SPOT_IDS = [
   "fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1",
   "fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1",
 ];
+const PREFLOP_RANGE_BVB_LIMP_SPOT_IDS = [
+  "fk_6max_100bb_sb_first_in_limp_or_raise_v1",
+  "fk_6max_100bb_bb_vs_sb_limp_v1",
+  "fk_6max_100bb_sb_limp_vs_bb_raise_v1",
+];
 const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = [
   ...new Set([
     ...PREFLOP_RANGE_RFI_SPOT_IDS,
@@ -187,6 +192,7 @@ const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = [
     ...PREFLOP_RANGE_THREE_BET_SPOT_IDS,
     ...PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS,
     ...PREFLOP_RANGE_FACING_FOUR_BET_SPOT_IDS,
+    ...PREFLOP_RANGE_BVB_LIMP_SPOT_IDS,
   ]),
 ];
 const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-rfi";
@@ -249,6 +255,10 @@ const PREFLOP_RANGE_DRILL_OPTIONS = [
   { id: "btn-3bet-vs-co-open-co-4bet", label: "BTN 3-bet vs CO open / CO 4-bet", group: "Facing 4-bet", spotIds: ["fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1"] },
   { id: "sb-3bet-vs-btn-open-btn-4bet", label: "SB 3-bet vs BTN open / BTN 4-bet", group: "Facing 4-bet", spotIds: ["fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1"] },
   { id: "bb-3bet-vs-btn-open-btn-4bet", label: "BB 3-bet vs BTN open / BTN 4-bet", group: "Facing 4-bet", spotIds: ["fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1"] },
+  { id: "all-bvb-limp", label: "All BvB Limp", group: "BvB Limp", spotIds: PREFLOP_RANGE_BVB_LIMP_SPOT_IDS },
+  { id: "sb-first-limp-or-raise", label: "SB first in: limp or raise", group: "BvB Limp", spotIds: ["fk_6max_100bb_sb_first_in_limp_or_raise_v1"] },
+  { id: "bb-vs-sb-limp", label: "BB vs SB limp", group: "BvB Limp", spotIds: ["fk_6max_100bb_bb_vs_sb_limp_v1"] },
+  { id: "sb-limp-vs-bb-raise", label: "SB limp vs BB raise", group: "BvB Limp", spotIds: ["fk_6max_100bb_sb_limp_vs_bb_raise_v1"] },
   { id: PREFLOP_RANGE_REVIEW_DRILL_ID, label: "Review mistakes", group: "Review", reviewMode: true, spotIds: [] },
 ];
 const PREFLOP_RANGE_QUESTION_XP = 12;
@@ -1624,7 +1634,7 @@ function renderTopline() {
 }
 
 function getPreflopCoverageLabel() {
-  return "RFI / Facing Open / BB Defense / 3-bet / Facing 3-bet / Facing 4-bet";
+  return "RFI / Facing Open / BB Defense / 3-bet / Facing 3-bet / Facing 4-bet / BvB Limp";
 }
 
 function getTableIntroCopy(tableSize) {
@@ -1637,7 +1647,7 @@ function getTableIntroCopy(tableSize) {
 }
 
 function getTableTrainingLabel(tableSize) {
-  return tableSize === "six" ? "41-spot preflop range" : "Starter scenario drills";
+  return tableSize === "six" ? "44-spot preflop range" : "Starter scenario drills";
 }
 
 function getTablePillLabel(tableSize) {
@@ -1650,7 +1660,7 @@ function getPracticeModeDescription(mode, tableSize) {
   }
 
   return tableSize === "six"
-    ? `Flagship 41-spot preflop range trainer: ${getPreflopCoverageLabel()}.`
+    ? `Flagship 44-spot preflop range trainer: ${getPreflopCoverageLabel()}.`
     : "Starter scenario-pack preflop drills for quick reps; the full range-pack trainer is currently 6-max.";
 }
 
@@ -1961,6 +1971,16 @@ function getPreflopProgressLeakLabel(patterns = {}) {
 }
 
 function formatPreflopProgressSpotLabel(spotId = "") {
+  if (spotId === "fk_6max_100bb_sb_first_in_limp_or_raise_v1") {
+    return "SB first in: limp or raise";
+  }
+  if (spotId === "fk_6max_100bb_bb_vs_sb_limp_v1") {
+    return "BB vs SB limp";
+  }
+  if (spotId === "fk_6max_100bb_sb_limp_vs_bb_raise_v1") {
+    return "SB limp vs BB raise";
+  }
+
   const facingFourBetMatch = String(spotId).match(/100bb_(lj|hj|co|btn|sb|bb)_3bet_vs_(lj|hj|co|btn|sb)_open_(lj|hj|co|btn|sb)_4bet/i);
   if (facingFourBetMatch) {
     return `${facingFourBetMatch[1].toUpperCase()} 3-bet vs ${facingFourBetMatch[2].toUpperCase()} open, ${facingFourBetMatch[3].toUpperCase()} 4-bet`;
@@ -2003,6 +2023,10 @@ function createPreflopRangeVisualScenario(question) {
 
 function createPreflopRangeBettingSummary(question) {
   const spot = getPreflopRangeSpot(question?.spotId);
+  if (isPreflopRangeBvbLimpSpot(spot)) {
+    return createPreflopRangeBvbLimpBettingSummary(spot, question);
+  }
+
   if (isPreflopRangeFacingFourBetSpot(spot)) {
     return createPreflopRangeFacingFourBetBettingSummary(spot, question);
   }
@@ -2034,6 +2058,10 @@ function createPreflopRangeBettingSummary(question) {
 }
 
 function createPreflopRangeResponses(spot) {
+  if (isPreflopRangeBvbLimpSpot(spot)) {
+    return createPreflopRangeBvbLimpResponses(spot);
+  }
+
   if (isPreflopRangeFacingFourBetSpot(spot)) {
     return createPreflopRangeFacingFourBetResponses(spot);
   }
@@ -2054,6 +2082,10 @@ function createPreflopRangeResponses(spot) {
 }
 
 function createPreflopRangeActors(spot) {
+  if (isPreflopRangeBvbLimpSpot(spot)) {
+    return createPreflopRangeBvbLimpActors(spot);
+  }
+
   if (isPreflopRangeFacingFourBetSpot(spot)) {
     return createPreflopRangeFacingFourBetActors(spot);
   }
@@ -2077,6 +2109,10 @@ function createPreflopRangeActors(spot) {
 }
 
 function createPreflopRangeActionBySeat(spot, question) {
+  if (isPreflopRangeBvbLimpSpot(spot)) {
+    return createPreflopRangeBvbLimpActionBySeat(spot, question);
+  }
+
   if (isPreflopRangeFacingFourBetSpot(spot)) {
     return createPreflopRangeFacingFourBetActionBySeat(spot, question);
   }
@@ -2297,6 +2333,72 @@ function getPreflopRangeFacingThreeBetFoldedPositions(opener, threeBettor) {
   ];
 }
 
+function createPreflopRangeBvbLimpBettingSummary(spot, question) {
+  const actionBySeat = createPreflopRangeBvbLimpActionBySeat(spot, question);
+  const heroPosition = spot?.heroPosition || "SB";
+  const foldedPositions = (spot?.priorActions || [])
+    .filter((action) => action.actionId === "fold")
+    .map((action) => action.position);
+  const keyActions = (spot?.priorActions || [])
+    .filter((action) => action.actionId !== "fold")
+    .map(getPreflopRangePriorActionLabel);
+  return {
+    pot: getPreflopRangePriorActionPot(spot),
+    items: [
+      `Blinds ${formatMoney(SMALL_BLIND)} / ${formatMoney(BIG_BLIND)}`,
+      foldedPositions.length ? `${foldedPositions.join(", ")} fold` : "Action starts blind vs blind",
+      ...(keyActions.length ? keyActions : [formatPreflopSpotLabel(spot)]),
+      `${heroPosition} to respond`,
+    ],
+    actionBySeat,
+  };
+}
+
+function createPreflopRangeBvbLimpResponses(spot) {
+  return (spot?.priorActions || []).map((action) => ({
+    seat: getPreflopRangeTableSeat(action.position),
+    action: getPreflopRangePriorActionVerb(action),
+    amount: action.sizeBb || null,
+    folded: action.actionId === "fold",
+  }));
+}
+
+function createPreflopRangeBvbLimpActors(spot) {
+  const actionByPosition = getFinalPreflopActionByPosition(spot);
+  const heroPosition = spot?.heroPosition || "SB";
+  return ["LJ", "HJ", "CO", "BTN", "SB", "BB"]
+    .filter((position) => position === heroPosition || position === "SB" || position === "BB" || actionByPosition[position])
+    .map((position) => {
+      let label = "Waiting";
+      if (position === heroPosition) {
+        label = "Hero";
+      } else if (actionByPosition[position]?.actionId === "fold") {
+        label = "Folded";
+      } else if (actionByPosition[position]?.actionId === "limp") {
+        label = "Limper";
+      } else if (actionByPosition[position]?.actionId === "raise") {
+        label = "Raiser";
+      }
+      return { seat: getPreflopRangeTableSeat(position), label };
+    });
+}
+
+function createPreflopRangeBvbLimpActionBySeat(spot, question) {
+  const actionBySeat = {};
+  (spot?.priorActions || []).forEach((action) => {
+    actionBySeat[getPreflopRangeTableSeat(action.position)] = getPreflopRangePriorActionLabel(action);
+  });
+
+  const heroPosition = spot?.heroPosition || "SB";
+  actionBySeat[getPreflopRangeTableSeat(heroPosition)] = question.answered
+    ? getPreflopActionLabel(question.legalActions, question.selected)
+    : "Hero to act";
+  if (!actionBySeat.BB && heroPosition !== "BB") {
+    actionBySeat.BB = "Waiting";
+  }
+  return actionBySeat;
+}
+
 function createPreflopRangeFacingFourBetBettingSummary(spot, question) {
   const actionBySeat = createPreflopRangeFacingFourBetActionBySeat(spot, question);
   const heroPosition = spot?.heroPosition || spot?.threeBettorPosition || "BTN";
@@ -2362,6 +2464,8 @@ function createPreflopRangeFacingFourBetActionBySeat(spot, question) {
 function getPreflopRangePriorActionLabel(action = {}) {
   const amount = action.sizeBb ? ` ${formatBbAmount(action.sizeBb)}bb` : "";
   if (action.actionId === "fold") return "Folded";
+  if (action.actionId === "limp") return `${action.position} limps${amount}`;
+  if (action.actionId === "raise" && action.position === "BB") return `${action.position} raises${amount}`;
   if (action.actionId === "raise") return `${action.position} opens${amount}`;
   if (action.actionId === "threeBet") return `${action.position} 3-bets${amount}`;
   if (action.actionId === "fourBet") return `${action.position} 4-bets${amount}`;
@@ -2370,6 +2474,8 @@ function getPreflopRangePriorActionLabel(action = {}) {
 
 function getPreflopRangePriorActionVerb(action = {}) {
   if (action.actionId === "fold") return "Folds";
+  if (action.actionId === "limp") return "Limps";
+  if (action.actionId === "raise" && action.position === "BB") return "Raises";
   if (action.actionId === "raise") return "Opens";
   if (action.actionId === "threeBet") return "3-bets";
   if (action.actionId === "fourBet") return "4-bets";
@@ -2417,6 +2523,10 @@ function isPreflopRangeFacingFourBetSpot(spot) {
   return spot?.actionContext === "facing-4bet" && Boolean(spot?.heroPosition) && Boolean(spot?.villainPosition);
 }
 
+function isPreflopRangeBvbLimpSpot(spot) {
+  return spot?.family === "limpedPot" || spot?.actionContext === "limped-pot";
+}
+
 function isPreflopRangeBbDefenseSpot(spot) {
   return isPreflopRangeFacingOpenSpot(spot) && spot?.heroPosition === "BB";
 }
@@ -2426,6 +2536,10 @@ function getPreflopRangeSpotShortLabel(spot) {
 }
 
 function formatPreflopRangeDecisionLabel(spot) {
+  if (isPreflopRangeBvbLimpSpot(spot)) {
+    return formatPreflopSpotLabel(spot);
+  }
+
   if (isPreflopRangeFacingFourBetSpot(spot)) {
     return `${spot.heroPosition} 3-bet versus ${spot.villainPosition} 4-bet`;
   }
@@ -2456,6 +2570,10 @@ function getPreflopRangeThreeBetActionLabel(spot) {
 }
 
 function getPreflopRangeSizeFactLabel(spot) {
+  if (isPreflopRangeBvbLimpSpot(spot)) {
+    return spot?.spotType === "sb-limp-vs-bb-raise" ? "Raise Size" : "Limp Size";
+  }
+
   if (isPreflopRangeFacingFourBetSpot(spot)) {
     return "4-bet Size";
   }
@@ -2505,6 +2623,9 @@ function formatPreflopSpotLabel(spot) {
     return `${spot?.heroPosition || "Hero"} squeeze vs ${spot?.openerPosition || spot?.villainPosition || "open"}${spot?.callerPosition ? ` + ${spot.callerPosition}` : ""}`;
   }
   if (spot?.actionContext === "limped-pot" || spot?.spotType === "limped-pot") {
+    if (spot?.spotType === "sb-first-in-limp-or-raise") return "SB first in: limp or raise";
+    if (spot?.spotType === "bb-vs-sb-limp") return "BB vs SB limp";
+    if (spot?.spotType === "sb-limp-vs-bb-raise") return "SB limp vs BB raise";
     return `${spot?.heroPosition || "Hero"} in limped pot`;
   }
   if (isPreflopRangeFacingOpenSpot(spot)) {
@@ -2526,6 +2647,15 @@ function formatPreflopSizeLabel(spot) {
     return `Squeeze ${formatBbAmount(spot.squeezeSize.sizeBb)}bb`;
   }
   if (spot?.actionContext === "limped-pot" || spot?.spotType === "limped-pot") {
+    if (spot?.facingLimpRaise?.sizeBb) {
+      return `${spot?.facingLimpRaise.raiserPosition || spot?.villainPosition || "Raiser"} raises ${formatBbAmount(spot.facingLimpRaise.sizeBb)}bb`;
+    }
+    if (spot?.facingLimp?.sizeBb) {
+      return `${spot?.facingLimp.limperPosition || spot?.villainPosition || "Limper"} limps ${formatBbAmount(spot.facingLimp.sizeBb)}bb`;
+    }
+    if (spot?.limpSize?.sizeBb && spot?.raiseSize?.sizeBb) {
+      return `Limp ${formatBbAmount(spot.limpSize.sizeBb)}bb / Raise ${formatBbAmount(spot.raiseSize.sizeBb)}bb`;
+    }
     return "Limped pot";
   }
   if (spot?.facingThreeBet?.sizeBb) {
@@ -2737,7 +2867,7 @@ function renderIdleScenario() {
   });
   elements.scenarioTitle.textContent = "Start a new session whenever you want.";
   elements.scenarioCopy.textContent = selectedTable.id === "six"
-    ? `6-max is the flagship preflop trainer: 41 internal baseline spots across ${getPreflopCoverageLabel()}.`
+    ? `6-max is the flagship preflop trainer: 44 internal baseline spots across ${getPreflopCoverageLabel()}.`
     : `${selectedTable.label} currently uses starter scenario-pack drills. The full range-pack trainer is focused on 6-max preflop.`;
   elements.sessionChip.textContent = "Ready";
   elements.sessionCounter.textContent = "0 / 10";
@@ -2764,7 +2894,7 @@ function renderIdleScenario() {
   elements.answerGrid.innerHTML = `
     <button class="answer-button" type="button" onclick="window.__fishkillerStartFromCard()">
       <strong>Launch Session</strong>
-      <span>${selectedTable.id === "six" ? "Start a 41-spot range-pack run." : "Start a starter scenario-pack run."}</span>
+      <span>${selectedTable.id === "six" ? "Start a 44-spot range-pack run." : "Start a starter scenario-pack run."}</span>
     </button>
     <button class="answer-button" type="button" disabled>
       <strong>Instant Corrections</strong>
@@ -7528,7 +7658,18 @@ function isTrainablePreflopRangeSpot(spot) {
     actionIds.has("call") &&
     actionIds.has("fiveBetJam")
   );
-  return isRfi || isFacingOpen || isBbDefense || isThreeBetVsOpen || isFacingThreeBet || isFacingFourBet;
+  const isBvbLimp = (
+    spot.complete === true &&
+    spot.family === "limpedPot" &&
+    spot.actionContext === "limped-pot" &&
+    Boolean(spot.heroPosition) &&
+    (
+      (spot.spotType === "sb-first-in-limp-or-raise" && actionIds.has("fold") && actionIds.has("limp") && actionIds.has("raise")) ||
+      (spot.spotType === "bb-vs-sb-limp" && actionIds.has("check") && actionIds.has("raise")) ||
+      (spot.spotType === "sb-limp-vs-bb-raise" && actionIds.has("fold") && actionIds.has("call") && actionIds.has("threeBet"))
+    )
+  );
+  return isRfi || isFacingOpen || isBbDefense || isThreeBetVsOpen || isFacingThreeBet || isFacingFourBet || isBvbLimp;
 }
 
 function getPreflopRangeSpotOrder(spotId) {

@@ -268,6 +268,9 @@
     }
 
     if (family === PREFLOP_SPOT_FAMILIES.limpedPot) {
+      if (spot?.spotType === "sb-first-in-limp-or-raise") return "SB first in: limp or raise";
+      if (spot?.spotType === "bb-vs-sb-limp") return "BB vs SB limp";
+      if (spot?.spotType === "sb-limp-vs-bb-raise") return "SB limp vs BB raise";
       return `${spot?.heroPosition || "Hero"} in limped pot`;
     }
 
@@ -293,6 +296,15 @@
     }
 
     if (family === PREFLOP_SPOT_FAMILIES.limpedPot) {
+      if (spot?.facingLimpRaise) {
+        return `${spot.facingLimpRaise.raiserPosition || spot.villainPosition || "Raiser"} raises ${formatBbSize(spot.facingLimpRaise.sizeBb)}`;
+      }
+      if (spot?.facingLimp) {
+        return `${spot.facingLimp.limperPosition || spot.villainPosition || "Limper"} limps ${formatBbSize(spot.facingLimp.sizeBb)}`;
+      }
+      if (spot?.limpSize && spot?.raiseSize) {
+        return `Limp ${formatBbSize(spot.limpSize.sizeBb)} / Raise ${formatBbSize(spot.raiseSize.sizeBb)}`;
+      }
       return "Limped pot";
     }
 
