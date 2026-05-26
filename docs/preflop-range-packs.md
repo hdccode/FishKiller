@@ -88,7 +88,7 @@ The first real MVP pack is:
 data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json
 ```
 
-It contains 44 complete 6-max 100bb preflop spots for the live trainer. This is the flagship range-pack path in the current app; HU, 3-max, and 9-max remain starter scenario-pack drills for now.
+It contains 50 complete 6-max 100bb preflop spots for the live trainer. This is the flagship range-pack path in the current app; HU, 3-max, and 9-max remain starter scenario-pack drills for now.
 
 It currently contains internally authored, non-proprietary baseline 6-max RFI spots at 100bb after action folds to Hero:
 
@@ -167,7 +167,18 @@ The pack also contains selected internally authored blind-vs-blind limp spots:
 - `fk_6max_100bb_bb_vs_sb_limp_v1`
 - `fk_6max_100bb_sb_limp_vs_bb_raise_v1`
 
-These selected spots use `fold`/`limp`/`raise`, `check`/`raise`, and `fold`/`call`/`threeBet` respectively. SB limp metadata uses a 1bb completed small blind, SB first-in raises use 3bb, and BB raises versus SB limp use 4.5bb. The current live pack still excludes multi-limper, iso, and squeeze spots.
+These selected spots use `fold`/`limp`/`raise`, `check`/`raise`, and `fold`/`call`/`threeBet` respectively. SB limp metadata uses a 1bb completed small blind, SB first-in raises use 3bb, and BB raises versus SB limp use 4.5bb.
+
+The pack also contains selected internally authored one-limper iso/overlimp spots:
+
+- `fk_6max_100bb_hj_vs_lj_limp_v1`
+- `fk_6max_100bb_co_vs_lj_limp_v1`
+- `fk_6max_100bb_btn_vs_lj_limp_v1`
+- `fk_6max_100bb_btn_vs_co_limp_v1`
+- `fk_6max_100bb_sb_vs_btn_limp_v1`
+- `fk_6max_100bb_bb_vs_btn_limp_v1`
+
+These selected one-limper spots use `fold`, `call`, and `isoRaise` as legal actions. In the trainer, `call` is displayed as Overlimp or Complete depending on position, and `isoRaise` is displayed as Iso-raise. Limp metadata uses 1bb and iso-raise metadata uses 4.5bb to 5bb. The current live pack still excludes multi-limper chains and squeeze spots.
 
 ## Full 6-Max Preflop MVP Target
 
@@ -178,7 +189,7 @@ The current live MVP is deliberately smaller than the intended complete 6-max 10
 - Facing 3-bet: opener responses with fold/call/4-bet.
 - Facing 4-bet: selected 3-bettor responses now, with more pairings to add later.
 - Blind-vs-blind limp: selected SB limp/raise, BB check/raise, and SB response spots.
-- Iso vs limper: future raises and overlimp/check branches against limps outside the current BvB module.
+- Iso vs limper: selected one-limper overlimp/complete and iso-raise branches.
 - Squeeze: 3-bet squeeze decisions after an open and at least one caller.
 
 Explicit exclusions for this MVP target:
@@ -187,7 +198,7 @@ Explicit exclusions for this MVP target:
 - No antes.
 - No stack-depth variants beyond 100bb.
 - No multiple rake models yet.
-- No multi-limper, iso, or squeeze spots yet.
+- No multi-limper chains or squeeze spots yet.
 - No postflop strategy in this preflop MVP.
 
 ## Demo Versus Real
@@ -219,7 +230,7 @@ This checks metadata, spot fields, hand syntax, and per-hand action frequencies.
 data/preflop-ranges/validation-report.json
 ```
 
-The coverage check verifies the launch-supported live 6-max trainer families: five RFI spots, six non-BB facing-open response spots, five BB defense spots, five selected 3-bet versus open spots, 15 facing-3bet spots, five selected facing-4bet spots, and three selected BvB limp spots. It also verifies the 15-spot Facing Open coverage umbrella, 169-hand coverage, expected legal actions by family, drill-to-spot mappings, range-matrix construction, and question sampling.
+The coverage check verifies the launch-supported live 6-max trainer families: five RFI spots, six non-BB facing-open response spots, five BB defense spots, five selected 3-bet versus open spots, 15 facing-3bet spots, five selected facing-4bet spots, three selected BvB limp spots, and six selected iso-vs-limp spots. It also verifies the 15-spot Facing Open coverage umbrella, 169-hand coverage, expected legal actions by family, drill-to-spot mappings, range-matrix construction, and question sampling.
 
 ## TexasSolver Range Generation
 

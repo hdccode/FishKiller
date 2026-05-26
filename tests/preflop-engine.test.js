@@ -63,6 +63,14 @@ const BVB_LIMP_SPOT_IDS = [
   "fk_6max_100bb_bb_vs_sb_limp_v1",
   "fk_6max_100bb_sb_limp_vs_bb_raise_v1",
 ];
+const ISO_VS_LIMP_SPOT_IDS = [
+  "fk_6max_100bb_hj_vs_lj_limp_v1",
+  "fk_6max_100bb_co_vs_lj_limp_v1",
+  "fk_6max_100bb_btn_vs_lj_limp_v1",
+  "fk_6max_100bb_btn_vs_co_limp_v1",
+  "fk_6max_100bb_sb_vs_btn_limp_v1",
+  "fk_6max_100bb_bb_vs_btn_limp_v1",
+];
 const FACING_OPEN_COVERAGE_SPOT_IDS = [
   "fk_6max_100bb_hj_vs_lj_open_v1",
   "fk_6max_100bb_co_vs_lj_open_v1",
@@ -95,6 +103,7 @@ function run() {
   loadsAllFacingThreeBetSpots(normalized);
   loadsAllFacingFourBetSpots(normalized);
   loadsAllBvbLimpSpots(normalized);
+  loadsAllIsoVsLimpSpots(normalized);
   classifiesCurrentSpotFamilies(normalized);
   prefersRaiseWithAces(spot);
   prefersFoldWithTrash(spot);
@@ -252,6 +261,25 @@ function loadsAllBvbLimpSpots(pack) {
   });
 }
 
+function loadsAllIsoVsLimpSpots(pack) {
+  ISO_VS_LIMP_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    assert(spot, `${spotId} should exist`);
+    assert.equal(spot.family, "isoVsLimper");
+    assert.equal(spot.spotType, "iso-vs-limper");
+    assert.equal(spot.actionContext, "iso-vs-limper");
+    assert(spot.heroPosition, `${spotId} should define hero position`);
+    assert(spot.limperPosition, `${spotId} should define limper position`);
+    assert.equal(spot.villainPosition, spot.limperPosition);
+    assert.equal(spot.openerPosition, spot.limperPosition);
+    assert.equal(spot.aggressorPosition, spot.limperPosition);
+    assert.equal(spot.defenderPosition, spot.heroPosition);
+    assert(Array.isArray(spot.priorActions));
+    assert.equal(Object.keys(spot.actionsByHand).length, 169);
+    assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "isoRaise"]);
+  });
+}
+
 function classifiesCurrentSpotFamilies(pack) {
   RFI_SPOT_IDS.forEach((spotId) => {
     assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "rfi");
@@ -273,6 +301,9 @@ function classifiesCurrentSpotFamilies(pack) {
   });
   BVB_LIMP_SPOT_IDS.forEach((spotId) => {
     assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "limpedPot");
+  });
+  ISO_VS_LIMP_SPOT_IDS.forEach((spotId) => {
+    assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "isoVsLimper");
   });
 }
 
@@ -374,6 +405,10 @@ function resolvesDrillSpotIds() {
     { id: "sb-first-limp-or-raise", spotIds: ["fk_6max_100bb_sb_first_in_limp_or_raise_v1"] },
     { id: "bb-vs-sb-limp", spotIds: ["fk_6max_100bb_bb_vs_sb_limp_v1"] },
     { id: "sb-limp-vs-bb-raise", spotIds: ["fk_6max_100bb_sb_limp_vs_bb_raise_v1"] },
+    { id: "all-iso-vs-limp", spotIds: ISO_VS_LIMP_SPOT_IDS },
+    { id: "iso-hj-vs-lj-limp", spotIds: ["fk_6max_100bb_hj_vs_lj_limp_v1"] },
+    { id: "iso-btn-vs-lj-limp", spotIds: ["fk_6max_100bb_btn_vs_lj_limp_v1"] },
+    { id: "iso-bb-vs-btn-limp", spotIds: ["fk_6max_100bb_bb_vs_btn_limp_v1"] },
     { id: "review-mistakes", reviewMode: true, spotIds: [] },
   ];
 
@@ -395,6 +430,10 @@ function resolvesDrillSpotIds() {
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("sb-first-limp-or-raise", options), ["fk_6max_100bb_sb_first_in_limp_or_raise_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("bb-vs-sb-limp", options), ["fk_6max_100bb_bb_vs_sb_limp_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("sb-limp-vs-bb-raise", options), ["fk_6max_100bb_sb_limp_vs_bb_raise_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-iso-vs-limp", options), ISO_VS_LIMP_SPOT_IDS);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("iso-hj-vs-lj-limp", options), ["fk_6max_100bb_hj_vs_lj_limp_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("iso-btn-vs-lj-limp", options), ["fk_6max_100bb_btn_vs_lj_limp_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("iso-bb-vs-btn-limp", options), ["fk_6max_100bb_bb_vs_btn_limp_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), RFI_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("review-mistakes", options), []);
 }
@@ -411,6 +450,8 @@ function formatsPreflopLabels(pack) {
   const sbFirstLimp = preflop.getPreflopSpot(pack, "fk_6max_100bb_sb_first_in_limp_or_raise_v1");
   const bbVsSbLimp = preflop.getPreflopSpot(pack, "fk_6max_100bb_bb_vs_sb_limp_v1");
   const sbLimpVsBbRaise = preflop.getPreflopSpot(pack, "fk_6max_100bb_sb_limp_vs_bb_raise_v1");
+  const btnVsLjLimp = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_vs_lj_limp_v1");
+  const sbVsBtnLimp = preflop.getPreflopSpot(pack, "fk_6max_100bb_sb_vs_btn_limp_v1");
 
   assert.equal(preflop.formatPreflopActionLabel("fold"), "Fold");
   assert.equal(preflop.formatPreflopActionLabel("call"), "Call");
@@ -423,6 +464,8 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopActionLabel("threeBet", { family: "squeeze" }), "Squeeze");
   assert.equal(preflop.formatPreflopActionLabel("squeeze"), "Squeeze");
   assert.equal(preflop.formatPreflopActionLabel("fiveBetJam"), "5-bet jam");
+  assert.equal(preflop.formatPreflopActionLabel("call", btnVsLjLimp), "Overlimp");
+  assert.equal(preflop.formatPreflopActionLabel("call", sbVsBtnLimp), "Complete");
   assert.equal(preflop.formatPreflopSpotLabel(btn), "BTN first in");
   assert.equal(preflop.formatPreflopSpotLabel(bbVsBtn), "BB vs BTN open");
   assert.equal(preflop.formatPreflopSpotLabel(btnVsHj), "BTN vs HJ open");
@@ -432,6 +475,8 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopSpotLabel(sbFirstLimp), "SB first in: limp or raise");
   assert.equal(preflop.formatPreflopSpotLabel(bbVsSbLimp), "BB vs SB limp");
   assert.equal(preflop.formatPreflopSpotLabel(sbLimpVsBbRaise), "SB limp vs BB raise");
+  assert.equal(preflop.formatPreflopSpotLabel(btnVsLjLimp), "BTN vs LJ limp");
+  assert.equal(preflop.formatPreflopSpotLabel(sbVsBtnLimp), "SB vs BTN limp");
   assert.equal(preflop.formatPreflopSpotLabel({
     family: "facingFourBet",
     heroPosition: "BTN",
@@ -446,7 +491,7 @@ function formatsPreflopLabels(pack) {
     family: "isoVsLimper",
     heroPosition: "CO",
     limperPosition: "LJ",
-  }), "CO iso vs LJ");
+  }), "CO vs LJ limp");
   assert.equal(preflop.formatPreflopSpotLabel({
     family: "squeeze",
     heroPosition: "SB",
@@ -464,6 +509,8 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopSizeLabel(sbFirstLimp), "Limp 1bb / Raise 3bb");
   assert.equal(preflop.formatPreflopSizeLabel(bbVsSbLimp), "SB limps 1bb");
   assert.equal(preflop.formatPreflopSizeLabel(sbLimpVsBbRaise), "BB raises 4.5bb");
+  assert.equal(preflop.formatPreflopSizeLabel(btnVsLjLimp), "Iso 4.5bb");
+  assert.equal(preflop.formatPreflopSizeLabel(sbVsBtnLimp), "Iso 5bb");
 }
 
 run();

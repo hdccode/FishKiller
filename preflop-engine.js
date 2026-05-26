@@ -235,7 +235,11 @@
 
   function formatPreflopActionLabel(actionId, context = {}) {
     const family = typeof context === "string" ? context : getPreflopSpotFamily(context?.spot || context);
+    const spot = typeof context === "string" ? null : context?.spot || context;
     if (actionId === "fold") return "Fold";
+    if (actionId === "call" && family === PREFLOP_SPOT_FAMILIES.isoVsLimper) {
+      return spot?.heroPosition === "SB" ? "Complete" : "Overlimp";
+    }
     if (actionId === "call") return "Call";
     if (actionId === "check") return "Check";
     if (actionId === "limp") return "Limp";
@@ -260,7 +264,7 @@
     }
 
     if (family === PREFLOP_SPOT_FAMILIES.isoVsLimper) {
-      return `${spot?.heroPosition || "Hero"} iso vs ${spot?.limperPosition || spot?.villainPosition || "limper"}`;
+      return `${spot?.heroPosition || "Hero"} vs ${spot?.limperPosition || spot?.villainPosition || "limper"} limp`;
     }
 
     if (family === PREFLOP_SPOT_FAMILIES.squeeze) {

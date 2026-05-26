@@ -39452,6 +39452,5496 @@
           "threeBet": 0
         }
       }
+    },
+    {
+      "spotId": "fk_6max_100bb_hj_vs_lj_limp_v1",
+      "name": "6-Max HJ vs LJ Limp 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "isoVsLimper",
+      "spotType": "iso-vs-limper",
+      "heroPosition": "HJ",
+      "villainPosition": "LJ",
+      "limperPosition": "LJ",
+      "openerPosition": "LJ",
+      "aggressorPosition": "LJ",
+      "defenderPosition": "HJ",
+      "actionContext": "iso-vs-limper",
+      "priorAction": "lj-limp",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "limp",
+          "sizeBb": 1
+        }
+      ],
+      "potState": "facing-limp",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for one-limper iso/overlimp drills. Not claimed as universal GTO.",
+      "facingLimp": {
+        "type": "limp",
+        "sizeBb": 1,
+        "limperPosition": "LJ",
+        "label": "LJ limps 1bb"
+      },
+      "isoRaiseSize": {
+        "type": "isoRaise",
+        "sizeBb": 4.5,
+        "label": "Iso-raise 4.5bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Overlimp",
+          "type": "call",
+          "callAmountBb": 1
+        },
+        {
+          "id": "isoRaise",
+          "label": "Iso-raise 4.5bb",
+          "type": "raise",
+          "sizeBb": 4.5
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "33": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "44": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "55": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "66": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "77": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "88": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "99": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A4s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "KTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QJo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "QTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q8s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "Q3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "Q2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "JTs": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "JTo": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J9s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J8s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "J4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "J3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "J2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "T9s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T8s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "T5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "T4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "T3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "T2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "98s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "98o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "95s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "94s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "93s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "92s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "87s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "87o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "86s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "85s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "84s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "76s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "75s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "65s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_co_vs_lj_limp_v1",
+      "name": "6-Max CO vs LJ Limp 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "isoVsLimper",
+      "spotType": "iso-vs-limper",
+      "heroPosition": "CO",
+      "villainPosition": "LJ",
+      "limperPosition": "LJ",
+      "openerPosition": "LJ",
+      "aggressorPosition": "LJ",
+      "defenderPosition": "CO",
+      "actionContext": "iso-vs-limper",
+      "priorAction": "lj-limp",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "limp",
+          "sizeBb": 1
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        }
+      ],
+      "potState": "facing-limp",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for one-limper iso/overlimp drills. Not claimed as universal GTO.",
+      "facingLimp": {
+        "type": "limp",
+        "sizeBb": 1,
+        "limperPosition": "LJ",
+        "label": "LJ limps 1bb"
+      },
+      "isoRaiseSize": {
+        "type": "isoRaise",
+        "sizeBb": 4.5,
+        "label": "Iso-raise 4.5bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Overlimp",
+          "type": "call",
+          "callAmountBb": 1
+        },
+        {
+          "id": "isoRaise",
+          "label": "Iso-raise 4.5bb",
+          "type": "raise",
+          "sizeBb": 4.5
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "33": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "44": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "55": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "66": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "77": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "88": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "99": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A4s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A3s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A2s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QJo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "QTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "JTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J8s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "J3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "J2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "T9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "T9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T8s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "T4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "T3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "T2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "98s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "98o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "95s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "94s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "93s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "92s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "87s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "87o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "85s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "84s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "83s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "76s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "76o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "75s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "74s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "65s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "64s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_btn_vs_lj_limp_v1",
+      "name": "6-Max BTN vs LJ Limp 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "isoVsLimper",
+      "spotType": "iso-vs-limper",
+      "heroPosition": "BTN",
+      "villainPosition": "LJ",
+      "limperPosition": "LJ",
+      "openerPosition": "LJ",
+      "aggressorPosition": "LJ",
+      "defenderPosition": "BTN",
+      "actionContext": "iso-vs-limper",
+      "priorAction": "lj-limp",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "limp",
+          "sizeBb": 1
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        }
+      ],
+      "potState": "facing-limp",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for one-limper iso/overlimp drills. Not claimed as universal GTO.",
+      "facingLimp": {
+        "type": "limp",
+        "sizeBb": 1,
+        "limperPosition": "LJ",
+        "label": "LJ limps 1bb"
+      },
+      "isoRaiseSize": {
+        "type": "isoRaise",
+        "sizeBb": 4.5,
+        "label": "Iso-raise 4.5bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Overlimp",
+          "type": "call",
+          "callAmountBb": 1
+        },
+        {
+          "id": "isoRaise",
+          "label": "Iso-raise 4.5bb",
+          "type": "raise",
+          "sizeBb": 4.5
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "33": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "44": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "55": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "66": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "77": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "88": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "99": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A8s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A4s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A3s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A2s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "JTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "J2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J2o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "T9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "T9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T8s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "T3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "T2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "98s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "98o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "94s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "94o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "93s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "92s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "87s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "87o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "84s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "83s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "82s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "76s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "76o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "75s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "74s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "73s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "65s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "64s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "54s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_btn_vs_co_limp_v1",
+      "name": "6-Max BTN vs CO Limp 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "isoVsLimper",
+      "spotType": "iso-vs-limper",
+      "heroPosition": "BTN",
+      "villainPosition": "CO",
+      "limperPosition": "CO",
+      "openerPosition": "CO",
+      "aggressorPosition": "CO",
+      "defenderPosition": "BTN",
+      "actionContext": "iso-vs-limper",
+      "priorAction": "co-limp",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "limp",
+          "sizeBb": 1
+        }
+      ],
+      "potState": "facing-limp",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for one-limper iso/overlimp drills. Not claimed as universal GTO.",
+      "facingLimp": {
+        "type": "limp",
+        "sizeBb": 1,
+        "limperPosition": "CO",
+        "label": "CO limps 1bb"
+      },
+      "isoRaiseSize": {
+        "type": "isoRaise",
+        "sizeBb": 4.5,
+        "label": "Iso-raise 4.5bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Overlimp",
+          "type": "call",
+          "callAmountBb": 1
+        },
+        {
+          "id": "isoRaise",
+          "label": "Iso-raise 4.5bb",
+          "type": "raise",
+          "sizeBb": 4.5
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "33": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "44": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "55": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "66": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "77": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "88": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "99": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A8s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A8o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A7s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A6s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A5s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A4s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A3s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A2s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K8s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K8o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K4s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K3s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "Q9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "Q9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "JTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "T9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "T8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T3o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "T2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T2o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "98s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "98o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "94s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "94o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "93s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "92s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "87s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "87o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "84s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "84o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "83s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "82s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "76s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "76o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "75s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "75o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "74s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "73s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "72s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "65s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "65o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "64s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "63s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "54s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_sb_vs_btn_limp_v1",
+      "name": "6-Max SB vs BTN Limp 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "isoVsLimper",
+      "spotType": "iso-vs-limper",
+      "heroPosition": "SB",
+      "villainPosition": "BTN",
+      "limperPosition": "BTN",
+      "openerPosition": "BTN",
+      "aggressorPosition": "BTN",
+      "defenderPosition": "SB",
+      "actionContext": "iso-vs-limper",
+      "priorAction": "btn-limp",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "limp",
+          "sizeBb": 1
+        }
+      ],
+      "potState": "facing-limp",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for one-limper iso/overlimp drills. Not claimed as universal GTO.",
+      "facingLimp": {
+        "type": "limp",
+        "sizeBb": 1,
+        "limperPosition": "BTN",
+        "label": "BTN limps 1bb"
+      },
+      "isoRaiseSize": {
+        "type": "isoRaise",
+        "sizeBb": 5,
+        "label": "Iso-raise 5bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Complete",
+          "type": "call",
+          "callAmountBb": 0.5
+        },
+        {
+          "id": "isoRaise",
+          "label": "Iso-raise 5bb",
+          "type": "raise",
+          "sizeBb": 5
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "33": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "44": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "55": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "66": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "77": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "88": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "99": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A8s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A8o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A7s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A6s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A5s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A4s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A3s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A2s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K8s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K8o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K4s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K3s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "Q9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "JTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JTo": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T9s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "T9o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "T8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T3o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "T2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T2o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "98s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "98o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "94s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "94o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "93s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "92s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "87s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "87o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "84s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "83s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "82s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "76s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "76o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "75s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "75o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "74s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "73s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "72s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "65s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "65o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "64s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "63s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "54s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_bb_vs_btn_limp_v1",
+      "name": "6-Max BB vs BTN Limp 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "isoVsLimper",
+      "spotType": "iso-vs-limper",
+      "heroPosition": "BB",
+      "villainPosition": "BTN",
+      "limperPosition": "BTN",
+      "openerPosition": "BTN",
+      "aggressorPosition": "BTN",
+      "defenderPosition": "BB",
+      "actionContext": "iso-vs-limper",
+      "priorAction": "btn-limp",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "limp",
+          "sizeBb": 1
+        },
+        {
+          "position": "SB",
+          "actionId": "fold"
+        }
+      ],
+      "potState": "facing-limp",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for one-limper iso/overlimp drills. Not claimed as universal GTO.",
+      "facingLimp": {
+        "type": "limp",
+        "sizeBb": 1,
+        "limperPosition": "BTN",
+        "label": "BTN limps 1bb"
+      },
+      "isoRaiseSize": {
+        "type": "isoRaise",
+        "sizeBb": 5,
+        "label": "Iso-raise 5bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Overlimp",
+          "type": "call",
+          "callAmountBb": 0
+        },
+        {
+          "id": "isoRaise",
+          "label": "Iso-raise 5bb",
+          "type": "raise",
+          "sizeBb": 5
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "33": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "44": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "55": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "66": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "77": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "88": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "99": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "ATo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A9o": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A8s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A8o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A7s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A7o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A6s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A6o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "A5s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A4s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A3s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "A2s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "A2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KQo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "KTo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K8s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K8o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K7s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K6s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "K6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K4s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K3s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "K2s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "K2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QJo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "QTo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "Q9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "Q9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q8s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "Q8o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q4s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q3s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "Q3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "Q2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "JTs": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "JTo": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "J9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "J9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J6s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J5s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "J5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "J2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T9s": {
+          "fold": 0,
+          "call": 0.1,
+          "isoRaise": 0.9
+        },
+        "T9o": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "T8s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "T8o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T7s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "T7o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T6o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T5o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T4o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T3s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T3o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T2s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "T2o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "98s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "98o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "97s": {
+          "fold": 0.1,
+          "call": 0.35,
+          "isoRaise": 0.55
+        },
+        "97o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "96o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "95o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "94s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "94o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "93s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "93o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "92s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "92o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "87s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "87o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "86o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "85o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "84s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "84o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "83s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "83o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "82s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "76s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "76o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "75s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "75o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "74s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "74o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "73s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "72s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "65s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "65o": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "64s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "64o": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "63s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "62s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "54s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "53s": {
+          "fold": 0.25,
+          "call": 0.75,
+          "isoRaise": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "52s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "43s": {
+          "fold": 0.65,
+          "call": 0.35,
+          "isoRaise": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "isoRaise": 0
+        }
+      }
     }
   ]
 }
