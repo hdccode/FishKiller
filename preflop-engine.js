@@ -268,7 +268,7 @@
     }
 
     if (family === PREFLOP_SPOT_FAMILIES.squeeze) {
-      return `${spot?.heroPosition || "Hero"} squeeze vs ${spot?.openerPosition || spot?.villainPosition || "open"}${spot?.callerPosition ? ` + ${spot.callerPosition}` : ""}`;
+      return `${spot?.heroPosition || "Hero"} vs ${spot?.openerPosition || spot?.villainPosition || "open"} open${spot?.callerPosition ? ` + ${spot.callerPosition} call` : ""}`;
     }
 
     if (family === PREFLOP_SPOT_FAMILIES.limpedPot) {

@@ -44942,6 +44942,5554 @@
           "isoRaise": 0
         }
       }
+    },
+    {
+      "spotId": "fk_6max_100bb_co_vs_lj_open_hj_call_squeeze_v1",
+      "name": "6-Max CO Squeeze vs LJ Open HJ Call 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "squeeze",
+      "spotType": "squeeze",
+      "heroPosition": "CO",
+      "villainPosition": "LJ",
+      "openerPosition": "LJ",
+      "callerPosition": "HJ",
+      "aggressorPosition": "LJ",
+      "defenderPosition": "CO",
+      "actionContext": "squeeze",
+      "priorAction": "lj-open-hj-call",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "HJ",
+          "actionId": "call",
+          "sizeBb": 2.3
+        }
+      ],
+      "potState": "open-and-call",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for single-opener plus one-caller squeeze drills. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "LJ",
+        "label": "LJ opens 2.3bb"
+      },
+      "facingCall": {
+        "type": "call",
+        "sizeBb": 2.3,
+        "callerPosition": "HJ",
+        "label": "HJ calls 2.3bb"
+      },
+      "squeezeSize": {
+        "type": "squeeze",
+        "sizeBb": 10.5,
+        "label": "Squeeze 10.5bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 2.3
+        },
+        {
+          "id": "squeeze",
+          "label": "Squeeze 10.5bb",
+          "type": "raise",
+          "sizeBb": 10.5
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "33": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "44": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "55": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "66": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "77": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "88": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "99": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A7s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A6s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A4o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A3o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "A2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A2o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KQo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KJo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K9o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K8o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K7o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "K5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "K4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "K3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "K2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "QJs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "QJo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "QTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "QTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q9o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q8o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q2s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "JTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "JTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J9o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J8o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J4s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J3s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J2s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T9o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T8o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T6s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T5s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T4s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T3s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T2s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "98s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "98o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "97s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "96s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "95s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "94s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "87s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "86s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "76s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1",
+      "name": "6-Max BTN Squeeze vs LJ Open CO Call 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "squeeze",
+      "spotType": "squeeze",
+      "heroPosition": "BTN",
+      "villainPosition": "LJ",
+      "openerPosition": "LJ",
+      "callerPosition": "CO",
+      "aggressorPosition": "LJ",
+      "defenderPosition": "BTN",
+      "actionContext": "squeeze",
+      "priorAction": "lj-open-co-call",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "call",
+          "sizeBb": 2.3
+        }
+      ],
+      "potState": "open-and-call",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for single-opener plus one-caller squeeze drills. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "LJ",
+        "label": "LJ opens 2.3bb"
+      },
+      "facingCall": {
+        "type": "call",
+        "sizeBb": 2.3,
+        "callerPosition": "CO",
+        "label": "CO calls 2.3bb"
+      },
+      "squeezeSize": {
+        "type": "squeeze",
+        "sizeBb": 10.5,
+        "label": "Squeeze 10.5bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 2.3
+        },
+        {
+          "id": "squeeze",
+          "label": "Squeeze 10.5bb",
+          "type": "raise",
+          "sizeBb": 10.5
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "33": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "44": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "55": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "66": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "77": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "88": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "99": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A9s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A7s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A6s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A5s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A4s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A4o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A3o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A2o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KQo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KJo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K6o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K5o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "K3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "K2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QJo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "QTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "QTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q8o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q7o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "JTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "JTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J9o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J8o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J2s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T9o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T8o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T4s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T3s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T2s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "98s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "98o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "97s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "96s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "95s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "94s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "87s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "86s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "76s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_btn_vs_hj_open_co_call_squeeze_v1",
+      "name": "6-Max BTN Squeeze vs HJ Open CO Call 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "squeeze",
+      "spotType": "squeeze",
+      "heroPosition": "BTN",
+      "villainPosition": "HJ",
+      "openerPosition": "HJ",
+      "callerPosition": "CO",
+      "aggressorPosition": "HJ",
+      "defenderPosition": "BTN",
+      "actionContext": "squeeze",
+      "priorAction": "hj-open-co-call",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "CO",
+          "actionId": "call",
+          "sizeBb": 2.3
+        }
+      ],
+      "potState": "open-and-call",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for single-opener plus one-caller squeeze drills. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "HJ",
+        "label": "HJ opens 2.3bb"
+      },
+      "facingCall": {
+        "type": "call",
+        "sizeBb": 2.3,
+        "callerPosition": "CO",
+        "label": "CO calls 2.3bb"
+      },
+      "squeezeSize": {
+        "type": "squeeze",
+        "sizeBb": 10,
+        "label": "Squeeze 10bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 2.3
+        },
+        {
+          "id": "squeeze",
+          "label": "Squeeze 10bb",
+          "type": "raise",
+          "sizeBb": 10
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "33": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "44": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "55": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "66": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "77": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "88": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "99": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A9s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A8s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A7s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A6s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A5s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A4s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A4o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A3s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A3o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A2o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KQo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KJo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KTs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KTo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K5o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K4o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "K2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QJo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "QTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "QTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q8o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q7o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q6o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "JTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "JTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J8o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T9o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T8o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T3s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T2s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "98s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "98o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "97s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "96s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "95s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "94s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "87s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "86s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "76s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_sb_vs_co_open_btn_call_squeeze_v1",
+      "name": "6-Max SB Squeeze vs CO Open BTN Call 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "squeeze",
+      "spotType": "squeeze",
+      "heroPosition": "SB",
+      "villainPosition": "CO",
+      "openerPosition": "CO",
+      "callerPosition": "BTN",
+      "aggressorPosition": "CO",
+      "defenderPosition": "SB",
+      "actionContext": "squeeze",
+      "priorAction": "co-open-btn-call",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "BTN",
+          "actionId": "call",
+          "sizeBb": 2.3
+        }
+      ],
+      "potState": "open-and-call",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for single-opener plus one-caller squeeze drills. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "CO",
+        "label": "CO opens 2.3bb"
+      },
+      "facingCall": {
+        "type": "call",
+        "sizeBb": 2.3,
+        "callerPosition": "BTN",
+        "label": "BTN calls 2.3bb"
+      },
+      "squeezeSize": {
+        "type": "squeeze",
+        "sizeBb": 12,
+        "label": "Squeeze 12bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 1.3
+        },
+        {
+          "id": "squeeze",
+          "label": "Squeeze 12bb",
+          "type": "raise",
+          "sizeBb": 12
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "33": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "44": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "55": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "66": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "77": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "88": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "99": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A7s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A6s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A5s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A4s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A4o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A3o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A2o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KQo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KJo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "KTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K7o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K6o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K5o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "K4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "K3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "K2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QJo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "QTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "QTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q9o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q8o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "Q2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "JTs": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "JTo": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J9o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J8o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J2s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T9s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T9o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T8o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T7o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T5s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T4s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T3s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T2s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "98s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "98o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "97s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "96s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "95s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "94s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "87s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "86s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "76s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_bb_vs_co_open_btn_call_squeeze_v1",
+      "name": "6-Max BB Squeeze vs CO Open BTN Call 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "squeeze",
+      "spotType": "squeeze",
+      "heroPosition": "BB",
+      "villainPosition": "CO",
+      "openerPosition": "CO",
+      "callerPosition": "BTN",
+      "aggressorPosition": "CO",
+      "defenderPosition": "BB",
+      "actionContext": "squeeze",
+      "priorAction": "co-open-btn-call",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "BTN",
+          "actionId": "call",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "SB",
+          "actionId": "fold"
+        }
+      ],
+      "potState": "open-and-call",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for single-opener plus one-caller squeeze drills. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "CO",
+        "label": "CO opens 2.3bb"
+      },
+      "facingCall": {
+        "type": "call",
+        "sizeBb": 2.3,
+        "callerPosition": "BTN",
+        "label": "BTN calls 2.3bb"
+      },
+      "squeezeSize": {
+        "type": "squeeze",
+        "sizeBb": 12,
+        "label": "Squeeze 12bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 0.3
+        },
+        {
+          "id": "squeeze",
+          "label": "Squeeze 12bb",
+          "type": "raise",
+          "sizeBb": 12
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "33": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "44": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "55": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "66": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "77": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "88": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "99": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A9s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A9o": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A8s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A7s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A6s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A5s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A4s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A4o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A3s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A3o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A2s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A2o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KQo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KJo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KTs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KTo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K7s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K6s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K5s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K4o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K3o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K2o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QJo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "QTs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QTo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "Q9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "Q9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "Q8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q4o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q3o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "JTs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "JTo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "J9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "J9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J7o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J6o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J5o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "T9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T8s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T7o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T6o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "98s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "98o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "97s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "97o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "96s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "95s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "94s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "87s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "86s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "76s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        }
+      }
+    },
+    {
+      "spotId": "fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1",
+      "name": "6-Max BB Squeeze vs BTN Open SB Call 100bb",
+      "game": "NLHE",
+      "format": "6-max cash",
+      "tableSize": 6,
+      "stackDepthBb": 100,
+      "anteBb": 0,
+      "street": "preflop",
+      "family": "squeeze",
+      "spotType": "squeeze",
+      "heroPosition": "BB",
+      "villainPosition": "BTN",
+      "openerPosition": "BTN",
+      "callerPosition": "SB",
+      "aggressorPosition": "BTN",
+      "defenderPosition": "BB",
+      "actionContext": "squeeze",
+      "priorAction": "btn-open-sb-call",
+      "priorActions": [
+        {
+          "position": "LJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "HJ",
+          "actionId": "fold"
+        },
+        {
+          "position": "CO",
+          "actionId": "fold"
+        },
+        {
+          "position": "BTN",
+          "actionId": "raise",
+          "sizeBb": 2.3
+        },
+        {
+          "position": "SB",
+          "actionId": "call",
+          "sizeBb": 2.3
+        }
+      ],
+      "potState": "open-and-call",
+      "complete": true,
+      "sourceNotes": "FishKiller internal-authored MVP baseline for single-opener plus one-caller squeeze drills. Not claimed as universal GTO.",
+      "facingOpen": {
+        "type": "open",
+        "sizeBb": 2.3,
+        "openerPosition": "BTN",
+        "label": "BTN opens 2.3bb"
+      },
+      "facingCall": {
+        "type": "call",
+        "sizeBb": 2.3,
+        "callerPosition": "SB",
+        "label": "SB calls 2.3bb"
+      },
+      "squeezeSize": {
+        "type": "squeeze",
+        "sizeBb": 12,
+        "label": "Squeeze 12bb"
+      },
+      "legalActions": [
+        {
+          "id": "fold",
+          "label": "Fold",
+          "type": "fold"
+        },
+        {
+          "id": "call",
+          "label": "Call",
+          "type": "call",
+          "callAmountBb": 0.3
+        },
+        {
+          "id": "squeeze",
+          "label": "Squeeze 12bb",
+          "type": "raise",
+          "sizeBb": 12
+        }
+      ],
+      "actionsByHand": {
+        "22": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "33": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "44": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "55": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "66": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "77": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "88": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "99": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AA": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KK": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QQ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "JJ": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "TT": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AKo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AQo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "AJo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "ATo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A9s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A9o": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A8s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A8o": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A7s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A7o": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A6s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A5s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A4s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "A4o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A3s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A3o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "A2s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "A2o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "KQs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KQo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KJo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KTs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "KTo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K9s": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "K9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K7s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K6s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K5s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K4s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "K4o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K3o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "K2o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "QJs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QJo": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QTs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "QTo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "Q9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "Q9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "Q8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q7s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "Q7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q6s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "Q6o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q5o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q4o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q3o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "Q2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "Q2o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "JTs": {
+          "fold": 0,
+          "call": 0.1,
+          "squeeze": 0.9
+        },
+        "JTo": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "J9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "J9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "J8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J7o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J6o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J5o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J4o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "J3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "J2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "J2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T9s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "T9o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T8s": {
+          "fold": 0.1,
+          "call": 0.25,
+          "squeeze": 0.65
+        },
+        "T8o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T7s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T7o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T6s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T6o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "T5s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T5o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T4s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T4o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T3s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T3o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "T2s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "T2o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "98s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "98o": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "97s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "97o": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "96s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "96o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "95s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "95o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "94s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "94o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "93s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "93o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "92s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "92o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "87s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "87o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "86s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "86o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "85s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "85o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "84s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "84o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "83s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "83o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "82s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "82o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "76s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "76o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "75s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "75o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "74s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "74o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "73o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "72o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "65s": {
+          "fold": 0.15,
+          "call": 0.85,
+          "squeeze": 0
+        },
+        "65o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "64s": {
+          "fold": 0.7,
+          "call": 0.3,
+          "squeeze": 0
+        },
+        "64o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "63o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "62o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "54o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "53o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "52o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "43o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "42o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32s": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        },
+        "32o": {
+          "fold": 1,
+          "call": 0,
+          "squeeze": 0
+        }
+      }
     }
   ]
 }

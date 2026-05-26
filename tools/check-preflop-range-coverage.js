@@ -7,7 +7,7 @@ const preflop = require("../preflop-engine");
 const ROOT = path.resolve(__dirname, "..");
 const PACK_PATH = path.join(ROOT, "data", "preflop-ranges", "real", "fishkiller-6max-100bb-v1.preflop-range.json");
 const EXPECTED_HAND_COUNT = 169;
-const EXPECTED_REAL_SPOT_COUNT = 50;
+const EXPECTED_REAL_SPOT_COUNT = 56;
 
 const RFI_SPOT_IDS = [
   "fk_6max_100bb_lj_rfi_unopened_v1",
@@ -83,6 +83,15 @@ const ISO_VS_LIMP_SPOT_IDS = [
   "fk_6max_100bb_bb_vs_btn_limp_v1",
 ];
 
+const SQUEEZE_SPOT_IDS = [
+  "fk_6max_100bb_co_vs_lj_open_hj_call_squeeze_v1",
+  "fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1",
+  "fk_6max_100bb_btn_vs_hj_open_co_call_squeeze_v1",
+  "fk_6max_100bb_sb_vs_co_open_btn_call_squeeze_v1",
+  "fk_6max_100bb_bb_vs_co_open_btn_call_squeeze_v1",
+  "fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1",
+];
+
 const FACING_OPEN_COVERAGE_SPOT_IDS = [
   "fk_6max_100bb_hj_vs_lj_open_v1",
   "fk_6max_100bb_co_vs_lj_open_v1",
@@ -98,7 +107,7 @@ const FACING_OPEN_COVERAGE_SPOT_IDS = [
 ];
 
 const FUTURE_TARGET_FAMILIES = [
-  "squeeze",
+  "complex multiway continuation trees",
 ];
 
 const DRILL_OPTIONS = [
@@ -169,6 +178,13 @@ const DRILL_OPTIONS = [
   { id: "iso-btn-vs-co-limp", spotIds: ["fk_6max_100bb_btn_vs_co_limp_v1"] },
   { id: "iso-sb-vs-btn-limp", spotIds: ["fk_6max_100bb_sb_vs_btn_limp_v1"] },
   { id: "iso-bb-vs-btn-limp", spotIds: ["fk_6max_100bb_bb_vs_btn_limp_v1"] },
+  { id: "all-squeeze", spotIds: SQUEEZE_SPOT_IDS },
+  { id: "sqz-co-vs-lj-open-hj-call", spotIds: ["fk_6max_100bb_co_vs_lj_open_hj_call_squeeze_v1"] },
+  { id: "sqz-btn-vs-lj-open-co-call", spotIds: ["fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1"] },
+  { id: "sqz-btn-vs-hj-open-co-call", spotIds: ["fk_6max_100bb_btn_vs_hj_open_co_call_squeeze_v1"] },
+  { id: "sqz-sb-vs-co-open-btn-call", spotIds: ["fk_6max_100bb_sb_vs_co_open_btn_call_squeeze_v1"] },
+  { id: "sqz-bb-vs-co-open-btn-call", spotIds: ["fk_6max_100bb_bb_vs_co_open_btn_call_squeeze_v1"] },
+  { id: "sqz-bb-vs-btn-open-sb-call", spotIds: ["fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1"] },
   { id: "review-mistakes", reviewMode: true, spotIds: [] },
 ];
 
@@ -242,6 +258,13 @@ const FAMILY_DEFINITIONS = [
     legalActions: ["fold", "call", "isoRaise"],
     family: "isoVsLimper",
     matches: (spot) => preflop.getPreflopSpotFamily(spot) === "isoVsLimper" && spot.spotType === "iso-vs-limper",
+  },
+  {
+    name: "squeeze",
+    spotIds: SQUEEZE_SPOT_IDS,
+    legalActions: ["fold", "call", "squeeze"],
+    family: "squeeze",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "squeeze" && spot.spotType === "squeeze",
   },
 ];
 
@@ -438,7 +461,8 @@ function report(errors, pack = null) {
       `${FACING_THREE_BET_SPOT_IDS.length} facing-3bet, ` +
       `${FACING_FOUR_BET_SPOT_IDS.length} facing-4bet, ` +
       `${BVB_LIMP_SPOT_IDS.length} BvB limp, ` +
-      `${ISO_VS_LIMP_SPOT_IDS.length} iso-vs-limp.`
+      `${ISO_VS_LIMP_SPOT_IDS.length} iso-vs-limp, ` +
+      `${SQUEEZE_SPOT_IDS.length} squeeze.`
   );
   console.log(`Future complete-preflop targets are documented but not required yet: ${FUTURE_TARGET_FAMILIES.join(", ")}.`);
 }

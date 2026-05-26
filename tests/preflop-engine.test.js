@@ -71,6 +71,14 @@ const ISO_VS_LIMP_SPOT_IDS = [
   "fk_6max_100bb_sb_vs_btn_limp_v1",
   "fk_6max_100bb_bb_vs_btn_limp_v1",
 ];
+const SQUEEZE_SPOT_IDS = [
+  "fk_6max_100bb_co_vs_lj_open_hj_call_squeeze_v1",
+  "fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1",
+  "fk_6max_100bb_btn_vs_hj_open_co_call_squeeze_v1",
+  "fk_6max_100bb_sb_vs_co_open_btn_call_squeeze_v1",
+  "fk_6max_100bb_bb_vs_co_open_btn_call_squeeze_v1",
+  "fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1",
+];
 const FACING_OPEN_COVERAGE_SPOT_IDS = [
   "fk_6max_100bb_hj_vs_lj_open_v1",
   "fk_6max_100bb_co_vs_lj_open_v1",
@@ -104,6 +112,7 @@ function run() {
   loadsAllFacingFourBetSpots(normalized);
   loadsAllBvbLimpSpots(normalized);
   loadsAllIsoVsLimpSpots(normalized);
+  loadsAllSqueezeSpots(normalized);
   classifiesCurrentSpotFamilies(normalized);
   prefersRaiseWithAces(spot);
   prefersFoldWithTrash(spot);
@@ -280,6 +289,25 @@ function loadsAllIsoVsLimpSpots(pack) {
   });
 }
 
+function loadsAllSqueezeSpots(pack) {
+  SQUEEZE_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    assert(spot, `${spotId} should exist`);
+    assert.equal(spot.family, "squeeze");
+    assert.equal(spot.spotType, "squeeze");
+    assert.equal(spot.actionContext, "squeeze");
+    assert(spot.heroPosition, `${spotId} should define hero position`);
+    assert(spot.openerPosition, `${spotId} should define opener position`);
+    assert(spot.callerPosition, `${spotId} should define caller position`);
+    assert.equal(spot.villainPosition, spot.openerPosition);
+    assert.equal(spot.aggressorPosition, spot.openerPosition);
+    assert.equal(spot.defenderPosition, spot.heroPosition);
+    assert(Array.isArray(spot.priorActions));
+    assert.equal(Object.keys(spot.actionsByHand).length, 169);
+    assert.deepEqual(spot.legalActions.map((action) => action.id), ["fold", "call", "squeeze"]);
+  });
+}
+
 function classifiesCurrentSpotFamilies(pack) {
   RFI_SPOT_IDS.forEach((spotId) => {
     assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "rfi");
@@ -304,6 +332,9 @@ function classifiesCurrentSpotFamilies(pack) {
   });
   ISO_VS_LIMP_SPOT_IDS.forEach((spotId) => {
     assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "isoVsLimper");
+  });
+  SQUEEZE_SPOT_IDS.forEach((spotId) => {
+    assert.equal(preflop.getPreflopSpotFamily(preflop.getPreflopSpot(pack, spotId)), "squeeze");
   });
 }
 
@@ -409,6 +440,9 @@ function resolvesDrillSpotIds() {
     { id: "iso-hj-vs-lj-limp", spotIds: ["fk_6max_100bb_hj_vs_lj_limp_v1"] },
     { id: "iso-btn-vs-lj-limp", spotIds: ["fk_6max_100bb_btn_vs_lj_limp_v1"] },
     { id: "iso-bb-vs-btn-limp", spotIds: ["fk_6max_100bb_bb_vs_btn_limp_v1"] },
+    { id: "all-squeeze", spotIds: SQUEEZE_SPOT_IDS },
+    { id: "sqz-btn-vs-lj-open-co-call", spotIds: ["fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1"] },
+    { id: "sqz-bb-vs-btn-open-sb-call", spotIds: ["fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1"] },
     { id: "review-mistakes", reviewMode: true, spotIds: [] },
   ];
 
@@ -434,6 +468,9 @@ function resolvesDrillSpotIds() {
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("iso-hj-vs-lj-limp", options), ["fk_6max_100bb_hj_vs_lj_limp_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("iso-btn-vs-lj-limp", options), ["fk_6max_100bb_btn_vs_lj_limp_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("iso-bb-vs-btn-limp", options), ["fk_6max_100bb_bb_vs_btn_limp_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-squeeze", options), SQUEEZE_SPOT_IDS);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("sqz-btn-vs-lj-open-co-call", options), ["fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1"]);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("sqz-bb-vs-btn-open-sb-call", options), ["fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), RFI_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("review-mistakes", options), []);
 }
@@ -452,6 +489,7 @@ function formatsPreflopLabels(pack) {
   const sbLimpVsBbRaise = preflop.getPreflopSpot(pack, "fk_6max_100bb_sb_limp_vs_bb_raise_v1");
   const btnVsLjLimp = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_vs_lj_limp_v1");
   const sbVsBtnLimp = preflop.getPreflopSpot(pack, "fk_6max_100bb_sb_vs_btn_limp_v1");
+  const btnSqueezeLjCo = preflop.getPreflopSpot(pack, "fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1");
 
   assert.equal(preflop.formatPreflopActionLabel("fold"), "Fold");
   assert.equal(preflop.formatPreflopActionLabel("call"), "Call");
@@ -477,6 +515,7 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopSpotLabel(sbLimpVsBbRaise), "SB limp vs BB raise");
   assert.equal(preflop.formatPreflopSpotLabel(btnVsLjLimp), "BTN vs LJ limp");
   assert.equal(preflop.formatPreflopSpotLabel(sbVsBtnLimp), "SB vs BTN limp");
+  assert.equal(preflop.formatPreflopSpotLabel(btnSqueezeLjCo), "BTN vs LJ open + CO call");
   assert.equal(preflop.formatPreflopSpotLabel({
     family: "facingFourBet",
     heroPosition: "BTN",
@@ -497,7 +536,7 @@ function formatsPreflopLabels(pack) {
     heroPosition: "SB",
     openerPosition: "CO",
     callerPosition: "BTN",
-  }), "SB squeeze vs CO + BTN");
+  }), "SB vs CO open + BTN call");
   assert.equal(preflop.formatPreflopSizeLabel(btn), "Open 2.3bb");
   assert.equal(preflop.formatPreflopSizeLabel(sb), "Open 3bb");
   assert.equal(preflop.formatPreflopSizeLabel(bbVsBtn), "BTN opens 2.3bb");
@@ -511,6 +550,7 @@ function formatsPreflopLabels(pack) {
   assert.equal(preflop.formatPreflopSizeLabel(sbLimpVsBbRaise), "BB raises 4.5bb");
   assert.equal(preflop.formatPreflopSizeLabel(btnVsLjLimp), "Iso 4.5bb");
   assert.equal(preflop.formatPreflopSizeLabel(sbVsBtnLimp), "Iso 5bb");
+  assert.equal(preflop.formatPreflopSizeLabel(btnSqueezeLjCo), "Squeeze 10.5bb");
 }
 
 run();

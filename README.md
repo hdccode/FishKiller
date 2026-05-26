@@ -5,8 +5,8 @@ FishKiller is a local-first poker training website. The current live MVP is a 6-
 ## Current MVP
 
 - 6-max is the flagship trainer.
-- The live 6-max range pack contains 50 complete preflop spots.
-- Supported 6-max families are RFI, Facing Open, BB Defense, 3-bet, Facing 3-bet, selected Facing 4-bet, selected BvB Limp, and selected Iso vs Limp.
+- The live 6-max range pack contains 56 complete preflop spots.
+- Supported 6-max families are RFI, Facing Open, BB Defense, 3-bet, Facing 3-bet, selected Facing 4-bet, selected BvB Limp, selected Iso vs Limp, and selected Squeeze.
 - Each live 6-max spot has 169 starting hand classes, frequency-based grading, a range matrix, progress tracking, mistake review, and a compact progress summary.
 - HU, 3-max, and 9-max remain starter/legacy scenario-pack drills.
 - Postflop and TexasSolver import tooling exists in the repo, but real postflop solving is not part of the current live MVP.
@@ -58,10 +58,11 @@ These checks do not run TexasSolver.
 9. Try `All Facing 4-bet`.
 10. Try `All BvB Limp`.
 11. Try `All Iso vs Limp`.
-12. Open the range table for a hand and confirm the current hand is highlighted.
-13. Answer a few hands and check the feedback/frequencies.
-14. View the local progress summary.
-15. Use Review mistakes after recording a miss.
+12. Try `All Squeeze`.
+13. Open the range table for a hand and confirm the current hand is highlighted.
+14. Answer a few hands and check the feedback/frequencies.
+15. View the local progress summary.
+16. Use Review mistakes after recording a miss.
 
 HU, 3-max, and 9-max can also be opened, but they are starter scenario drills rather than the live 6-max range-pack trainer.
 
