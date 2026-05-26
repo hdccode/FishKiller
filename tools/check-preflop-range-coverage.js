@@ -7,7 +7,19 @@ const preflop = require("../preflop-engine");
 const ROOT = path.resolve(__dirname, "..");
 const PACK_PATH = path.join(ROOT, "data", "preflop-ranges", "real", "fishkiller-6max-100bb-v1.preflop-range.json");
 const EXPECTED_HAND_COUNT = 169;
-const EXPECTED_REAL_SPOT_COUNT = 20;
+const MVP_CONTRACT = Object.freeze({
+  totalRealSpots: 56,
+  rfi: 5,
+  facingOpenCoverage: 15,
+  facingOpenResponse: 6,
+  bbDefense: 5,
+  threeBetVsOpen: 5,
+  facingThreeBet: 15,
+  selectedFacingFourBet: 5,
+  bvbLimp: 3,
+  isoVsLimp: 6,
+  squeeze: 6,
+});
 
 const RFI_SPOT_IDS = [
   "fk_6max_100bb_lj_rfi_unopened_v1",
@@ -25,6 +37,15 @@ const BB_DEFENSE_SPOT_IDS = [
   "fk_6max_100bb_bb_vs_sb_open_v1",
 ];
 
+const FACING_OPEN_RESPONSE_SPOT_IDS = [
+  "fk_6max_100bb_hj_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_hj_open_v1",
+  "fk_6max_100bb_sb_vs_lj_open_v1",
+  "fk_6max_100bb_sb_vs_hj_open_v1",
+];
+
 const THREE_BET_SPOT_IDS = [
   "fk_6max_100bb_btn_vs_co_open_3bet_v1",
   "fk_6max_100bb_co_vs_hj_open_3bet_v1",
@@ -34,11 +55,83 @@ const THREE_BET_SPOT_IDS = [
 ];
 
 const FACING_THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_co_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_lj_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_co_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_hj_open_vs_bb_3bet_v1",
   "fk_6max_100bb_co_open_vs_btn_3bet_v1",
   "fk_6max_100bb_co_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
+  "fk_6max_100bb_co_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_btn_open_vs_sb_3bet_v1",
+  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
+  "fk_6max_100bb_sb_open_vs_bb_3bet_v1",
+];
+
+const FACING_FOUR_BET_SPOT_IDS = [
+  "fk_6max_100bb_hj_3bet_vs_lj_open_lj_4bet_v1",
+  "fk_6max_100bb_co_3bet_vs_hj_open_hj_4bet_v1",
+  "fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1",
+  "fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1",
+  "fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1",
+];
+
+const BVB_LIMP_SPOT_IDS = [
+  "fk_6max_100bb_sb_first_in_limp_or_raise_v1",
+  "fk_6max_100bb_bb_vs_sb_limp_v1",
+  "fk_6max_100bb_sb_limp_vs_bb_raise_v1",
+];
+
+const ISO_VS_LIMP_SPOT_IDS = [
+  "fk_6max_100bb_hj_vs_lj_limp_v1",
+  "fk_6max_100bb_co_vs_lj_limp_v1",
+  "fk_6max_100bb_btn_vs_lj_limp_v1",
+  "fk_6max_100bb_btn_vs_co_limp_v1",
+  "fk_6max_100bb_sb_vs_btn_limp_v1",
+  "fk_6max_100bb_bb_vs_btn_limp_v1",
+];
+
+const SQUEEZE_SPOT_IDS = [
+  "fk_6max_100bb_co_vs_lj_open_hj_call_squeeze_v1",
+  "fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1",
+  "fk_6max_100bb_btn_vs_hj_open_co_call_squeeze_v1",
+  "fk_6max_100bb_sb_vs_co_open_btn_call_squeeze_v1",
+  "fk_6max_100bb_bb_vs_co_open_btn_call_squeeze_v1",
+  "fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1",
+];
+
+const FACING_OPEN_COVERAGE_SPOT_IDS = [
+  "fk_6max_100bb_hj_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_lj_open_v1",
+  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
+  "fk_6max_100bb_btn_vs_lj_open_v1",
+  "fk_6max_100bb_btn_vs_hj_open_v1",
+  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_lj_open_v1",
+  "fk_6max_100bb_sb_vs_hj_open_v1",
+  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
+  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
+  ...BB_DEFENSE_SPOT_IDS,
+];
+
+const LIVE_SPOT_IDS = [
+  ...RFI_SPOT_IDS,
+  ...FACING_OPEN_RESPONSE_SPOT_IDS,
+  ...BB_DEFENSE_SPOT_IDS,
+  ...THREE_BET_SPOT_IDS,
+  ...FACING_THREE_BET_SPOT_IDS,
+  ...FACING_FOUR_BET_SPOT_IDS,
+  ...BVB_LIMP_SPOT_IDS,
+  ...ISO_VS_LIMP_SPOT_IDS,
+  ...SQUEEZE_SPOT_IDS,
+];
+
+const FUTURE_TARGET_FAMILIES = [
+  "complex multiway continuation trees",
 ];
 
 const DRILL_OPTIONS = [
@@ -48,6 +141,22 @@ const DRILL_OPTIONS = [
   { id: "co-rfi", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
   { id: "btn-rfi", spotIds: ["fk_6max_100bb_btn_rfi_unopened_v1"] },
   { id: "sb-rfi", spotIds: ["fk_6max_100bb_sb_rfi_unopened_v1"] },
+  { id: "all-facing-open", spotIds: FACING_OPEN_COVERAGE_SPOT_IDS },
+  { id: "fo-hj-vs-lj", spotIds: ["fk_6max_100bb_hj_vs_lj_open_v1"] },
+  { id: "fo-co-vs-lj", spotIds: ["fk_6max_100bb_co_vs_lj_open_v1"] },
+  { id: "fo-co-vs-hj", spotIds: ["fk_6max_100bb_co_vs_hj_open_3bet_v1"] },
+  { id: "fo-btn-vs-lj", spotIds: ["fk_6max_100bb_btn_vs_lj_open_v1"] },
+  { id: "fo-btn-vs-hj", spotIds: ["fk_6max_100bb_btn_vs_hj_open_v1"] },
+  { id: "fo-btn-vs-co", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
+  { id: "fo-sb-vs-lj", spotIds: ["fk_6max_100bb_sb_vs_lj_open_v1"] },
+  { id: "fo-sb-vs-hj", spotIds: ["fk_6max_100bb_sb_vs_hj_open_v1"] },
+  { id: "fo-sb-vs-co", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
+  { id: "fo-sb-vs-btn", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
+  { id: "fo-bb-vs-lj", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
+  { id: "fo-bb-vs-hj", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
+  { id: "fo-bb-vs-co", spotIds: ["fk_6max_100bb_bb_vs_co_open_v1"] },
+  { id: "fo-bb-vs-btn", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
+  { id: "fo-bb-vs-sb", spotIds: ["fk_6max_100bb_bb_vs_sb_open_v1"] },
   { id: "all-bb-defense", spotIds: BB_DEFENSE_SPOT_IDS },
   { id: "bb-vs-lj", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
   { id: "bb-vs-hj", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
@@ -61,11 +170,45 @@ const DRILL_OPTIONS = [
   { id: "sb-vs-btn-3bet", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
   { id: "sb-vs-co-3bet", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
   { id: "all-facing-3bet", spotIds: FACING_THREE_BET_SPOT_IDS },
-  { id: "btn-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
+  { id: "lj-open-vs-hj-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
+  { id: "lj-open-vs-co-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_co_3bet_v1"] },
+  { id: "lj-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_btn_3bet_v1"] },
+  { id: "lj-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_sb_3bet_v1"] },
+  { id: "lj-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_bb_3bet_v1"] },
+  { id: "hj-open-vs-co-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_co_3bet_v1"] },
+  { id: "hj-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
+  { id: "hj-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_sb_3bet_v1"] },
+  { id: "hj-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_bb_3bet_v1"] },
   { id: "co-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_co_open_vs_btn_3bet_v1"] },
   { id: "co-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_co_open_vs_sb_3bet_v1"] },
-  { id: "hj-open-vs-btn-3bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
-  { id: "lj-open-vs-hj-3bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
+  { id: "co-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_co_open_vs_bb_3bet_v1"] },
+  { id: "btn-open-vs-sb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_sb_3bet_v1"] },
+  { id: "btn-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
+  { id: "sb-open-vs-bb-3bet", spotIds: ["fk_6max_100bb_sb_open_vs_bb_3bet_v1"] },
+  { id: "all-facing-4bet", spotIds: FACING_FOUR_BET_SPOT_IDS },
+  { id: "hj-3bet-vs-lj-open-lj-4bet", spotIds: ["fk_6max_100bb_hj_3bet_vs_lj_open_lj_4bet_v1"] },
+  { id: "co-3bet-vs-hj-open-hj-4bet", spotIds: ["fk_6max_100bb_co_3bet_vs_hj_open_hj_4bet_v1"] },
+  { id: "btn-3bet-vs-co-open-co-4bet", spotIds: ["fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1"] },
+  { id: "sb-3bet-vs-btn-open-btn-4bet", spotIds: ["fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1"] },
+  { id: "bb-3bet-vs-btn-open-btn-4bet", spotIds: ["fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1"] },
+  { id: "all-bvb-limp", spotIds: BVB_LIMP_SPOT_IDS },
+  { id: "sb-first-limp-or-raise", spotIds: ["fk_6max_100bb_sb_first_in_limp_or_raise_v1"] },
+  { id: "bb-vs-sb-limp", spotIds: ["fk_6max_100bb_bb_vs_sb_limp_v1"] },
+  { id: "sb-limp-vs-bb-raise", spotIds: ["fk_6max_100bb_sb_limp_vs_bb_raise_v1"] },
+  { id: "all-iso-vs-limp", spotIds: ISO_VS_LIMP_SPOT_IDS },
+  { id: "iso-hj-vs-lj-limp", spotIds: ["fk_6max_100bb_hj_vs_lj_limp_v1"] },
+  { id: "iso-co-vs-lj-limp", spotIds: ["fk_6max_100bb_co_vs_lj_limp_v1"] },
+  { id: "iso-btn-vs-lj-limp", spotIds: ["fk_6max_100bb_btn_vs_lj_limp_v1"] },
+  { id: "iso-btn-vs-co-limp", spotIds: ["fk_6max_100bb_btn_vs_co_limp_v1"] },
+  { id: "iso-sb-vs-btn-limp", spotIds: ["fk_6max_100bb_sb_vs_btn_limp_v1"] },
+  { id: "iso-bb-vs-btn-limp", spotIds: ["fk_6max_100bb_bb_vs_btn_limp_v1"] },
+  { id: "all-squeeze", spotIds: SQUEEZE_SPOT_IDS },
+  { id: "sqz-co-vs-lj-open-hj-call", spotIds: ["fk_6max_100bb_co_vs_lj_open_hj_call_squeeze_v1"] },
+  { id: "sqz-btn-vs-lj-open-co-call", spotIds: ["fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1"] },
+  { id: "sqz-btn-vs-hj-open-co-call", spotIds: ["fk_6max_100bb_btn_vs_hj_open_co_call_squeeze_v1"] },
+  { id: "sqz-sb-vs-co-open-btn-call", spotIds: ["fk_6max_100bb_sb_vs_co_open_btn_call_squeeze_v1"] },
+  { id: "sqz-bb-vs-co-open-btn-call", spotIds: ["fk_6max_100bb_bb_vs_co_open_btn_call_squeeze_v1"] },
+  { id: "sqz-bb-vs-btn-open-sb-call", spotIds: ["fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1"] },
   { id: "review-mistakes", reviewMode: true, spotIds: [] },
 ];
 
@@ -74,25 +217,78 @@ const FAMILY_DEFINITIONS = [
     name: "RFI",
     spotIds: RFI_SPOT_IDS,
     legalActions: ["fold", "raise"],
-    matches: (spot) => spot.actionContext === "rfi" && spot.priorAction === "folded-to-hero",
+    family: "rfi",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "rfi" && spot.priorAction === "folded-to-hero",
+  },
+  {
+    name: "facing open response",
+    spotIds: FACING_OPEN_RESPONSE_SPOT_IDS,
+    legalActions: ["fold", "call", "threeBet"],
+    family: "facingOpen",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "facingOpen" && spot.spotType === "facing-open-response",
   },
   {
     name: "BB defense",
     spotIds: BB_DEFENSE_SPOT_IDS,
     legalActions: ["fold", "call", "threeBet"],
-    matches: (spot) => spot.actionContext === "facing-open" && spot.heroPosition === "BB",
+    family: "bbDefense",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "bbDefense" && spot.heroPosition === "BB",
   },
   {
     name: "3-bet vs open",
     spotIds: THREE_BET_SPOT_IDS,
     legalActions: ["fold", "call", "threeBet"],
-    matches: (spot) => spot.actionContext === "facing-open" && spot.spotType === "three-bet-vs-open",
+    family: "threeBetVsOpen",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "threeBetVsOpen" && spot.spotType === "three-bet-vs-open",
   },
   {
     name: "facing 3-bet",
     spotIds: FACING_THREE_BET_SPOT_IDS,
     legalActions: ["fold", "call", "fourBet"],
-    matches: (spot) => spot.actionContext === "facing-3bet" && spot.spotType === "facing-3bet",
+    family: "facingThreeBet",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "facingThreeBet" && spot.spotType === "facing-3bet",
+  },
+  {
+    name: "facing 4-bet",
+    spotIds: FACING_FOUR_BET_SPOT_IDS,
+    legalActions: ["fold", "call", "fiveBetJam"],
+    family: "facingFourBet",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "facingFourBet" && spot.spotType === "facing-4bet",
+  },
+  {
+    name: "BvB SB first-in limp or raise",
+    spotIds: ["fk_6max_100bb_sb_first_in_limp_or_raise_v1"],
+    legalActions: ["fold", "limp", "raise"],
+    family: "limpedPot",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "limpedPot" && spot.spotType === "sb-first-in-limp-or-raise",
+  },
+  {
+    name: "BvB BB vs SB limp",
+    spotIds: ["fk_6max_100bb_bb_vs_sb_limp_v1"],
+    legalActions: ["check", "raise"],
+    family: "limpedPot",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "limpedPot" && spot.spotType === "bb-vs-sb-limp",
+  },
+  {
+    name: "BvB SB limp vs BB raise",
+    spotIds: ["fk_6max_100bb_sb_limp_vs_bb_raise_v1"],
+    legalActions: ["fold", "call", "threeBet"],
+    family: "limpedPot",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "limpedPot" && spot.spotType === "sb-limp-vs-bb-raise",
+  },
+  {
+    name: "iso vs limp",
+    spotIds: ISO_VS_LIMP_SPOT_IDS,
+    legalActions: ["fold", "call", "isoRaise"],
+    family: "isoVsLimper",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "isoVsLimper" && spot.spotType === "iso-vs-limper",
+  },
+  {
+    name: "squeeze",
+    spotIds: SQUEEZE_SPOT_IDS,
+    legalActions: ["fold", "call", "squeeze"],
+    family: "squeeze",
+    matches: (spot) => preflop.getPreflopSpotFamily(spot) === "squeeze" && spot.spotType === "squeeze",
   },
 ];
 
@@ -106,11 +302,14 @@ function main() {
     return;
   }
 
-  if ((pack.spots || []).length !== EXPECTED_REAL_SPOT_COUNT) {
-    errors.push(`Expected ${EXPECTED_REAL_SPOT_COUNT} real 6-max preflop spots, found ${(pack.spots || []).length}.`);
+  if ((pack.spots || []).length !== MVP_CONTRACT.totalRealSpots) {
+    errors.push(`Expected ${MVP_CONTRACT.totalRealSpots} real 6-max preflop spots, found ${(pack.spots || []).length}.`);
   }
 
+  validateStaticContract(errors);
+  validatePackSpotIds(pack, errors);
   validateFamilyCounts(pack, errors);
+  validateFacingOpenCoverage(pack, errors);
   validateCompleteSpots(pack, errors);
   validateDrillMappings(pack, errors);
 
@@ -131,11 +330,56 @@ function loadRealPack(errors) {
   }
 }
 
+function validateStaticContract(errors) {
+  const checks = [
+    ["RFI", RFI_SPOT_IDS, MVP_CONTRACT.rfi],
+    ["Facing Open coverage", FACING_OPEN_COVERAGE_SPOT_IDS, MVP_CONTRACT.facingOpenCoverage],
+    ["Facing Open response", FACING_OPEN_RESPONSE_SPOT_IDS, MVP_CONTRACT.facingOpenResponse],
+    ["BB Defense", BB_DEFENSE_SPOT_IDS, MVP_CONTRACT.bbDefense],
+    ["3-bet vs open", THREE_BET_SPOT_IDS, MVP_CONTRACT.threeBetVsOpen],
+    ["Facing 3-bet", FACING_THREE_BET_SPOT_IDS, MVP_CONTRACT.facingThreeBet],
+    ["Selected Facing 4-bet", FACING_FOUR_BET_SPOT_IDS, MVP_CONTRACT.selectedFacingFourBet],
+    ["BvB Limp", BVB_LIMP_SPOT_IDS, MVP_CONTRACT.bvbLimp],
+    ["Iso vs Limp", ISO_VS_LIMP_SPOT_IDS, MVP_CONTRACT.isoVsLimp],
+    ["Squeeze", SQUEEZE_SPOT_IDS, MVP_CONTRACT.squeeze],
+  ];
+
+  checks.forEach(([label, spotIds, expectedCount]) => {
+    if (spotIds.length !== expectedCount) {
+      errors.push(`${label}: contract expects ${expectedCount} configured spot ids, found ${spotIds.length}.`);
+    }
+    assertUniqueIds(spotIds, `${label} configured spot ids`, errors);
+  });
+
+  if (LIVE_SPOT_IDS.length !== MVP_CONTRACT.totalRealSpots) {
+    errors.push(`Live spot-id contract expects ${MVP_CONTRACT.totalRealSpots} ids, configured ${LIVE_SPOT_IDS.length}.`);
+  }
+  assertUniqueIds(LIVE_SPOT_IDS, "live launch spot ids", errors);
+}
+
+function validatePackSpotIds(pack, errors) {
+  const packSpotIds = (pack.spots || []).map((spot) => spot?.spotId || "");
+  assertUniqueIds(packSpotIds, "real pack spot ids", errors);
+
+  const expected = new Set(LIVE_SPOT_IDS);
+  const actual = new Set(packSpotIds);
+  LIVE_SPOT_IDS.forEach((spotId) => {
+    if (!actual.has(spotId)) {
+      errors.push(`Real pack is missing live launch spot ${spotId}.`);
+    }
+  });
+  packSpotIds.forEach((spotId) => {
+    if (!expected.has(spotId)) {
+      errors.push(`Real pack contains unsupported live MVP spot ${spotId}. Update the coverage contract before adding it.`);
+    }
+  });
+}
+
 function validateFamilyCounts(pack, errors) {
   FAMILY_DEFINITIONS.forEach((family) => {
     const found = family.spotIds.map((spotId) => preflop.getPreflopSpot(pack, spotId)).filter(Boolean);
-    if (found.length !== 5) {
-      errors.push(`${family.name}: expected 5 supported spots, found ${found.length}.`);
+    if (found.length !== family.spotIds.length) {
+      errors.push(`${family.name}: expected ${family.spotIds.length} supported spots, found ${found.length}.`);
     }
 
     family.spotIds.forEach((spotId) => {
@@ -147,9 +391,45 @@ function validateFamilyCounts(pack, errors) {
       if (!family.matches(spot)) {
         errors.push(`${spotId}: metadata does not match ${family.name}.`);
       }
+      assertFamilyMetadata(spot, family, errors);
       assertLegalActions(spot, family.legalActions, errors);
     });
   });
+}
+
+function validateFacingOpenCoverage(pack, errors) {
+  FACING_OPEN_COVERAGE_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    if (!spot) {
+      errors.push(`Facing open coverage: missing spot ${spotId}.`);
+      return;
+    }
+    if (spot.actionContext !== "facing-open") {
+      errors.push(`${spotId}: expected actionContext facing-open for Facing Open coverage.`);
+    }
+    assertLegalActions(spot, ["fold", "call", "threeBet"], errors);
+  });
+}
+
+function assertFamilyMetadata(spot, family, errors) {
+  if (spot.family !== family.family) {
+    errors.push(`${spot.spotId}: expected family "${family.family}", got "${spot.family || ""}".`);
+  }
+  if (!spot.spotType) {
+    errors.push(`${spot.spotId}: missing spotType metadata.`);
+  }
+  if (!Array.isArray(spot.priorActions)) {
+    errors.push(`${spot.spotId}: priorActions must be an array.`);
+  }
+  if (!spot.openerPosition) {
+    errors.push(`${spot.spotId}: missing openerPosition metadata.`);
+  }
+  if (family.family !== "rfi" && !spot.defenderPosition) {
+    errors.push(`${spot.spotId}: missing defenderPosition metadata.`);
+  }
+  if (family.family !== "rfi" && !spot.aggressorPosition) {
+    errors.push(`${spot.spotId}: missing aggressorPosition metadata.`);
+  }
 }
 
 function validateCompleteSpots(pack, errors) {
@@ -195,6 +475,11 @@ function validateMappedSpot(pack, drillId, spotId, errors) {
     return;
   }
 
+  const handCount = Object.keys(spot.actionsByHand || {}).length;
+  if (handCount !== EXPECTED_HAND_COUNT) {
+    errors.push(`${drillId}/${spotId}: expected ${EXPECTED_HAND_COUNT} hands, found ${handCount}.`);
+  }
+
   const matrix = preflop.buildPreflopRangeMatrix(spot);
   if (!matrix || matrix.cells.length !== EXPECTED_HAND_COUNT) {
     errors.push(`${drillId}/${spotId}: expected a ${EXPECTED_HAND_COUNT}-cell matrix.`);
@@ -236,6 +521,24 @@ function getLegalActionIds(spot) {
   return (spot.legalActions || []).map((action) => action.id);
 }
 
+function assertUniqueIds(values, label, errors) {
+  const seen = new Set();
+  const duplicates = new Set();
+  values.forEach((value) => {
+    if (!value) {
+      errors.push(`${label}: contains an empty id.`);
+      return;
+    }
+    if (seen.has(value)) {
+      duplicates.add(value);
+    }
+    seen.add(value);
+  });
+  if (duplicates.size) {
+    errors.push(`${label}: duplicate ids ${[...duplicates].join(", ")}.`);
+  }
+}
+
 function report(errors, pack = null) {
   if (errors.length) {
     errors.forEach((error) => console.error(`ERROR: ${error}`));
@@ -245,9 +548,15 @@ function report(errors, pack = null) {
 
   const spotCount = pack?.spots?.length || 0;
   console.log(
-    `Preflop range coverage passed: ${spotCount} real spots, ` +
+    `Expanded 6-max preflop MVP contract passed: ${spotCount} real spots, ` +
       `${RFI_SPOT_IDS.length} RFI, ${BB_DEFENSE_SPOT_IDS.length} BB defense, ` +
+      `${FACING_OPEN_COVERAGE_SPOT_IDS.length} facing-open coverage spots, ` +
       `${THREE_BET_SPOT_IDS.length} 3-bet-vs-open, ` +
-      `${FACING_THREE_BET_SPOT_IDS.length} facing-3bet.`
+      `${FACING_THREE_BET_SPOT_IDS.length} facing-3bet, ` +
+      `${FACING_FOUR_BET_SPOT_IDS.length} facing-4bet, ` +
+      `${BVB_LIMP_SPOT_IDS.length} BvB limp, ` +
+      `${ISO_VS_LIMP_SPOT_IDS.length} iso-vs-limp, ` +
+      `${SQUEEZE_SPOT_IDS.length} squeeze.`
   );
+  console.log(`Future complete-preflop targets are documented but not required yet: ${FUTURE_TARGET_FAMILIES.join(", ")}.`);
 }
