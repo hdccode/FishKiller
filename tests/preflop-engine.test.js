@@ -92,6 +92,19 @@ const FACING_OPEN_COVERAGE_SPOT_IDS = [
   "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
   ...BB_DEFENSE_SPOT_IDS,
 ];
+const LIVE_SPOT_IDS = [
+  ...new Set([
+    ...RFI_SPOT_IDS,
+    ...FACING_OPEN_COVERAGE_SPOT_IDS,
+    ...BB_DEFENSE_SPOT_IDS,
+    ...THREE_BET_SPOT_IDS,
+    ...FACING_THREE_BET_SPOT_IDS,
+    ...FACING_FOUR_BET_SPOT_IDS,
+    ...BVB_LIMP_SPOT_IDS,
+    ...ISO_VS_LIMP_SPOT_IDS,
+    ...SQUEEZE_SPOT_IDS,
+  ]),
+];
 
 function fixedRng(value) {
   return () => value;
@@ -121,6 +134,8 @@ function run() {
   rejectsIllegalAction(spot);
   buildsFullMatrix(spot);
   samplesDeterministicQuestion(normalized);
+  samplesFacingThreeBetQuestionsFromPriorOpenRange(normalized);
+  samplesFacingFourBetQuestionsFromPriorThreeBetRange(normalized);
   resolvesDrillSpotIds();
   formatsPreflopLabels(normalized);
   console.log("preflop-engine tests passed");
@@ -415,9 +430,104 @@ function samplesDeterministicQuestion(pack) {
   assert(question.strategy.actions);
 }
 
+function samplesFacingThreeBetQuestionsFromPriorOpenRange(pack) {
+  FACING_THREE_BET_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    const priorSpot = findPriorOpenSpot(pack, spot);
+    assert(priorSpot, `${spotId} should have a matching prior open decision spot`);
+
+    const sampleHands = preflop.getPreflopSampleHandClasses(pack, spot);
+    assert(sampleHands.length > 0, `${spotId} should have sampleable hands`);
+    assert(sampleHands.length < 169, `${spotId} should not sample the full 169 after Hero has already opened`);
+    assert(sampleHands.includes("AA"), `${spotId} should include premium prior opens`);
+    assert(!sampleHands.includes("72o"), `${spotId} should exclude trash prior opens`);
+    if (spot.heroPosition === "LJ") {
+      assert(!sampleHands.includes("J9s"), `${spotId} should not auto-open marginal LJ J9s before facing a 3-bet`);
+    }
+
+    sampleHands.forEach((handClass) => {
+      const priorStrategy = preflop.getPreflopHandStrategy(priorSpot, handClass);
+      assert(
+        (priorStrategy?.actions?.raise || 0) >= preflop.PRIOR_OPEN_MIN_FREQUENCY,
+        `${spotId} sampled ${handClass}, but prior open frequency was too low`
+      );
+    });
+
+    const sampled = preflop.samplePreflopQuestion({
+      packOrNormalizedPack: pack,
+      spotId,
+      rng: fixedRng(0.999),
+    });
+    assert(sampleHands.includes(sampled.handClass), `${spotId} sampled outside the prior open range`);
+  });
+}
+
+function findPriorOpenSpot(pack, facingThreeBetSpot) {
+  const openerPosition = facingThreeBetSpot.openerPosition || facingThreeBetSpot.heroPosition;
+  return pack.spots.find((candidate) => {
+    const actionIds = new Set(candidate.legalActions.map((action) => action.id));
+    return candidate.heroPosition === openerPosition
+      && candidate.actionContext === "rfi"
+      && candidate.priorAction === "folded-to-hero"
+      && actionIds.has("raise");
+  }) || null;
+}
+
+function samplesFacingFourBetQuestionsFromPriorThreeBetRange(pack) {
+  FACING_FOUR_BET_SPOT_IDS.forEach((spotId) => {
+    const spot = preflop.getPreflopSpot(pack, spotId);
+    const priorSpot = findPriorThreeBetSpot(pack, spot);
+    assert(priorSpot, `${spotId} should have a matching prior 3-bet decision spot`);
+
+    const sampleHands = preflop.getPreflopSampleHandClasses(pack, spot);
+    assert(sampleHands.length > 0, `${spotId} should have sampleable hands`);
+    assert(sampleHands.length < 169, `${spotId} should not sample the full 169 after Hero has already 3-bet`);
+    assert(sampleHands.includes("AA"), `${spotId} should include premium prior 3-bets`);
+    assert(!sampleHands.includes("72o"), `${spotId} should exclude trash prior 3-bets`);
+    sampleHands.forEach((handClass) => {
+      const priorStrategy = preflop.getPreflopHandStrategy(priorSpot, handClass);
+      assert(
+        (priorStrategy?.actions?.threeBet || 0) >= preflop.PRIOR_AGGRESSION_MIN_FREQUENCY,
+        `${spotId} sampled ${handClass}, but prior 3-bet frequency was too low`
+      );
+    });
+
+    const sampled = preflop.samplePreflopQuestion({
+      packOrNormalizedPack: pack,
+      spotId,
+      rng: fixedRng(0.999),
+    });
+    assert(sampleHands.includes(sampled.handClass), `${spotId} sampled outside the prior 3-bet range`);
+  });
+}
+
+function findPriorThreeBetSpot(pack, facingFourBetSpot) {
+  const heroPosition = facingFourBetSpot.threeBettorPosition || facingFourBetSpot.heroPosition;
+  const openerPosition = facingFourBetSpot.openerPosition || facingFourBetSpot.villainPosition;
+  return pack.spots
+    .filter((candidate) => {
+      const actionIds = new Set(candidate.legalActions.map((action) => action.id));
+      const candidateOpener = candidate.openerPosition || candidate.villainPosition;
+      return candidate.heroPosition === heroPosition
+        && candidateOpener === openerPosition
+        && candidate.actionContext === "facing-open"
+        && actionIds.has("threeBet");
+    })
+    .sort((left, right) => priorThreeBetPriority(left) - priorThreeBetPriority(right))[0] || null;
+}
+
+function priorThreeBetPriority(spot) {
+  const family = preflop.getPreflopSpotFamily(spot);
+  if (family === "threeBetVsOpen") return 0;
+  if (family === "facingOpen") return 1;
+  if (family === "bbDefense") return 2;
+  return 3;
+}
+
 function resolvesDrillSpotIds() {
   const options = [
-    { id: "all-rfi", default: true, spotIds: RFI_SPOT_IDS },
+    { id: "all-preflop", default: true, spotIds: LIVE_SPOT_IDS },
+    { id: "all-rfi", spotIds: RFI_SPOT_IDS },
     { id: "co-rfi", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
     { id: "all-facing-open", spotIds: FACING_OPEN_COVERAGE_SPOT_IDS },
     { id: "fo-btn-vs-hj", spotIds: ["fk_6max_100bb_btn_vs_hj_open_v1"] },
@@ -446,6 +556,8 @@ function resolvesDrillSpotIds() {
     { id: "review-mistakes", reviewMode: true, spotIds: [] },
   ];
 
+  assert.equal(LIVE_SPOT_IDS.length, 56);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-preflop", options), LIVE_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("co-rfi", options), ["fk_6max_100bb_co_rfi_unopened_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-facing-open", options), FACING_OPEN_COVERAGE_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("fo-btn-vs-hj", options), ["fk_6max_100bb_btn_vs_hj_open_v1"]);
@@ -471,7 +583,7 @@ function resolvesDrillSpotIds() {
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("all-squeeze", options), SQUEEZE_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("sqz-btn-vs-lj-open-co-call", options), ["fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1"]);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("sqz-bb-vs-btn-open-sb-call", options), ["fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1"]);
-  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), RFI_SPOT_IDS);
+  assert.deepEqual(preflop.resolvePreflopDrillSpotIds("missing", options), LIVE_SPOT_IDS);
   assert.deepEqual(preflop.resolvePreflopDrillSpotIds("review-mistakes", options), []);
 }
 

@@ -135,7 +135,8 @@ const FUTURE_TARGET_FAMILIES = [
 ];
 
 const DRILL_OPTIONS = [
-  { id: "all-rfi", default: true, spotIds: RFI_SPOT_IDS },
+  { id: "all-preflop", default: true, spotIds: LIVE_SPOT_IDS },
+  { id: "all-rfi", spotIds: RFI_SPOT_IDS },
   { id: "lj-rfi", spotIds: ["fk_6max_100bb_lj_rfi_unopened_v1"] },
   { id: "hj-rfi", spotIds: ["fk_6max_100bb_hj_rfi_unopened_v1"] },
   { id: "co-rfi", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },

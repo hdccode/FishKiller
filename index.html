@@ -134,13 +134,45 @@
       <section class="trainer-grid">
         <article class="scenario-panel panel">
           <div class="scenario-topline">
-            <div class="session-chip" id="session-chip">Ready</div>
-            <div class="progress-track">
-              <div class="progress-fill" id="progress-fill"></div>
+            <div class="hud-brand">
+              <span class="hud-compass" aria-hidden="true"></span>
+              <div>
+                <span class="hud-title">Preflop Trainer</span>
+                <span class="session-chip" id="session-chip">Ready</span>
+              </div>
             </div>
-            <div class="session-figures">
-              <span id="session-counter">0 / 0</span>
-              <span id="mistake-counter">0 mistakes</span>
+            <div class="hud-progress">
+              <span>Preflop Range Progress</span>
+              <div class="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+            </div>
+            <div class="session-figures" aria-label="Session stats">
+              <span class="hud-stat hud-stat-hands">
+                <span class="hud-stat-icon hud-stat-icon-hands" aria-hidden="true"></span>
+                <span class="hud-stat-copy">
+                  <small>Hands</small>
+                  <strong id="session-counter">0 / 0</strong>
+                </span>
+              </span>
+              <span class="hud-stat hud-stat-mistakes">
+                <span class="hud-stat-icon hud-stat-icon-mistakes" aria-hidden="true"></span>
+                <span class="hud-stat-copy">
+                  <small>Mistakes</small>
+                  <strong id="mistake-counter">0 mistakes</strong>
+                </span>
+              </span>
+              <span class="hud-stat hud-stat-accuracy">
+                <span class="hud-stat-icon hud-stat-icon-accuracy" aria-hidden="true"></span>
+                <span class="hud-stat-copy">
+                  <small>Accuracy</small>
+                  <strong id="session-accuracy">0%</strong>
+                </span>
+              </span>
+            </div>
+            <div class="visual-skin-toggle" id="visual-skin-toggle" aria-label="Visual skin">
+              <button type="button" data-skin="fishkiller2" aria-pressed="true">FK2</button>
+              <button type="button" data-skin="fishkiller1" aria-pressed="false">FK1</button>
             </div>
           </div>
 
@@ -167,7 +199,9 @@
             <p class="scenario-copy" id="scenario-copy">Choose a format and launch a short trainer. Each mistake is corrected immediately, and missed spots are saved for a retry round.</p>
 
             <div class="fact-grid" id="scenario-facts"></div>
-            <div class="table-visual" id="table-visual"></div>
+            <div class="table-stage">
+              <div class="table-visual" id="table-visual"></div>
+            </div>
             <div class="answer-grid" id="answer-grid"></div>
           </div>
 
@@ -274,6 +308,18 @@
         <button class="secondary-button" id="modal-close-button">Close</button>
         <button class="secondary-button hidden" id="retry-misses-button">Retry Misses</button>
         <button class="primary-button" id="modal-new-session-button">Start Fresh Session</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="end-session-modal">
+    <div class="modal-card panel end-session-card">
+      <span class="eyebrow">Leave session</span>
+      <h3>End this session now?</h3>
+      <p>All XP earned in this session will be lost. Your lifetime progress from earlier sessions will stay safe.</p>
+      <div class="modal-actions">
+        <button class="secondary-button" id="cancel-end-session-button" type="button">Keep playing</button>
+        <button class="primary-button danger-button" id="confirm-end-session-button" type="button">End session</button>
       </div>
     </div>
   </div>

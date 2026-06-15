@@ -60,19 +60,20 @@ These checks do not run TexasSolver.
 1. Start the app with `npm start`.
 2. Open `http://127.0.0.1:4173`.
 3. Select `6-Max`.
-4. Try `All RFI`.
-5. Try `All Facing Open`.
-6. Try `All BB Defense`.
-7. Try `All 3-bet`.
-8. Try `All Facing 3-bet`.
-9. Try `All Facing 4-bet`.
-10. Try `All BvB Limp`.
-11. Try `All Iso vs Limp`.
-12. Try `All Squeeze`.
-13. Open the range table for a hand and confirm the current hand is highlighted.
-14. Answer a few hands and check the feedback/frequencies.
-15. View the local progress summary.
-16. Use Review mistakes after recording a miss.
+4. Start with the default `All Preflop` drill, which samples across the full 56-spot live pack.
+5. Try `All RFI`.
+6. Try `All Facing Open`.
+7. Try `All BB Defense`.
+8. Try `All 3-bet`.
+9. Try `All Facing 3-bet`.
+10. Try `All Facing 4-bet`.
+11. Try `All BvB Limp`.
+12. Try `All Iso vs Limp`.
+13. Try `All Squeeze`.
+14. Open the range table for a hand and confirm the current hand is highlighted.
+15. Answer a few hands and check the feedback/frequencies.
+16. View the local progress summary.
+17. Use Review mistakes after recording a miss.
 
 HU, 3-max, and 9-max can also be opened, but they are starter scenario drills rather than the live 6-max range-pack trainer.
 

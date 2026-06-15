@@ -3,6 +3,8 @@
   const MIXED_ACTION_MIN_FREQUENCY = 0.2;
   const TINY_ACTION_MAX_FREQUENCY = 0.05;
   const PURE_ACTION_MIN_FREQUENCY = 0.999;
+  const PRIOR_OPEN_MIN_FREQUENCY = 0.75;
+  const PRIOR_AGGRESSION_MIN_FREQUENCY = MIXED_ACTION_MIN_FREQUENCY;
   const PREFLOP_SPOT_FAMILIES = Object.freeze({
     rfi: "rfi",
     facingOpen: "facingOpen",
@@ -158,12 +160,15 @@
   }
 
   function samplePreflopQuestion({ packOrNormalizedPack, spotId, rng = Math.random }) {
-    const spot = getPreflopSpot(packOrNormalizedPack, spotId);
+    const pack = packOrNormalizedPack?.spotsById
+      ? packOrNormalizedPack
+      : normalizePreflopRangePack(packOrNormalizedPack);
+    const spot = getPreflopSpot(pack, spotId);
     if (!spot) {
       throw new Error(`Preflop spot not found: ${spotId}`);
     }
 
-    const handClasses = Object.keys(spot.actionsByHand || {}).sort(compareHandClassesForMatrix);
+    const handClasses = getPreflopSampleHandClasses(pack, spot);
     if (!handClasses.length) {
       throw new Error(`Preflop spot has no hand strategies: ${spotId}`);
     }
@@ -176,6 +181,113 @@
       legalActions: spot.legalActions,
       strategy: getPreflopHandStrategy(spot, handClass),
     };
+  }
+
+  function getPreflopSampleHandClasses(packOrNormalizedPack, spotOrSpotId) {
+    const pack = packOrNormalizedPack?.spotsById
+      ? packOrNormalizedPack
+      : normalizePreflopRangePack(packOrNormalizedPack);
+    const spot = typeof spotOrSpotId === "string" ? getPreflopSpot(pack, spotOrSpotId) : spotOrSpotId;
+    const allHandClasses = Object.keys(spot?.actionsByHand || {}).sort(compareHandClassesForMatrix);
+
+    if (!spot) {
+      return allHandClasses;
+    }
+
+    if (getPreflopSpotFamily(spot) === PREFLOP_SPOT_FAMILIES.facingThreeBet) {
+      return getHandClassesWithPriorActionFrequency({
+        pack,
+        spot,
+        allHandClasses,
+        priorSpot: findPriorOpenDecisionSpot(pack, spot),
+        actionId: "raise",
+        minimumFrequency: PRIOR_OPEN_MIN_FREQUENCY,
+      });
+    }
+
+    if (getPreflopSpotFamily(spot) !== PREFLOP_SPOT_FAMILIES.facingFourBet) {
+      return allHandClasses;
+    }
+
+    const priorThreeBetSpot = findPriorThreeBetDecisionSpot(pack, spot);
+    return getHandClassesWithPriorActionFrequency({
+      pack,
+      spot,
+      allHandClasses,
+      priorSpot: priorThreeBetSpot,
+      actionId: "threeBet",
+      minimumFrequency: PRIOR_AGGRESSION_MIN_FREQUENCY,
+    });
+  }
+
+  function getHandClassesWithPriorActionFrequency({ allHandClasses, priorSpot, actionId, minimumFrequency }) {
+    if (!priorSpot) {
+      return allHandClasses;
+    }
+
+    const eligibleHandClasses = allHandClasses.filter((handClass) => {
+      const priorStrategy = getPreflopHandStrategy(priorSpot, handClass);
+      return getActionFrequency(priorStrategy, actionId) >= minimumFrequency;
+    });
+
+    return eligibleHandClasses.length ? eligibleHandClasses : allHandClasses;
+  }
+
+  function findPriorOpenDecisionSpot(pack, facingThreeBetSpot) {
+    const openerPosition = facingThreeBetSpot?.openerPosition || facingThreeBetSpot?.heroPosition || "";
+
+    if (!openerPosition || !Array.isArray(pack?.spots)) {
+      return null;
+    }
+
+    return pack.spots.find((candidate) => {
+      const candidateActionIds = new Set((candidate.legalActions || []).map((action) => action.id));
+      return candidate.heroPosition === openerPosition
+        && candidate.actionContext === "rfi"
+        && candidate.priorAction === "folded-to-hero"
+        && candidateActionIds.has("raise");
+    }) || null;
+  }
+
+  function findPriorThreeBetDecisionSpot(pack, facingFourBetSpot) {
+    const heroPosition = facingFourBetSpot?.threeBettorPosition || facingFourBetSpot?.heroPosition || "";
+    const openerPosition = facingFourBetSpot?.openerPosition
+      || facingFourBetSpot?.fourBettorPosition
+      || facingFourBetSpot?.villainPosition
+      || "";
+
+    if (!heroPosition || !openerPosition || !Array.isArray(pack?.spots)) {
+      return null;
+    }
+
+    return pack.spots
+      .filter((candidate) => {
+        const candidateOpener = candidate.openerPosition || candidate.villainPosition || "";
+        const candidateActionIds = new Set((candidate.legalActions || []).map((action) => action.id));
+        const candidateFamily = getPreflopSpotFamily(candidate);
+        return candidate.heroPosition === heroPosition
+          && candidateOpener === openerPosition
+          && candidate.actionContext === "facing-open"
+          && candidateActionIds.has("threeBet")
+          && [
+            PREFLOP_SPOT_FAMILIES.threeBetVsOpen,
+            PREFLOP_SPOT_FAMILIES.facingOpen,
+            PREFLOP_SPOT_FAMILIES.bbDefense,
+          ].includes(candidateFamily);
+      })
+      .sort(comparePriorThreeBetSpotPriority)[0] || null;
+  }
+
+  function comparePriorThreeBetSpotPriority(left, right) {
+    return getPriorThreeBetSpotPriority(left) - getPriorThreeBetSpotPriority(right);
+  }
+
+  function getPriorThreeBetSpotPriority(spot) {
+    const family = getPreflopSpotFamily(spot);
+    if (family === PREFLOP_SPOT_FAMILIES.threeBetVsOpen) return 0;
+    if (family === PREFLOP_SPOT_FAMILIES.facingOpen) return 1;
+    if (family === PREFLOP_SPOT_FAMILIES.bbDefense) return 2;
+    return 3;
   }
 
   function resolvePreflopDrillSpotIds(drillId, drillOptions = []) {
@@ -469,6 +581,8 @@
   const api = {
     MIXED_ACTION_MIN_FREQUENCY,
     TINY_ACTION_MAX_FREQUENCY,
+    PRIOR_OPEN_MIN_FREQUENCY,
+    PRIOR_AGGRESSION_MIN_FREQUENCY,
     RANK_ORDER,
     normalizePreflopRangePack,
     getPreflopSpot,
@@ -477,6 +591,7 @@
     gradePreflopAnswer,
     buildPreflopRangeMatrix,
     samplePreflopQuestion,
+    getPreflopSampleHandClasses,
     resolvePreflopDrillSpotIds,
     PREFLOP_SPOT_FAMILIES,
     getPreflopSpotFamily,

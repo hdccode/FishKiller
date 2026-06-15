@@ -10,6 +10,8 @@ const FULL_HAND_STREETS = ["preflop", "flop", "turn", "river"];
 const SOLVER_EQUITY_SAMPLES = 42;
 const SOLVER_RANGE_SAMPLE_SIZE = 72;
 const POSTFLOP_SOLVER_ENABLED = false;
+const TABLE_ACTION_ANIMATION_MS = 850;
+const TABLE_ACTION_ANIMATION_STAGGER_MS = 820;
 
 const PRACTICE_MODES = {
   preflop: {
@@ -31,6 +33,12 @@ const CARD_STYLES = [
   { id: "abyss", name: "Abyss Pro", xp: 320, description: "Deep-sea dark cards for serious volume." },
   { id: "goldfin", name: "Goldfin Elite", xp: 650, description: "Gold-edged deck for proven crushers." },
 ];
+
+const VISUAL_SKINS = [
+  { id: "fishkiller2", label: "FishKiller2" },
+  { id: "fishkiller1", label: "FishKiller1" },
+];
+const DEFAULT_VISUAL_SKIN = "fishkiller2";
 
 const TABLES = {
   hu: {
@@ -86,6 +94,50 @@ const TABLES = {
     ],
   },
 };
+
+const SEAT_AVATAR_BY_SEAT = {
+  "SB / BTN": "dolphin",
+  UTG: "shark",
+  "UTG+1": "octopus",
+  MP: "turtle",
+  LJ: "shark",
+  HJ: "octopus",
+  CO: "turtle",
+  BTN: "blue-shark",
+  SB: "dolphin",
+  BB: "angler",
+};
+
+const SEAT_AVATAR_CONFIG = {
+  shark: { src: "assets/avatars/seat-shark.png", objectPosition: "50% 50%", scale: 1.02, spriteLeft: "0%", spriteTop: "0%" },
+  octopus: { src: "assets/avatars/seat-octopus.png", objectPosition: "50% 50%", scale: 1.02, spriteLeft: "-100%", spriteTop: "0%" },
+  turtle: { src: "assets/avatars/seat-turtle.png", objectPosition: "51% 50%", scale: 1.02, spriteLeft: "-200%", spriteTop: "0%" },
+  "blue-shark": { src: "assets/avatars/seat-blue-shark.png", objectPosition: "50% 50%", scale: 1.02, spriteLeft: "0%", spriteTop: "-100%" },
+  dolphin: { src: "assets/avatars/seat-dolphin.png", objectPosition: "50% 51%", scale: 1.04, spriteLeft: "-100%", spriteTop: "-100%" },
+  angler: { src: "assets/avatars/seat-angler.png", objectPosition: "50% 50%", scale: 1.02, spriteLeft: "-200%", spriteTop: "-100%" },
+};
+
+const SEAT_AVATAR_CROP_CONFIG = {
+  shark: { scale: 1.26, x: "-2%", y: "1%", objectPosition: "49% 51%" },
+  octopus: { scale: 1.22, x: "0%", y: "3%", objectPosition: "50% 53%" },
+  turtle: { scale: 1.2, x: "2%", y: "2%", objectPosition: "53% 52%" },
+  "blue-shark": { scale: 1.24, x: "-2%", y: "2%", objectPosition: "48% 52%" },
+  dolphin: { scale: 1.2, x: "0%", y: "2%", objectPosition: "50% 53%" },
+  angler: { scale: 1.24, x: "2%", y: "1%", objectPosition: "52% 51%" },
+};
+
+const SEAT_AVATAR_ASSET_VERSION = "20260601-dolphinbelly";
+const SEAT_AVATAR_SPRITE_SRC = `assets/avatars/fishkiller-avatar-sheet.png?v=${SEAT_AVATAR_ASSET_VERSION}`;
+const SEAT_SHELL_ASSET_VERSION = "20260603-fkseat-transparent";
+
+const SIX_MAX_PLAYER_VIEW_SEAT_SLOTS = [
+  { x: "50.4%", y: "82%", anchor: "hero" },
+  { x: "28.6%", y: "82%", anchor: "bottom-left" },
+  { x: "15.6%", y: "47%", anchor: "left" },
+  { x: "34.6%", y: "11.2%", anchor: "top-left" },
+  { x: "65.2%", y: "11.2%", anchor: "top-right" },
+  { x: "81.6%", y: "47%", anchor: "right" },
+];
 
 const QUESTS = [
   {
@@ -213,11 +265,13 @@ const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = [
     ...PREFLOP_RANGE_SQUEEZE_SPOT_IDS,
   ]),
 ];
-const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-rfi";
+const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-preflop";
 const PREFLOP_RANGE_REVIEW_DRILL_ID = "review-mistakes";
+const PREFLOP_RANGE_DRILL_DEFAULT_VERSION = 2;
 const PREFLOP_RANGE_MIN_WEAK_SPOT_ATTEMPTS = 5;
 const PREFLOP_RANGE_DRILL_OPTIONS = [
-  { id: "all-rfi", label: "All RFI", group: "RFI", default: true, spotIds: PREFLOP_RANGE_RFI_SPOT_IDS },
+  { id: "all-preflop", label: "All Preflop", group: "All", default: true, spotIds: PREFLOP_RANGE_TRAINABLE_SPOT_IDS },
+  { id: "all-rfi", label: "All RFI", group: "RFI", spotIds: PREFLOP_RANGE_RFI_SPOT_IDS },
   { id: "lj-rfi", label: "LJ RFI", group: "RFI", spotIds: ["fk_6max_100bb_lj_rfi_unopened_v1"] },
   { id: "hj-rfi", label: "HJ RFI", group: "RFI", spotIds: ["fk_6max_100bb_hj_rfi_unopened_v1"] },
   { id: "co-rfi", label: "CO RFI", group: "RFI", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
@@ -330,6 +384,7 @@ const elements = {
   progressFill: document.getElementById("progress-fill"),
   sessionCounter: document.getElementById("session-counter"),
   mistakeCounter: document.getElementById("mistake-counter"),
+  sessionAccuracy: document.getElementById("session-accuracy"),
   scenarioTable: document.getElementById("scenario-table"),
   scenarioDifficulty: document.getElementById("scenario-difficulty"),
   bettingLine: document.getElementById("betting-line"),
@@ -345,6 +400,8 @@ const elements = {
   feedbackText: document.getElementById("feedback-text"),
   gtoTableButton: document.getElementById("gto-table-button"),
   continueButton: document.getElementById("continue-button"),
+  sessionExitButton: document.getElementById("session-exit-button"),
+  visualSkinToggle: document.getElementById("visual-skin-toggle"),
   lastGrade: document.getElementById("last-grade"),
   lastXp: document.getElementById("last-xp"),
   lastAccuracy: document.getElementById("last-accuracy"),
@@ -364,6 +421,9 @@ const elements = {
   modalCloseButton: document.getElementById("modal-close-button"),
   retryMissesButton: document.getElementById("retry-misses-button"),
   modalNewSessionButton: document.getElementById("modal-new-session-button"),
+  endSessionModal: document.getElementById("end-session-modal"),
+  cancelEndSessionButton: document.getElementById("cancel-end-session-button"),
+  confirmEndSessionButton: document.getElementById("confirm-end-session-button"),
   gtoModal: document.getElementById("gto-modal"),
   gtoKicker: document.getElementById("gto-kicker"),
   gtoTitle: document.getElementById("gto-title"),
@@ -381,6 +441,10 @@ let preflopRangePack = null;
 let preflopRangeSpot = null;
 let preflopRangeSpots = [];
 let preflopRangeStatus = "idle";
+let tableActionAnimationKey = "";
+let tableActionAnimationTimers = [];
+let tableActionAnimationRevealKey = "";
+let tableActionAnimationRevealedFoldSeats = new Set();
 const solverCache = new Map();
 
 boot();
@@ -413,13 +477,23 @@ function bindEvents() {
   document.addEventListener("click", closeProfileMenu);
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
+      closeEndSessionModal();
       closeProfileMenu();
     }
   });
   elements.startSessionButton.addEventListener("click", () => startMainSession(state.selectedTableSize));
   elements.continueButton.addEventListener("click", advanceSession);
+  elements.sessionExitButton?.addEventListener("click", openEndSessionModal);
+  elements.visualSkinToggle?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-skin]");
+    if (button) {
+      selectVisualSkin(button.dataset.skin);
+    }
+  });
   elements.gtoTableButton.addEventListener("click", openGtoModal);
   elements.gtoCloseButton.addEventListener("click", closeGtoModal);
+  elements.cancelEndSessionButton?.addEventListener("click", closeEndSessionModal);
+  elements.confirmEndSessionButton?.addEventListener("click", endActiveSessionPrematurely);
   elements.modalCloseButton.addEventListener("click", closeSummaryModal);
   elements.modalNewSessionButton.addEventListener("click", () => {
     closeSummaryModal();
@@ -441,6 +515,11 @@ function bindEvents() {
   elements.summaryModal.addEventListener("click", (event) => {
     if (event.target === elements.summaryModal) {
       closeSummaryModal();
+    }
+  });
+  elements.endSessionModal?.addEventListener("click", (event) => {
+    if (event.target === elements.endSessionModal) {
+      closeEndSessionModal();
     }
   });
   elements.gtoModal.addEventListener("click", (event) => {
@@ -545,9 +624,11 @@ function createDefaultState() {
     totalXp: 0,
     xpBoostSessions: 0,
     cardStyle: "reef",
+    visualSkin: DEFAULT_VISUAL_SKIN,
     daily: createDailyState(),
     preflop6maxProgress: createDefaultPreflop6maxProgress(),
     preflop6maxDrillId: PREFLOP_RANGE_DEFAULT_DRILL_ID,
+    preflop6maxDrillDefaultVersion: PREFLOP_RANGE_DRILL_DEFAULT_VERSION,
     lastResult: {
       grade: "No run yet",
       xp: 0,
@@ -597,6 +678,7 @@ function loadState() {
       xpByTable: { ...defaults.xpByTable, ...(parsed.xpByTable || {}) },
       modeByTable: { ...defaults.modeByTable, ...(parsed.modeByTable || {}) },
       cardStyle: getCardStyleById(parsed.cardStyle)?.id || defaults.cardStyle,
+      visualSkin: normalizeVisualSkinId(parsed.visualSkin),
       daily: {
         ...defaults.daily,
         ...(parsed.daily || {}),
@@ -604,7 +686,8 @@ function loadState() {
         claimedQuestIds: Array.isArray(parsed.daily?.claimedQuestIds) ? parsed.daily.claimedQuestIds : [],
       },
       preflop6maxProgress: normalizePreflop6maxProgress(parsed.preflop6maxProgress),
-      preflop6maxDrillId: normalizePreflopRangeDrillId(parsed.preflop6maxDrillId),
+      preflop6maxDrillId: normalizeStoredPreflopRangeDrillId(parsed.preflop6maxDrillId, parsed.preflop6maxDrillDefaultVersion),
+      preflop6maxDrillDefaultVersion: PREFLOP_RANGE_DRILL_DEFAULT_VERSION,
       lastResult: { ...defaults.lastResult, ...(parsed.lastResult || {}) },
     };
 
@@ -689,6 +772,7 @@ function startMainSession(tableSize) {
   activeSession.usingEngineFallback = Boolean(sessionEngine.isFallback);
   latestSummary = null;
   closeSummaryModal();
+  closeEndSessionModal();
   enterLessonMode();
   render();
 }
@@ -712,6 +796,7 @@ function startPreflopRangeSession(tableSize, sessionEngine, options = {}) {
     activeSession.usingEngineFallback = true;
     latestSummary = null;
     closeSummaryModal();
+    closeEndSessionModal();
     enterLessonMode();
     render();
     return;
@@ -745,6 +830,7 @@ function startPreflopRangeSession(tableSize, sessionEngine, options = {}) {
   activeSession.spotId = activeSession.questionStates[0]?.spotId || spot.spotId;
   latestSummary = null;
   closeSummaryModal();
+  closeEndSessionModal();
   enterLessonMode();
   render();
 }
@@ -1277,7 +1363,7 @@ function answerPreflopRangeQuestion(actionId) {
     }
   }
 
-  renderScenario();
+  renderPreflopRangeAnsweredState(question);
 }
 
 function recordPreflopRangeAttempt(question, grade) {
@@ -1298,11 +1384,23 @@ function recordPreflopRangeAttempt(question, grade) {
 }
 
 function advanceSession() {
-  if (!activeSession || !activeSession.pendingAdvance) {
-    const question = getCurrentQuestion();
+  if (!activeSession) {
+    return;
+  }
+
+  const question = getCurrentQuestion();
+  if (!activeSession.pendingAdvance) {
     if (question?.decisionReview && continueStagedDecision(question)) {
       return;
     }
+    if (activeSession.trainingEngine === TRAINING_ENGINE_IDS.preflopRange && question?.answered) {
+      activeSession.pendingAdvance = true;
+    } else {
+      return;
+    }
+  }
+
+  if (activeSession.trainingEngine === TRAINING_ENGINE_IDS.preflopRange && !question?.answered) {
     return;
   }
 
@@ -1334,6 +1432,42 @@ function advanceSession() {
 
   activeSession.pendingAdvance = false;
   render();
+}
+
+function openEndSessionModal() {
+  if (!activeSession || !elements.endSessionModal) {
+    return;
+  }
+
+  elements.endSessionModal.classList.remove("hidden");
+  elements.cancelEndSessionButton?.focus();
+}
+
+function closeEndSessionModal() {
+  elements.endSessionModal?.classList.add("hidden");
+}
+
+function endActiveSessionPrematurely() {
+  if (!activeSession) {
+    closeEndSessionModal();
+    return;
+  }
+
+  const lostXp = activeSession.xpEarned || 0;
+  activeSession = null;
+  latestSummary = null;
+  clearTableActionAnimations();
+  closeGtoModal();
+  closeSummaryModal();
+  closeEndSessionModal();
+  exitLessonMode();
+  render();
+  showToast(
+    "Session ended",
+    lostXp > 0
+      ? `${formatNumber(lostXp)} session XP discarded. No heart was lost.`
+      : "No XP was awarded. No heart was lost."
+  );
 }
 
 function skipRemainingStreetsForFoldedHand(foldedQuestion) {
@@ -1456,6 +1590,7 @@ function enterLessonMode() {
 
 function exitLessonMode() {
   document.body.classList.remove("lesson-active");
+  document.body.classList.remove("preflop-range-active");
 
   if (document.fullscreenElement && document.exitFullscreen) {
     document.exitFullscreen().catch(() => {});
@@ -1627,8 +1762,11 @@ function render() {
 function renderTopline() {
   syncHearts(state);
   saveState();
+  applyVisualSkin();
   document.body.classList.toggle("menu-mode", !activeSession);
   document.body.classList.toggle("session-mode", Boolean(activeSession));
+  document.body.classList.toggle("preflop-range-active", activeSession?.trainingEngine === TRAINING_ENGINE_IDS.preflopRange);
+  elements.sessionExitButton?.classList.toggle("hidden", !activeSession);
 
   const selectedTable = TABLES[state.selectedTableSize];
   const activeTable = activeSession ? TABLES[activeSession.tableSize] : selectedTable;
@@ -1663,10 +1801,40 @@ function renderTopline() {
 
   elements.startSessionButton.textContent = `Start ${PRACTICE_MODES[getPracticeMode(selectedTable.id)].label}`;
   elements.startSessionButton.disabled = state.hearts <= 0 && !activeSession;
+  renderVisualSkinToggle();
+}
+
+function normalizeVisualSkinId(skinId) {
+  return VISUAL_SKINS.some((skin) => skin.id === skinId) ? skinId : DEFAULT_VISUAL_SKIN;
+}
+
+function applyVisualSkin() {
+  document.body.dataset.visualSkin = normalizeVisualSkinId(state.visualSkin);
+}
+
+function renderVisualSkinToggle() {
+  elements.visualSkinToggle?.querySelectorAll("[data-skin]").forEach((button) => {
+    const isActive = button.dataset.skin === normalizeVisualSkinId(state.visualSkin);
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function selectVisualSkin(skinId) {
+  const normalized = normalizeVisualSkinId(skinId);
+  if (state.visualSkin === normalized) {
+    return;
+  }
+
+  state.visualSkin = normalized;
+  saveState();
+  applyVisualSkin();
+  renderVisualSkinToggle();
+  showToast("Visual skin equipped", VISUAL_SKINS.find((skin) => skin.id === normalized)?.label || "FishKiller");
 }
 
 function getPreflopCoverageLabel() {
-  return "RFI / Facing Open / BB Defense / 3-bet / Facing 3-bet / Facing 4-bet / BvB Limp / Iso vs Limp / Squeeze";
+  return "All spots";
 }
 
 function getTableIntroCopy(tableSize) {
@@ -1875,6 +2043,7 @@ function renderScenario() {
   elements.sessionChip.textContent = activeSession.mode === "main" ? getStreetLabel(question.street) : "Review Round";
   elements.sessionCounter.textContent = `${activeSession.currentIndex + 1} / ${activeSession.questionStates.length}`;
   elements.mistakeCounter.textContent = activeSession.mode === "main" ? `${activeSession.strikes} / 3 mistakes` : `${activeSession.missedQuestions.length} misses logged`;
+  elements.sessionAccuracy.textContent = getActiveSessionAccuracyValue();
   elements.progressFill.style.width = `${Math.round(((activeSession.currentIndex + (question.answered ? 1 : 0)) / activeSession.questionStates.length) * 100)}%`;
   elements.scenarioFacts.innerHTML = spot.facts.map((fact) => createFactCard(fact.label, fact.value)).join("");
   setScenarioExplanationVisible(question.answered || Boolean(question.decisionReview));
@@ -1909,12 +2078,13 @@ function renderPreflopRangeScenario() {
   elements.sessionChip.textContent = activeSession.mode === "review" ? "Range Review" : "Preflop Range";
   elements.sessionCounter.textContent = `${activeSession.currentIndex + 1} / ${activeSession.questionStates.length}`;
   elements.mistakeCounter.textContent = activeSession.mode === "main"
-    ? `${activeSession.strikes} / 3 mistakes - ${getPreflopRangeSessionAccuracyLabel()}`
-    : `Review mistakes - ${getPreflopRangeSessionAccuracyLabel()}`;
+    ? `${activeSession.strikes} / 3`
+    : `${activeSession.missedQuestions.length} misses`;
+  elements.sessionAccuracy.textContent = getActiveSessionAccuracyValue();
   elements.progressFill.style.width = `${Math.round(((activeSession.currentIndex + (question.answered ? 1 : 0)) / activeSession.questionStates.length) * 100)}%`;
   elements.scenarioFacts.innerHTML = [
     createFactCard("Spot", getPreflopRangeSpotShortLabel(spot)),
-    createFactCard("Drill", getPreflopRangeDrill(getActivePreflopRangeDrillId())?.label || "All RFI"),
+    createFactCard("Drill", getPreflopRangeDrill(getActivePreflopRangeDrillId())?.label || "All Preflop"),
     createFactCard("Coverage", getPreflopCoverageLabel()),
     createFactCard("Stack", "100bb"),
     createFactCard(getPreflopRangeSizeFactLabel(spot), getPreflopRangeOpenLabel(spot)),
@@ -1923,6 +2093,7 @@ function renderPreflopRangeScenario() {
   renderPreflopRangeProgressSummary();
   setScenarioExplanationVisible(true);
   renderTableVisual(visualScenario, bettingSummary, {
+    ...spot,
     street: "preflop",
     heroCards: getHeroCardsForScenario(visualScenario),
     facts: [{ label: "Pot", value: formatMoney(bettingSummary.pot || SMALL_BLIND + BIG_BLIND) }],
@@ -1932,11 +2103,15 @@ function renderPreflopRangeScenario() {
 }
 
 function getPreflopRangeSessionAccuracyLabel() {
+  return `${getActiveSessionAccuracyValue()} accuracy`;
+}
+
+function getActiveSessionAccuracyValue() {
   const answered = activeSession?.questionStates?.filter((question) => question.answered).length || 0;
   if (!answered) {
-    return "0% accuracy";
+    return "0%";
   }
-  return `${Math.round((activeSession.correctCount / answered) * 100)}% accuracy`;
+  return `${Math.round((activeSession.correctCount / answered) * 100)}%`;
 }
 
 function renderPreflopRangeProgressSummary() {
@@ -2781,44 +2956,175 @@ function renderPreflopRangeAnswers(question) {
     }
 
     button.disabled = question.answered;
-    button.innerHTML = `
-      <strong>${getPreflopActionLabel(question.legalActions, action.id)}</strong>
-      <span>${getPreflopRangeActionHint(action)}</span>
-    `;
+    button.classList.add(`answer-${getPreflopActionTone(action.id)}`);
+    button.innerHTML = createPreflopActionButtonMarkup(action, question.legalActions);
     button.addEventListener("click", () => answerCurrentQuestion(action.id));
     elements.answerGrid.appendChild(button);
   });
+
+}
+
+function renderPreflopRangeAnsweredState(question) {
+  try {
+    renderScenario();
+    return;
+  } catch (error) {
+    console.error("Failed to render answered 6-max preflop spot; showing fallback controls.", error);
+  }
+
+  renderPreflopRangeAnswerFallback(question);
+}
+
+function renderPreflopRangeAnswerFallback(question) {
+  if (!question) {
+    return;
+  }
+
+  elements.answerGrid.innerHTML = "";
+  const preferredActionId = question.grade?.preferredActionId || "";
+  (question.legalActions || []).forEach((action) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "answer-button";
+    if (action.id === preferredActionId) {
+      button.classList.add("correct");
+    } else if (action.id === question.selected && question.isMixed) {
+      button.classList.add("mixed");
+    } else if (action.id === question.selected) {
+      button.classList.add("wrong");
+    } else {
+      button.classList.add("locked");
+    }
+    button.classList.add(`answer-${getPreflopActionTone(action.id)}`);
+    button.disabled = true;
+    button.innerHTML = createPreflopActionButtonMarkup(action, question.legalActions);
+    elements.answerGrid.appendChild(button);
+  });
+  const grade = question.grade || {};
+  elements.feedbackBand.className = `feedback-band ${question.isCorrect ? "correct" : question.isMixed ? "mixed" : "wrong"}`;
+  elements.feedbackLabel.textContent = question.isCorrect ? "Correct" : question.isMixed ? "Mixed" : "Correction";
+  elements.feedbackText.textContent = grade.feedback || "Answer recorded. Continue to the next hand.";
+  elements.continueButton.disabled = false;
+  elements.continueButton.textContent = getPreflopRangeAdvanceLabel();
+}
+
+function createPreflopActionButtonMarkup(action, legalActions = []) {
+  const label = getPreflopActionLabel(legalActions, action.id);
+  return `
+    <span class="answer-icon-well" aria-hidden="true">
+      ${createPreflopActionIconMarkup(action.id)}
+    </span>
+    <span class="answer-copy">
+      <strong>${label}</strong>
+      <span>${getPreflopRangeActionHint(action)}</span>
+    </span>
+  `;
+}
+
+function getPreflopActionTone(actionId = "") {
+  if (actionId === "fold") {
+    return "fold";
+  }
+
+  if (["call", "check", "limp"].includes(actionId)) {
+    return "call";
+  }
+
+  return "raise";
+}
+
+function createPreflopActionIconMarkup(actionId = "") {
+  if (actionId === "fold") {
+    return '<svg viewBox="0 0 24 24" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+  }
+
+  if (actionId === "check") {
+    return '<svg viewBox="0 0 24 24" focusable="false"><path d="M5 12.5l4.2 4.2L19 7"/></svg>';
+  }
+
+  if (actionId === "call" || actionId === "limp") {
+    return '<svg viewBox="0 0 24 24" focusable="false"><path d="M12 3l7 3v5.5c0 4.1-2.8 7.2-7 9.5-4.2-2.3-7-5.4-7-9.5V6l7-3Z"/></svg>';
+  }
+
+  return '<svg viewBox="0 0 24 24" focusable="false"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/><path d="M7 19h10"/></svg>';
 }
 
 function renderPreflopRangeDrillSelector() {
   const wrapper = document.createElement("div");
   wrapper.className = "preflop-drill-selector";
+  const question = getCurrentQuestion();
+  const spot = getPreflopRangeSpot(question?.spotId);
   const activeDrillId = getActivePreflopRangeDrillId();
   const hasMistakes = Boolean(PREFLOP_PROGRESS?.hasPreflop6maxMistakes(state.preflop6maxProgress));
-  wrapper.innerHTML = `<span>${activeSession?.mode === "review" ? "Reviewing mistakes" : "Drill"}</span>`;
+  const activeDrill = getPreflopRangeDrill(activeDrillId) || getPreflopRangeDrill(PREFLOP_RANGE_DEFAULT_DRILL_ID);
+  const details = document.createElement("details");
+  details.className = "preflop-drill-menu";
+
+  const summary = document.createElement("summary");
+  summary.className = "preflop-drill-menu-button";
+  summary.setAttribute("aria-label", "Choose 6-max preflop drill");
+  summary.title = `Drill: ${activeDrill?.label || "All Preflop"}`;
+  const menuIcon = document.createElement("span");
+  menuIcon.className = "preflop-drill-menu-icon";
+  menuIcon.setAttribute("aria-hidden", "true");
+  for (let index = 0; index < 3; index += 1) {
+    menuIcon.appendChild(document.createElement("i"));
+  }
+  summary.appendChild(menuIcon);
+
+  const panel = document.createElement("div");
+  panel.className = "preflop-drill-panel";
+
+  const label = document.createElement("label");
+  label.className = "preflop-drill-label";
+  label.setAttribute("for", "preflop-drill-select");
+  label.textContent = activeSession?.mode === "review" ? "Review mode" : "Choose drill";
 
   let currentGroup = "";
+  let groupElement = null;
+  const select = document.createElement("select");
+  select.id = "preflop-drill-select";
+  select.className = "preflop-drill-select";
+  select.setAttribute("aria-label", "Choose 6-max preflop drill");
+
   PREFLOP_RANGE_DRILL_OPTIONS.forEach((drill) => {
     if (drill.group && drill.group !== currentGroup) {
-      const groupLabel = document.createElement("span");
-      groupLabel.className = "preflop-drill-group";
-      groupLabel.textContent = drill.group;
-      wrapper.appendChild(groupLabel);
+      groupElement = document.createElement("optgroup");
+      groupElement.label = drill.group;
+      select.appendChild(groupElement);
       currentGroup = drill.group;
     }
 
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = `preflop-drill-option${drill.id === activeDrillId ? " active" : ""}`;
-    button.textContent = drill.label;
-    button.disabled = drill.reviewMode && !hasMistakes;
-    button.title = drill.reviewMode && !hasMistakes
-      ? "No missed 6-max preflop hands yet across the supported preflop families."
-      : `Train ${drill.label}`;
-    button.addEventListener("click", () => selectPreflopRangeDrill(drill.id));
-    wrapper.appendChild(button);
+    const option = document.createElement("option");
+    option.value = drill.id;
+    option.textContent = drill.label;
+    option.selected = drill.id === activeDrillId;
+    option.disabled = drill.reviewMode && !hasMistakes;
+    (groupElement || select).appendChild(option);
   });
 
+  select.addEventListener("change", () => selectPreflopRangeDrill(select.value));
+
+  const hint = document.createElement("span");
+  hint.className = "preflop-drill-hint";
+  hint.textContent = activeDrill?.reviewMode
+    ? "Replaying recent missed hands."
+    : activeDrill?.id === PREFLOP_RANGE_DEFAULT_DRILL_ID
+      ? "Default: all 56 live preflop spots can appear."
+      : `Focused: ${activeDrill?.label || "selected drill"}.`;
+
+  const meta = document.createElement("div");
+  meta.className = "preflop-drill-meta";
+  meta.innerHTML = [
+    ["Spot", spot ? getPreflopRangeSpotShortLabel(spot) : "Ready"],
+    ["Stack", "100bb"],
+    [spot ? getPreflopRangeSizeFactLabel(spot) : "Size", spot ? getPreflopRangeOpenLabel(spot) : "All spots"],
+    ["Coverage", getPreflopCoverageLabel()],
+  ].map(([key, value]) => `<span><em>${key}</em><strong>${value}</strong></span>`).join("");
+
+  panel.append(label, select, hint, meta);
+  details.append(summary, panel);
+  wrapper.appendChild(details);
   elements.answerGrid.appendChild(wrapper);
 }
 
@@ -2858,10 +3164,32 @@ function renderPreflopRangeFeedback(question) {
     elements.feedbackText.textContent = `Prefer ${preferredLabel}. ${selectedLabel || grade.chosenActionId} is ${formatPercent(grade.chosenFrequency || 0)}; ${preferredLabel} is ${formatPercent(grade.preferredFrequency || 0)}. Full mix: ${frequencyText}.`;
   }
 
+  elements.continueButton.disabled = false;
+  elements.continueButton.textContent = getPreflopRangeAdvanceLabel();
+}
+
+function getPreflopRangeAdvanceLabel() {
+  if (!activeSession) {
+    return "Continue";
+  }
+
   const lastQuestion = activeSession.currentIndex >= activeSession.questionStates.length - 1;
   const failedMain = activeSession.mode === "main" && activeSession.strikes >= 3;
-  elements.continueButton.disabled = false;
-  elements.continueButton.textContent = failedMain ? "End Session" : lastQuestion ? "See Summary" : "Next Hand";
+  return failedMain ? "End Session" : lastQuestion ? "See Summary" : "Next Hand";
+}
+
+function getPreflopRangeAdvanceHint() {
+  if (!activeSession) {
+    return "Continue the session.";
+  }
+
+  const failedMain = activeSession.mode === "main" && activeSession.strikes >= 3;
+  if (failedMain) {
+    return "Three mistakes ends this run.";
+  }
+
+  const lastQuestion = activeSession.currentIndex >= activeSession.questionStates.length - 1;
+  return lastQuestion ? "Open your session review." : "Move to the next preflop spot.";
 }
 
 function getPreflopActionLabel(actions = [], actionId = "", spot = preflopRangeSpot) {
@@ -2941,6 +3269,7 @@ function renderIdleScenario() {
   elements.sessionChip.textContent = "Ready";
   elements.sessionCounter.textContent = "0 / 10";
   elements.mistakeCounter.textContent = "0 mistakes";
+  elements.sessionAccuracy.textContent = "0%";
   elements.progressFill.style.width = "0%";
   const idleFacts = [
     createFactCard("Format", selectedTable.label),
@@ -3010,10 +3339,14 @@ function renderScenarioCards(scenario) {
 }
 
 function applyCardStyle() {
-  const cardStyle = isCardStyleUnlocked(state.cardStyle) ? state.cardStyle : "reef";
+  const cardStyle = getActiveCardStyleId();
   [elements.heroCardLeft, elements.heroCardRight].forEach((card) => {
     card.className = `hero-card card-style-${cardStyle}`;
   });
+}
+
+function getActiveCardStyleId() {
+  return isCardStyleUnlocked(state.cardStyle) ? state.cardStyle : "reef";
 }
 
 function createCardFace(rank, suit) {
@@ -4331,6 +4664,10 @@ function createPreflopShowdownResult(scenario, spot, question, selectedAction, r
 }
 
 function getResolvedShowdownPot(spot, question, pot) {
+  if (question?.engine === TRAINING_ENGINE_IDS.preflopRange || !Array.isArray(spot?.options)) {
+    return pot;
+  }
+
   const accepted = question.isCorrect || question.isMixed;
   const selectedAction = getActionForOption(spot, question.selected);
   if (spot.street === "preflop") {
@@ -4990,40 +5327,431 @@ function renderBettingLine(summary) {
 
 function renderTableVisual(scenario, bettingSummary = createBettingSummary(scenario), spot = getCurrentSpot(), question = getCurrentQuestion()) {
   const layout = TABLES[scenario.tableSize];
+  const visualLayout = getTableVisualLayout(scenario, layout);
   const actorMap = Object.fromEntries((scenario.actors || []).map((actor) => [actor.seat, actor]));
   const seatStates = getSeatStates(scenario, layout, spot, question);
+  const animationEvents = buildTableActionAnimationEvents(scenario, visualLayout, bettingSummary, spot, question, seatStates, actorMap);
+  const animationKey = getTableActionAnimationKey(question, animationEvents);
+  ensureTableActionRevealState(animationKey);
+  const displayedSeatStates = maskSeatStatesForPendingFoldAnimations(seatStates, animationEvents);
   const board = spot?.board || [];
   const potLabel = getTablePotLabel(bettingSummary, spot, question);
   const boardMarkup = board.length ? createBoardMarkup(board, spot.street, potLabel) : "";
   const potMarkup = board.length ? "" : createTablePotMarkup(potLabel);
+  const stageHeroCardsMarkup = !board.length ? createStageHeroCardsMarkup(scenario.heroCards || spot?.heroCards || []) : "";
   const villainResponse = question?.villainReturnResponse || question?.villainResponse || null;
   const responseMarkup = villainResponse ? createVillainResponseMarkup(villainResponse) : "";
   const showdownMarkup = question?.showdownResult ? createShowdownMarkup(question.showdownResult) : "";
 
-  const seatMarkup = layout.seats.map((seatConfig) => {
+  const seatMarkup = visualLayout.seats.map((seatConfig) => {
     const actor = actorMap[seatConfig.seat];
     const isHero = seatConfig.seat === scenario.heroSeat;
-    const seatState = seatStates[seatConfig.seat] || {};
+    const seatState = displayedSeatStates[seatConfig.seat] || {};
     const isVillainResponseSeat = villainResponse?.seat === seatConfig.seat;
-    const className = ["seat-node", isHero ? "hero" : "", actor || isVillainResponseSeat ? "action" : "", isVillainResponseSeat ? "villain-recent" : "", seatState.status || ""]
+    const seatAnchor = seatConfig.anchor || "default";
+    const className = [
+      "seat-node",
+      `seat-anchor-${seatAnchor}`,
+      isHero ? "hero" : "",
+      actor || isVillainResponseSeat ? "action" : "",
+      isVillainResponseSeat ? "villain-recent" : "",
+      seatState.status || "",
+    ]
       .filter(Boolean)
       .join(" ");
     const isPostflop = spot?.street && spot.street !== "preflop";
     const actionLabel = isVillainResponseSeat
       ? formatVillainResponseLabel(villainResponse)
+      : seatState.pendingFoldAnimation
+        ? seatState.label
       : isPostflop && seatState.label
         ? seatState.label
         : bettingSummary.actionBySeat[seatConfig.seat] || actor?.label;
     const caption = isHero ? "Hero to act" : isVillainResponseSeat ? actionLabel : actor ? actionLabel : seatState.label || "Waiting";
+    const heroCardsMarkup = isHero && !stageHeroCardsMarkup ? createSeatHeroCardsMarkup(scenario.heroCards || spot?.heroCards || []) : "";
+    const avatarMarkup = createSeatAvatarMarkup(seatConfig.seat, isHero);
+    const chromeSide = getSeatChromeSide(seatAnchor, isHero, seatConfig.seat);
+    const chromeMarkup = createSeatChromeMarkup(chromeSide);
     return `
-      <div class="${className}" style="--x: ${seatConfig.x}; --y: ${seatConfig.y};">
-        <div class="seat-marker">${seatConfig.seat}</div>
-        <div class="seat-caption">${caption}</div>
+      <div class="${className}" data-seat="${seatConfig.seat}" style="--x: ${seatConfig.x}; --y: ${seatConfig.y};">
+        <div class="seat-hero-hand">
+          ${heroCardsMarkup}
+        </div>
+        <div class="seat-player">
+          <div class="seat-main seat-orient-${chromeSide}">
+            ${chromeMarkup}
+            ${avatarMarkup}
+            <div class="seat-marker">${seatConfig.seat}</div>
+            <div class="seat-caption">${caption}</div>
+          </div>
+        </div>
       </div>
     `;
   }).join("");
 
-  elements.tableVisual.innerHTML = `${boardMarkup}${potMarkup}${responseMarkup}${showdownMarkup}${seatMarkup}`;
+  elements.tableVisual.innerHTML = `${boardMarkup}${potMarkup}${stageHeroCardsMarkup}${responseMarkup}${showdownMarkup}${seatMarkup}`;
+  hydrateSeatAvatarImages(elements.tableVisual);
+  scheduleTableActionAnimations(scenario, visualLayout, bettingSummary, spot, question, seatStates, actorMap, animationEvents, animationKey);
+}
+
+function createSeatAvatarMarkup(seat, isHero = false) {
+  const avatarKind = SEAT_AVATAR_BY_SEAT[seat] || "dolphin";
+  const avatarLabel = isHero ? "Hero avatar" : `${seat} avatar`;
+  const avatarConfig = SEAT_AVATAR_CONFIG[avatarKind] || SEAT_AVATAR_CONFIG.dolphin;
+  const cropConfig = SEAT_AVATAR_CROP_CONFIG[avatarKind] || {};
+  const avatarSrc = `${avatarConfig.src}?v=${SEAT_AVATAR_ASSET_VERSION}`;
+  const avatarStyle = [
+    `--avatar-object-position: ${cropConfig.objectPosition || avatarConfig.objectPosition}`,
+    `--avatar-scale: ${cropConfig.scale || avatarConfig.scale}`,
+    `--avatar-x: ${cropConfig.x || "0%"}`,
+    `--avatar-y: ${cropConfig.y || "0%"}`,
+    `--avatar-left: ${avatarConfig.spriteLeft}`,
+    `--avatar-top: ${avatarConfig.spriteTop}`,
+  ].join("; ");
+  return `
+    <span class="seat-avatar seat-avatar-${avatarKind}" role="img" aria-label="${avatarLabel}" style="${avatarStyle}">
+      <img class="seat-avatar-image" src="${avatarSrc}" data-fallback-src="${SEAT_AVATAR_SPRITE_SRC}" alt="" aria-hidden="true">
+    </span>
+  `;
+}
+
+function getSeatChromeSide(seatAnchor = "", isHero = false, seat = "") {
+  if (["HJ", "CO", "BTN"].includes(seat)) {
+    return "left";
+  }
+
+  if (["UTG", "SB", "BB"].includes(seat)) {
+    return "right";
+  }
+
+  if (isHero) {
+    return "right";
+  }
+
+  return seatAnchor.includes("right") ? "left" : "right";
+}
+
+function createSeatChromeMarkup(side = "right") {
+  const normalizedSide = side === "left" ? "left" : "right";
+  const shellFile = normalizedSide === "left" ? "FKFrameLeft_transparent.png" : "FKFrame_transparent.png";
+  return `
+    <img class="seat-shell-image" src="assets/FKSeat/${shellFile}?v=${SEAT_SHELL_ASSET_VERSION}" alt="" aria-hidden="true">
+  `;
+}
+
+function hydrateSeatAvatarImages(root) {
+  root.querySelectorAll(".seat-avatar-image").forEach((image) => {
+    const seatAvatar = image.closest(".seat-avatar");
+    const showArtwork = () => seatAvatar?.classList.add("has-avatar-art");
+    const useFallbackArtwork = () => {
+      const fallbackSrc = image.dataset.fallbackSrc;
+      if (fallbackSrc && !image.classList.contains("uses-avatar-sheet")) {
+        image.classList.add("uses-avatar-sheet");
+        image.addEventListener("load", showArtwork, { once: true });
+        image.addEventListener("error", () => image.remove(), { once: true });
+        image.src = fallbackSrc;
+        return;
+      }
+      image.remove();
+    };
+
+    if (image.complete) {
+      if (image.naturalWidth > 0) {
+        showArtwork();
+      } else {
+        useFallbackArtwork();
+      }
+      return;
+    }
+
+    image.addEventListener("load", showArtwork, { once: true });
+    image.addEventListener("error", useFallbackArtwork, { once: true });
+  });
+}
+
+function getTableVisualLayout(scenario, layout) {
+  if (scenario?.tableSize !== "six" || !layout?.seats?.length) {
+    return layout;
+  }
+
+  const heroIndex = layout.seats.findIndex((seatConfig) => seatConfig.seat === scenario.heroSeat);
+  if (heroIndex < 0) {
+    return layout;
+  }
+
+  const rotatedSeats = [
+    ...layout.seats.slice(heroIndex),
+    ...layout.seats.slice(0, heroIndex),
+  ];
+
+  return {
+    ...layout,
+    seats: rotatedSeats.map((seatConfig, index) => ({
+      ...seatConfig,
+      ...(SIX_MAX_PLAYER_VIEW_SEAT_SLOTS[index] || {}),
+    })),
+  };
+}
+
+function scheduleTableActionAnimations(scenario, layout, bettingSummary, spot, question, seatStates = {}, actorMap = {}, prebuiltEvents = null, prebuiltAnimationKey = "") {
+  const events = prebuiltEvents || buildTableActionAnimationEvents(scenario, layout, bettingSummary, spot, question, seatStates, actorMap);
+  const animationKey = prebuiltAnimationKey || getTableActionAnimationKey(question, events);
+
+  if (!events.length || animationKey === tableActionAnimationKey) {
+    return;
+  }
+
+  clearTableActionAnimations();
+  tableActionAnimationKey = animationKey;
+  events.forEach((event, index) => {
+    tableActionAnimationTimers.push(window.setTimeout(() => {
+      playTableActionAnimation(event);
+    }, index * TABLE_ACTION_ANIMATION_STAGGER_MS));
+  });
+}
+
+function getTableActionAnimationKey(question, events = []) {
+  return [
+    activeSession?.id || "idle",
+    activeSession?.currentIndex ?? "none",
+    question?.answered ? "answered" : "waiting",
+    question?.selected || "",
+    events.map((event) => `${event.seat}:${event.label}`).join("|"),
+  ].join("::");
+}
+
+function ensureTableActionRevealState(animationKey) {
+  if (animationKey === tableActionAnimationRevealKey) {
+    return;
+  }
+
+  tableActionAnimationRevealKey = animationKey;
+  tableActionAnimationRevealedFoldSeats = new Set();
+}
+
+function maskSeatStatesForPendingFoldAnimations(seatStates = {}, events = []) {
+  const pendingFoldSeats = new Set(
+    events
+      .filter((event) => event.kind === "fold" && !tableActionAnimationRevealedFoldSeats.has(event.seat))
+      .map((event) => event.seat)
+  );
+
+  if (!pendingFoldSeats.size) {
+    return seatStates;
+  }
+
+  const masked = { ...seatStates };
+  pendingFoldSeats.forEach((seat) => {
+    masked[seat] = {
+      ...(masked[seat] || {}),
+      status: "action pending-fold",
+      label: "To act",
+      pendingFoldAnimation: true,
+    };
+  });
+  return masked;
+}
+
+function clearTableActionAnimations() {
+  tableActionAnimationTimers.forEach((timerId) => window.clearTimeout(timerId));
+  tableActionAnimationTimers = [];
+  elements.tableVisual.querySelectorAll(".table-action-anim").forEach((element) => element.remove());
+}
+
+function buildTableActionAnimationEvents(scenario, layout, bettingSummary, spot, question, seatStates = {}, actorMap = {}) {
+  if (!activeSession || !question || (spot?.street || "preflop") !== "preflop") {
+    return [];
+  }
+
+  if (question.engine === TRAINING_ENGINE_IDS.preflopRange) {
+    return buildPreflopRangeTableActionAnimationEvents(scenario, layout, spot, question);
+  }
+
+  return layout.seats
+    .map((seatConfig) => {
+      const isHero = seatConfig.seat === scenario.heroSeat;
+      const actor = actorMap[seatConfig.seat];
+      const seatState = seatStates[seatConfig.seat] || {};
+      const label = isHero
+        ? question.answered ? getPreflopActionLabel(question.legalActions || [], question.selected) : ""
+        : seatState.label || bettingSummary.actionBySeat?.[seatConfig.seat] || actor?.label || "";
+      const normalizedLabel = normalizeTableActionAnimationLabel(label);
+      if (!normalizedLabel) {
+        return null;
+      }
+
+      return {
+        seat: seatConfig.seat,
+        label: normalizedLabel,
+        kind: getTableActionAnimationKind(normalizedLabel),
+        x: seatConfig.x,
+        y: seatConfig.y,
+      };
+    })
+    .filter(Boolean);
+}
+
+function buildPreflopRangeTableActionAnimationEvents(scenario, layout, spot, question) {
+  const seatConfigBySeat = Object.fromEntries(layout.seats.map((seatConfig) => [seatConfig.seat, seatConfig]));
+  const events = [];
+
+  const pushEvent = (seat, label) => {
+    const seatConfig = seatConfigBySeat[seat];
+    const normalizedLabel = normalizeTableActionAnimationLabel(label);
+    if (!seatConfig || !normalizedLabel) {
+      return;
+    }
+
+    events.push({
+      seat,
+      label: normalizedLabel,
+      kind: getTableActionAnimationKind(normalizedLabel),
+      x: seatConfig.x,
+      y: seatConfig.y,
+    });
+  };
+
+  if (!question.answered) {
+    (question.preflopResponses || []).forEach((response) => {
+      pushEvent(response.seat, formatTablePreflopResponseAnimationLabel(response));
+    });
+    return events;
+  }
+
+  if (question.selected) {
+    pushEvent(scenario.heroSeat, getPreflopActionLabel(question.legalActions || [], question.selected, spot));
+  }
+
+  const responseEvent = getPreflopRangePostAnswerAnimationEvent(spot, question);
+  if (responseEvent) {
+    pushEvent(responseEvent.seat, responseEvent.label);
+  }
+
+  return events;
+}
+
+function formatTablePreflopResponseAnimationLabel(response = {}) {
+  const amount = response.amountLabel || (typeof response.amount === "number" ? `${formatBbAmount(response.amount)}bb` : "");
+  return [response.action, amount].filter(Boolean).join(" ");
+}
+
+function getPreflopRangePostAnswerAnimationEvent(spot, question) {
+  if (!isPreflopRangeFacingOpenSpot(spot) || question.selected !== "threeBet") {
+    return null;
+  }
+
+  const openerSeat = getPreflopRangeTableSeat(spot.openerPosition || spot.villainPosition || "");
+  return openerSeat ? { seat: openerSeat, label: "Folds to 3-bet" } : null;
+}
+
+function normalizeTableActionAnimationLabel(label = "") {
+  const value = String(label || "").trim();
+  if (!value || /^(waiting|hero|hero to act|opener|raiser|caller|3-bettor|4-bettor|in hand)$/i.test(value)) {
+    return "";
+  }
+
+  return value
+    .replace(/^([A-Z]{2,3}|UTG|BB|SB|HJ|CO|BTN)\s+/i, "")
+    .replace(/\s+/g, " ");
+}
+
+function getTableActionAnimationKind(label = "") {
+  if (/fold/i.test(label)) return "fold";
+  if (/check/i.test(label)) return "check";
+  return "chips";
+}
+
+function playTableActionAnimation(event) {
+  if (!elements.tableVisual || !event) {
+    return;
+  }
+
+  const burst = document.createElement("div");
+  burst.className = `table-action-anim ${event.kind}`;
+  burst.style.setProperty("--x", event.x);
+  burst.style.setProperty("--y", event.y);
+  if (event.kind === "fold") {
+    const centerDelta = getTableCenterDeltaFromSeat(event);
+    burst.style.setProperty("--fold-x", `${centerDelta.x}px`);
+    burst.style.setProperty("--fold-y", `${centerDelta.y}px`);
+    revealTableFoldSeat(event);
+  } else if (event.kind === "chips") {
+    const centerDelta = getTableCenterDeltaFromSeat(event);
+    burst.style.setProperty("--chip-x", `${centerDelta.x}px`);
+    burst.style.setProperty("--chip-y", `${centerDelta.y}px`);
+  }
+  burst.innerHTML = `
+    <span>${event.seat}</span>
+    <strong>${event.label}</strong>
+    ${createTableActionAnimationIcon(event.kind)}
+  `;
+  elements.tableVisual.appendChild(burst);
+  tableActionAnimationTimers.push(window.setTimeout(() => burst.remove(), TABLE_ACTION_ANIMATION_MS));
+}
+
+function revealTableFoldSeat(event) {
+  if (!event?.seat || !elements.tableVisual) {
+    return;
+  }
+
+  tableActionAnimationRevealedFoldSeats.add(event.seat);
+  const seatNode = elements.tableVisual.querySelector(`.seat-node[data-seat="${event.seat}"]`);
+  if (!seatNode) {
+    return;
+  }
+
+  seatNode.classList.remove("action", "villain-recent", "pending-fold");
+  seatNode.classList.add("folded");
+  const captions = seatNode.querySelectorAll(".seat-caption");
+  captions.forEach((caption) => {
+    const captionText = caption.querySelector(".seat-caption-text");
+    if (captionText) {
+      captionText.textContent = event.label;
+      return;
+    }
+    caption.textContent = event.label;
+  });
+}
+
+function getTableCenterDeltaFromSeat(event) {
+  const bounds = elements.tableVisual.getBoundingClientRect();
+  const seatX = parseCssPercent(event.x, 50);
+  const seatY = parseCssPercent(event.y, 50);
+  return {
+    x: ((50 - seatX) / 100) * bounds.width,
+    y: ((50 - seatY) / 100) * bounds.height,
+  };
+}
+
+function parseCssPercent(value, fallback) {
+  const parsed = Number(String(value || "").replace("%", ""));
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function createTableActionAnimationIcon(kind) {
+  if (kind === "fold") {
+    const cardStyle = getActiveCardStyleId();
+    return `<i class="action-cards fold-card-style-${cardStyle}" aria-hidden="true"><b class="action-card-back"></b><b class="action-card-back"></b></i>`;
+  }
+
+  if (kind === "check") {
+    return `<i class="action-check" aria-hidden="true"></i>`;
+  }
+
+  return `<i class="action-chips" aria-hidden="true"><b></b><b></b><b></b></i>`;
+}
+
+function createSeatHeroCardsMarkup(cards) {
+  if (!Array.isArray(cards) || cards.length < 2) {
+    return "";
+  }
+
+  return `<div class="seat-hole-cards">${cards.slice(0, 2).map((card) => createMiniCardMarkup(card)).join("")}</div>`;
+}
+
+function createStageHeroCardsMarkup(cards) {
+  const cardsMarkup = createSeatHeroCardsMarkup(cards);
+  return cardsMarkup ? `<div class="stage-hero-cards">${cardsMarkup}</div>` : "";
 }
 
 function createVillainResponseMarkup(response) {
@@ -5066,6 +5794,10 @@ function getTablePotLabel(bettingSummary, spot, question) {
   }
 
   const basePot = spot?.pot || getSpotPotValue(spot || {}) || bettingSummary?.pot || (SMALL_BLIND + BIG_BLIND);
+  if (question?.engine === TRAINING_ENGINE_IDS.preflopRange) {
+    return formatMoney(basePot);
+  }
+
   if (spot && question?.raiseSpot) {
     return formatMoney(getResolvedShowdownPot(spot, question, basePot));
   }
@@ -5229,6 +5961,12 @@ function getSeatStates(scenario, layout, spot = null, question = null) {
 
       const response = responseBySeat[seatConfig.seat];
       if (response) {
+        const rangeSeatState = getPreflopRangeSeatState(seatConfig.seat, response, spot, question);
+        if (rangeSeatState) {
+          states[seatConfig.seat] = rangeSeatState;
+          return;
+        }
+
         states[seatConfig.seat] = {
           status: response.folded ? "folded" : response.isRaise ? "villain-recent" : "action",
           label: formatVillainResponseLabel(response),
@@ -5304,6 +6042,34 @@ function getSeatStates(scenario, layout, spot = null, question = null) {
   });
 
   return states;
+}
+
+function getPreflopRangeSeatState(seat, response, spot = null, question = null) {
+  if (question?.engine !== TRAINING_ENGINE_IDS.preflopRange || !isPreflopRangeFacingOpenSpot(spot)) {
+    return null;
+  }
+
+  const openerSeat = getPreflopRangeTableSeat(spot.openerPosition || spot.villainPosition || "");
+  if (!openerSeat || seat !== openerSeat || !question.answered) {
+    return null;
+  }
+
+  if (question.selected === "threeBet") {
+    return { status: "folded", label: "Folds to 3-bet" };
+  }
+
+  if (question.selected === "call") {
+    return { status: "action", label: "Opened - in hand" };
+  }
+
+  if (question.selected === "fold") {
+    return { status: "action", label: "Opened - wins" };
+  }
+
+  return {
+    status: response.folded ? "folded" : "action",
+    label: formatVillainResponseLabel(response),
+  };
 }
 
 function getPostflopLiveSeatSet(scenario, layout = TABLES[scenario.tableSize], question = null, runoutSeed = question?.runoutSeed || scenario.id) {
@@ -7586,6 +8352,11 @@ function getActivePreflopRangeDrillId() {
 function normalizePreflopRangeDrillId(drillId) {
   const drill = getPreflopRangeDrill(drillId);
   return drill && !drill.reviewMode ? drill.id : PREFLOP_RANGE_DEFAULT_DRILL_ID;
+}
+
+function normalizeStoredPreflopRangeDrillId(drillId, drillDefaultVersion) {
+  const isOldImplicitDefault = !drillDefaultVersion && (!drillId || drillId === "all-rfi");
+  return isOldImplicitDefault ? PREFLOP_RANGE_DEFAULT_DRILL_ID : normalizePreflopRangeDrillId(drillId);
 }
 
 function getPreflopRangeDrill(drillId) {
