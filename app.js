@@ -173,180 +173,15 @@ const TRAINING_ENGINE_IDS = {
   preflopRange: "preflop-range",
 };
 const PREFLOP_RANGE_PACK_URL = "data/preflop-ranges/real/fishkiller-6max-100bb-v1.preflop-range.json";
-const PREFLOP_RANGE_RFI_SPOT_IDS = [
-  "fk_6max_100bb_lj_rfi_unopened_v1",
-  "fk_6max_100bb_hj_rfi_unopened_v1",
-  "fk_6max_100bb_co_rfi_unopened_v1",
-  "fk_6max_100bb_btn_rfi_unopened_v1",
-  "fk_6max_100bb_sb_rfi_unopened_v1",
-];
-const PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS = [
-  "fk_6max_100bb_bb_vs_lj_open_v1",
-  "fk_6max_100bb_bb_vs_hj_open_v1",
-  "fk_6max_100bb_bb_vs_co_open_v1",
-  "fk_6max_100bb_bb_vs_btn_open_v1",
-  "fk_6max_100bb_bb_vs_sb_open_v1",
-];
-const PREFLOP_RANGE_FACING_OPEN_SPOT_IDS = [
-  "fk_6max_100bb_hj_vs_lj_open_v1",
-  "fk_6max_100bb_co_vs_lj_open_v1",
-  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
-  "fk_6max_100bb_btn_vs_lj_open_v1",
-  "fk_6max_100bb_btn_vs_hj_open_v1",
-  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_lj_open_v1",
-  "fk_6max_100bb_sb_vs_hj_open_v1",
-  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
-  ...PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS,
-];
-const PREFLOP_RANGE_THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
-  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
-  "fk_6max_100bb_hj_vs_lj_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
-];
-const PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_co_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_bb_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_co_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_bb_3bet_v1",
-  "fk_6max_100bb_co_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_co_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_co_open_vs_bb_3bet_v1",
-  "fk_6max_100bb_btn_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
-  "fk_6max_100bb_sb_open_vs_bb_3bet_v1",
-];
-const PREFLOP_RANGE_FACING_FOUR_BET_SPOT_IDS = [
-  "fk_6max_100bb_hj_3bet_vs_lj_open_lj_4bet_v1",
-  "fk_6max_100bb_co_3bet_vs_hj_open_hj_4bet_v1",
-  "fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1",
-  "fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1",
-  "fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1",
-];
-const PREFLOP_RANGE_BVB_LIMP_SPOT_IDS = [
-  "fk_6max_100bb_sb_first_in_limp_or_raise_v1",
-  "fk_6max_100bb_bb_vs_sb_limp_v1",
-  "fk_6max_100bb_sb_limp_vs_bb_raise_v1",
-];
-const PREFLOP_RANGE_ISO_VS_LIMP_SPOT_IDS = [
-  "fk_6max_100bb_hj_vs_lj_limp_v1",
-  "fk_6max_100bb_co_vs_lj_limp_v1",
-  "fk_6max_100bb_btn_vs_lj_limp_v1",
-  "fk_6max_100bb_btn_vs_co_limp_v1",
-  "fk_6max_100bb_sb_vs_btn_limp_v1",
-  "fk_6max_100bb_bb_vs_btn_limp_v1",
-];
-const PREFLOP_RANGE_SQUEEZE_SPOT_IDS = [
-  "fk_6max_100bb_co_vs_lj_open_hj_call_squeeze_v1",
-  "fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1",
-  "fk_6max_100bb_btn_vs_hj_open_co_call_squeeze_v1",
-  "fk_6max_100bb_sb_vs_co_open_btn_call_squeeze_v1",
-  "fk_6max_100bb_bb_vs_co_open_btn_call_squeeze_v1",
-  "fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1",
-];
-const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = [
-  ...new Set([
-    ...PREFLOP_RANGE_RFI_SPOT_IDS,
-    ...PREFLOP_RANGE_FACING_OPEN_SPOT_IDS,
-    ...PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS,
-    ...PREFLOP_RANGE_THREE_BET_SPOT_IDS,
-    ...PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS,
-    ...PREFLOP_RANGE_FACING_FOUR_BET_SPOT_IDS,
-    ...PREFLOP_RANGE_BVB_LIMP_SPOT_IDS,
-    ...PREFLOP_RANGE_ISO_VS_LIMP_SPOT_IDS,
-    ...PREFLOP_RANGE_SQUEEZE_SPOT_IDS,
-  ]),
-];
-const PREFLOP_RANGE_DEFAULT_DRILL_ID = "all-preflop";
-const PREFLOP_RANGE_REVIEW_DRILL_ID = "review-mistakes";
-const PREFLOP_RANGE_DRILL_DEFAULT_VERSION = 2;
+const DRILL_DEFINITIONS = window.FishKillerDrillDefinitions;
+const {
+  PREFLOP_RANGE_DEFAULT_DRILL_ID,
+  PREFLOP_RANGE_REVIEW_DRILL_ID,
+  PREFLOP_RANGE_DRILL_DEFAULT_VERSION,
+} = DRILL_DEFINITIONS;
+const PREFLOP_RANGE_TRAINABLE_SPOT_IDS = DRILL_DEFINITIONS.SPOT_IDS.TRAINABLE_SPOT_IDS;
 const PREFLOP_RANGE_MIN_WEAK_SPOT_ATTEMPTS = 5;
-const PREFLOP_RANGE_DRILL_OPTIONS = [
-  { id: "all-preflop", label: "All Preflop", group: "All", default: true, spotIds: PREFLOP_RANGE_TRAINABLE_SPOT_IDS },
-  { id: "all-rfi", label: "All RFI", group: "RFI", spotIds: PREFLOP_RANGE_RFI_SPOT_IDS },
-  { id: "lj-rfi", label: "LJ RFI", group: "RFI", spotIds: ["fk_6max_100bb_lj_rfi_unopened_v1"] },
-  { id: "hj-rfi", label: "HJ RFI", group: "RFI", spotIds: ["fk_6max_100bb_hj_rfi_unopened_v1"] },
-  { id: "co-rfi", label: "CO RFI", group: "RFI", spotIds: ["fk_6max_100bb_co_rfi_unopened_v1"] },
-  { id: "btn-rfi", label: "BTN RFI", group: "RFI", spotIds: ["fk_6max_100bb_btn_rfi_unopened_v1"] },
-  { id: "sb-rfi", label: "SB RFI", group: "RFI", spotIds: ["fk_6max_100bb_sb_rfi_unopened_v1"] },
-  { id: "all-facing-open", label: "All Facing Open", group: "Facing Open", spotIds: PREFLOP_RANGE_FACING_OPEN_SPOT_IDS },
-  { id: "fo-hj-vs-lj", label: "HJ vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_hj_vs_lj_open_v1"] },
-  { id: "fo-co-vs-lj", label: "CO vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_co_vs_lj_open_v1"] },
-  { id: "fo-co-vs-hj", label: "CO vs HJ", group: "Facing Open", spotIds: ["fk_6max_100bb_co_vs_hj_open_3bet_v1"] },
-  { id: "fo-btn-vs-lj", label: "BTN vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_btn_vs_lj_open_v1"] },
-  { id: "fo-btn-vs-hj", label: "BTN vs HJ", group: "Facing Open", spotIds: ["fk_6max_100bb_btn_vs_hj_open_v1"] },
-  { id: "fo-btn-vs-co", label: "BTN vs CO", group: "Facing Open", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
-  { id: "fo-sb-vs-lj", label: "SB vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_sb_vs_lj_open_v1"] },
-  { id: "fo-sb-vs-hj", label: "SB vs HJ", group: "Facing Open", spotIds: ["fk_6max_100bb_sb_vs_hj_open_v1"] },
-  { id: "fo-sb-vs-co", label: "SB vs CO", group: "Facing Open", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
-  { id: "fo-sb-vs-btn", label: "SB vs BTN", group: "Facing Open", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
-  { id: "fo-bb-vs-lj", label: "BB vs LJ", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
-  { id: "fo-bb-vs-hj", label: "BB vs HJ", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
-  { id: "fo-bb-vs-co", label: "BB vs CO", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_co_open_v1"] },
-  { id: "fo-bb-vs-btn", label: "BB vs BTN", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
-  { id: "fo-bb-vs-sb", label: "BB vs SB", group: "Facing Open", spotIds: ["fk_6max_100bb_bb_vs_sb_open_v1"] },
-  { id: "all-bb-defense", label: "All BB Defense", group: "BB Defense", spotIds: PREFLOP_RANGE_BB_DEFENSE_SPOT_IDS },
-  { id: "bb-vs-lj", label: "BB vs LJ", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_lj_open_v1"] },
-  { id: "bb-vs-hj", label: "BB vs HJ", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_hj_open_v1"] },
-  { id: "bb-vs-co", label: "BB vs CO", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_co_open_v1"] },
-  { id: "bb-vs-btn", label: "BB vs BTN", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_btn_open_v1"] },
-  { id: "bb-vs-sb", label: "BB vs SB", group: "BB Defense", spotIds: ["fk_6max_100bb_bb_vs_sb_open_v1"] },
-  { id: "all-three-bet", label: "All 3-bet", group: "3-bet", spotIds: PREFLOP_RANGE_THREE_BET_SPOT_IDS },
-  { id: "btn-vs-co-3bet", label: "BTN vs CO", group: "3-bet", spotIds: ["fk_6max_100bb_btn_vs_co_open_3bet_v1"] },
-  { id: "co-vs-hj-3bet", label: "CO vs HJ", group: "3-bet", spotIds: ["fk_6max_100bb_co_vs_hj_open_3bet_v1"] },
-  { id: "hj-vs-lj-3bet", label: "HJ vs LJ", group: "3-bet", spotIds: ["fk_6max_100bb_hj_vs_lj_open_3bet_v1"] },
-  { id: "sb-vs-btn-3bet", label: "SB vs BTN", group: "3-bet", spotIds: ["fk_6max_100bb_sb_vs_btn_open_3bet_v1"] },
-  { id: "sb-vs-co-3bet", label: "SB vs CO", group: "3-bet", spotIds: ["fk_6max_100bb_sb_vs_co_open_3bet_v1"] },
-  { id: "all-facing-3bet", label: "All Facing 3-bet", group: "Facing 3-bet", spotIds: PREFLOP_RANGE_FACING_THREE_BET_SPOT_IDS },
-  { id: "lj-open-vs-hj-3bet", label: "LJ open vs HJ 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_hj_3bet_v1"] },
-  { id: "lj-open-vs-co-3bet", label: "LJ open vs CO 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_co_3bet_v1"] },
-  { id: "lj-open-vs-btn-3bet", label: "LJ open vs BTN 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_btn_3bet_v1"] },
-  { id: "lj-open-vs-sb-3bet", label: "LJ open vs SB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_sb_3bet_v1"] },
-  { id: "lj-open-vs-bb-3bet", label: "LJ open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_lj_open_vs_bb_3bet_v1"] },
-  { id: "hj-open-vs-co-3bet", label: "HJ open vs CO 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_co_3bet_v1"] },
-  { id: "hj-open-vs-btn-3bet", label: "HJ open vs BTN 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_btn_3bet_v1"] },
-  { id: "hj-open-vs-sb-3bet", label: "HJ open vs SB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_sb_3bet_v1"] },
-  { id: "hj-open-vs-bb-3bet", label: "HJ open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_hj_open_vs_bb_3bet_v1"] },
-  { id: "co-open-vs-btn-3bet", label: "CO open vs BTN 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_btn_3bet_v1"] },
-  { id: "co-open-vs-sb-3bet", label: "CO open vs SB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_sb_3bet_v1"] },
-  { id: "co-open-vs-bb-3bet", label: "CO open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_co_open_vs_bb_3bet_v1"] },
-  { id: "btn-open-vs-sb-3bet", label: "BTN open vs SB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_btn_open_vs_sb_3bet_v1"] },
-  { id: "btn-open-vs-bb-3bet", label: "BTN open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_btn_open_vs_bb_3bet_v1"] },
-  { id: "sb-open-vs-bb-3bet", label: "SB open vs BB 3-bet", group: "Facing 3-bet", spotIds: ["fk_6max_100bb_sb_open_vs_bb_3bet_v1"] },
-  { id: "all-facing-4bet", label: "All Facing 4-bet", group: "Facing 4-bet", spotIds: PREFLOP_RANGE_FACING_FOUR_BET_SPOT_IDS },
-  { id: "hj-3bet-vs-lj-open-lj-4bet", label: "HJ 3-bet vs LJ open / LJ 4-bet", group: "Facing 4-bet", spotIds: ["fk_6max_100bb_hj_3bet_vs_lj_open_lj_4bet_v1"] },
-  { id: "co-3bet-vs-hj-open-hj-4bet", label: "CO 3-bet vs HJ open / HJ 4-bet", group: "Facing 4-bet", spotIds: ["fk_6max_100bb_co_3bet_vs_hj_open_hj_4bet_v1"] },
-  { id: "btn-3bet-vs-co-open-co-4bet", label: "BTN 3-bet vs CO open / CO 4-bet", group: "Facing 4-bet", spotIds: ["fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1"] },
-  { id: "sb-3bet-vs-btn-open-btn-4bet", label: "SB 3-bet vs BTN open / BTN 4-bet", group: "Facing 4-bet", spotIds: ["fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1"] },
-  { id: "bb-3bet-vs-btn-open-btn-4bet", label: "BB 3-bet vs BTN open / BTN 4-bet", group: "Facing 4-bet", spotIds: ["fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1"] },
-  { id: "all-bvb-limp", label: "All BvB Limp", group: "BvB Limp", spotIds: PREFLOP_RANGE_BVB_LIMP_SPOT_IDS },
-  { id: "sb-first-limp-or-raise", label: "SB first in: limp or raise", group: "BvB Limp", spotIds: ["fk_6max_100bb_sb_first_in_limp_or_raise_v1"] },
-  { id: "bb-vs-sb-limp", label: "BB vs SB limp", group: "BvB Limp", spotIds: ["fk_6max_100bb_bb_vs_sb_limp_v1"] },
-  { id: "sb-limp-vs-bb-raise", label: "SB limp vs BB raise", group: "BvB Limp", spotIds: ["fk_6max_100bb_sb_limp_vs_bb_raise_v1"] },
-  { id: "all-iso-vs-limp", label: "All Iso vs Limp", group: "Iso vs Limp", spotIds: PREFLOP_RANGE_ISO_VS_LIMP_SPOT_IDS },
-  { id: "iso-hj-vs-lj-limp", label: "HJ vs LJ limp", group: "Iso vs Limp", spotIds: ["fk_6max_100bb_hj_vs_lj_limp_v1"] },
-  { id: "iso-co-vs-lj-limp", label: "CO vs LJ limp", group: "Iso vs Limp", spotIds: ["fk_6max_100bb_co_vs_lj_limp_v1"] },
-  { id: "iso-btn-vs-lj-limp", label: "BTN vs LJ limp", group: "Iso vs Limp", spotIds: ["fk_6max_100bb_btn_vs_lj_limp_v1"] },
-  { id: "iso-btn-vs-co-limp", label: "BTN vs CO limp", group: "Iso vs Limp", spotIds: ["fk_6max_100bb_btn_vs_co_limp_v1"] },
-  { id: "iso-sb-vs-btn-limp", label: "SB vs BTN limp", group: "Iso vs Limp", spotIds: ["fk_6max_100bb_sb_vs_btn_limp_v1"] },
-  { id: "iso-bb-vs-btn-limp", label: "BB vs BTN limp", group: "Iso vs Limp", spotIds: ["fk_6max_100bb_bb_vs_btn_limp_v1"] },
-  { id: "all-squeeze", label: "All Squeeze", group: "Squeeze", spotIds: PREFLOP_RANGE_SQUEEZE_SPOT_IDS },
-  { id: "sqz-co-vs-lj-open-hj-call", label: "CO vs LJ open + HJ call", group: "Squeeze", spotIds: ["fk_6max_100bb_co_vs_lj_open_hj_call_squeeze_v1"] },
-  { id: "sqz-btn-vs-lj-open-co-call", label: "BTN vs LJ open + CO call", group: "Squeeze", spotIds: ["fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1"] },
-  { id: "sqz-btn-vs-hj-open-co-call", label: "BTN vs HJ open + CO call", group: "Squeeze", spotIds: ["fk_6max_100bb_btn_vs_hj_open_co_call_squeeze_v1"] },
-  { id: "sqz-sb-vs-co-open-btn-call", label: "SB vs CO open + BTN call", group: "Squeeze", spotIds: ["fk_6max_100bb_sb_vs_co_open_btn_call_squeeze_v1"] },
-  { id: "sqz-bb-vs-co-open-btn-call", label: "BB vs CO open + BTN call", group: "Squeeze", spotIds: ["fk_6max_100bb_bb_vs_co_open_btn_call_squeeze_v1"] },
-  { id: "sqz-bb-vs-btn-open-sb-call", label: "BB vs BTN open + SB call", group: "Squeeze", spotIds: ["fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1"] },
-  { id: PREFLOP_RANGE_REVIEW_DRILL_ID, label: "Review mistakes", group: "Review", reviewMode: true, spotIds: [] },
-];
+const PREFLOP_RANGE_DRILL_OPTIONS = DRILL_DEFINITIONS.DRILL_OPTIONS;
 const PREFLOP_RANGE_QUESTION_XP = 12;
 const PREFLOP_PROGRESS = window.FishKillerPreflopProgress || null;
 const SCENARIOS_BY_ID = Object.fromEntries(SCENARIOS.map((scenario) => [scenario.id, scenario]));
@@ -356,83 +191,11 @@ const SCENARIOS_BY_TABLE = SCENARIOS.reduce((accumulator, scenario) => {
   return accumulator;
 }, {});
 
-const elements = {
-  splashScreen: document.getElementById("splash-screen"),
-  splashStartButton: document.getElementById("splash-start-button"),
-  profileMenuButton: document.getElementById("profile-menu-button"),
-  profileMenu: document.getElementById("profile-menu"),
-  profileLevelDisplay: document.getElementById("profile-level-display"),
-  profileXpText: document.getElementById("profile-xp-text"),
-  profileXpFill: document.getElementById("profile-xp-fill"),
-  profileHeartMeter: document.getElementById("profile-heart-meter"),
-  tableSizeList: document.getElementById("table-size-list"),
-  modeList: document.getElementById("mode-list"),
-  modeTableLabel: document.getElementById("mode-table-label"),
-  questList: document.getElementById("quest-list"),
-  rewardList: document.getElementById("reward-list"),
-  totalXpDisplay: document.getElementById("total-xp-display"),
-  selectedXpDisplay: document.getElementById("selected-xp-display"),
-  selectedXpLabel: document.getElementById("selected-xp-label"),
-  heroTitle: document.getElementById("hero-title"),
-  heroSubtitle: document.getElementById("hero-subtitle"),
-  heartsDisplay: document.getElementById("hearts-display"),
-  heartsTimer: document.getElementById("hearts-timer"),
-  boostDisplay: document.getElementById("boost-display"),
-  boostSubtitle: document.getElementById("boost-subtitle"),
-  startSessionButton: document.getElementById("start-session-button"),
-  sessionChip: document.getElementById("session-chip"),
-  progressFill: document.getElementById("progress-fill"),
-  sessionCounter: document.getElementById("session-counter"),
-  mistakeCounter: document.getElementById("mistake-counter"),
-  sessionAccuracy: document.getElementById("session-accuracy"),
-  scenarioTable: document.getElementById("scenario-table"),
-  scenarioDifficulty: document.getElementById("scenario-difficulty"),
-  bettingLine: document.getElementById("betting-line"),
-  heroCardLeft: document.getElementById("hero-card-left"),
-  heroCardRight: document.getElementById("hero-card-right"),
-  scenarioTitle: document.getElementById("scenario-title"),
-  scenarioCopy: document.getElementById("scenario-copy"),
-  scenarioFacts: document.getElementById("scenario-facts"),
-  tableVisual: document.getElementById("table-visual"),
-  answerGrid: document.getElementById("answer-grid"),
-  feedbackBand: document.getElementById("feedback-band"),
-  feedbackLabel: document.getElementById("feedback-label"),
-  feedbackText: document.getElementById("feedback-text"),
-  gtoTableButton: document.getElementById("gto-table-button"),
-  continueButton: document.getElementById("continue-button"),
-  sessionExitButton: document.getElementById("session-exit-button"),
-  visualSkinToggle: document.getElementById("visual-skin-toggle"),
-  lastGrade: document.getElementById("last-grade"),
-  lastXp: document.getElementById("last-xp"),
-  lastAccuracy: document.getElementById("last-accuracy"),
-  lastTable: document.getElementById("last-table"),
-  lastMisses: document.getElementById("last-misses"),
-  lastNote: document.getElementById("last-note"),
-  summaryModal: document.getElementById("summary-modal"),
-  modalKicker: document.getElementById("modal-kicker"),
-  modalTitle: document.getElementById("modal-title"),
-  modalCopy: document.getElementById("modal-copy"),
-  modalGrade: document.getElementById("modal-grade"),
-  modalXp: document.getElementById("modal-xp"),
-  modalAccuracy: document.getElementById("modal-accuracy"),
-  modalMisses: document.getElementById("modal-misses"),
-  modalAverageTime: document.getElementById("modal-average-time"),
-  modalReviewList: document.getElementById("modal-review-list"),
-  modalCloseButton: document.getElementById("modal-close-button"),
-  retryMissesButton: document.getElementById("retry-misses-button"),
-  modalNewSessionButton: document.getElementById("modal-new-session-button"),
-  endSessionModal: document.getElementById("end-session-modal"),
-  cancelEndSessionButton: document.getElementById("cancel-end-session-button"),
-  confirmEndSessionButton: document.getElementById("confirm-end-session-button"),
-  gtoModal: document.getElementById("gto-modal"),
-  gtoKicker: document.getElementById("gto-kicker"),
-  gtoTitle: document.getElementById("gto-title"),
-  gtoCopy: document.getElementById("gto-copy"),
-  gtoLegend: document.getElementById("gto-legend"),
-  gtoMatrix: document.getElementById("gto-matrix"),
-  gtoCloseButton: document.getElementById("gto-close-button"),
-  toastStack: document.getElementById("toast-stack"),
-};
+const elements = window.FishKillerDomElements.collectDomElements(document);
+const tableAnimationHooks = window.FishKillerTableAnimations.createTableAnimationHooks({
+  windowRef: window,
+  tableElement: elements.tableVisual,
+});
 
 let state = loadState();
 let activeSession = null;
@@ -537,15 +300,13 @@ function loadPreflopRangePack() {
   }
 
   preflopRangeStatus = "loading";
-  fetch(PREFLOP_RANGE_PACK_URL, { cache: "no-store" })
-    .then((response) => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
-    .then((pack) => {
-      const normalizedPack = window.FishKillerPreflopEngine.normalizePreflopRangePack(pack);
-      const spots = getPreflopRangeTrainableSpots(normalizedPack);
-      if (!spots.length) {
-        throw new Error("Missing complete supported 6-max preflop spots.");
-      }
-
+  window.FishKillerRangePackLoader.loadRangePack({
+    url: PREFLOP_RANGE_PACK_URL,
+    fetchImpl: fetch,
+    engine: window.FishKillerPreflopEngine,
+    getTrainableSpots: getPreflopRangeTrainableSpots,
+  })
+    .then(({ normalizedPack, spots }) => {
       preflopRangePack = normalizedPack;
       preflopRangeSpots = spots;
       preflopRangeSpot = spots[0];
@@ -666,30 +427,19 @@ function loadState() {
   const defaults = createDefaultState();
 
   try {
-    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
-    if (!raw) {
+    const parsed = window.FishKillerProgressStore.loadJson(localStorage, [STORAGE_KEY, LEGACY_STORAGE_KEY]);
+    // TODO(mobile): localStorage is fine for the browser demo, but long-term mobile progress should move behind a storage adapter.
+    if (!parsed) {
       return defaults;
     }
 
-    const parsed = JSON.parse(raw);
-    const merged = {
-      ...defaults,
-      ...parsed,
-      xpByTable: { ...defaults.xpByTable, ...(parsed.xpByTable || {}) },
-      modeByTable: { ...defaults.modeByTable, ...(parsed.modeByTable || {}) },
-      cardStyle: getCardStyleById(parsed.cardStyle)?.id || defaults.cardStyle,
-      visualSkin: normalizeVisualSkinId(parsed.visualSkin),
-      daily: {
-        ...defaults.daily,
-        ...(parsed.daily || {}),
-        tableSizesPlayed: { ...defaults.daily.tableSizesPlayed, ...(parsed.daily?.tableSizesPlayed || {}) },
-        claimedQuestIds: Array.isArray(parsed.daily?.claimedQuestIds) ? parsed.daily.claimedQuestIds : [],
-      },
-      preflop6maxProgress: normalizePreflop6maxProgress(parsed.preflop6maxProgress),
-      preflop6maxDrillId: normalizeStoredPreflopRangeDrillId(parsed.preflop6maxDrillId, parsed.preflop6maxDrillDefaultVersion),
-      preflop6maxDrillDefaultVersion: PREFLOP_RANGE_DRILL_DEFAULT_VERSION,
-      lastResult: { ...defaults.lastResult, ...(parsed.lastResult || {}) },
-    };
+    const merged = window.FishKillerAppState.mergeSavedState(defaults, parsed, {
+      getCardStyleById,
+      normalizeVisualSkinId,
+      normalizePreflop6maxProgress,
+      normalizeStoredPreflopRangeDrillId,
+      preflopRangeDrillDefaultVersion: PREFLOP_RANGE_DRILL_DEFAULT_VERSION,
+    });
 
     ensureDailyState(merged);
     return merged;
@@ -700,7 +450,8 @@ function loadState() {
 }
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  // TODO(mobile): replace direct localStorage writes before PWA/Capacitor packaging so progress can survive quota and backup edge cases.
+  window.FishKillerProgressStore.saveJson(localStorage, STORAGE_KEY, state);
 }
 
 function ensureDailyState(targetState) {
@@ -1581,6 +1332,7 @@ function enterLessonMode() {
   closeProfileMenu();
   document.body.classList.add("lesson-active");
 
+  // TODO(mobile): fullscreen is a desktop-first assumption; mobile shells should use viewport-safe layout instead.
   if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
     document.documentElement.requestFullscreen().catch(() => {
       showToast("Fullscreen blocked", "Use F11 or your browser fullscreen control if it does not switch automatically.");
@@ -1681,7 +1433,8 @@ function buildSummaryNote(session, outcome, boostUsed) {
   }
 
   if (session.trainingEngine === TRAINING_ENGINE_IDS.preflopRange) {
-    return `6-max RFI range drill finished with ${session.missedQuestions.length} missed decision${session.missedQuestions.length === 1 ? "" : "s"}.${boostNote}`;
+    const drillLabel = getPreflopRangeDrill(session.drillId)?.label || "6-max preflop range";
+    return `${drillLabel} drill finished with ${session.missedQuestions.length} missed decision${session.missedQuestions.length === 1 ? "" : "s"}.${boostNote}`;
   }
 
   return `Main session finished with ${session.missedQuestions.length} missed decision${session.missedQuestions.length === 1 ? "" : "s"} saved for review.${boostNote}`;
@@ -5336,61 +5089,38 @@ function renderTableVisual(scenario, bettingSummary = createBettingSummary(scena
   const displayedSeatStates = maskSeatStatesForPendingFoldAnimations(seatStates, animationEvents);
   const board = spot?.board || [];
   const potLabel = getTablePotLabel(bettingSummary, spot, question);
-  const boardMarkup = board.length ? createBoardMarkup(board, spot.street, potLabel) : "";
-  const potMarkup = board.length ? "" : createTablePotMarkup(potLabel);
-  const stageHeroCardsMarkup = !board.length ? createStageHeroCardsMarkup(scenario.heroCards || spot?.heroCards || []) : "";
+  const heroCards = scenario.heroCards || spot?.heroCards || [];
   const villainResponse = question?.villainReturnResponse || question?.villainResponse || null;
-  const responseMarkup = villainResponse ? createVillainResponseMarkup(villainResponse) : "";
-  const showdownMarkup = question?.showdownResult ? createShowdownMarkup(question.showdownResult) : "";
+  const tableState = window.FishKillerTableView.createTableSessionState({
+    scenario,
+    bettingSummary,
+    spot,
+    question,
+    visualLayout,
+    actorMap,
+    seatStates,
+    displayedSeatStates,
+    board,
+    potLabel,
+    potBb: bettingSummary.pot || 0,
+    heroCards,
+    villainResponse,
+  });
 
-  const seatMarkup = visualLayout.seats.map((seatConfig) => {
-    const actor = actorMap[seatConfig.seat];
-    const isHero = seatConfig.seat === scenario.heroSeat;
-    const seatState = displayedSeatStates[seatConfig.seat] || {};
-    const isVillainResponseSeat = villainResponse?.seat === seatConfig.seat;
-    const seatAnchor = seatConfig.anchor || "default";
-    const className = [
-      "seat-node",
-      `seat-anchor-${seatAnchor}`,
-      isHero ? "hero" : "",
-      actor || isVillainResponseSeat ? "action" : "",
-      isVillainResponseSeat ? "villain-recent" : "",
-      seatState.status || "",
-    ]
-      .filter(Boolean)
-      .join(" ");
-    const isPostflop = spot?.street && spot.street !== "preflop";
-    const actionLabel = isVillainResponseSeat
-      ? formatVillainResponseLabel(villainResponse)
-      : seatState.pendingFoldAnimation
-        ? seatState.label
-      : isPostflop && seatState.label
-        ? seatState.label
-        : bettingSummary.actionBySeat[seatConfig.seat] || actor?.label;
-    const caption = isHero ? "Hero to act" : isVillainResponseSeat ? actionLabel : actor ? actionLabel : seatState.label || "Waiting";
-    const heroCardsMarkup = isHero && !stageHeroCardsMarkup ? createSeatHeroCardsMarkup(scenario.heroCards || spot?.heroCards || []) : "";
-    const avatarMarkup = createSeatAvatarMarkup(seatConfig.seat, isHero);
-    const chromeSide = getSeatChromeSide(seatAnchor, isHero, seatConfig.seat);
-    const chromeMarkup = createSeatChromeMarkup(chromeSide);
-    return `
-      <div class="${className}" data-seat="${seatConfig.seat}" style="--x: ${seatConfig.x}; --y: ${seatConfig.y};">
-        <div class="seat-hero-hand">
-          ${heroCardsMarkup}
-        </div>
-        <div class="seat-player">
-          <div class="seat-main seat-orient-${chromeSide}">
-            ${chromeMarkup}
-            ${avatarMarkup}
-            <div class="seat-marker">${seatConfig.seat}</div>
-            <div class="seat-caption">${caption}</div>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  elements.tableVisual.innerHTML = `${boardMarkup}${potMarkup}${stageHeroCardsMarkup}${responseMarkup}${showdownMarkup}${seatMarkup}`;
-  hydrateSeatAvatarImages(elements.tableVisual);
+  window.FishKillerTableView.renderTableView(elements, tableState, {
+    createBoardMarkup,
+    createTablePotMarkup,
+    createStageHeroCardsMarkup,
+    createVillainResponseMarkup,
+    createShowdownMarkup,
+    createSeatHeroCardsMarkup,
+    createSeatAvatarMarkup,
+    createSeatChromeMarkup,
+    getSeatChromeSide,
+    hydrateSeatAvatarImages,
+    formatVillainResponseLabel,
+    animationHooks: tableAnimationHooks,
+  });
   scheduleTableActionAnimations(scenario, visualLayout, bettingSummary, spot, question, seatStates, actorMap, animationEvents, animationKey);
 }
 
@@ -8410,7 +8140,7 @@ function getPreflopRangeTrainableSpotsForDrill(drillId = getSelectedPreflopRange
     drillId,
     PREFLOP_RANGE_DRILL_OPTIONS
   ) || PREFLOP_RANGE_TRAINABLE_SPOT_IDS;
-  const allowed = new Set(spotIds.length ? spotIds : PREFLOP_RANGE_RFI_SPOT_IDS);
+  const allowed = new Set(spotIds.length ? spotIds : PREFLOP_RANGE_TRAINABLE_SPOT_IDS);
   const spots = getPreflopRangeTrainableSpots();
   const filtered = spots.filter((spot) => allowed.has(spot.spotId));
   return filtered.length ? filtered : spots;

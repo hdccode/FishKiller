@@ -2,109 +2,23 @@ const assert = require("assert");
 const fs = require("fs");
 const path = require("path");
 const preflop = require("../preflop-engine");
+const drillDefinitions = require("../src/data/drill-definitions");
 
 const PACK_PATH = path.join(__dirname, "..", "data", "preflop-ranges", "real", "fishkiller-6max-100bb-v1.preflop-range.json");
 const SPOT_ID = "fk_6max_100bb_btn_rfi_unopened_v1";
-const RFI_SPOT_IDS = [
-  "fk_6max_100bb_lj_rfi_unopened_v1",
-  "fk_6max_100bb_hj_rfi_unopened_v1",
-  "fk_6max_100bb_co_rfi_unopened_v1",
-  "fk_6max_100bb_btn_rfi_unopened_v1",
-  "fk_6max_100bb_sb_rfi_unopened_v1",
-];
-const BB_DEFENSE_SPOT_IDS = [
-  "fk_6max_100bb_bb_vs_lj_open_v1",
-  "fk_6max_100bb_bb_vs_hj_open_v1",
-  "fk_6max_100bb_bb_vs_co_open_v1",
-  "fk_6max_100bb_bb_vs_btn_open_v1",
-  "fk_6max_100bb_bb_vs_sb_open_v1",
-];
-const FACING_OPEN_RESPONSE_SPOT_IDS = [
-  "fk_6max_100bb_hj_vs_lj_open_v1",
-  "fk_6max_100bb_co_vs_lj_open_v1",
-  "fk_6max_100bb_btn_vs_lj_open_v1",
-  "fk_6max_100bb_btn_vs_hj_open_v1",
-  "fk_6max_100bb_sb_vs_lj_open_v1",
-  "fk_6max_100bb_sb_vs_hj_open_v1",
-];
-const THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
-  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
-  "fk_6max_100bb_hj_vs_lj_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
-];
-const FACING_THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_co_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_bb_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_co_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_bb_3bet_v1",
-  "fk_6max_100bb_co_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_co_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_co_open_vs_bb_3bet_v1",
-  "fk_6max_100bb_btn_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
-  "fk_6max_100bb_sb_open_vs_bb_3bet_v1",
-];
-const FACING_FOUR_BET_SPOT_IDS = [
-  "fk_6max_100bb_hj_3bet_vs_lj_open_lj_4bet_v1",
-  "fk_6max_100bb_co_3bet_vs_hj_open_hj_4bet_v1",
-  "fk_6max_100bb_btn_3bet_vs_co_open_co_4bet_v1",
-  "fk_6max_100bb_sb_3bet_vs_btn_open_btn_4bet_v1",
-  "fk_6max_100bb_bb_3bet_vs_btn_open_btn_4bet_v1",
-];
-const BVB_LIMP_SPOT_IDS = [
-  "fk_6max_100bb_sb_first_in_limp_or_raise_v1",
-  "fk_6max_100bb_bb_vs_sb_limp_v1",
-  "fk_6max_100bb_sb_limp_vs_bb_raise_v1",
-];
-const ISO_VS_LIMP_SPOT_IDS = [
-  "fk_6max_100bb_hj_vs_lj_limp_v1",
-  "fk_6max_100bb_co_vs_lj_limp_v1",
-  "fk_6max_100bb_btn_vs_lj_limp_v1",
-  "fk_6max_100bb_btn_vs_co_limp_v1",
-  "fk_6max_100bb_sb_vs_btn_limp_v1",
-  "fk_6max_100bb_bb_vs_btn_limp_v1",
-];
-const SQUEEZE_SPOT_IDS = [
-  "fk_6max_100bb_co_vs_lj_open_hj_call_squeeze_v1",
-  "fk_6max_100bb_btn_vs_lj_open_co_call_squeeze_v1",
-  "fk_6max_100bb_btn_vs_hj_open_co_call_squeeze_v1",
-  "fk_6max_100bb_sb_vs_co_open_btn_call_squeeze_v1",
-  "fk_6max_100bb_bb_vs_co_open_btn_call_squeeze_v1",
-  "fk_6max_100bb_bb_vs_btn_open_sb_call_squeeze_v1",
-];
-const FACING_OPEN_COVERAGE_SPOT_IDS = [
-  "fk_6max_100bb_hj_vs_lj_open_v1",
-  "fk_6max_100bb_co_vs_lj_open_v1",
-  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
-  "fk_6max_100bb_btn_vs_lj_open_v1",
-  "fk_6max_100bb_btn_vs_hj_open_v1",
-  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_lj_open_v1",
-  "fk_6max_100bb_sb_vs_hj_open_v1",
-  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
-  ...BB_DEFENSE_SPOT_IDS,
-];
-const LIVE_SPOT_IDS = [
-  ...new Set([
-    ...RFI_SPOT_IDS,
-    ...FACING_OPEN_COVERAGE_SPOT_IDS,
-    ...BB_DEFENSE_SPOT_IDS,
-    ...THREE_BET_SPOT_IDS,
-    ...FACING_THREE_BET_SPOT_IDS,
-    ...FACING_FOUR_BET_SPOT_IDS,
-    ...BVB_LIMP_SPOT_IDS,
-    ...ISO_VS_LIMP_SPOT_IDS,
-    ...SQUEEZE_SPOT_IDS,
-  ]),
-];
+const {
+  RFI_SPOT_IDS,
+  BB_DEFENSE_SPOT_IDS,
+  FACING_OPEN_RESPONSE_SPOT_IDS,
+  FACING_OPEN_COVERAGE_SPOT_IDS,
+  THREE_BET_SPOT_IDS,
+  FACING_THREE_BET_SPOT_IDS,
+  FACING_FOUR_BET_SPOT_IDS,
+  BVB_LIMP_SPOT_IDS,
+  ISO_VS_LIMP_SPOT_IDS,
+  SQUEEZE_SPOT_IDS,
+  TRAINABLE_SPOT_IDS: LIVE_SPOT_IDS,
+} = drillDefinitions.SPOT_IDS;
 
 function fixedRng(value) {
   return () => value;

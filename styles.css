@@ -1942,6 +1942,7 @@ body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .table-v
 }
 
 .table-stage {
+  /* TODO(mobile): table scaling currently assumes a broad desktop lesson viewport; replace with a viewport-safe scale map. */
   position: relative;
   min-height: 0;
   border-radius: 30px;
@@ -2176,6 +2177,21 @@ body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .table-v
 
 .table-action-anim.check {
   border-color: rgba(124, 238, 228, 0.32);
+}
+
+.table-visual.table-hook-acting-seat .seat-node.acting-seat .seat-main {
+  filter: brightness(1.05);
+}
+
+.table-visual.table-hook-pot-changed .table-pot-badge,
+.table-visual.table-hook-answer-selected .seat-node.hero .seat-main,
+.table-visual.table-hook-card-update .stage-hero-cards,
+.table-visual.table-hook-feedback-correct .seat-node.hero .seat-main,
+.table-visual.table-hook-feedback-mixed .seat-node.hero .seat-main,
+.table-visual.table-hook-feedback-wrong .seat-node.hero .seat-main {
+  transition: transform 220ms ease, filter 220ms ease;
+  transform: translateY(-1px);
+  filter: brightness(1.08);
 }
 
 .table-action-anim.fold span,
@@ -3155,6 +3171,7 @@ body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .table-v
 }
 
 .answer-button {
+  /* TODO(mobile): action buttons need touch-target tuning once the table view has mobile breakpoints. */
   min-height: 92px;
   padding: 1rem;
   text-align: left;
@@ -6875,6 +6892,7 @@ body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .feedbac
 }
 
 .gto-matrix-wrap {
+  /* TODO(mobile): this matrix intentionally keeps a desktop min-width today; add a swipe/zoom treatment for phones. */
   margin-top: 0.85rem;
   overflow: auto;
   border-radius: var(--radius-md);

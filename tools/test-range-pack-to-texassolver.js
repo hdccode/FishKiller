@@ -5,6 +5,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { spawnSync } = require("child_process");
+const drillDefinitions = require("../src/data/drill-definitions");
 const {
   actionFrequencyToWeight,
   buildTexasSolverRangeString,
@@ -16,34 +17,12 @@ const {
 const ROOT = path.resolve(__dirname, "..");
 const VALIDATOR = path.join(ROOT, "tools", "validate-preflop-range-packs.js");
 const GENERATOR = path.join(ROOT, "tools", "generate-texassolver-ranges.js");
-const REAL_RFI_SPOT_IDS = [
-  "fk_6max_100bb_lj_rfi_unopened_v1",
-  "fk_6max_100bb_hj_rfi_unopened_v1",
-  "fk_6max_100bb_co_rfi_unopened_v1",
-  "fk_6max_100bb_btn_rfi_unopened_v1",
-  "fk_6max_100bb_sb_rfi_unopened_v1",
-];
-const REAL_BB_DEFENSE_SPOT_IDS = [
-  "fk_6max_100bb_bb_vs_lj_open_v1",
-  "fk_6max_100bb_bb_vs_hj_open_v1",
-  "fk_6max_100bb_bb_vs_co_open_v1",
-  "fk_6max_100bb_bb_vs_btn_open_v1",
-  "fk_6max_100bb_bb_vs_sb_open_v1",
-];
-const REAL_THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_btn_vs_co_open_3bet_v1",
-  "fk_6max_100bb_co_vs_hj_open_3bet_v1",
-  "fk_6max_100bb_hj_vs_lj_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_btn_open_3bet_v1",
-  "fk_6max_100bb_sb_vs_co_open_3bet_v1",
-];
-const REAL_FACING_THREE_BET_SPOT_IDS = [
-  "fk_6max_100bb_btn_open_vs_bb_3bet_v1",
-  "fk_6max_100bb_co_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_co_open_vs_sb_3bet_v1",
-  "fk_6max_100bb_hj_open_vs_btn_3bet_v1",
-  "fk_6max_100bb_lj_open_vs_hj_3bet_v1",
-];
+const {
+  RFI_SPOT_IDS: REAL_RFI_SPOT_IDS,
+  BB_DEFENSE_SPOT_IDS: REAL_BB_DEFENSE_SPOT_IDS,
+  THREE_BET_SPOT_IDS: REAL_THREE_BET_SPOT_IDS,
+  FACING_THREE_BET_SPOT_IDS: REAL_FACING_THREE_BET_SPOT_IDS,
+} = drillDefinitions.SPOT_IDS;
 
 main();
 
