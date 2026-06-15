@@ -10196,3 +10196,39 @@ body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-no
     --fk-seat-shell-w-active: clamp(178px, 12.2vw, 248px);
   }
 }
+
+/* FK2 hero hole cards live with the hero seat; center felt is reserved for board cards. */
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.hero .seat-hero-hand:not(:empty) {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + clamp(0.42rem, 0.78vw, 0.78rem));
+  left: auto;
+  z-index: 9;
+  display: flex !important;
+  justify-content: center;
+  pointer-events: none;
+  transform: translateY(-50%);
+  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.42));
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.hero[data-seat="HJ"] .seat-hero-hand:not(:empty),
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.hero[data-seat="CO"] .seat-hero-hand:not(:empty),
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.hero[data-seat="BTN"] .seat-hero-hand:not(:empty) {
+  right: auto;
+  left: calc(100% + clamp(0.42rem, 0.78vw, 0.78rem));
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.hero .seat-hole-cards {
+  gap: clamp(0.28rem, 0.48vw, 0.44rem);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.hero .seat-hole-cards .mini-card {
+  width: clamp(40px, 3.05vw, 58px);
+  height: clamp(56px, 4.3vw, 80px);
+  border-radius: 9px;
+  font-size: clamp(1rem, 1.18vw, 1.28rem);
+  outline: 1px solid rgba(255, 224, 174, 0.46);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 12px 22px rgba(0, 0, 0, 0.34);
+}

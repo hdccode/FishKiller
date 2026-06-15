@@ -4,6 +4,9 @@ server.stderr.log
 *.log
 .DS_Store
 exports/
+.tmp-edge-cdp*/
+.tmp-preview-cdp/
+preview-fk2.png
 third_party/
 data/preflop-ranges/validation-report.json
 data/texassolver/logs/

@@ -48,19 +48,16 @@
       ? helpers.createBoardMarkup(tableState.board, tableState.spot?.street, tableState.potLabel)
       : "";
     const potMarkup = tableState.board.length ? "" : helpers.createTablePotMarkup(tableState.potLabel);
-    const stageHeroCardsMarkup = !tableState.board.length
-      ? helpers.createStageHeroCardsMarkup(tableState.heroCards)
-      : "";
     const responseMarkup = tableState.villainResponse ? helpers.createVillainResponseMarkup(tableState.villainResponse) : "";
     const showdownMarkup = tableState.question?.showdownResult ? helpers.createShowdownMarkup(tableState.question.showdownResult) : "";
-    const seatMarkup = tableState.seats.map((seatConfig) => renderSeat(seatConfig, tableState, helpers, stageHeroCardsMarkup)).join("");
+    const seatMarkup = tableState.seats.map((seatConfig) => renderSeat(seatConfig, tableState, helpers)).join("");
 
-    elements.tableVisual.innerHTML = `${boardMarkup}${potMarkup}${stageHeroCardsMarkup}${responseMarkup}${showdownMarkup}${seatMarkup}`;
+    elements.tableVisual.innerHTML = `${boardMarkup}${potMarkup}${responseMarkup}${showdownMarkup}${seatMarkup}`;
     helpers.hydrateSeatAvatarImages(elements.tableVisual);
     helpers.animationHooks?.onStateRendered(tableState);
   }
 
-  function renderSeat(seatConfig, tableState, helpers, stageHeroCardsMarkup) {
+  function renderSeat(seatConfig, tableState, helpers) {
     const actor = tableState.actorMap[seatConfig.seat];
     const isHero = seatConfig.seat === tableState.heroSeat;
     const seatState = tableState.displayedSeatStates[seatConfig.seat] || {};
@@ -85,7 +82,7 @@
           ? seatState.label
           : tableState.bettingSummary.actionBySeat[seatConfig.seat] || actor?.label;
     const caption = isHero ? "Hero to act" : isVillainResponseSeat ? actionLabel : actor ? actionLabel : seatState.label || "Waiting";
-    const heroCardsMarkup = isHero && !stageHeroCardsMarkup ? helpers.createSeatHeroCardsMarkup(tableState.heroCards) : "";
+    const heroCardsMarkup = isHero ? helpers.createSeatHeroCardsMarkup(tableState.heroCards) : "";
     const avatarMarkup = helpers.createSeatAvatarMarkup(seatConfig.seat, isHero);
     const chromeSide = helpers.getSeatChromeSide(seatAnchor, isHero, seatConfig.seat);
     const chromeMarkup = helpers.createSeatChromeMarkup(chromeSide);
