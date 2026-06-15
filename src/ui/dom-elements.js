@@ -42,6 +42,8 @@
     scenarioTitle: "scenario-title",
     scenarioCopy: "scenario-copy",
     scenarioFacts: "scenario-facts",
+    tableStage: "table-stage",
+    pixiTableScene: "pixi-table-scene",
     tableVisual: "table-visual",
     answerGrid: "answer-grid",
     feedbackBand: "feedback-band",

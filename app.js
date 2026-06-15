@@ -10,6 +10,7 @@ const FULL_HAND_STREETS = ["preflop", "flop", "turn", "river"];
 const SOLVER_EQUITY_SAMPLES = 42;
 const SOLVER_RANGE_SAMPLE_SIZE = 72;
 const POSTFLOP_SOLVER_ENABLED = false;
+const ENABLE_PIXI_TABLE = false;
 const TABLE_ACTION_ANIMATION_MS = 850;
 const TABLE_ACTION_ANIMATION_STAGGER_MS = 820;
 
@@ -5121,7 +5122,30 @@ function renderTableVisual(scenario, bettingSummary = createBettingSummary(scena
     formatVillainResponseLabel,
     animationHooks: tableAnimationHooks,
   });
+  renderPixiTableScene(tableState);
   scheduleTableActionAnimations(scenario, visualLayout, bettingSummary, spot, question, seatStates, actorMap, animationEvents, animationKey);
+}
+
+function renderPixiTableScene(tableState) {
+  const tableStage = elements.tableStage || elements.tableVisual?.closest(".table-stage");
+  const pixiMount = elements.pixiTableScene;
+  const pixiScene = window.FishKillerFk2TableScene;
+
+  if (!tableStage || !pixiMount || !pixiScene || !ENABLE_PIXI_TABLE) {
+    tableStage?.classList.remove("pixi-table-enabled");
+    pixiScene?.destroyTableScene?.(pixiMount);
+    return;
+  }
+
+  pixiScene.renderTableScene(pixiMount, tableState)
+    .then(() => {
+      tableStage.classList.add("pixi-table-enabled");
+    })
+    .catch((error) => {
+      console.warn("Pixi table scene failed; keeping DOM table fallback.", error);
+      tableStage.classList.remove("pixi-table-enabled");
+      pixiScene.destroyTableScene?.(pixiMount);
+    });
 }
 
 function createSeatAvatarMarkup(seat, isHero = false) {

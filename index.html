@@ -199,7 +199,8 @@
             <p class="scenario-copy" id="scenario-copy">Choose a format and launch a short trainer. Each mistake is corrected immediately, and missed spots are saved for a retry round.</p>
 
             <div class="fact-grid" id="scenario-facts"></div>
-            <div class="table-stage">
+            <div class="table-stage" id="table-stage">
+              <div class="pixi-table-scene" id="pixi-table-scene" aria-hidden="true"></div>
               <div class="table-visual" id="table-visual"></div>
             </div>
             <div class="answer-grid" id="answer-grid"></div>
@@ -352,6 +353,8 @@
   <script src="src/state/app-state.js"></script>
   <script src="src/data/drill-definitions.js"></script>
   <script src="src/animation/table-animations.js"></script>
+  <script src="src/render/fk2-scene-coordinates.js"></script>
+  <script src="src/render/fk2-table-scene.js"></script>
   <script src="src/ui/table-view.js"></script>
   <script src="preflop-engine.js"></script>
   <script src="preflop-progress.js"></script>
