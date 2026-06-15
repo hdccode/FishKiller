@@ -27,6 +27,42 @@
   --radius-lg: 14px;
   --radius-md: 10px;
   --radius-sm: 8px;
+
+  /* Trainer visual tokens: shared palette and surface language for the table UI. */
+  --trainer-accent-gold: #f0b84f;
+  --trainer-accent-gold-soft: #ffd98a;
+  --trainer-accent-brass: #c8842f;
+  --trainer-accent-brass-deep: #6f3c15;
+  --trainer-danger-red: #c85a46;
+  --trainer-danger-red-soft: #ee917f;
+  --trainer-success-green: #3fbf8e;
+  --trainer-success-green-soft: #9de8c4;
+  --trainer-action-teal: #2bc8b3;
+  --trainer-action-teal-soft: #93f2e2;
+  --trainer-action-purple: #9460e8;
+  --trainer-action-purple-soft: #c6a4ff;
+  --trainer-surface-glass: rgba(8, 6, 4, 0.72);
+  --trainer-surface-glass-strong: rgba(8, 5, 3, 0.88);
+  --trainer-surface-panel: rgba(12, 8, 4, 0.92);
+  --trainer-surface-modal: rgba(10, 7, 4, 0.96);
+  --trainer-surface-card: #fffaf0;
+  --trainer-text-primary: #fff1d4;
+  --trainer-text-muted: rgba(255, 235, 200, 0.74);
+  --trainer-text-gold: var(--trainer-accent-gold-soft);
+  --trainer-text-inverse: #15201b;
+  --trainer-border-brass: rgba(200, 132, 47, 0.38);
+  --trainer-border-brass-soft: rgba(240, 184, 79, 0.2);
+  --trainer-shadow-panel: 0 20px 42px rgba(0, 0, 0, 0.34);
+  --trainer-shadow-button: 0 22px 44px rgba(0, 0, 0, 0.42);
+  --trainer-shadow-card: 0 12px 22px rgba(0, 0, 0, 0.34);
+  --trainer-glow-selected: 0 0 20px rgba(240, 184, 79, 0.22);
+  --trainer-glow-success: 0 0 18px rgba(63, 191, 142, 0.2);
+  --trainer-glow-danger: 0 0 18px rgba(200, 90, 70, 0.2);
+  --trainer-radius-panel: 14px;
+  --trainer-radius-control: 18px;
+  --trainer-radius-card: 9px;
+  --trainer-radius-pill: 999px;
+
   --skin-accent: #d99a36;
   --skin-accent-soft: #ffd986;
   --skin-secondary: #22d6bf;
@@ -41,15 +77,15 @@
   --fk2-panel: rgba(12, 8, 4, 0.92);
   --fk2-wood: #3a2110;
   --fk2-wood-deep: #140903;
-  --fk2-brass: #c8842f;
-  --fk2-gold: #f0b84f;
-  --fk2-gold-soft: #ffd98a;
+  --fk2-brass: var(--trainer-accent-brass);
+  --fk2-gold: var(--trainer-accent-gold);
+  --fk2-gold-soft: var(--trainer-accent-gold-soft);
   --fk2-felt: #172014;
   --fk2-felt-deep: #080c07;
-  --fk2-red: #d95b45;
-  --fk2-teal: #21d0b8;
-  --fk2-purple: #9b61ff;
-  --fk2-glass: rgba(8, 6, 4, 0.72);
+  --fk2-red: var(--trainer-danger-red);
+  --fk2-teal: var(--trainer-action-teal);
+  --fk2-purple: var(--trainer-action-purple);
+  --fk2-glass: var(--trainer-surface-glass);
 }
 
 body[data-visual-skin="fishkiller1"] {
@@ -10231,4 +10267,214 @@ body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-no
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
     0 12px 22px rgba(0, 0, 0, 0.34);
+}
+
+/* Visual polish pass 1: tokenized FK2 trainer surfaces without layout changes. */
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active {
+  --trainer-active-panel:
+    radial-gradient(circle at 16% 0%, rgba(240, 184, 79, 0.12), transparent 42%),
+    linear-gradient(180deg, rgba(255, 229, 172, 0.07), rgba(255, 229, 172, 0.018)),
+    var(--trainer-surface-glass-strong);
+  --trainer-subtle-panel:
+    linear-gradient(180deg, rgba(255, 230, 174, 0.07), rgba(255, 230, 174, 0.014)),
+    var(--trainer-surface-glass);
+  --answer-accent: var(--trainer-accent-gold);
+  --answer-accent-soft: var(--trainer-accent-gold-soft);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .scenario-panel,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .scenario-topline,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .session-figures,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .feedback-band,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .modal-card {
+  border-color: var(--trainer-border-brass);
+  color: var(--trainer-text-primary);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .scenario-panel {
+  box-shadow:
+    0 32px 86px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 229, 172, 0.08);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .scenario-topline {
+  border-bottom-color: var(--trainer-border-brass-soft);
+  background:
+    linear-gradient(90deg, rgba(240, 184, 79, 0.075), transparent 34%, rgba(240, 184, 79, 0.05)),
+    var(--trainer-surface-glass-strong);
+  box-shadow:
+    var(--trainer-shadow-panel),
+    inset 0 1px 0 rgba(255, 229, 172, 0.08);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .hud-title,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .feedback-label,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .session-figures::before,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .gto-legend strong {
+  color: var(--trainer-text-gold);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .hud-brand .session-chip,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .hud-progress > span,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .hud-stat small,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .feedback-band p,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active #gto-copy {
+  color: var(--trainer-text-muted);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .session-figures,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .visual-skin-toggle,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .modal-card,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .gto-matrix-wrap {
+  border-radius: var(--trainer-radius-panel);
+  background: var(--trainer-active-panel);
+  box-shadow:
+    var(--trainer-shadow-panel),
+    0 0 0 1px rgba(240, 184, 79, 0.055),
+    inset 0 1px 0 rgba(255, 235, 190, 0.1);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .progress-track {
+  border-color: var(--trainer-border-brass-soft);
+  background:
+    linear-gradient(180deg, rgba(255, 238, 185, 0.075), rgba(0, 0, 0, 0.24)),
+    rgba(20, 13, 7, 0.78);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .progress-fill {
+  background:
+    linear-gradient(90deg, var(--trainer-accent-brass-deep), var(--trainer-accent-brass) 48%, var(--trainer-accent-gold-soft));
+  box-shadow: var(--trainer-glow-selected);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-fold {
+  --answer-accent: var(--trainer-danger-red);
+  --answer-accent-soft: var(--trainer-danger-red-soft);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-call {
+  --answer-accent: var(--trainer-action-teal);
+  --answer-accent-soft: var(--trainer-action-teal-soft);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-raise {
+  --answer-accent: var(--trainer-action-purple);
+  --answer-accent-soft: var(--trainer-action-purple-soft);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-grid {
+  background: transparent;
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-button {
+  border-color: color-mix(in srgb, var(--answer-accent) 54%, rgba(255, 235, 190, 0.18));
+  border-radius: var(--trainer-radius-control);
+  background:
+    linear-gradient(115deg, rgba(255, 245, 216, 0.12), transparent 32%, rgba(255, 245, 216, 0.035)),
+    linear-gradient(180deg, color-mix(in srgb, var(--answer-accent) 13%, transparent), transparent 72%),
+    var(--trainer-surface-glass-strong);
+  color: var(--trainer-text-primary);
+  box-shadow:
+    var(--trainer-shadow-button),
+    0 0 18px color-mix(in srgb, var(--answer-accent) 13%, transparent),
+    inset 0 1px 0 rgba(255, 235, 190, 0.12);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-button span,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-button .answer-copy span {
+  color: var(--trainer-text-muted);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-icon-well {
+  border-color: color-mix(in srgb, var(--answer-accent) 62%, rgba(255, 235, 190, 0.18));
+  background:
+    radial-gradient(circle at 50% 44%, color-mix(in srgb, var(--answer-accent) 25%, transparent), transparent 56%),
+    rgba(0, 0, 0, 0.28);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-button.correct,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .feedback-band.correct {
+  border-color: color-mix(in srgb, var(--trainer-success-green) 70%, rgba(255, 235, 190, 0.16));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--trainer-success-green) 18%, transparent), rgba(0, 0, 0, 0.04)),
+    var(--trainer-surface-glass);
+  box-shadow:
+    var(--trainer-shadow-panel),
+    var(--trainer-glow-success);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-button.wrong,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .feedback-band.wrong {
+  border-color: color-mix(in srgb, var(--trainer-danger-red) 72%, rgba(255, 235, 190, 0.14));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--trainer-danger-red) 18%, transparent), rgba(0, 0, 0, 0.04)),
+    var(--trainer-surface-glass);
+  box-shadow:
+    var(--trainer-shadow-panel),
+    var(--trainer-glow-danger);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .answer-button.mixed,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .feedback-band.mixed {
+  border-color: color-mix(in srgb, var(--trainer-accent-gold) 72%, rgba(255, 235, 190, 0.14));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--trainer-accent-gold) 18%, transparent), rgba(0, 0, 0, 0.04)),
+    var(--trainer-surface-glass);
+  box-shadow:
+    var(--trainer-shadow-panel),
+    var(--trainer-glow-selected);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .feedback-band {
+  border-radius: var(--trainer-radius-panel);
+  background: var(--trainer-subtle-panel);
+  box-shadow:
+    var(--trainer-shadow-panel),
+    inset 0 1px 0 rgba(255, 235, 190, 0.09);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-marker,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-caption {
+  color: var(--trainer-text-primary);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.92),
+    0 0 8px rgba(240, 184, 79, 0.13);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.hero .seat-shell-image,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.action .seat-shell-image,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.villain-recent .seat-shell-image {
+  filter:
+    contrast(1.07)
+    saturate(1.1)
+    brightness(1.06)
+    drop-shadow(0 0 10px rgba(240, 184, 79, 0.28))
+    drop-shadow(0 9px 12px rgba(0, 0, 0, 0.38));
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .mini-card {
+  border-radius: var(--trainer-radius-card);
+  background: var(--trainer-surface-card);
+  color: var(--trainer-text-inverse);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    var(--trainer-shadow-card);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .seat-node.hero .seat-hole-cards .mini-card {
+  border-radius: var(--trainer-radius-card);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    var(--trainer-shadow-card);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .gto-legend,
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .modal-actions {
+  color: var(--trainer-text-muted);
+}
+
+body[data-visual-skin="fishkiller2"].preflop-range-active.lesson-active .preflop-range-matrix .gto-cell {
+  border-color: rgba(255, 235, 190, 0.1);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 1px 0 rgba(255, 235, 190, 0.055);
 }
