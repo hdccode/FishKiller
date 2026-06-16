@@ -6,6 +6,24 @@
   root.FishKillerFk2TableScene = api;
 })(typeof globalThis !== "undefined" ? globalThis : window, function buildFk2TableSceneApi(root) {
   const PIXI_CDN_URL = "https://cdn.jsdelivr.net/npm/pixi.js@8.8.1/dist/pixi.mjs";
+  const DEFAULT_HERO_CARDS = Object.freeze([
+    Object.freeze({ rank: "A", suit: Object.freeze({ id: "spade", symbol: "\u2660" }) }),
+    Object.freeze({ rank: "K", suit: Object.freeze({ id: "heart", symbol: "\u2665" }) }),
+  ]);
+  const SUIT_SYMBOL_BY_ID = Object.freeze({
+    club: "\u2663",
+    clubs: "\u2663",
+    c: "\u2663",
+    diamond: "\u2666",
+    diamonds: "\u2666",
+    d: "\u2666",
+    heart: "\u2665",
+    hearts: "\u2665",
+    h: "\u2665",
+    spade: "\u2660",
+    spades: "\u2660",
+    s: "\u2660",
+  });
   const sceneByMount = new WeakMap();
 
   async function loadPixi() {
@@ -29,7 +47,8 @@
     }
 
     const scene = await getOrCreateScene(Pixi, mount, coordinates.STAGE_SIZE);
-    drawScene(Pixi, scene.app.stage, coordinates, tableState);
+    updateSceneTransform(scene, mount, coordinates.STAGE_SIZE);
+    drawScene(Pixi, scene.world, coordinates, tableState);
     return scene;
   }
 
@@ -51,14 +70,41 @@
     }
 
     const app = await createPixiApplication(Pixi, stageSize);
+    const world = new Pixi.Container();
     const canvas = app.canvas || app.view;
     canvas.className = "pixi-table-canvas";
     canvas.setAttribute("aria-hidden", "true");
     mount.replaceChildren(canvas);
+    app.stage.addChild(world);
 
-    const scene = { app };
+    const scene = { app, world };
     sceneByMount.set(mount, scene);
     return scene;
+  }
+
+  function updateSceneTransform(scene, mount, stageSize) {
+    const bounds = mount.getBoundingClientRect();
+    const width = Math.max(1, Math.round(bounds.width));
+    const height = Math.max(1, Math.round(bounds.height));
+
+    if (scene.app.renderer?.resize) {
+      scene.app.renderer.resize(width, height);
+    }
+
+    const canvas = scene.app.canvas || scene.app.view;
+    if (canvas) {
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+    }
+
+    const scale = Math.min(width / stageSize.width, height / stageSize.height);
+    const scaledWidth = stageSize.width * scale;
+    const scaledHeight = stageSize.height * scale;
+    const offsetX = (width - scaledWidth) / 2;
+    const offsetY = (height - scaledHeight) / 2;
+
+    scene.world.scale.set(scale);
+    scene.world.position.set(offsetX, offsetY);
   }
 
   async function createPixiApplication(Pixi, stageSize) {
@@ -191,7 +237,7 @@
   function drawHeroCards(Pixi, stage, coordinates, tableState) {
     const heroPosition = coordinates.SEAT_POSITIONS[tableState.heroSeat] || { x: 800, y: 690, side: "right" };
     const cardOffset = coordinates.HERO_CARD_OFFSETS[heroPosition.side] || coordinates.HERO_CARD_OFFSETS.right;
-    const cards = tableState.heroCards.length ? tableState.heroCards : ["A♠", "K♥"];
+    const cards = normalizeCards(tableState.heroCards);
 
     cards.slice(0, 2).forEach((card, index) => {
       const x = heroPosition.x + cardOffset.x + (index * 58);
@@ -202,7 +248,7 @@
       }));
 
       const cardText = createText(Pixi, formatCardLabel(card), {
-        fill: isRedCard(card) ? 0xbc2d28 : 0x141a18,
+        fill: card.isRed ? 0xbc2d28 : 0x141a18,
         fontFamily: "Georgia, serif",
         fontSize: 22,
         fontWeight: "800",
@@ -291,16 +337,53 @@
   }
 
   function formatCardLabel(card) {
-    if (typeof card === "string") {
-      return card;
-    }
-
-    return `${card?.rank || ""}${card?.suit || ""}`;
+    const normalizedCard = normalizeCard(card);
+    return `${normalizedCard.rank}${normalizedCard.suitSymbol}`;
   }
 
   function isRedCard(card) {
-    const label = formatCardLabel(card);
-    return /[♥♦hd]/i.test(label);
+    return normalizeCard(card).isRed;
+  }
+
+  function normalizeCards(cards) {
+    const sourceCards = Array.isArray(cards) && cards.length ? cards : DEFAULT_HERO_CARDS;
+    return sourceCards.slice(0, 2).map((card, index) => normalizeCard(card, DEFAULT_HERO_CARDS[index]));
+  }
+
+  function normalizeCard(card, fallback = DEFAULT_HERO_CARDS[0]) {
+    if (typeof card === "string") {
+      const trimmed = card.trim();
+      const rank = trimmed[0] || fallback.rank;
+      const rawSuit = trimmed.slice(1);
+      const suitSymbol = normalizeSuitSymbol(rawSuit, fallback.suit);
+      return {
+        rank,
+        suitSymbol,
+        isRed: suitSymbol === "\u2665" || suitSymbol === "\u2666",
+      };
+    }
+
+    const rank = card?.rank || fallback.rank;
+    const suit = card?.suit || fallback.suit;
+    const suitSymbol = normalizeSuitSymbol(suit, fallback.suit);
+    return {
+      rank,
+      suitSymbol,
+      isRed: isRedSuit(suit, suitSymbol),
+    };
+  }
+
+  function normalizeSuitSymbol(suit, fallbackSuit) {
+    if (typeof suit === "string") {
+      return SUIT_SYMBOL_BY_ID[suit.toLowerCase()] || suit || fallbackSuit?.symbol || "";
+    }
+
+    return suit?.symbol || SUIT_SYMBOL_BY_ID[String(suit?.id || "").toLowerCase()] || fallbackSuit?.symbol || "";
+  }
+
+  function isRedSuit(suit, suitSymbol) {
+    const suitId = typeof suit === "string" ? suit.toLowerCase() : String(suit?.id || "").toLowerCase();
+    return suitSymbol === "\u2665" || suitSymbol === "\u2666" || suitId === "heart" || suitId === "diamond" || suitId === "h" || suitId === "d";
   }
 
   return Object.freeze({
