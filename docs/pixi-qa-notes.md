@@ -20,13 +20,13 @@ Checked desktop viewports:
 - The canvas mounts inside `#pixi-table-scene` within the existing `.table-stage`.
 - The feature flag correctly hides the DOM table only while Pixi mode is enabled.
 - The Pixi layer receives the existing `tableState` from `app.js`.
-- Basic state-fed placeholders render:
-  - table oval
-  - six seat placeholders
+- State-fed placeholders render:
+  - FK2 room/table scene background
+  - six tuned seat placeholders
   - position labels
   - status/action labels
   - pot label
-  - hero-card placeholders
+  - hero-card placeholders beside the hero seat
 - After restoring `ENABLE_PIXI_TABLE = false`, the DOM table fallback is visible again and the existing trainer view continues to load.
 
 ## Scaling Fix QA Update
@@ -46,24 +46,38 @@ Updated results:
 - Hero cards now render as clean rank/suit text rather than object text.
 - Restoring `ENABLE_PIXI_TABLE = false` returns the app to the DOM fallback table.
 
-## Misalignment And Visual Issues
+## Renderer Parity QA Update
 
-- The 1600 x 900 placeholder drawing is now stable, but it is still not visually aligned to the production FK2 room composition.
-- At 1920 x 1080, the placeholder scene is centered and contained, but the dark Pixi background rectangle reads as a separate staged box over the FK2 room.
-- At 1440 x 900, the table no longer collides with the action row, but the placeholder stage has large empty/dark space around the table.
-- At 1366 x 768, the table remains contained and readable, but the placeholder table is now intentionally smaller because the mount height drives the contain scale.
-- The Pixi scene draws a flat placeholder table over the FK2 room image, so it visually fights the current asset-backed background rather than replacing it cleanly.
-- Seat placeholder coordinates are logical for a raw 1600 x 900 stage, but they do not map to the existing CSS/FK2 table crop.
-- Hero-card placeholders still need layout rules for every hero seat, but they no longer run into the action row after the contain transform.
-- The canvas scale now works predictably, but the art-coordinate system still needs a production FK2 scene coordinate map before it can be visually useful.
+After the Pixi scene-background pass, the renderer was checked again at:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+Updated results:
+
+- Pixi now keeps the clean `assets/FishKiller2.2.png` scene background rather than drawing a dark box or a synthetic table over the stage.
+- Seat placeholders now consume the same rendered-state concepts as the DOM table: hero seat, folded seats, villain/action labels, recent villain response labels, and the single acting seat.
+- Active/hero seats receive a stronger warm ring/glow; folded seats are dimmed but still readable.
+- Pot text is still state-fed and remains centered in the felt area.
+- Hero card labels are normalized and placed beside the current hero seat instead of in the center community-card area.
+- The 1600 x 900 contain transform remains stable across all three checked desktop viewports.
+- Restoring `ENABLE_PIXI_TABLE = false` returns the app to the DOM fallback table.
+
+## Remaining Misalignment And Visual Issues
+
+- The renderer still uses Pixi-drawn placeholder medallions and plaques, not the production DOM seat/avatar art.
+- Seat coordinates are tuned for the FK2 scene and usable, but they still need final art-direction tuning once real Pixi avatar/chrome textures are introduced.
+- Hero cards are now beside the hero seat, but the exact offsets may need per-seat art tuning when real card textures replace text placeholders.
+- The Pixi renderer does not yet draw board/community-card slots for postflop scenes.
+- The canvas scale works predictably, but Pixi still needs a shared renderer-state adapter before it can fully replace the DOM table.
 
 ## Missing Or Weak TableState Data
 
 - Hero cards now have renderer-facing normalization in the Pixi scaffold, but this helper is local to `src/render/fk2-table-scene.js` and should eventually move into a shared adapter.
 - Seat avatar art is not passed as render-ready texture data. Pixi currently draws generic circles instead of using the live avatar assets.
 - Seat chrome/shell data is not represented in renderer-friendly form. The DOM renderer still owns shell selection and text placement.
-- The Pixi layer does not receive precise FK2 stage crop/framing information from CSS, so it cannot align to the current background composition.
-- There is no shared coordinate transform between DOM percentages and Pixi stage pixels.
+- The Pixi layer now owns a fixed FK2 scene coordinate map, but there is still no shared coordinate transform between DOM percentages and Pixi stage pixels.
 - Board/community-card slots are not modeled as a first-class render target yet.
 - Action animation state is still DOM-specific and is not represented in a way Pixi can consume.
 
@@ -79,16 +93,16 @@ After the temporary QA pass:
 ## Next Migration Steps
 
 1. Add a renderer-facing table-state adapter.
-   Normalize cards, seats, avatar URLs, status labels, and board slots before either renderer consumes them.
+   Normalize cards, seats, avatar URLs, status labels, board slots, and animation events before either renderer consumes them.
 
-2. Add a proper Pixi stage transform.
-   A centered contain transform now exists. The next decision is whether Pixi owns the full FK2 room scene or only a table layer; that decision will determine whether the production transform should remain contain, switch to cover, or use a custom safe-area fit.
+2. Move avatar and seat chrome rendering into Pixi.
+   Start with the same live avatar URLs and FK2 seat chrome strategy used by the DOM table, then replace the generic Pixi circles.
 
-3. Replace placeholder drawing with the clean FK2 background only after the transform is stable.
-   Avoid drawing a second table over the existing DOM/CSS background unless Pixi fully owns that scene layer.
+3. Add card texture rendering.
+   Replace rank/suit text placeholders with card face textures, while keeping the current hero-card placement beside the hero seat.
 
-4. Move seat rendering into Pixi in one small slice.
-   Start with one seat using the same avatar asset and live text, then scale out to all six seats.
+4. Add community-card and pot prop slots.
+   Model the center board area explicitly before using Pixi for postflop table scenes.
 
 5. Keep DOM fallback until Pixi reaches visual parity.
    The current Pixi scaffold is useful as a mount/state proof, not as a user-facing renderer.

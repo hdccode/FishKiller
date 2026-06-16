@@ -223,44 +223,63 @@
       seatContainer.x = position.x;
       seatContainer.y = position.y;
 
-      const isHero = seat === tableState.heroSeat;
-      const statusLabel = getSeatStatusLabel(tableState, seat, isHero);
-      const isLeft = position.side === "left";
+      const seatView = getSeatViewModel(tableState, seat, position);
+      const style = root.FishKillerFk2SceneCoordinates?.SEAT_STYLE || {};
+      const avatarRadius = seatView.isHero ? style.heroAvatarRadius || 52 : style.avatarRadius || 46;
+      const plaqueWidth = style.plaqueWidth || 132;
+      const plaqueHeight = style.plaqueHeight || 40;
+      const statusWidth = style.statusWidth || 104;
+      const statusHeight = style.statusHeight || 26;
+      const plaqueX = seatView.isLeft ? -(avatarRadius + plaqueWidth + 10) : avatarRadius + 10;
+      const markerText = seatView.isHero ? `${seat} (Hero)` : seat;
+      const statusLabel = truncateLabel(seatView.caption, seatView.isHero ? 20 : 18);
 
       seatContainer.addChild(createShape(Pixi, (graphics) => {
-        drawEllipse(graphics, 0, 0, isHero ? 48 : 42, isHero ? 48 : 42, isHero ? 0x264f65 : 0x172923, 1);
-        strokeEllipse(graphics, 0, 0, isHero ? 51 : 45, isHero ? 51 : 45, isHero ? 0xffcc66 : 0xd69b42, isHero ? 0.92 : 0.66, 5);
+        drawEllipse(graphics, 8, 11, avatarRadius + 8, avatarRadius * 0.34, 0x000000, seatView.isFolded ? 0.22 : 0.34);
       }));
 
-      const plaqueX = isLeft ? -176 : 52;
+      if (seatView.isActing || seatView.isHero || seatView.isVillainRecent) {
+        seatContainer.addChild(createShape(Pixi, (graphics) => {
+          drawEllipse(graphics, 0, 0, avatarRadius + 12, avatarRadius + 12, getSeatGlowColor(seatView), getSeatGlowAlpha(seatView));
+        }));
+      }
+
       seatContainer.addChild(createShape(Pixi, (graphics) => {
-        drawRoundedRect(graphics, plaqueX, -28, 124, 40, 10, 0x090604, 0.88);
-        strokeRoundedRect(graphics, plaqueX, -28, 124, 40, 10, 0xd69b42, 0.58, 2);
-        drawRoundedRect(graphics, plaqueX + 16, 18, 92, 26, 8, 0x090604, 0.78);
-        strokeRoundedRect(graphics, plaqueX + 16, 18, 92, 26, 8, 0xae7a31, 0.42, 1.5);
+        drawEllipse(graphics, 0, 0, avatarRadius, avatarRadius, getSeatFillColor(seatView), seatView.isFolded ? 0.76 : 0.94);
+        strokeEllipse(graphics, 0, 0, avatarRadius + 4, avatarRadius + 4, getSeatRingColor(seatView), getSeatRingAlpha(seatView), seatView.isActing || seatView.isHero ? 6 : 4);
+        strokeEllipse(graphics, 0, 0, avatarRadius - 6, avatarRadius - 6, 0xffefb8, seatView.isFolded ? 0.08 : 0.16, 1.5);
       }));
 
-      const seatText = createText(Pixi, seat, {
-        fill: 0xffdf96,
+      seatContainer.addChild(createShape(Pixi, (graphics) => {
+        drawRoundedRect(graphics, plaqueX, -28, plaqueWidth, plaqueHeight, 10, 0x090604, seatView.isFolded ? 0.68 : 0.88);
+        strokeRoundedRect(graphics, plaqueX, -28, plaqueWidth, plaqueHeight, 10, getPlaqueStrokeColor(seatView), seatView.isFolded ? 0.38 : 0.62, 2);
+        drawRoundedRect(graphics, plaqueX + 14, 18, statusWidth, statusHeight, 8, 0x080504, seatView.isFolded ? 0.62 : 0.8);
+        strokeRoundedRect(graphics, plaqueX + 14, 18, statusWidth, statusHeight, 8, getPlaqueStrokeColor(seatView), seatView.isFolded ? 0.26 : 0.46, 1.5);
+      }));
+
+      const seatText = createText(Pixi, markerText, {
+        fill: seatView.isFolded ? 0xd9bd88 : 0xffdf96,
         fontFamily: "Georgia, serif",
-        fontSize: 19,
+        fontSize: seatView.isHero ? 18 : 19,
         fontWeight: "700",
         align: "center",
       });
       seatText.anchor.set(0.5);
-      seatText.x = plaqueX + 62;
+      seatText.x = plaqueX + (plaqueWidth / 2);
       seatText.y = -8;
       seatContainer.addChild(seatText);
 
       const statusText = createText(Pixi, statusLabel, {
-        fill: 0xf2dec2,
+        fill: getStatusTextColor(seatView),
         fontFamily: "Arial, sans-serif",
         fontSize: 11,
         fontWeight: "700",
         align: "center",
+        wordWrap: true,
+        wordWrapWidth: statusWidth - 8,
       });
       statusText.anchor.set(0.5);
-      statusText.x = plaqueX + 62;
+      statusText.x = plaqueX + 14 + (statusWidth / 2);
       statusText.y = 31;
       seatContainer.addChild(statusText);
 
@@ -291,14 +310,19 @@
   function drawHeroCards(Pixi, stage, coordinates, tableState) {
     const heroPosition = coordinates.SEAT_POSITIONS[tableState.heroSeat] || { x: 800, y: 690, side: "right" };
     const cardOffset = coordinates.HERO_CARD_OFFSETS[heroPosition.side] || coordinates.HERO_CARD_OFFSETS.right;
+    const style = coordinates.SEAT_STYLE || {};
+    const cardWidth = style.cardWidth || 50;
+    const cardHeight = style.cardHeight || 70;
+    const cardGap = style.cardGap || 8;
     const cards = normalizeCards(tableState.heroCards);
 
     cards.slice(0, 2).forEach((card, index) => {
-      const x = heroPosition.x + cardOffset.x + (index * 58);
+      const x = heroPosition.x + cardOffset.x + (index * (cardWidth + cardGap));
       const y = heroPosition.y + cardOffset.y;
       stage.addChild(createShape(Pixi, (graphics) => {
-        drawRoundedRect(graphics, x, y, 50, 70, 8, 0xf8f3e8, 1);
-        strokeRoundedRect(graphics, x, y, 50, 70, 8, 0x3b2412, 0.4, 2);
+        drawRoundedRect(graphics, x + 4, y + 6, cardWidth, cardHeight, 8, 0x000000, 0.26);
+        drawRoundedRect(graphics, x, y, cardWidth, cardHeight, 8, 0xf8f3e8, 1);
+        strokeRoundedRect(graphics, x, y, cardWidth, cardHeight, 8, 0x3b2412, 0.4, 2);
       }));
 
       const cardText = createText(Pixi, formatCardLabel(card), {
@@ -313,14 +337,143 @@
     });
   }
 
-  function getSeatStatusLabel(tableState, seat, isHero) {
-    if (isHero) {
-      return "Hero";
+  function getSeatViewModel(tableState, seat, position) {
+    const actor = tableState.actorMap?.[seat];
+    const seatState = tableState.displayedSeatStates?.[seat] || {};
+    const isHero = seat === tableState.heroSeat;
+    const isActing = tableState.actingSeat === seat;
+    const isFolded = tableState.foldedSeats?.includes(seat) || seatState.status === "folded" || /fold/i.test(seatState.label || "");
+    const isVillainRecent = tableState.villainResponse?.seat === seat;
+    const isPostflop = tableState.spot?.street && tableState.spot.street !== "preflop";
+    const displayedStateLabel = /to act/i.test(seatState.label || "") && !isActing && !isHero
+      ? "Waiting"
+      : seatState.label;
+    const actionLabel = isVillainRecent
+      ? formatVillainResponseLabel(tableState.villainResponse)
+      : seatState.pendingFoldAnimation
+        ? displayedStateLabel
+        : isPostflop && displayedStateLabel
+          ? displayedStateLabel
+          : tableState.bettingSummary?.actionBySeat?.[seat] || actor?.label || "";
+    const caption = isHero
+      ? "Hero to act"
+      : isVillainRecent
+        ? actionLabel
+        : actor
+          ? actionLabel
+          : displayedStateLabel || "Waiting";
+
+    return {
+      seat,
+      caption,
+      isHero,
+      isActing,
+      isFolded,
+      isVillainRecent,
+      isLeft: position.side === "left",
+      hasAction: Boolean(actor || actionLabel),
+    };
+  }
+
+  function formatVillainResponseLabel(response) {
+    if (!response) {
+      return "";
     }
 
-    return tableState.bettingSummary?.actionBySeat?.[seat]
-      || tableState.displayedSeatStates?.[seat]?.label
-      || "Waiting";
+    return [response.action, response.amountLabel].filter(Boolean).join(" ");
+  }
+
+  function truncateLabel(label, maxLength) {
+    const normalizedLabel = String(label || "Waiting");
+    if (normalizedLabel.length <= maxLength) {
+      return normalizedLabel;
+    }
+
+    return `${normalizedLabel.slice(0, Math.max(0, maxLength - 1)).trim()}…`;
+  }
+
+  function getSeatFillColor(seatView) {
+    if (seatView.isHero) {
+      return 0x21495e;
+    }
+
+    if (seatView.isVillainRecent || seatView.hasAction) {
+      return 0x2f2019;
+    }
+
+    if (seatView.isFolded) {
+      return 0x1b211c;
+    }
+
+    return 0x122f27;
+  }
+
+  function getSeatRingColor(seatView) {
+    if (seatView.isHero || seatView.isActing) {
+      return 0xffcc66;
+    }
+
+    if (seatView.isVillainRecent || seatView.hasAction) {
+      return 0xd6863a;
+    }
+
+    if (seatView.isFolded) {
+      return 0x8d734b;
+    }
+
+    return 0xd69b42;
+  }
+
+  function getSeatRingAlpha(seatView) {
+    if (seatView.isHero || seatView.isActing) {
+      return 0.94;
+    }
+
+    if (seatView.isFolded) {
+      return 0.46;
+    }
+
+    return 0.68;
+  }
+
+  function getSeatGlowColor(seatView) {
+    if (seatView.isVillainRecent || seatView.hasAction) {
+      return 0xb84f2d;
+    }
+
+    return 0xffc866;
+  }
+
+  function getSeatGlowAlpha(seatView) {
+    if (seatView.isHero || seatView.isActing) {
+      return 0.2;
+    }
+
+    return 0.12;
+  }
+
+  function getPlaqueStrokeColor(seatView) {
+    if (seatView.isHero || seatView.isActing) {
+      return 0xffcc66;
+    }
+
+    if (seatView.isVillainRecent || seatView.hasAction) {
+      return 0xc87337;
+    }
+
+    return 0xd69b42;
+  }
+
+  function getStatusTextColor(seatView) {
+    if (seatView.isHero || seatView.isActing) {
+      return 0xffedbd;
+    }
+
+    if (seatView.isFolded) {
+      return 0xd7c5a6;
+    }
+
+    return 0xf2dec2;
   }
 
   function createText(Pixi, text, style) {
