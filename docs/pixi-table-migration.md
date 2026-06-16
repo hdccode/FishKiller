@@ -11,6 +11,14 @@ This branch keeps the existing DOM poker table as the production renderer and ad
 - `index.html` includes a `#pixi-table-scene` mount inside the existing `.table-stage`.
 - The feature flag `ENABLE_PIXI_TABLE` in `app.js` defaults to `false`, so the current DOM table remains visible and gameplay is unchanged.
 
+## Scene Ownership Decision
+
+When `ENABLE_PIXI_TABLE` is temporarily enabled, Pixi now owns the full FK2 table-scene plate. The renderer loads `assets/FishKiller2.2.png` into the fixed 1600 x 900 world and cover-fits it behind the live placeholder overlays.
+
+The DOM still owns the top HUD, action buttons, feedback dock, range table modal, and all trainer controls. This keeps the Pixi migration scoped to the table scene while the existing DOM trainer remains the production fallback.
+
+If the FK2 scene image fails to load, the Pixi renderer falls back to the earlier synthetic dark-room/table placeholder so local QA can still distinguish renderer placement from app failures.
+
 ## Pixi Loading
 
 The proof of concept uses a browser dynamic import from:
@@ -41,15 +49,14 @@ When enabled, the Pixi canvas is shown inside `.table-stage` and the DOM `.table
 
 ## Proof-Of-Concept Layers
 
-The Pixi scene currently renders placeholder layers only:
+The Pixi scene currently renders:
 
-- dark background rectangle
-- simple wood/felt table oval
+- FK2 room/table scene background from `assets/FishKiller2.2.png`
 - six seat placeholders using the existing seat/status data
 - pot label from the existing table state
 - two hero-card placeholders near the hero seat
 
-This is intentionally not a replacement for the FK2 visual system yet. It is a rendering boundary test.
+The synthetic dark background and simple wood/felt oval remain fallback-only layers for failed image loads. This is still not a replacement for the FK2 visual system yet; it is a rendering boundary test for letting Pixi own the table scene while DOM controls stay live.
 
 ## Migration Rules
 

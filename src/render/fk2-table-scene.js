@@ -6,6 +6,7 @@
   root.FishKillerFk2TableScene = api;
 })(typeof globalThis !== "undefined" ? globalThis : window, function buildFk2TableSceneApi(root) {
   const PIXI_CDN_URL = "https://cdn.jsdelivr.net/npm/pixi.js@8.8.1/dist/pixi.mjs";
+  const FK2_SCENE_BACKGROUND_SRC = "assets/FishKiller2.2.png";
   const DEFAULT_HERO_CARDS = Object.freeze([
     Object.freeze({ rank: "A", suit: Object.freeze({ id: "spade", symbol: "\u2660" }) }),
     Object.freeze({ rank: "K", suit: Object.freeze({ id: "heart", symbol: "\u2665" }) }),
@@ -24,6 +25,7 @@
     spades: "\u2660",
     s: "\u2660",
   });
+  let sceneAssetsPromise = null;
   const sceneByMount = new WeakMap();
 
   async function loadPixi() {
@@ -47,9 +49,35 @@
     }
 
     const scene = await getOrCreateScene(Pixi, mount, coordinates.STAGE_SIZE);
+    const sceneAssets = await loadSceneAssets(Pixi);
     updateSceneTransform(scene, mount, coordinates.STAGE_SIZE);
-    drawScene(Pixi, scene.world, coordinates, tableState);
+    drawScene(Pixi, scene.world, coordinates, tableState, sceneAssets);
     return scene;
+  }
+
+  function loadSceneAssets(Pixi) {
+    if (!sceneAssetsPromise) {
+      sceneAssetsPromise = loadTexture(Pixi, FK2_SCENE_BACKGROUND_SRC)
+        .then((backgroundTexture) => ({ backgroundTexture }))
+        .catch((error) => {
+          console.warn("Pixi FK2 background failed to load; using placeholder scene.", error);
+          return { backgroundTexture: null };
+        });
+    }
+
+    return sceneAssetsPromise;
+  }
+
+  async function loadTexture(Pixi, src) {
+    if (Pixi.Assets?.load) {
+      return Pixi.Assets.load(src);
+    }
+
+    if (Pixi.Texture?.from) {
+      return Pixi.Texture.from(src);
+    }
+
+    throw new Error("PixiJS texture loading is unavailable.");
   }
 
   function destroyTableScene(mount) {
@@ -135,22 +163,48 @@
     throw new Error("PixiJS Application constructor is unavailable.");
   }
 
-  function drawScene(Pixi, stage, coordinates, tableState) {
+  function drawScene(Pixi, stage, coordinates, tableState, sceneAssets) {
     stage.removeChildren();
 
-    drawBackground(Pixi, stage, coordinates.STAGE_SIZE);
-    drawTable(Pixi, stage, coordinates.TABLE);
+    const hasSceneBackground = drawBackground(Pixi, stage, coordinates.STAGE_SIZE, sceneAssets);
+    if (!hasSceneBackground) {
+      drawTable(Pixi, stage, coordinates.TABLE);
+    }
     drawSeats(Pixi, stage, coordinates.SEAT_POSITIONS, tableState);
     drawPot(Pixi, stage, coordinates.TABLE, tableState);
     drawHeroCards(Pixi, stage, coordinates, tableState);
   }
 
-  function drawBackground(Pixi, stage, stageSize) {
+  function drawBackground(Pixi, stage, stageSize, sceneAssets) {
+    if (sceneAssets?.backgroundTexture) {
+      const backgroundSprite = new Pixi.Sprite(sceneAssets.backgroundTexture);
+      fitSpriteCover(backgroundSprite, stageSize);
+      stage.addChild(backgroundSprite);
+      stage.addChild(createShape(Pixi, (graphics) => {
+        drawRect(graphics, 0, 0, stageSize.width, stageSize.height, 0x000000, 0.08);
+      }));
+      return true;
+    }
+
     const background = createShape(Pixi, (graphics) => {
       drawRect(graphics, 0, 0, stageSize.width, stageSize.height, 0x120805, 1);
       drawRect(graphics, 0, 0, stageSize.width, stageSize.height, 0x000000, 0.18);
     });
     stage.addChild(background);
+    return false;
+  }
+
+  function fitSpriteCover(sprite, stageSize) {
+    const textureWidth = Math.max(1, sprite.texture?.width || stageSize.width);
+    const textureHeight = Math.max(1, sprite.texture?.height || stageSize.height);
+    const scale = Math.max(stageSize.width / textureWidth, stageSize.height / textureHeight);
+    const width = textureWidth * scale;
+    const height = textureHeight * scale;
+
+    sprite.width = width;
+    sprite.height = height;
+    sprite.x = (stageSize.width - width) / 2;
+    sprite.y = (stageSize.height - height) / 2;
   }
 
   function drawTable(Pixi, stage, table) {
