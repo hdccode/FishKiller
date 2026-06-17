@@ -69,6 +69,25 @@ Findings:
 - Primitive fallback remains available if the frame textures fail to load.
 - The 1366 x 768 viewport remains dense but usable, with no table-stage collision from the frame textures.
 
+## Avatar Texture QA - 2026-06-17
+
+Result: pass for the first Pixi avatar portrait integration. `ENABLE_PIXI_TABLE` was temporarily set to `true` for inspection and restored to `false` before validation and commit.
+
+Checked desktop viewports:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+Findings:
+
+- Pixi now loads the consistent `assets/avatars/seat-*.png` portrait set and clips each portrait inside the existing FKSeat medallion frame.
+- The loose `ChatGPT Image...` avatar source files and `fishkiller-avatar-sheet.png` remain reference/fallback assets and were not wired into Pixi.
+- Hero, acting, and folded states remain readable over the portrait treatment.
+- Folded seats keep visible portraits with dimming plus a readable `Folds` caption.
+- Primitive avatar fills remain the fallback if any portrait texture fails to load.
+- The 1366 x 768 viewport remains tight but usable, with no new overlap from avatar portraits.
+
 ## What Works
 
 - The Pixi scaffold loads and renders when `ENABLE_PIXI_TABLE` is temporarily set to `true`.

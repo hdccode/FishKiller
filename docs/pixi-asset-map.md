@@ -26,12 +26,12 @@ See `docs/asset-production-brief.md` for the production filenames, target dimens
 
 | Asset | Dimensions | Status | Notes |
 | --- | ---: | --- | --- |
-| `assets/avatars/seat-shark.png` | 512 x 512 | Ready for prototype | Transparent live avatar. DOM uses it; Pixi does not yet load avatar textures. Final runtime target: `assets/runtime/fk2/avatar-utg-shark.webp`. |
-| `assets/avatars/seat-octopus.png` | 512 x 512 | Ready for prototype | Transparent live avatar. DOM uses it; Pixi does not yet load avatar textures. Final runtime target: `assets/runtime/fk2/avatar-hj-octopus.webp`. |
-| `assets/avatars/seat-turtle.png` | 512 x 512 | Ready for prototype | Transparent live avatar. DOM uses it; Pixi does not yet load avatar textures. Final runtime target: `assets/runtime/fk2/avatar-co-turtle.webp`. |
-| `assets/avatars/seat-blue-shark.png` | 512 x 512 | Ready for prototype | Transparent live avatar. DOM uses it; Pixi does not yet load avatar textures. Final runtime target: `assets/runtime/fk2/avatar-btn-blue-shark.webp`. |
-| `assets/avatars/seat-dolphin.png` | 512 x 512 | Ready for prototype | Transparent live avatar. DOM uses it; Pixi does not yet load avatar textures. Final runtime target: `assets/runtime/fk2/avatar-sb-dolphin.webp`. |
-| `assets/avatars/seat-angler.png` | 512 x 512 | Ready for prototype | Transparent live avatar. DOM uses it; Pixi does not yet load avatar textures. Final runtime target: `assets/runtime/fk2/avatar-bb-angler.webp`. |
+| `assets/avatars/seat-shark.png` | 512 x 512 | Implemented in Pixi prototype | Transparent live avatar. Pixi now loads it for UTG. Final runtime target: `assets/runtime/fk2/avatar-utg-shark.webp`. |
+| `assets/avatars/seat-octopus.png` | 512 x 512 | Implemented in Pixi prototype | Transparent live avatar. Pixi now loads it for HJ. Final runtime target: `assets/runtime/fk2/avatar-hj-octopus.webp`. |
+| `assets/avatars/seat-turtle.png` | 512 x 512 | Implemented in Pixi prototype | Transparent live avatar. Pixi now loads it for CO. Final runtime target: `assets/runtime/fk2/avatar-co-turtle.webp`. |
+| `assets/avatars/seat-blue-shark.png` | 512 x 512 | Implemented in Pixi prototype | Transparent live avatar. Pixi now loads it for BTN. Final runtime target: `assets/runtime/fk2/avatar-btn-blue-shark.webp`. |
+| `assets/avatars/seat-dolphin.png` | 512 x 512 | Implemented in Pixi prototype | Transparent live avatar. Pixi now loads it for SB. Final runtime target: `assets/runtime/fk2/avatar-sb-dolphin.webp`. |
+| `assets/avatars/seat-angler.png` | 512 x 512 | Implemented in Pixi prototype | Transparent live avatar. Pixi now loads it for BB. Final runtime target: `assets/runtime/fk2/avatar-bb-angler.webp`. |
 | `assets/avatars/fishkiller-avatar-sheet.png` | 1536 x 1024 | Reference/fallback only | Transparent fallback sprite sheet. Not used by Pixi yet. |
 
 ## Seat Chrome Assets
@@ -57,7 +57,7 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 | --- | --- | --- | --- |
 | Production seat frames | `seat-frame-right.png`, `seat-frame-left.png`, optional hero variants | Prototype implemented; final runtime files missing | Pixi loads `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png`, with primitive fallback if texture loading fails. |
 | Active/folded seat overlays | `seat-glow-active.png`, `seat-glow-folded.png` | Missing | Pixi uses primitive glow/dimming. |
-| Matched avatar runtime set | `avatar-utg-shark.webp`, `avatar-hj-octopus.webp`, `avatar-co-turtle.webp`, `avatar-btn-blue-shark.webp`, `avatar-sb-dolphin.webp`, `avatar-bb-angler.webp` | Missing final runtime files | Pixi renders generic circles. Existing DOM avatar PNGs can prototype texture loading. |
+| Matched avatar runtime set | `avatar-utg-shark.webp`, `avatar-hj-octopus.webp`, `avatar-co-turtle.webp`, `avatar-btn-blue-shark.webp`, `avatar-sb-dolphin.webp`, `avatar-bb-angler.webp` | Prototype implemented; final runtime files missing | Pixi loads the existing `assets/avatars/seat-*.png` portraits into circular masks, with primitive fill fallback if texture loading fails. |
 | Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Missing | Pixi renders card-like primitives with rank/suit text, bevels, and shadows. |
 | Card back texture | `card-back-fk2.webp` | Missing | Not needed yet for hero-card display. |
 | Card contact shadow | `card-shadow.png` | Missing | Pixi uses primitive card shadow shapes. |
@@ -74,7 +74,7 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 These assets can be used to prove Pixi texture loading and placement before final art production:
 
 1. `assets/FishKiller2.2.png` as the FK2 scene plate.
-2. `assets/avatars/seat-*.png` for live avatar texture loading.
+2. `assets/avatars/seat-*.png` for live avatar texture loading. These are now wired into the Pixi prototype.
 3. `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png` for combined seat shell testing. These are now wired into the Pixi prototype.
 4. `assets/fk2_medallion_ring_normal.png`, `assets/fk2_position_plaque_blank*.png`, and `assets/fk2_status_plaque_blank.png` for lightweight plaque/ring testing.
 
@@ -83,7 +83,7 @@ These prototype assets should not be renamed into final runtime paths until they
 ## Current Pixi Visual Strategy
 
 - Use `assets/FishKiller2.2.png` as the FK2 scene plate.
-- Keep DOM avatar/card assets untouched until renderer-state parity is stronger.
+- Load the existing DOM avatar PNGs into Pixi seat medallions, with primitive fill fallback if texture loading fails.
 - Use FKSeat frame textures for Pixi seat chrome, with primitive fallback if texture loading fails.
 - Use Pixi primitives for cards, chip stacks, avatar fills, and state trims in the interim.
 - Avoid loading unsuitable non-alpha screenshot crops or top-level legacy FK assets into Pixi.
@@ -91,7 +91,7 @@ These prototype assets should not be renamed into final runtime paths until they
 
 ## Recommended Next Asset Slice
 
-1. Load live seat avatar textures into Pixi from the same avatar URLs the DOM uses.
-2. Promote or replace FKSeat frame textures with final `assets/runtime/fk2/seat-frame-*.png` production filenames.
+1. Promote or replace FKSeat frame textures and avatar portraits with final `assets/runtime/fk2/` production filenames.
+2. Add final active/folded overlays once the frame/avatar pairing is stable.
 3. Replace the primitive card renderer with a small generated card-face atlas.
 4. Add chip/dealer-button prop textures once the pot/seat/card positions are stable.

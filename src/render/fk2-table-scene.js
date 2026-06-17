@@ -9,6 +9,14 @@
   const FK2_SCENE_BACKGROUND_SRC = "assets/FishKiller2.2.png";
   const SEAT_FRAME_RIGHT_SRC = "assets/FKSeat/FKFrame_transparent.png";
   const SEAT_FRAME_LEFT_SRC = "assets/FKSeat/FKFrameLeft_transparent.png";
+  const AVATAR_SRC_BY_SEAT = Object.freeze({
+    UTG: "assets/avatars/seat-shark.png",
+    HJ: "assets/avatars/seat-octopus.png",
+    CO: "assets/avatars/seat-turtle.png",
+    BTN: "assets/avatars/seat-blue-shark.png",
+    SB: "assets/avatars/seat-dolphin.png",
+    BB: "assets/avatars/seat-angler.png",
+  });
   const SEAT_FRAME_TEXTURE_ANCHORS = Object.freeze({
     right: Object.freeze({ x: 0.25, y: 0.5 }),
     left: Object.freeze({ x: 0.74, y: 0.5 }),
@@ -67,14 +75,25 @@
         loadOptionalTexture(Pixi, FK2_SCENE_BACKGROUND_SRC, "background"),
         loadOptionalTexture(Pixi, SEAT_FRAME_RIGHT_SRC, "right seat frame"),
         loadOptionalTexture(Pixi, SEAT_FRAME_LEFT_SRC, "left seat frame"),
-      ]).then(([backgroundTexture, seatFrameRightTexture, seatFrameLeftTexture]) => ({
-        backgroundTexture,
-        seatFrameRightTexture,
-        seatFrameLeftTexture,
-      }));
+        loadAvatarTextures(Pixi),
+      ]).then(([backgroundTexture, seatFrameRightTexture, seatFrameLeftTexture, avatarTextures]) => (
+        {
+          backgroundTexture,
+          seatFrameRightTexture,
+          seatFrameLeftTexture,
+          avatarTextures,
+        }
+      ));
     }
 
     return sceneAssetsPromise;
+  }
+
+  function loadAvatarTextures(Pixi) {
+    const avatarEntries = Object.entries(AVATAR_SRC_BY_SEAT);
+    return Promise.all(avatarEntries.map(([seat, src]) => (
+      loadOptionalTexture(Pixi, src, `${seat} avatar`).then((texture) => [seat, texture])
+    ))).then((entries) => Object.fromEntries(entries.filter(([, texture]) => texture)));
   }
 
   function loadOptionalTexture(Pixi, src, label) {
@@ -250,8 +269,12 @@
       const markerText = seatView.isHero ? `${seat} (Hero)` : seat;
       const statusLabel = truncateLabel(seatView.caption, seatView.isHero ? 20 : 18);
 
+      const avatarTexture = getSeatAvatarTexture(sceneAssets, seat);
       const didDrawFrameTexture = drawSeatFrameTexture(Pixi, seatContainer, seatView, avatarRadius, sceneAssets);
-      drawSeatMedallion(Pixi, seatContainer, seatView, avatarRadius, { includeOuterChrome: !didDrawFrameTexture });
+      drawSeatMedallion(Pixi, seatContainer, seatView, avatarRadius, {
+        avatarTexture,
+        includeOuterChrome: !didDrawFrameTexture,
+      });
       if (!didDrawFrameTexture) {
         drawSeatPlaques(Pixi, seatContainer, seatView, {
           plaqueX,
@@ -363,6 +386,10 @@
       : { markerY: -18, statusY: 30 };
   }
 
+  function getSeatAvatarTexture(sceneAssets, seat) {
+    return sceneAssets?.avatarTextures?.[seat] || null;
+  }
+
   function drawPot(Pixi, stage, table, tableState) {
     const label = tableState.potLabel ? `Pot ${tableState.potLabel}` : `Pot ${Number(tableState.potBb || 0).toFixed(1)}bb`;
     drawChipStack(Pixi, stage, table.centerX - 110, table.centerY - 26, getPotChipColor(tableState), 0.98);
@@ -406,6 +433,7 @@
 
   function drawSeatMedallion(Pixi, container, seatView, avatarRadius, options = {}) {
     const includeOuterChrome = options.includeOuterChrome !== false;
+    const avatarTexture = options.avatarTexture || null;
     container.addChild(createShape(Pixi, (graphics) => {
       drawEllipse(graphics, 9, 12, avatarRadius + 12, avatarRadius * 0.38, 0x000000, seatView.isFolded ? 0.2 : 0.38);
     }));
@@ -424,10 +452,40 @@
         strokeEllipse(graphics, 0, 0, avatarRadius + 5, avatarRadius + 5, 0x6c3512, seatView.isFolded ? 0.34 : 0.58, 3);
       }
       drawEllipse(graphics, 0, 0, avatarRadius - 2, avatarRadius - 2, 0x1a100b, 0.94);
-      drawEllipse(graphics, 0, 0, avatarRadius - 8, avatarRadius - 8, getSeatFillColor(seatView), seatView.isFolded ? 0.74 : 0.96);
+      drawEllipse(graphics, 0, 0, avatarRadius - 8, avatarRadius - 8, getSeatFillColor(seatView), avatarTexture ? 0.44 : seatView.isFolded ? 0.74 : 0.96);
+    }));
+
+    if (avatarTexture) {
+      drawSeatAvatarTexture(Pixi, container, seatView, avatarRadius, avatarTexture);
+    }
+
+    container.addChild(createShape(Pixi, (graphics) => {
       drawEllipse(graphics, -avatarRadius * 0.18, -avatarRadius * 0.22, avatarRadius * 0.34, avatarRadius * 0.2, 0xffffff, seatView.isFolded ? 0.03 : 0.08);
       strokeEllipse(graphics, 0, 0, avatarRadius - 8, avatarRadius - 8, 0xffefb8, seatView.isFolded ? 0.08 : 0.18, 1.5);
+      if (seatView.isFolded) {
+        drawEllipse(graphics, 0, 0, avatarRadius - 8, avatarRadius - 8, 0x090604, 0.42);
+      }
     }));
+  }
+
+  function drawSeatAvatarTexture(Pixi, container, seatView, avatarRadius, avatarTexture) {
+    const clipRadius = avatarRadius - 9;
+    const avatarSprite = new Pixi.Sprite(avatarTexture);
+    const textureWidth = Math.max(1, avatarTexture.width || avatarSprite.texture?.width || 1);
+    const textureHeight = Math.max(1, avatarTexture.height || avatarSprite.texture?.height || 1);
+    const scale = ((clipRadius * 2) * 1.08) / Math.max(textureWidth, textureHeight);
+    const avatarMask = createShape(Pixi, (graphics) => {
+      drawEllipse(graphics, 0, 0, clipRadius, clipRadius, 0xffffff, 1);
+    });
+
+    avatarSprite.anchor.set(0.5);
+    avatarSprite.scale.set(scale);
+    avatarSprite.y = avatarRadius * 0.03;
+    avatarSprite.alpha = seatView.isFolded ? 0.64 : 0.95;
+    avatarSprite.mask = avatarMask;
+
+    container.addChild(avatarMask);
+    container.addChild(avatarSprite);
   }
 
   function drawSeatPlaques(Pixi, container, seatView, layout) {
