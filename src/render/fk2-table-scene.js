@@ -207,6 +207,7 @@
     }
     drawSeats(Pixi, stage, coordinates.SEAT_POSITIONS, tableState, sceneAssets);
     drawPot(Pixi, stage, coordinates.TABLE, tableState);
+    drawDealerButton(Pixi, stage, coordinates.SEAT_POSITIONS);
     drawHeroCards(Pixi, stage, coordinates, tableState);
   }
 
@@ -392,14 +393,18 @@
 
   function drawPot(Pixi, stage, table, tableState) {
     const label = tableState.potLabel ? `Pot ${tableState.potLabel}` : `Pot ${Number(tableState.potBb || 0).toFixed(1)}bb`;
-    drawChipStack(Pixi, stage, table.centerX - 110, table.centerY - 26, getPotChipColor(tableState), 0.98);
-    drawChipStack(Pixi, stage, table.centerX + 82, table.centerY - 26, 0x2f4050, 0.9);
+    const potColors = getPotChipColors(tableState);
+    drawChipStack(Pixi, stage, table.centerX - 124, table.centerY - 24, potColors.primary, 1.02);
+    drawChipStack(Pixi, stage, table.centerX - 86, table.centerY - 20, potColors.secondary, 0.86);
+    drawChipStack(Pixi, stage, table.centerX + 86, table.centerY - 20, 0x2f4050, 0.86);
+    drawChipStack(Pixi, stage, table.centerX + 122, table.centerY - 24, 0x365f85, 0.96);
 
     const potBadge = createShape(Pixi, (graphics) => {
-      drawRoundedRect(graphics, table.centerX - 78, table.centerY - 38, 156, 42, 17, 0x000000, 0.24);
-      drawRoundedRect(graphics, table.centerX - 72, table.centerY - 40, 144, 38, 16, 0x090604, 0.86);
-      drawRoundedRect(graphics, table.centerX - 64, table.centerY - 34, 128, 10, 8, 0xffd27a, 0.08);
-      strokeRoundedRect(graphics, table.centerX - 72, table.centerY - 40, 144, 38, 16, 0xd69b42, 0.62, 2);
+      drawRoundedRect(graphics, table.centerX - 88, table.centerY - 42, 176, 46, 18, 0x000000, 0.26);
+      drawRoundedRect(graphics, table.centerX - 78, table.centerY - 43, 156, 40, 17, 0x090604, 0.88);
+      drawRoundedRect(graphics, table.centerX - 67, table.centerY - 37, 134, 10, 8, 0xffd27a, 0.1);
+      strokeRoundedRect(graphics, table.centerX - 78, table.centerY - 43, 156, 40, 17, 0xd69b42, 0.68, 2);
+      strokeRoundedRect(graphics, table.centerX - 72, table.centerY - 37, 144, 28, 14, 0xffefb8, 0.12, 1);
     });
     stage.addChild(potBadge);
 
@@ -411,8 +416,37 @@
     });
     potText.anchor.set(0.5);
     potText.x = table.centerX;
-    potText.y = table.centerY - 21;
+    potText.y = table.centerY - 23;
     stage.addChild(potText);
+  }
+
+  function drawDealerButton(Pixi, stage, seatPositions) {
+    const buttonSeat = seatPositions.BTN;
+    if (!buttonSeat) {
+      return;
+    }
+
+    const x = buttonSeat.x + (buttonSeat.side === "left" ? -86 : 86);
+    const y = buttonSeat.y - 86;
+    stage.addChild(createShape(Pixi, (graphics) => {
+      drawEllipse(graphics, x + 3, y + 5, 17, 9, 0x000000, 0.28);
+      drawEllipse(graphics, x, y, 18, 18, 0xf0e3c8, 0.96);
+      drawEllipse(graphics, x - 3, y - 4, 9, 5, 0xffffff, 0.28);
+      strokeEllipse(graphics, x, y, 18, 18, 0xd69b42, 0.78, 2);
+      strokeEllipse(graphics, x, y, 12, 12, 0x3b2412, 0.34, 1.5);
+    }));
+
+    const dealerText = createText(Pixi, "D", {
+      fill: 0x3b2412,
+      fontFamily: "Arial, sans-serif",
+      fontSize: 14,
+      fontWeight: "800",
+      align: "center",
+    });
+    dealerText.anchor.set(0.5);
+    dealerText.x = x;
+    dealerText.y = y + 1;
+    stage.addChild(dealerText);
   }
 
   function drawHeroCards(Pixi, stage, coordinates, tableState) {
@@ -712,36 +746,47 @@
     return pipLayouts[rankValue] || pipLayouts[2];
   }
 
-  function drawChipStack(Pixi, stage, x, y, color, alpha) {
-    drawChip(Pixi, stage, x, y + 14, color, alpha * 0.9);
-    drawChip(Pixi, stage, x + 13, y + 6, color, alpha);
-    drawChip(Pixi, stage, x + 28, y + 14, color, alpha * 0.86);
+  function drawChipStack(Pixi, stage, x, y, color, scale = 1) {
+    const shadowWidth = 23 * scale;
+    stage.addChild(createShape(Pixi, (graphics) => {
+      drawEllipse(graphics, x + (10 * scale), y + (18 * scale), shadowWidth, 8 * scale, 0x000000, 0.25);
+    }));
+
+    drawChip(Pixi, stage, x, y + (14 * scale), color, 0.84, scale);
+    drawChip(Pixi, stage, x + (7 * scale), y + (7 * scale), color, 0.92, scale);
+    drawChip(Pixi, stage, x + (15 * scale), y, color, 0.98, scale);
   }
 
-  function drawChip(Pixi, stage, x, y, color, alpha) {
+  function drawChip(Pixi, stage, x, y, color, alpha, scale = 1) {
+    const radiusX = 15 * scale;
+    const radiusY = 9 * scale;
+    const stripeLength = 7 * scale;
+    const stripeWidth = 3 * scale;
+
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawEllipse(graphics, x + 2, y + 7, 16, 8, 0x000000, 0.28);
-      drawEllipse(graphics, x, y, 15, 15, color, alpha);
-      strokeEllipse(graphics, x, y, 16, 16, 0xffd27a, 0.62, 2);
-      strokeEllipse(graphics, x, y, 9, 9, 0xffffff, 0.18, 1.5);
-      drawRect(graphics, x - 2, y - 14, 4, 8, 0xf7e3b0, 0.38);
-      drawRect(graphics, x - 2, y + 6, 4, 8, 0xf7e3b0, 0.38);
-      drawRect(graphics, x - 14, y - 2, 8, 4, 0xf7e3b0, 0.38);
-      drawRect(graphics, x + 6, y - 2, 8, 4, 0xf7e3b0, 0.38);
+      drawEllipse(graphics, x + (1.5 * scale), y + (5 * scale), radiusX, radiusY, 0x000000, 0.22);
+      drawEllipse(graphics, x, y, radiusX, radiusX, color, alpha);
+      drawEllipse(graphics, x - (2 * scale), y - (4 * scale), radiusX * 0.5, radiusY * 0.36, 0xffffff, 0.14);
+      strokeEllipse(graphics, x, y, radiusX + scale, radiusX + scale, 0xffd27a, 0.64, 2 * scale);
+      strokeEllipse(graphics, x, y, radiusX * 0.58, radiusX * 0.58, 0xffffff, 0.22, 1.4 * scale);
+      drawRoundedRect(graphics, x - (stripeWidth / 2), y - (radiusX + 1), stripeWidth, stripeLength, 2 * scale, 0xf7e3b0, 0.5);
+      drawRoundedRect(graphics, x - (stripeWidth / 2), y + radiusX - stripeLength + 1, stripeWidth, stripeLength, 2 * scale, 0xf7e3b0, 0.44);
+      drawRoundedRect(graphics, x - radiusX + 1, y - (stripeWidth / 2), stripeLength, stripeWidth, 2 * scale, 0xf7e3b0, 0.44);
+      drawRoundedRect(graphics, x + radiusX - stripeLength - 1, y - (stripeWidth / 2), stripeLength, stripeWidth, 2 * scale, 0xf7e3b0, 0.44);
     }));
   }
 
-  function getPotChipColor(tableState) {
+  function getPotChipColors(tableState) {
     const potValue = Number(tableState.potBb || 0);
     if (potValue >= 20) {
-      return 0x7c4ad4;
+      return { primary: 0x7c4ad4, secondary: 0xb53b2e };
     }
 
     if (potValue >= 8) {
-      return 0xb53b2e;
+      return { primary: 0xb53b2e, secondary: 0x7c4ad4 };
     }
 
-    return 0x2f8f70;
+    return { primary: 0x2f8f70, secondary: 0xd69b42 };
   }
 
   function getSeatViewModel(tableState, seat, position) {

@@ -60,6 +60,17 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 | `assets/runtime/fk2/card-back-fk2.webp` | 240 x 336 target | Missing | No card back is committed yet. Not needed for current hero-card display. |
 | `assets/runtime/fk2/card-shadow.png` | 256 x 96 target | Missing | No reusable card shadow asset is committed yet. Pixi draws primitive shadows. |
 
+## Chip And Table Prop Assets
+
+| Asset | Dimensions | Status | Notes |
+| --- | ---: | --- | --- |
+| `assets/runtime/fk2/chip-stack-small.webp` | 256 x 256 target | Missing | No real chip stack asset is committed yet. Pixi uses improved renderer-drawn chip stacks around the pot. |
+| `assets/runtime/fk2/chip-stack-medium.webp` | 384 x 384 target | Missing | No real medium chip stack asset is committed yet. |
+| `assets/runtime/fk2/chip-stack-large.webp` | 512 x 512 target | Missing | No real large chip stack asset is committed yet. |
+| `assets/runtime/fk2/chip-pile-pot.webp` | 512 x 256 target | Missing | No real pot pile asset is committed yet. Pixi uses primitive chip clusters flanking the pot label. |
+| `assets/runtime/fk2/dealer-button.webp` | 128 x 128 target | Missing | No dealer-button asset is committed yet. Pixi uses a subtle primitive dealer button near the BTN seat. |
+| `assets/runtime/fk2/chip-shadow.png` | 256 x 96 target | Missing | No reusable chip shadow asset is committed yet. Pixi draws primitive chip shadows. |
+
 ## Missing Production Assets
 
 | Need | Target Runtime Filename(s) | Status | Current Pixi Fallback |
@@ -70,9 +81,9 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 | Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Missing; primitive fallback improved | Pixi renders deck-like primitives with suit-colored corner labels, suit pips, bevels, and shadows. |
 | Card back texture | `card-back-fk2.webp` | Missing | Not needed yet for hero-card display. |
 | Card contact shadow | `card-shadow.png` | Missing; primitive fallback improved | Pixi uses primitive card shadow shapes. |
-| Chip stack / pot pile props | `chip-stack-small.webp`, `chip-stack-medium.webp`, `chip-stack-large.webp`, `chip-pile-pot.webp` | Missing | Pixi renders small layered chip primitives near the pot. |
-| Dealer button prop | `dealer-button.webp` | Missing | Not rendered yet. |
-| Chip contact shadow | `chip-shadow.png` | Missing | Pixi uses primitive chip shadow shapes. |
+| Chip stack / pot pile props | `chip-stack-small.webp`, `chip-stack-medium.webp`, `chip-stack-large.webp`, `chip-pile-pot.webp` | Missing; primitive fallback improved | Pixi renders layered chip-stack primitives around the pot label. |
+| Dealer button prop | `dealer-button.webp` | Missing; primitive fallback implemented | Pixi renders a subtle primitive dealer button near the BTN seat. |
+| Chip contact shadow | `chip-shadow.png` | Missing; primitive fallback improved | Pixi uses primitive chip shadow shapes. |
 | Action icons for Fold / Call / Raise / 3-bet / 4-bet / Jam / Squeeze | Future DOM/Pixi icon set | Missing | DOM action buttons still own action controls. |
 | HUD icons/textures | Future DOM/Pixi icon set | Missing | DOM HUD still owns session stats. |
 | Board/community-card texture slots | Uses `cards-atlas.webp` plus board slot coordinates | Missing | Not modeled in Pixi yet. |
@@ -94,7 +105,7 @@ These prototype assets should not be renamed into final runtime paths until they
 - Use `assets/FishKiller2.2.png` as the FK2 scene plate.
 - Load the existing DOM avatar PNGs into Pixi seat medallions, with primitive fill fallback if texture loading fails.
 - Use FKSeat frame textures for Pixi seat chrome, with primitive fallback if texture loading fails.
-- Use improved Pixi primitives for hero cards, chip stacks, avatar fills, and state trims in the interim.
+- Use improved Pixi primitives for hero cards, chip stacks, dealer button, avatar fills, and state trims in the interim.
 - Avoid loading unsuitable non-alpha screenshot crops or top-level legacy FK assets into Pixi.
 - Keep all poker logic and action behavior outside Pixi.
 

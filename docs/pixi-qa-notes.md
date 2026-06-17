@@ -106,6 +106,24 @@ Findings:
 - Red and black suit labels remain readable at all checked desktop sizes.
 - The 1366 x 768 viewport remains tight but usable, with no new overlap from the card primitive changes.
 
+## Chip And Table Prop QA - 2026-06-17
+
+Result: pass for improved Pixi chip/pot primitives and a subtle primitive dealer button. `ENABLE_PIXI_TABLE` was temporarily set to `true` for inspection and restored to `false` before validation and commit.
+
+Checked desktop viewports:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+Findings:
+
+- No real chip stack, pot pile, dealer button, or chip-shadow assets are currently committed.
+- Pixi now renders richer layered chip-stack primitives around the centered pot badge.
+- Pot text remains centered and readable at all checked desktop sizes.
+- A small primitive dealer button renders near the BTN seat without overlapping hero cards, seat plaques, or action labels in the checked views.
+- The 1366 x 768 viewport remains tight but usable, with no new stage collision from chip or dealer-button props.
+
 ## What Works
 
 - The Pixi scaffold loads and renders when `ENABLE_PIXI_TABLE` is temporarily set to `true`.
