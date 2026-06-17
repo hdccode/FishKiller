@@ -76,6 +76,36 @@ On 2026-06-17, after auditing committed FK2 assets, the Pixi renderer was moved 
 
 Fresh automated screenshot capture was attempted for this pass, but the local Edge/CDP helper became unreliable in this shell and did not produce fresh screenshot files. The code/server checks below remain the validation record for this pass. The last successful visual captures still apply to background/stage scaling, but the primitive card/chip polish should receive a fresh manual or repaired-CDP visual pass before promoting Pixi mode.
 
+## Polished Placeholder Manual QA Attempt
+
+On 2026-06-17, Pixi was temporarily enabled locally again to QA the polished placeholder renderer at:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+Result: visual pass/fail is inconclusive. `ENABLE_PIXI_TABLE` was restored to `false`, and the committed code remains DOM-table-first.
+
+Capture/inspection attempts:
+
+- The existing Edge/CDP helper reached the remote debugging endpoint, but Node's built-in WebSocket failed opening the DevTools page socket before screenshots could be captured.
+- A second ignored temporary CDP helper was tried with `--remote-allow-origins=*`; it reached the same CDP page target but hit the same WebSocket failure.
+- Edge's native headless `--screenshot` path was tried with a temporary local `?pixiQa=1` auto-start hook, but this Edge installation did not write screenshot files reliably from the shell.
+
+Checks from code/server inspection:
+
+- Pixi remains feature-flagged and disabled by default.
+- The DOM fallback is still the only committed user-facing renderer.
+- The polished placeholder renderer still uses primitives for cards, chips, and seats because production card/chip/avatar textures are not yet wired into Pixi.
+
+Top five issues before promoting Pixi mode:
+
+1. Visual QA tooling needs to be repaired or replaced so Pixi changes can be checked at desktop sizes without relying on stale screenshots.
+2. Seat placeholders still lack live avatar textures and remain materially behind the DOM FK2 seat treatment.
+3. Hero card primitives are readable in code structure, but they still need a real screenshot pass to verify size, contrast, and per-seat offsets.
+4. Pot/chip primitives are useful as placeholders, but they need production chip assets or a stronger shared visual spec.
+5. Pixi still has no board/community-card slots, so the center felt cannot yet support the planned postflop visual model.
+
 ## Remaining Misalignment And Visual Issues
 
 - The renderer still uses Pixi-drawn placeholder medallions and plaques, not the production DOM seat/avatar art.
