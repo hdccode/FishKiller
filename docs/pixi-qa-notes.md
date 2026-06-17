@@ -51,6 +51,24 @@ QA tooling notes:
 - The local browser needed network access to load `https://cdn.jsdelivr.net/npm/pixi.js@8.8.1/dist/pixi.mjs`, because Pixi is currently CDN-loaded only when the temporary flag is enabled.
 - Fresh screenshots were captured under the ignored `.tmp-edge-cdp-pixi-qa/screenshots/` folder.
 
+## Seat Frame Texture QA - 2026-06-17
+
+Result: pass for the first real Pixi seat chrome integration. `ENABLE_PIXI_TABLE` was temporarily set to `true` for inspection and restored to `false` before validation and commit.
+
+Checked desktop viewports:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+Findings:
+
+- Pixi now loads `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png` for right/left seat chrome.
+- Position labels, action/status labels, hero state, acting state, and folded state remain readable on top of the frame textures.
+- The renderer keeps primitive avatar fills for now; avatar portraits are intentionally not integrated in this pass.
+- Primitive fallback remains available if the frame textures fail to load.
+- The 1366 x 768 viewport remains dense but usable, with no table-stage collision from the frame textures.
+
 ## What Works
 
 - The Pixi scaffold loads and renders when `ENABLE_PIXI_TABLE` is temporarily set to `true`.

@@ -38,8 +38,8 @@ See `docs/asset-production-brief.md` for the production filenames, target dimens
 
 | Asset | Dimensions | Status | Notes |
 | --- | ---: | --- | --- |
-| `assets/FKSeat/FKFrame_transparent.png` | 1354 x 685 | Ready for prototype | Transparent combined right-facing seat shell. Final runtime target: `assets/runtime/fk2/seat-frame-right.png`. |
-| `assets/FKSeat/FKFrameLeft_transparent.png` | 1309 x 664 | Ready for prototype | Transparent combined left-facing seat shell. Final runtime target: `assets/runtime/fk2/seat-frame-left.png`. |
+| `assets/FKSeat/FKFrame_transparent.png` | 1354 x 685 | Implemented in Pixi prototype | Transparent combined right-facing seat shell. Pixi now loads it for right-facing seat chrome. Final runtime target: `assets/runtime/fk2/seat-frame-right.png`. |
+| `assets/FKSeat/FKFrameLeft_transparent.png` | 1309 x 664 | Implemented in Pixi prototype | Transparent combined left-facing seat shell. Pixi now loads it for left-facing seat chrome. Final runtime target: `assets/runtime/fk2/seat-frame-left.png`. |
 | `assets/FKSeat/FKHero_transparent.png` | 1076 x 1116 | Needs testing | Transparent hero seat shell/medallion. Needs layout testing before use. |
 | `assets/FKSeat/FKBorder_transparent.png` | 1069 x 1087 | Reference candidate | Transparent medallion/ring source. Candidate for later texture pass. |
 | `assets/FKSeat/FKPos_transparent.png` | 1459 x 452 | Reference candidate | Transparent position plaque. Not used in the current combined-shell strategy. |
@@ -55,7 +55,7 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 
 | Need | Target Runtime Filename(s) | Status | Current Pixi Fallback |
 | --- | --- | --- | --- |
-| Production seat frames | `seat-frame-right.png`, `seat-frame-left.png`, optional hero variants | Missing final runtime files | Pixi renders medallion/plaque primitives. Existing FKSeat PNGs can prototype texture loading. |
+| Production seat frames | `seat-frame-right.png`, `seat-frame-left.png`, optional hero variants | Prototype implemented; final runtime files missing | Pixi loads `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png`, with primitive fallback if texture loading fails. |
 | Active/folded seat overlays | `seat-glow-active.png`, `seat-glow-folded.png` | Missing | Pixi uses primitive glow/dimming. |
 | Matched avatar runtime set | `avatar-utg-shark.webp`, `avatar-hj-octopus.webp`, `avatar-co-turtle.webp`, `avatar-btn-blue-shark.webp`, `avatar-sb-dolphin.webp`, `avatar-bb-angler.webp` | Missing final runtime files | Pixi renders generic circles. Existing DOM avatar PNGs can prototype texture loading. |
 | Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Missing | Pixi renders card-like primitives with rank/suit text, bevels, and shadows. |
@@ -75,7 +75,7 @@ These assets can be used to prove Pixi texture loading and placement before fina
 
 1. `assets/FishKiller2.2.png` as the FK2 scene plate.
 2. `assets/avatars/seat-*.png` for live avatar texture loading.
-3. `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png` for combined seat shell testing.
+3. `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png` for combined seat shell testing. These are now wired into the Pixi prototype.
 4. `assets/fk2_medallion_ring_normal.png`, `assets/fk2_position_plaque_blank*.png`, and `assets/fk2_status_plaque_blank.png` for lightweight plaque/ring testing.
 
 These prototype assets should not be renamed into final runtime paths until they pass the production style and sizing requirements in `docs/asset-production-brief.md`.
@@ -84,13 +84,14 @@ These prototype assets should not be renamed into final runtime paths until they
 
 - Use `assets/FishKiller2.2.png` as the FK2 scene plate.
 - Keep DOM avatar/card assets untouched until renderer-state parity is stronger.
-- Use Pixi primitives for cards, chip stacks, and seat chrome in the interim.
+- Use FKSeat frame textures for Pixi seat chrome, with primitive fallback if texture loading fails.
+- Use Pixi primitives for cards, chip stacks, avatar fills, and state trims in the interim.
 - Avoid loading unsuitable non-alpha screenshot crops or top-level legacy FK assets into Pixi.
 - Keep all poker logic and action behavior outside Pixi.
 
 ## Recommended Next Asset Slice
 
 1. Load live seat avatar textures into Pixi from the same avatar URLs the DOM uses.
-2. Test one lightweight transparent ring/plaque asset set in Pixi.
+2. Promote or replace FKSeat frame textures with final `assets/runtime/fk2/seat-frame-*.png` production filenames.
 3. Replace the primitive card renderer with a small generated card-face atlas.
 4. Add chip/dealer-button prop textures once the pot/seat/card positions are stable.
