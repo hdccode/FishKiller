@@ -124,6 +124,40 @@ Findings:
 - A small primitive dealer button renders near the BTN seat without overlapping hero cards, seat plaques, or action labels in the checked views.
 - The 1366 x 768 viewport remains tight but usable, with no new stage collision from chip or dealer-button props.
 
+## DOM Versus Pixi Default Decision - 2026-06-17
+
+Recommendation: continue Pixi behind the feature flag and keep the DOM table as the production default. Do not make Pixi default yet.
+
+`ENABLE_PIXI_TABLE` was kept `false` for the DOM capture pass, temporarily set to `true` for Pixi capture, then restored to `false` before validation and commit.
+
+Captured viewport checks:
+
+- 1920 x 1080: DOM pass; Pixi no-go. The DOM table renders the full production seat/card/pot treatment. The Pixi canvas mounted, but this capture showed the FK2 background without the Pixi seat/card/chip layer, which is a promotion blocker until the startup/render race is understood.
+- 1440 x 900: DOM pass; Pixi partial pass. DOM has stronger production polish, larger readable avatars/cards, and stable seat plaque alignment. Pixi renders seats, avatars, hero cards, chips, pot, and dealer button, but the whole table reads smaller and more placeholder-like.
+- 1366 x 768: DOM pass; Pixi partial pass. DOM remains dense but readable. Pixi fits without action-row collision, but seat labels/cards/chips are noticeably smaller and the background contain crop is less composed.
+
+Comparison:
+
+- Overall professionalism: DOM wins. It looks like the current product surface; Pixi is atmospheric and promising, but still reads as an in-progress renderer.
+- Alignment/stability: DOM wins. DOM seat plaques, cards, pot, and action controls stayed stable across all captures. Pixi mounted correctly at all sizes, but the 1920 x 1080 blank-layer capture and smaller table scale keep it behind the flag.
+- Avatar/card/chip quality: DOM wins today. Pixi has real avatars and seat frames, but cards and chips are still primitives and the overall scale makes them less confident than the DOM treatment.
+- Readability: DOM wins. Pixi labels are readable in the successful 1440 x 900 and 1366 x 768 captures, but they are smaller and less comfortable than DOM.
+- Action-state parity: partial. Pixi displays hero, folded, waiting, and action captions, but the DOM renderer still owns the established animation/state behavior and should remain the reference until Pixi consumes a shared renderer-state adapter.
+- Remaining blockers: Pixi has not reached default-readiness because of the intermittent blank-layer capture, primitive card/chip assets, no community-card/board slots, smaller responsive composition, and incomplete renderer-state/action-animation parity.
+
+Exact blockers before changing the default:
+
+1. Fix the intermittent Pixi startup/render issue that produced a 1920 x 1080 canvas with background only and no seats/cards/chips.
+2. Tune Pixi stage scale and seat/card offsets so 1440 x 900 and 1366 x 768 have DOM-level readability instead of a noticeably smaller table.
+3. Replace primitive card and chip rendering with production-quality assets or a final renderer-native visual spec.
+4. Add explicit community-card/board slots before Pixi is used beyond preflop hero-card scenes.
+5. Move state normalization, action captions, and animation events into a shared renderer adapter so DOM and Pixi can be verified against the same table state.
+
+QA artifact paths:
+
+- DOM screenshots: `.tmp-edge-cdp-pixi-qa/screenshots/dom-1920x1080.png`, `.tmp-edge-cdp-pixi-qa/screenshots/dom-1440x900.png`, `.tmp-edge-cdp-pixi-qa/screenshots/dom-1366x768.png`
+- Pixi screenshots: `.tmp-edge-cdp-pixi-qa/screenshots/pixi-1920x1080.png`, `.tmp-edge-cdp-pixi-qa/screenshots/pixi-1440x900.png`, `.tmp-edge-cdp-pixi-qa/screenshots/pixi-1366x768.png`
+
 ## What Works
 
 - The Pixi scaffold loads and renders when `ENABLE_PIXI_TABLE` is temporarily set to `true`.
