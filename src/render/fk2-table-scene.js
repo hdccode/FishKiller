@@ -452,7 +452,9 @@
     const displayedStateLabel = /to act/i.test(seatState.label || "") && !isActing && !isHero
       ? "Waiting"
       : seatState.label;
-    const actionLabel = isVillainRecent
+    const actionLabel = isFolded && !isHero
+      ? "Folds"
+      : isVillainRecent
       ? formatVillainResponseLabel(tableState.villainResponse)
       : seatState.pendingFoldAnimation
         ? displayedStateLabel
@@ -463,6 +465,8 @@
       ? "Hero to act"
       : isVillainRecent
         ? actionLabel
+        : isFolded
+          ? "Folds"
         : actor
           ? actionLabel
           : displayedStateLabel || "Waiting";

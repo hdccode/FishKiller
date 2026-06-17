@@ -14,6 +14,43 @@ Checked desktop viewports:
 - 1440 x 900
 - 1366 x 768
 
+## Polished Placeholder Manual QA - 2026-06-17
+
+Result: pass for the disabled polished-placeholder scaffold, with Pixi still not ready for promotion. `ENABLE_PIXI_TABLE` was temporarily set to `true` for inspection and restored to `false` before validation and commit.
+
+Captured viewport checks:
+
+- 1920 x 1080: pass. Stage fills the table area, hero cards are readable, seat plaques and action labels are legible, pot/chip placeholders are centered, and action controls remain below the stage without overlap.
+- 1440 x 900: pass. Stage fits cleanly, card labels remain readable, plaques stay attached to seats, pot/chips remain readable, and the bottom action row is not collided with the Pixi scene.
+- 1366 x 768: pass with caution. Stage still fits and cards/labels remain readable, but the overall UI is dense and the bottom feedback band has little vertical breathing room.
+
+Checklist:
+
+- Card readability: pass for placeholder rank/suit cards at all checked sizes.
+- Seat plaques: pass for position plaques and status plaques at all checked sizes.
+- Pot/chips: pass for placeholder pot badge and chip stacks at all checked sizes.
+- Active/folded states: pass after a small Pixi-only fix. Folded seats now render `Folds` instead of inheriting a temporary `Waiting` caption from the animation-masked DOM state.
+- Action labels: pass for opener/limp/action labels, with truncation still expected on very long labels.
+- Stage fit: pass at 1920 x 1080, 1440 x 900, and 1366 x 768.
+
+Tiny visual fix applied:
+
+- `src/render/fk2-table-scene.js` now prioritizes the folded-seat state when building Pixi seat captions, so folded seats display `Folds` consistently.
+
+Top five remaining issues before promoting Pixi mode:
+
+1. Pixi still uses generic medallion/plaque primitives instead of the production avatar and seat chrome assets.
+2. Card faces are still drawn placeholders, not production card textures.
+3. Pot/chip visuals are placeholder primitives and need real chip art or a final visual spec.
+4. Pixi still has no explicit board/community-card slots for postflop table scenes.
+5. The 1366 x 768 layout is usable but tight; final Pixi promotion should include a denser small-desktop layout pass for the surrounding DOM controls.
+
+QA tooling notes:
+
+- Playwright was already installed in the repo; no extra screenshot software was downloaded.
+- The local browser needed network access to load `https://cdn.jsdelivr.net/npm/pixi.js@8.8.1/dist/pixi.mjs`, because Pixi is currently CDN-loaded only when the temporary flag is enabled.
+- Fresh screenshots were captured under the ignored `.tmp-edge-cdp-pixi-qa/screenshots/` folder.
+
 ## What Works
 
 - The Pixi scaffold loads and renders when `ENABLE_PIXI_TABLE` is temporarily set to `true`.
