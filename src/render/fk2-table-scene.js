@@ -234,28 +234,14 @@
       const markerText = seatView.isHero ? `${seat} (Hero)` : seat;
       const statusLabel = truncateLabel(seatView.caption, seatView.isHero ? 20 : 18);
 
-      seatContainer.addChild(createShape(Pixi, (graphics) => {
-        drawEllipse(graphics, 8, 11, avatarRadius + 8, avatarRadius * 0.34, 0x000000, seatView.isFolded ? 0.22 : 0.34);
-      }));
-
-      if (seatView.isActing || seatView.isHero || seatView.isVillainRecent) {
-        seatContainer.addChild(createShape(Pixi, (graphics) => {
-          drawEllipse(graphics, 0, 0, avatarRadius + 12, avatarRadius + 12, getSeatGlowColor(seatView), getSeatGlowAlpha(seatView));
-        }));
-      }
-
-      seatContainer.addChild(createShape(Pixi, (graphics) => {
-        drawEllipse(graphics, 0, 0, avatarRadius, avatarRadius, getSeatFillColor(seatView), seatView.isFolded ? 0.76 : 0.94);
-        strokeEllipse(graphics, 0, 0, avatarRadius + 4, avatarRadius + 4, getSeatRingColor(seatView), getSeatRingAlpha(seatView), seatView.isActing || seatView.isHero ? 6 : 4);
-        strokeEllipse(graphics, 0, 0, avatarRadius - 6, avatarRadius - 6, 0xffefb8, seatView.isFolded ? 0.08 : 0.16, 1.5);
-      }));
-
-      seatContainer.addChild(createShape(Pixi, (graphics) => {
-        drawRoundedRect(graphics, plaqueX, -28, plaqueWidth, plaqueHeight, 10, 0x090604, seatView.isFolded ? 0.68 : 0.88);
-        strokeRoundedRect(graphics, plaqueX, -28, plaqueWidth, plaqueHeight, 10, getPlaqueStrokeColor(seatView), seatView.isFolded ? 0.38 : 0.62, 2);
-        drawRoundedRect(graphics, plaqueX + 14, 18, statusWidth, statusHeight, 8, 0x080504, seatView.isFolded ? 0.62 : 0.8);
-        strokeRoundedRect(graphics, plaqueX + 14, 18, statusWidth, statusHeight, 8, getPlaqueStrokeColor(seatView), seatView.isFolded ? 0.26 : 0.46, 1.5);
-      }));
+      drawSeatMedallion(Pixi, seatContainer, seatView, avatarRadius);
+      drawSeatPlaques(Pixi, seatContainer, seatView, {
+        plaqueX,
+        plaqueWidth,
+        plaqueHeight,
+        statusWidth,
+        statusHeight,
+      });
 
       const seatText = createText(Pixi, markerText, {
         fill: seatView.isFolded ? 0xd9bd88 : 0xffdf96,
@@ -289,9 +275,14 @@
 
   function drawPot(Pixi, stage, table, tableState) {
     const label = tableState.potLabel ? `Pot ${tableState.potLabel}` : `Pot ${Number(tableState.potBb || 0).toFixed(1)}bb`;
+    drawChipStack(Pixi, stage, table.centerX - 110, table.centerY - 26, getPotChipColor(tableState), 0.98);
+    drawChipStack(Pixi, stage, table.centerX + 82, table.centerY - 26, 0x2f4050, 0.9);
+
     const potBadge = createShape(Pixi, (graphics) => {
-      drawRoundedRect(graphics, table.centerX - 72, table.centerY - 32, 144, 38, 16, 0x090604, 0.82);
-      strokeRoundedRect(graphics, table.centerX - 72, table.centerY - 32, 144, 38, 16, 0xd69b42, 0.56, 2);
+      drawRoundedRect(graphics, table.centerX - 78, table.centerY - 38, 156, 42, 17, 0x000000, 0.24);
+      drawRoundedRect(graphics, table.centerX - 72, table.centerY - 40, 144, 38, 16, 0x090604, 0.86);
+      drawRoundedRect(graphics, table.centerX - 64, table.centerY - 34, 128, 10, 8, 0xffd27a, 0.08);
+      strokeRoundedRect(graphics, table.centerX - 72, table.centerY - 40, 144, 38, 16, 0xd69b42, 0.62, 2);
     });
     stage.addChild(potBadge);
 
@@ -303,7 +294,7 @@
     });
     potText.anchor.set(0.5);
     potText.x = table.centerX;
-    potText.y = table.centerY - 13;
+    potText.y = table.centerY - 21;
     stage.addChild(potText);
   }
 
@@ -319,22 +310,135 @@
     cards.slice(0, 2).forEach((card, index) => {
       const x = heroPosition.x + cardOffset.x + (index * (cardWidth + cardGap));
       const y = heroPosition.y + cardOffset.y;
-      stage.addChild(createShape(Pixi, (graphics) => {
-        drawRoundedRect(graphics, x + 4, y + 6, cardWidth, cardHeight, 8, 0x000000, 0.26);
-        drawRoundedRect(graphics, x, y, cardWidth, cardHeight, 8, 0xf8f3e8, 1);
-        strokeRoundedRect(graphics, x, y, cardWidth, cardHeight, 8, 0x3b2412, 0.4, 2);
-      }));
-
-      const cardText = createText(Pixi, formatCardLabel(card), {
-        fill: card.isRed ? 0xbc2d28 : 0x141a18,
-        fontFamily: "Georgia, serif",
-        fontSize: 22,
-        fontWeight: "800",
-      });
-      cardText.x = x + 12;
-      cardText.y = y + 10;
-      stage.addChild(cardText);
+      drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight);
     });
+  }
+
+  function drawSeatMedallion(Pixi, container, seatView, avatarRadius) {
+    container.addChild(createShape(Pixi, (graphics) => {
+      drawEllipse(graphics, 9, 12, avatarRadius + 12, avatarRadius * 0.38, 0x000000, seatView.isFolded ? 0.2 : 0.38);
+    }));
+
+    if (seatView.isActing || seatView.isHero || seatView.isVillainRecent) {
+      container.addChild(createShape(Pixi, (graphics) => {
+        drawEllipse(graphics, 0, 0, avatarRadius + 17, avatarRadius + 17, getSeatGlowColor(seatView), getSeatGlowAlpha(seatView));
+      }));
+    }
+
+    container.addChild(createShape(Pixi, (graphics) => {
+      drawEllipse(graphics, 0, 0, avatarRadius + 10, avatarRadius + 10, 0x150c05, seatView.isFolded ? 0.64 : 0.92);
+      strokeEllipse(graphics, 0, 0, avatarRadius + 11, avatarRadius + 11, 0xffdf95, seatView.isFolded ? 0.18 : 0.42, 2);
+      drawEllipse(graphics, 0, 0, avatarRadius + 5, avatarRadius + 5, getSeatRingColor(seatView), seatView.isFolded ? 0.48 : 0.9);
+      strokeEllipse(graphics, 0, 0, avatarRadius + 5, avatarRadius + 5, 0x6c3512, seatView.isFolded ? 0.34 : 0.58, 3);
+      drawEllipse(graphics, 0, 0, avatarRadius - 2, avatarRadius - 2, 0x1a100b, 0.94);
+      drawEllipse(graphics, 0, 0, avatarRadius - 8, avatarRadius - 8, getSeatFillColor(seatView), seatView.isFolded ? 0.74 : 0.96);
+      drawEllipse(graphics, -avatarRadius * 0.18, -avatarRadius * 0.22, avatarRadius * 0.34, avatarRadius * 0.2, 0xffffff, seatView.isFolded ? 0.03 : 0.08);
+      strokeEllipse(graphics, 0, 0, avatarRadius - 8, avatarRadius - 8, 0xffefb8, seatView.isFolded ? 0.08 : 0.18, 1.5);
+    }));
+  }
+
+  function drawSeatPlaques(Pixi, container, seatView, layout) {
+    const {
+      plaqueX,
+      plaqueWidth,
+      plaqueHeight,
+      statusWidth,
+      statusHeight,
+    } = layout;
+    const strokeColor = getPlaqueStrokeColor(seatView);
+    const plaqueAlpha = seatView.isFolded ? 0.66 : 0.9;
+    const statusAlpha = seatView.isFolded ? 0.62 : 0.82;
+
+    container.addChild(createShape(Pixi, (graphics) => {
+      drawRoundedRect(graphics, plaqueX + 4, -23, plaqueWidth, plaqueHeight, 12, 0x000000, 0.28);
+      drawRoundedRect(graphics, plaqueX, -30, plaqueWidth, plaqueHeight, 11, 0x150b06, plaqueAlpha);
+      drawRoundedRect(graphics, plaqueX + 8, -25, plaqueWidth - 16, 10, 8, 0xffd27a, seatView.isFolded ? 0.03 : 0.08);
+      strokeRoundedRect(graphics, plaqueX, -30, plaqueWidth, plaqueHeight, 11, strokeColor, seatView.isFolded ? 0.36 : 0.62, 2);
+      strokeRoundedRect(graphics, plaqueX + 5, -25, plaqueWidth - 10, plaqueHeight - 10, 8, 0xffdf95, seatView.isFolded ? 0.05 : 0.13, 1);
+      drawRoundedRect(graphics, plaqueX + 14, 18, statusWidth, statusHeight, 8, 0x080504, statusAlpha);
+      drawRoundedRect(graphics, plaqueX + 20, 21, statusWidth - 12, 6, 6, 0xffd27a, seatView.isFolded ? 0.03 : 0.06);
+      strokeRoundedRect(graphics, plaqueX + 14, 18, statusWidth, statusHeight, 8, strokeColor, seatView.isFolded ? 0.24 : 0.46, 1.5);
+    }));
+  }
+
+  function drawPlayingCard(Pixi, stage, card, x, y, width, height) {
+    const suitColor = card.isRed ? 0xb62224 : 0x151b19;
+    const label = formatCardLabel(card);
+    const cornerLabel = `${card.rank}${card.suitSymbol}`;
+
+    stage.addChild(createShape(Pixi, (graphics) => {
+      drawRoundedRect(graphics, x + 5, y + 8, width, height, 8, 0x000000, 0.3);
+      drawRoundedRect(graphics, x, y, width, height, 8, 0xf4ecd9, 1);
+      drawRoundedRect(graphics, x + 3, y + 3, width - 6, height - 6, 6, 0xfffbef, 0.72);
+      drawRoundedRect(graphics, x + 5, y + height - 14, width - 10, 8, 5, 0xd4c4a6, 0.28);
+      strokeRoundedRect(graphics, x, y, width, height, 8, 0x3b2412, 0.48, 2);
+      strokeRoundedRect(graphics, x + 4, y + 4, width - 8, height - 8, 5, 0xffffff, 0.25, 1);
+    }));
+
+    const cornerText = createText(Pixi, cornerLabel, {
+      fill: suitColor,
+      fontFamily: "Georgia, serif",
+      fontSize: 17,
+      fontWeight: "800",
+    });
+    cornerText.x = x + 8;
+    cornerText.y = y + 7;
+    stage.addChild(cornerText);
+
+    const centerSuit = createText(Pixi, card.suitSymbol, {
+      fill: suitColor,
+      fontFamily: "Georgia, serif",
+      fontSize: 27,
+      fontWeight: "800",
+    });
+    centerSuit.anchor.set(0.5);
+    centerSuit.x = x + (width / 2);
+    centerSuit.y = y + (height / 2) + 6;
+    stage.addChild(centerSuit);
+
+    const bottomText = createText(Pixi, label, {
+      fill: suitColor,
+      fontFamily: "Georgia, serif",
+      fontSize: 11,
+      fontWeight: "800",
+    });
+    bottomText.anchor.set(1, 1);
+    bottomText.rotation = Math.PI;
+    bottomText.x = x + width - 8;
+    bottomText.y = y + height - 7;
+    stage.addChild(bottomText);
+  }
+
+  function drawChipStack(Pixi, stage, x, y, color, alpha) {
+    drawChip(Pixi, stage, x, y + 14, color, alpha * 0.9);
+    drawChip(Pixi, stage, x + 13, y + 6, color, alpha);
+    drawChip(Pixi, stage, x + 28, y + 14, color, alpha * 0.86);
+  }
+
+  function drawChip(Pixi, stage, x, y, color, alpha) {
+    stage.addChild(createShape(Pixi, (graphics) => {
+      drawEllipse(graphics, x + 2, y + 7, 16, 8, 0x000000, 0.28);
+      drawEllipse(graphics, x, y, 15, 15, color, alpha);
+      strokeEllipse(graphics, x, y, 16, 16, 0xffd27a, 0.62, 2);
+      strokeEllipse(graphics, x, y, 9, 9, 0xffffff, 0.18, 1.5);
+      drawRect(graphics, x - 2, y - 14, 4, 8, 0xf7e3b0, 0.38);
+      drawRect(graphics, x - 2, y + 6, 4, 8, 0xf7e3b0, 0.38);
+      drawRect(graphics, x - 14, y - 2, 8, 4, 0xf7e3b0, 0.38);
+      drawRect(graphics, x + 6, y - 2, 8, 4, 0xf7e3b0, 0.38);
+    }));
+  }
+
+  function getPotChipColor(tableState) {
+    const potValue = Number(tableState.potBb || 0);
+    if (potValue >= 20) {
+      return 0x7c4ad4;
+    }
+
+    if (potValue >= 8) {
+      return 0xb53b2e;
+    }
+
+    return 0x2f8f70;
   }
 
   function getSeatViewModel(tableState, seat, position) {
@@ -389,7 +493,7 @@
       return normalizedLabel;
     }
 
-    return `${normalizedLabel.slice(0, Math.max(0, maxLength - 1)).trim()}…`;
+    return `${normalizedLabel.slice(0, Math.max(0, maxLength - 3)).trim()}...`;
   }
 
   function getSeatFillColor(seatView) {

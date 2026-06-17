@@ -64,11 +64,23 @@ Updated results:
 - The 1600 x 900 contain transform remains stable across all three checked desktop viewports.
 - Restoring `ENABLE_PIXI_TABLE = false` returns the app to the DOM fallback table.
 
+## Primitive Asset Polish Update
+
+On 2026-06-17, after auditing committed FK2 assets, the Pixi renderer was moved slightly closer to production visuals without adding or replacing art:
+
+- Card-face image assets are not present yet, so Pixi now renders more polished card-like primitives with bevels, shadows, corner rank/suit labels, and center suit marks.
+- Chip/pot image assets are not present yet, so Pixi now draws small chip-stack primitives around the pot badge.
+- Seat placeholders now have more layered brass medallion and plaque primitives while still avoiding avatar replacement.
+- `docs/pixi-asset-map.md` records which FK2 scene, avatar, and seat chrome assets are usable, and which card/chip/HUD assets are still missing.
+- `ENABLE_PIXI_TABLE` was restored to `false` after local checks.
+
+Fresh automated screenshot capture was attempted for this pass, but the local Edge/CDP helper became unreliable in this shell and did not produce fresh screenshot files. The code/server checks below remain the validation record for this pass. The last successful visual captures still apply to background/stage scaling, but the primitive card/chip polish should receive a fresh manual or repaired-CDP visual pass before promoting Pixi mode.
+
 ## Remaining Misalignment And Visual Issues
 
 - The renderer still uses Pixi-drawn placeholder medallions and plaques, not the production DOM seat/avatar art.
 - Seat coordinates are tuned for the FK2 scene and usable, but they still need final art-direction tuning once real Pixi avatar/chrome textures are introduced.
-- Hero cards are now beside the hero seat, but the exact offsets may need per-seat art tuning when real card textures replace text placeholders.
+- Hero cards are now beside the hero seat, but the exact offsets may need per-seat art tuning when real card textures replace the primitive card renderer.
 - The Pixi renderer does not yet draw board/community-card slots for postflop scenes.
 - The canvas scale works predictably, but Pixi still needs a shared renderer-state adapter before it can fully replace the DOM table.
 
