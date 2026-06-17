@@ -51,6 +51,15 @@ See `docs/asset-production-brief.md` for the production filenames, target dimens
 
 Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and `FKBorder.png` are not suitable for Pixi rendering because they do not have alpha and would create rectangular artifacts.
 
+## Card Assets
+
+| Asset | Dimensions | Status | Notes |
+| --- | ---: | --- | --- |
+| `assets/runtime/fk2/cards-atlas.webp` | 3120 x 1344 target | Missing | No real card face atlas is committed yet. Pixi uses improved renderer-drawn card primitives for hero cards. |
+| `assets/runtime/fk2/cards-atlas.json` | N/A | Missing | No atlas metadata is committed yet. |
+| `assets/runtime/fk2/card-back-fk2.webp` | 240 x 336 target | Missing | No card back is committed yet. Not needed for current hero-card display. |
+| `assets/runtime/fk2/card-shadow.png` | 256 x 96 target | Missing | No reusable card shadow asset is committed yet. Pixi draws primitive shadows. |
+
 ## Missing Production Assets
 
 | Need | Target Runtime Filename(s) | Status | Current Pixi Fallback |
@@ -58,9 +67,9 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 | Production seat frames | `seat-frame-right.png`, `seat-frame-left.png`, optional hero variants | Prototype implemented; final runtime files missing | Pixi loads `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png`, with primitive fallback if texture loading fails. |
 | Active/folded seat overlays | `seat-glow-active.png`, `seat-glow-folded.png` | Missing | Pixi uses primitive glow/dimming. |
 | Matched avatar runtime set | `avatar-utg-shark.webp`, `avatar-hj-octopus.webp`, `avatar-co-turtle.webp`, `avatar-btn-blue-shark.webp`, `avatar-sb-dolphin.webp`, `avatar-bb-angler.webp` | Prototype implemented; final runtime files missing | Pixi loads the existing `assets/avatars/seat-*.png` portraits into circular masks, with primitive fill fallback if texture loading fails. |
-| Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Missing | Pixi renders card-like primitives with rank/suit text, bevels, and shadows. |
+| Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Missing; primitive fallback improved | Pixi renders deck-like primitives with suit-colored corner labels, suit pips, bevels, and shadows. |
 | Card back texture | `card-back-fk2.webp` | Missing | Not needed yet for hero-card display. |
-| Card contact shadow | `card-shadow.png` | Missing | Pixi uses primitive card shadow shapes. |
+| Card contact shadow | `card-shadow.png` | Missing; primitive fallback improved | Pixi uses primitive card shadow shapes. |
 | Chip stack / pot pile props | `chip-stack-small.webp`, `chip-stack-medium.webp`, `chip-stack-large.webp`, `chip-pile-pot.webp` | Missing | Pixi renders small layered chip primitives near the pot. |
 | Dealer button prop | `dealer-button.webp` | Missing | Not rendered yet. |
 | Chip contact shadow | `chip-shadow.png` | Missing | Pixi uses primitive chip shadow shapes. |
@@ -85,7 +94,7 @@ These prototype assets should not be renamed into final runtime paths until they
 - Use `assets/FishKiller2.2.png` as the FK2 scene plate.
 - Load the existing DOM avatar PNGs into Pixi seat medallions, with primitive fill fallback if texture loading fails.
 - Use FKSeat frame textures for Pixi seat chrome, with primitive fallback if texture loading fails.
-- Use Pixi primitives for cards, chip stacks, avatar fills, and state trims in the interim.
+- Use improved Pixi primitives for hero cards, chip stacks, avatar fills, and state trims in the interim.
 - Avoid loading unsuitable non-alpha screenshot crops or top-level legacy FK assets into Pixi.
 - Keep all poker logic and action behavior outside Pixi.
 

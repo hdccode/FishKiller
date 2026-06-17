@@ -88,6 +88,24 @@ Findings:
 - Primitive avatar fills remain the fallback if any portrait texture fails to load.
 - The 1366 x 768 viewport remains tight but usable, with no new overlap from avatar portraits.
 
+## Card Primitive QA - 2026-06-17
+
+Result: pass for improved Pixi hero-card primitives. `ENABLE_PIXI_TABLE` was temporarily set to `true` for inspection and restored to `false` before validation and commit.
+
+Checked desktop viewports:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+Findings:
+
+- No real card deck, card atlas, card back, or reusable card-shadow assets are currently committed.
+- Pixi hero cards now use a more deck-like primitive renderer with suit-colored corner labels, suit pips, bevels, and contact shadows.
+- Hero cards remain beside the hero seat and do not move into the center-felt/community-card area.
+- Red and black suit labels remain readable at all checked desktop sizes.
+- The 1366 x 768 viewport remains tight but usable, with no new overlap from the card primitive changes.
+
 ## What Works
 
 - The Pixi scaffold loads and renders when `ENABLE_PIXI_TABLE` is temporarily set to `true`.

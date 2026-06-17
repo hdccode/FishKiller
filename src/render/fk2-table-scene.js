@@ -514,50 +514,202 @@
 
   function drawPlayingCard(Pixi, stage, card, x, y, width, height) {
     const suitColor = card.isRed ? 0xb62224 : 0x151b19;
-    const label = formatCardLabel(card);
-    const cornerLabel = `${card.rank}${card.suitSymbol}`;
 
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawRoundedRect(graphics, x + 5, y + 8, width, height, 8, 0x000000, 0.3);
-      drawRoundedRect(graphics, x, y, width, height, 8, 0xf4ecd9, 1);
-      drawRoundedRect(graphics, x + 3, y + 3, width - 6, height - 6, 6, 0xfffbef, 0.72);
-      drawRoundedRect(graphics, x + 5, y + height - 14, width - 10, 8, 5, 0xd4c4a6, 0.28);
-      strokeRoundedRect(graphics, x, y, width, height, 8, 0x3b2412, 0.48, 2);
-      strokeRoundedRect(graphics, x + 4, y + 4, width - 8, height - 8, 5, 0xffffff, 0.25, 1);
+      drawEllipse(graphics, x + (width / 2) + 3, y + height + 7, width * 0.44, 8, 0x000000, 0.28);
+      drawRoundedRect(graphics, x + 5, y + 8, width, height, 8, 0x000000, 0.32);
+      drawRoundedRect(graphics, x, y, width, height, 8, 0xf0e3c8, 1);
+      drawRoundedRect(graphics, x + 2, y + 2, width - 4, height - 4, 7, 0xfffbef, 0.96);
+      drawRoundedRect(graphics, x + 5, y + 6, width - 10, height - 12, 5, 0xf9f2df, 0.62);
+      drawRoundedRect(graphics, x + 6, y + height - 14, width - 12, 8, 5, 0xd4c4a6, 0.24);
+      strokeRoundedRect(graphics, x, y, width, height, 8, 0x3b2412, 0.58, 2);
+      strokeRoundedRect(graphics, x + 4, y + 4, width - 8, height - 8, 5, 0xffffff, 0.34, 1);
     }));
 
-    const cornerText = createText(Pixi, cornerLabel, {
+    drawCardCorner(Pixi, stage, card, x + 7, y + 5, suitColor, false);
+    drawCardCorner(Pixi, stage, card, x + width - 7, y + height - 5, suitColor, true);
+    drawCardPips(Pixi, stage, card, x, y, width, height, suitColor);
+  }
+
+  function drawCardCorner(Pixi, stage, card, x, y, suitColor, isRotated) {
+    const rankText = createText(Pixi, card.rank, {
       fill: suitColor,
       fontFamily: "Georgia, serif",
       fontSize: 17,
       fontWeight: "800",
+      align: "center",
     });
-    cornerText.x = x + 8;
-    cornerText.y = y + 7;
-    stage.addChild(cornerText);
-
-    const centerSuit = createText(Pixi, card.suitSymbol, {
+    const suitText = createText(Pixi, card.suitSymbol, {
       fill: suitColor,
       fontFamily: "Georgia, serif",
-      fontSize: 27,
+      fontSize: 13,
       fontWeight: "800",
+      align: "center",
     });
-    centerSuit.anchor.set(0.5);
-    centerSuit.x = x + (width / 2);
-    centerSuit.y = y + (height / 2) + 6;
-    stage.addChild(centerSuit);
+    rankText.anchor.set(0.5, 0);
+    suitText.anchor.set(0.5, 0);
+    rankText.x = x;
+    rankText.y = y;
+    suitText.x = x;
+    suitText.y = y + 16;
 
-    const bottomText = createText(Pixi, label, {
+    if (isRotated) {
+      rankText.rotation = Math.PI;
+      suitText.rotation = Math.PI;
+    }
+
+    stage.addChild(rankText);
+    stage.addChild(suitText);
+  }
+
+  function drawCardPips(Pixi, stage, card, x, y, width, height, suitColor) {
+    const rankValue = getCardRankValue(card.rank);
+    const pipPositions = getCardPipPositions(rankValue);
+    pipPositions.forEach((position) => {
+      const pip = createText(Pixi, card.suitSymbol, {
+        fill: suitColor,
+        fontFamily: "Georgia, serif",
+        fontSize: position.large ? 24 : 15,
+        fontWeight: "800",
+        align: "center",
+      });
+      pip.anchor.set(0.5);
+      pip.x = x + (width * position.x);
+      pip.y = y + (height * position.y);
+      if (position.rotated) {
+        pip.rotation = Math.PI;
+      }
+      stage.addChild(pip);
+    });
+
+    if (rankValue > 10) {
+      const rankMark = createText(Pixi, card.rank, {
+        fill: suitColor,
+        fontFamily: "Georgia, serif",
+        fontSize: 21,
+        fontWeight: "800",
+        align: "center",
+      });
+      rankMark.anchor.set(0.5);
+      rankMark.x = x + (width / 2);
+      rankMark.y = y + (height / 2);
+      stage.addChild(rankMark);
+    }
+
+    const label = formatCardLabel(card);
+    const smallLabel = createText(Pixi, label, {
       fill: suitColor,
       fontFamily: "Georgia, serif",
-      fontSize: 11,
+      fontSize: 9,
       fontWeight: "800",
     });
-    bottomText.anchor.set(1, 1);
-    bottomText.rotation = Math.PI;
-    bottomText.x = x + width - 8;
-    bottomText.y = y + height - 7;
-    stage.addChild(bottomText);
+    smallLabel.anchor.set(0.5);
+    smallLabel.x = x + (width / 2);
+    smallLabel.y = y + height - 11;
+    stage.addChild(smallLabel);
+  }
+
+  function getCardRankValue(rank) {
+    const normalizedRank = String(rank || "").toUpperCase();
+    if (normalizedRank === "A") {
+      return 14;
+    }
+    if (normalizedRank === "K") {
+      return 13;
+    }
+    if (normalizedRank === "Q") {
+      return 12;
+    }
+    if (normalizedRank === "J") {
+      return 11;
+    }
+    if (normalizedRank === "T") {
+      return 10;
+    }
+    return Number(normalizedRank) || 2;
+  }
+
+  function getCardPipPositions(rankValue) {
+    if (rankValue > 10) {
+      return [{ x: 0.5, y: 0.56, large: true }];
+    }
+
+    const pipLayouts = {
+      10: [
+        { x: 0.34, y: 0.26 },
+        { x: 0.66, y: 0.26 },
+        { x: 0.34, y: 0.38 },
+        { x: 0.66, y: 0.38 },
+        { x: 0.34, y: 0.5 },
+        { x: 0.66, y: 0.5 },
+        { x: 0.34, y: 0.62, rotated: true },
+        { x: 0.66, y: 0.62, rotated: true },
+        { x: 0.34, y: 0.74, rotated: true },
+        { x: 0.66, y: 0.74, rotated: true },
+      ],
+      9: [
+        { x: 0.34, y: 0.27 },
+        { x: 0.66, y: 0.27 },
+        { x: 0.34, y: 0.42 },
+        { x: 0.66, y: 0.42 },
+        { x: 0.5, y: 0.5 },
+        { x: 0.34, y: 0.58, rotated: true },
+        { x: 0.66, y: 0.58, rotated: true },
+        { x: 0.34, y: 0.73, rotated: true },
+        { x: 0.66, y: 0.73, rotated: true },
+      ],
+      8: [
+        { x: 0.34, y: 0.27 },
+        { x: 0.66, y: 0.27 },
+        { x: 0.34, y: 0.42 },
+        { x: 0.66, y: 0.42 },
+        { x: 0.34, y: 0.58, rotated: true },
+        { x: 0.66, y: 0.58, rotated: true },
+        { x: 0.34, y: 0.73, rotated: true },
+        { x: 0.66, y: 0.73, rotated: true },
+      ],
+      7: [
+        { x: 0.34, y: 0.28 },
+        { x: 0.66, y: 0.28 },
+        { x: 0.5, y: 0.41 },
+        { x: 0.34, y: 0.55, rotated: true },
+        { x: 0.66, y: 0.55, rotated: true },
+        { x: 0.34, y: 0.7, rotated: true },
+        { x: 0.66, y: 0.7, rotated: true },
+      ],
+      6: [
+        { x: 0.34, y: 0.29 },
+        { x: 0.66, y: 0.29 },
+        { x: 0.34, y: 0.5 },
+        { x: 0.66, y: 0.5 },
+        { x: 0.34, y: 0.71, rotated: true },
+        { x: 0.66, y: 0.71, rotated: true },
+      ],
+      5: [
+        { x: 0.34, y: 0.31 },
+        { x: 0.66, y: 0.31 },
+        { x: 0.5, y: 0.5 },
+        { x: 0.34, y: 0.69, rotated: true },
+        { x: 0.66, y: 0.69, rotated: true },
+      ],
+      4: [
+        { x: 0.34, y: 0.31 },
+        { x: 0.66, y: 0.31 },
+        { x: 0.34, y: 0.69, rotated: true },
+        { x: 0.66, y: 0.69, rotated: true },
+      ],
+      3: [
+        { x: 0.5, y: 0.3 },
+        { x: 0.5, y: 0.5 },
+        { x: 0.5, y: 0.7, rotated: true },
+      ],
+      2: [
+        { x: 0.5, y: 0.31 },
+        { x: 0.5, y: 0.69, rotated: true },
+      ],
+    };
+
+    return pipLayouts[rankValue] || pipLayouts[2];
   }
 
   function drawChipStack(Pixi, stage, x, y, color, alpha) {
