@@ -7,7 +7,9 @@ exports/
 .tmp-edge-cdp*/
 .tmp-preview-cdp/
 preview-fk2.png
-third_party/
+third_party/*
+!third_party/pixi/
+!third_party/pixi/pixi.min.mjs
 data/preflop-ranges/validation-report.json
 data/texassolver/logs/
 data/texassolver/raw/

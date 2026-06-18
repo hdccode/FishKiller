@@ -26,9 +26,24 @@ Next required step before a local default trial:
 - Rerun the full trainer flow with an actual Pixi canvas present at 1920 x 1080, 1440 x 900, and 1366 x 768.
 - Verify correct/incorrect feedback flashes, pot/card pulses, range modal behavior, continue behavior, and session summary with Pixi active.
 
+## Local Pixi Runtime Update - 2026-06-18
+
+Status: the CDN runtime blocker is addressed. Pixi now loads from the vendored local ESM file at `third_party/pixi/pixi.min.mjs`, so enabling Pixi no longer requires reaching `cdn.jsdelivr.net`.
+
+Verification:
+
+- Pixi-enabled full-flow QA mounted one canvas at 1920 x 1080, 1440 x 900, and 1366 x 768.
+- The trainer flow reached start hand, answer feedback, range modal, continue, and session summary with Pixi active.
+- The original network/CDN error did not recur; only headless/software WebGL warnings were reported.
+
+Follow-up before any default trial:
+
+- Keep `ENABLE_PIXI_TABLE = false` in committed code.
+- Re-run promotion QA after every Pixi renderer change with external network unavailable.
+- Continue treating visual parity, primitive card/chip assets, and postflop board QA as promotion blockers.
+
 ## Blockers Before Pixi Default
 
-- Make the Pixi runtime dependency local/offline-safe or prove the target runtime can reliably load the pinned Pixi module.
 - Fix and repeatedly verify Pixi first-render stability at 1920 x 1080, 1440 x 900, and 1366 x 768.
 - Tune Pixi stage scale, seat offsets, hero-card offsets, pot/chip placement, and dealer-button placement until they match DOM readability at small desktop sizes.
 - Replace primitive card and chip visuals with production-quality assets or a final approved renderer-native visual spec.

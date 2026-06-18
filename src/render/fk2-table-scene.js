@@ -5,7 +5,7 @@
   }
   root.FishKillerFk2TableScene = api;
 })(typeof globalThis !== "undefined" ? globalThis : window, function buildFk2TableSceneApi(root) {
-  const PIXI_CDN_URL = "https://cdn.jsdelivr.net/npm/pixi.js@8.8.1/dist/pixi.mjs";
+  const PIXI_MODULE_URL = "/third_party/pixi/pixi.min.mjs";
   const FK2_SCENE_BACKGROUND_SRC = "assets/FishKiller2.2.png";
   const SEAT_FRAME_RIGHT_SRC = "assets/FKSeat/FKFrame_transparent.png";
   const SEAT_FRAME_LEFT_SRC = "assets/FKSeat/FKFrameLeft_transparent.png";
@@ -47,7 +47,7 @@
       return root.PIXI;
     }
 
-    const pixiModule = await import(PIXI_CDN_URL);
+    const pixiModule = await import(PIXI_MODULE_URL);
     return pixiModule;
   }
 
@@ -1311,6 +1311,6 @@
   return Object.freeze({
     renderTableScene,
     destroyTableScene,
-    PIXI_CDN_URL,
+    PIXI_MODULE_URL,
   });
 });

@@ -21,11 +21,11 @@ If the FK2 scene image fails to load, the Pixi renderer falls back to the earlie
 
 ## Pixi Loading
 
-The proof of concept uses a browser dynamic import from:
+The proof of concept uses a browser dynamic import from the vendored local Pixi ESM build:
 
-`https://cdn.jsdelivr.net/npm/pixi.js@8.8.1/dist/pixi.mjs`
+`third_party/pixi/pixi.min.mjs`
 
-That keeps the repo and package scripts unchanged while the experiment is disabled. Because `ENABLE_PIXI_TABLE` is `false`, PixiJS is not loaded during normal app use.
+That keeps the experiment offline-safe while it remains disabled. Because `ENABLE_PIXI_TABLE` is `false`, PixiJS is not loaded during normal app use.
 
 If the proof of concept graduates, switch to a package-managed dependency and a bundler/build step only after the rendering boundary is proven.
 

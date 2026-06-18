@@ -50,6 +50,30 @@ Blockers before local default trial:
 
 Next step: do not begin a local Pixi default trial yet. First make Pixi loading independent of external CDN availability, then rerun this promotion-readiness flow against the actual Pixi renderer.
 
+## Local Pixi Runtime QA - 2026-06-18
+
+Result: pass for removing the CDN dependency. `ENABLE_PIXI_TABLE` remains `false` in committed code.
+
+Implementation:
+
+- Vendored the installed Pixi ESM runtime to `third_party/pixi/pixi.min.mjs`.
+- Updated `src/render/fk2-table-scene.js` to import the vendored module instead of `cdn.jsdelivr.net`.
+- Added `.mjs` to the local server MIME map so browser dynamic imports are served as JavaScript modules.
+- Added a narrow `.gitignore` exception so only the local Pixi runtime file is tracked under `third_party/pixi/`.
+
+QA target:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+Validation result:
+
+- Pixi-enabled full-flow QA mounted one canvas at 1920 x 1080, 1440 x 900, and 1366 x 768.
+- Start hand, answer action, correction feedback, range-table modal, continue, and session-summary flow completed with Pixi active.
+- The original CDN fetch error did not recur; the only browser messages were headless/software WebGL warnings.
+- DOM fallback remains the committed default when `ENABLE_PIXI_TABLE = false`.
+
 ## Polished Placeholder Manual QA - 2026-06-17
 
 Result: pass for the disabled polished-placeholder scaffold, with Pixi still not ready for promotion. `ENABLE_PIXI_TABLE` was temporarily set to `true` for inspection and restored to `false` before validation and commit.
