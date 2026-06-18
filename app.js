@@ -5137,10 +5137,8 @@ function renderPixiTableScene(tableState) {
     return;
   }
 
+  tableStage.classList.add("pixi-table-enabled");
   pixiScene.renderTableScene(pixiMount, tableState)
-    .then(() => {
-      tableStage.classList.add("pixi-table-enabled");
-    })
     .catch((error) => {
       console.warn("Pixi table scene failed; keeping DOM table fallback.", error);
       tableStage.classList.remove("pixi-table-enabled");

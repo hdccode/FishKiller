@@ -30,6 +30,15 @@
     right: Object.freeze({ x: 214, y: -34 }),
   });
 
+  const BOARD = Object.freeze({
+    x: 620,
+    y: 312,
+    cardWidth: 58,
+    cardHeight: 78,
+    gap: 12,
+    slots: 5,
+  });
+
   const SEAT_STYLE = Object.freeze({
     avatarRadius: 46,
     heroAvatarRadius: 52,
@@ -47,6 +56,7 @@
     SEAT_POSITIONS,
     TABLE,
     HERO_CARD_OFFSETS,
+    BOARD,
     SEAT_STYLE,
   });
 });

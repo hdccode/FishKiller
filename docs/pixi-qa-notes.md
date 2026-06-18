@@ -177,7 +177,35 @@ QA follow-up:
 - Repair or promote a tracked Pixi QA helper that waits for canvas mount instead of sleeping for a fixed timeout.
 - Run the Pixi capture helper at least three consecutive times at 1920 x 1080 before considering the first-render blocker fully closed.
 - Continue comparing against DOM at 1920 x 1080, 1440 x 900, and 1366 x 768.
-- Treat primitive card/chip assets, board slots, small-desktop scale, and shared renderer-state parity as remaining promotion blockers.
+- Treat primitive card/chip assets, postflop board-card QA, small-desktop scale, and shared renderer-state parity as remaining promotion blockers.
+
+## Pixi Adapter And Board Slot QA - 2026-06-18
+
+Result: pass for the first Pixi renderer-state adapter and empty board-slot support. `ENABLE_PIXI_TABLE` was temporarily set to `true` for inspection and restored to `false` before validation and commit.
+
+Checked desktop viewports:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+Findings:
+
+- `src/render/fk2-table-state-adapter.js` now normalizes Pixi-facing seats, hero cards, board cards, pot data, actions, active seat, and folded seats.
+- Pixi renders five center-felt board/community-card slots even when no board cards exist.
+- Board-card primitives use the existing Pixi card renderer when `tableState.board`/`boardCards` contains community cards.
+- Hero cards remain beside the hero seat and do not move into the center board area.
+- Pot/chip primitives remain centered below the board slots.
+- The Pixi mount is made visible before `renderTableScene(...)` measures it, which fixed the hidden-mount sizing path that produced background-only captures.
+- QA captured working Pixi canvases at 1920 x 1080, 1440 x 900, and 1366 x 768. The browser still reported headless software WebGL warnings only.
+
+Remaining blockers:
+
+1. Card and chip visuals are still primitives, not production assets.
+2. Board slots need postflop QA with actual three-, four-, and five-card boards.
+3. Small-desktop composition remains usable but visually dense.
+4. Animation-event parity is still not fully normalized through the adapter.
+5. Pixi remains behind `ENABLE_PIXI_TABLE = false`.
 
 ## What Works
 

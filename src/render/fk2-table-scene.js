@@ -62,10 +62,11 @@
       throw new Error("FishKiller FK2 scene coordinates are not loaded.");
     }
 
+    const renderState = normalizeTableState(tableState);
     const scene = await getOrCreateScene(Pixi, mount, coordinates.STAGE_SIZE);
     const sceneAssets = await loadSceneAssets(Pixi);
     updateSceneTransform(scene, mount, coordinates.STAGE_SIZE);
-    drawScene(Pixi, scene.world, coordinates, tableState, sceneAssets);
+    drawScene(Pixi, scene.world, coordinates, renderState, sceneAssets);
     return scene;
   }
 
@@ -205,10 +206,18 @@
     if (!hasSceneBackground) {
       drawTable(Pixi, stage, coordinates.TABLE);
     }
+    drawBoard(Pixi, stage, coordinates.BOARD, tableState);
     drawSeats(Pixi, stage, coordinates.SEAT_POSITIONS, tableState, sceneAssets);
     drawPot(Pixi, stage, coordinates.TABLE, tableState);
     drawDealerButton(Pixi, stage, coordinates.SEAT_POSITIONS);
     drawHeroCards(Pixi, stage, coordinates, tableState);
+  }
+
+  function normalizeTableState(tableState) {
+    const adapter = root.FishKillerFk2TableStateAdapter;
+    return adapter?.normalizeTableState
+      ? adapter.normalizeTableState(tableState)
+      : tableState;
   }
 
   function drawBackground(Pixi, stage, stageSize, sceneAssets) {
@@ -251,6 +260,47 @@
       strokeEllipse(graphics, table.centerX, table.centerY, table.feltRadiusX, table.feltRadiusY, 0xae7a31, 0.34, 3);
     });
     stage.addChild(tableLayer);
+  }
+
+  function drawBoard(Pixi, stage, boardLayout, tableState) {
+    if (!boardLayout) {
+      return;
+    }
+
+    const cards = Array.isArray(tableState.boardCards) ? tableState.boardCards : normalizeCards(tableState.board || [], [], 5);
+    const slotCount = boardLayout.slots || 5;
+    const cardWidth = boardLayout.cardWidth || 58;
+    const cardHeight = boardLayout.cardHeight || 78;
+    const gap = boardLayout.gap || 12;
+    const totalWidth = (slotCount * cardWidth) + ((slotCount - 1) * gap);
+    const startX = boardLayout.x || 800 - (totalWidth / 2);
+    const y = boardLayout.y || 312;
+
+    stage.addChild(createShape(Pixi, (graphics) => {
+      drawRoundedRect(graphics, startX - 18, y - 18, totalWidth + 36, cardHeight + 36, 24, 0x000000, 0.16);
+      drawRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0x0b130e, 0.24);
+      strokeRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0xd69b42, 0.18, 1.5);
+    }));
+
+    for (let index = 0; index < slotCount; index += 1) {
+      const x = startX + (index * (cardWidth + gap));
+      const card = cards[index];
+      if (card) {
+        drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight);
+      } else {
+        drawBoardSlot(Pixi, stage, x, y, cardWidth, cardHeight);
+      }
+    }
+  }
+
+  function drawBoardSlot(Pixi, stage, x, y, width, height) {
+    stage.addChild(createShape(Pixi, (graphics) => {
+      drawEllipse(graphics, x + (width / 2) + 2, y + height + 6, width * 0.42, 7, 0x000000, 0.18);
+      drawRoundedRect(graphics, x, y, width, height, 8, 0x07100c, 0.42);
+      drawRoundedRect(graphics, x + 5, y + 6, width - 10, height - 12, 6, 0xf2d28a, 0.035);
+      strokeRoundedRect(graphics, x, y, width, height, 8, 0xd69b42, 0.28, 1.5);
+      strokeRoundedRect(graphics, x + 5, y + 5, width - 10, height - 10, 5, 0xffefb8, 0.08, 1);
+    }));
   }
 
   function drawSeats(Pixi, stage, seatPositions, tableState, sceneAssets) {
@@ -790,6 +840,14 @@
   }
 
   function getSeatViewModel(tableState, seat, position) {
+    const normalizedSeat = tableState.seatMap?.[seat];
+    if (normalizedSeat) {
+      return {
+        ...normalizedSeat,
+        isLeft: position.side === "left",
+      };
+    }
+
     const actor = tableState.actorMap?.[seat];
     const seatState = tableState.displayedSeatStates?.[seat] || {};
     const isHero = seat === tableState.heroSeat;
@@ -1008,9 +1066,9 @@
     return normalizeCard(card).isRed;
   }
 
-  function normalizeCards(cards) {
-    const sourceCards = Array.isArray(cards) && cards.length ? cards : DEFAULT_HERO_CARDS;
-    return sourceCards.slice(0, 2).map((card, index) => normalizeCard(card, DEFAULT_HERO_CARDS[index]));
+  function normalizeCards(cards, fallbackCards = DEFAULT_HERO_CARDS, limit = 2) {
+    const sourceCards = Array.isArray(cards) && cards.length ? cards : fallbackCards;
+    return (sourceCards || []).slice(0, limit).map((card, index) => normalizeCard(card, fallbackCards?.[index] || DEFAULT_HERO_CARDS[0]));
   }
 
   function normalizeCard(card, fallback = DEFAULT_HERO_CARDS[0]) {
