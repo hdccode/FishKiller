@@ -42,6 +42,32 @@ Remaining visual blockers:
 2. Postflop board-card states still need live three-, four-, and five-card QA.
 3. 1366 x 768 should receive a human readability pass after longer repeated sessions.
 
+## Pixi Default Hardening QA - 2026-06-18
+
+Decision: pass. Keep Pixi as the default with `ENABLE_PIXI_TABLE = true`.
+
+Pixi repeated-hand QA:
+
+- 1920 x 1080: pass. Completed 10 hands, mounted one Pixi canvas, checked answer feedback, opened the range modal, continued through all hands, and reached `Success review.`
+- 1440 x 900: pass. Completed 10 hands, mounted one Pixi canvas, checked answer feedback, opened the range modal, continued through all hands, and reached `Success review.`
+- 1366 x 768: pass. Completed 10 hands, mounted one Pixi canvas, checked answer feedback, opened the range modal, continued through all hands, and reached `Success review.`
+
+Console result:
+
+- No console errors or page errors at any viewport.
+- Browser warnings were limited to headless/software WebGL and `ReadPixels` performance warnings.
+
+Fallback verification:
+
+- `ENABLE_PIXI_TABLE` was temporarily set to `false`.
+- DOM fallback completed 10 hands at 1920 x 1080, 1440 x 900, and 1366 x 768.
+- DOM fallback showed zero Pixi canvases, opened the range modal, continued through all hands, reached `Success review.`, and produced no console warnings/errors.
+
+Bugs found/fixed:
+
+- No committed app bugs were found.
+- The ignored QA helper was adjusted to choose the highest-frequency action from `question.strategy.actions`, so the repeated-hand pass reliably reaches all 10 hands instead of ending early on accumulated mistakes.
+
 ## Pixi Promotion Readiness Review - 2026-06-18
 
 Recommendation: no local default trial yet. Keep the DOM table as the production default and continue Pixi behind `ENABLE_PIXI_TABLE = false`.

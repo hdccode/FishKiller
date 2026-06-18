@@ -22,6 +22,23 @@ Remaining blockers before calling Pixi fully promoted:
 - Postflop board-card states still need real three-, four-, and five-card board QA.
 - A human visual pass should confirm small-desktop density and action-label readability after repeated sessions.
 
+## Default Hardening QA - 2026-06-18
+
+Decision: pass. Pixi remains the default after repeated trainer-flow QA.
+
+Verification:
+
+- Pixi completed 10 repeated hands at 1920 x 1080, 1440 x 900, and 1366 x 768.
+- Each Pixi viewport mounted one canvas, showed answer feedback, opened the range modal, advanced with continue, and reached `Success review.`
+- No console errors or page errors were reported; warnings were limited to headless/software WebGL and `ReadPixels` performance warnings.
+- DOM fallback was verified by temporarily setting `ENABLE_PIXI_TABLE = false`; it completed the same 10-hand flow at all three viewports with zero Pixi canvases and no console warnings/errors.
+
+Current hardening blockers:
+
+- Add a tracked smoke/visual QA script for repeated Pixi sessions instead of relying on ignored helper tooling.
+- Run a live human readability pass at 1366 x 768 after several repeated sessions.
+- Add postflop board-card QA with actual three-, four-, and five-card boards.
+
 ## Promotion Readiness Review - 2026-06-18
 
 Decision: no local default trial yet. Continue Pixi behind `ENABLE_PIXI_TABLE = false`.
