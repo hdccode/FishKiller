@@ -66,7 +66,8 @@
     const scene = await getOrCreateScene(Pixi, mount, coordinates.STAGE_SIZE);
     const sceneAssets = await loadSceneAssets(Pixi);
     updateSceneTransform(scene, mount, coordinates.STAGE_SIZE);
-    drawScene(Pixi, scene.world, coordinates, renderState, sceneAssets);
+    drawScene(Pixi, scene, coordinates, renderState, sceneAssets);
+    scene.previousRenderSignals = getRenderSignals(renderState);
     return scene;
   }
 
@@ -141,7 +142,7 @@
     mount.replaceChildren(canvas);
     app.stage.addChild(world);
 
-    const scene = { app, world };
+    const scene = { app, world, animations: [], previousRenderSignals: null };
     sceneByMount.set(mount, scene);
     return scene;
   }
@@ -199,18 +200,29 @@
     throw new Error("PixiJS Application constructor is unavailable.");
   }
 
-  function drawScene(Pixi, stage, coordinates, tableState, sceneAssets) {
+  function drawScene(Pixi, scene, coordinates, tableState, sceneAssets) {
+    const stage = scene.world;
+    clearSceneAnimations(scene);
     stage.removeChildren();
+
+    const previousSignals = scene.previousRenderSignals;
+    const nextSignals = getRenderSignals(tableState);
+    const animationFlags = {
+      feedbackChanged: Boolean(previousSignals && previousSignals.feedback !== nextSignals.feedback && nextSignals.feedback !== "waiting"),
+      potChanged: Boolean(previousSignals && previousSignals.pot !== nextSignals.pot),
+      cardsChanged: Boolean(previousSignals && previousSignals.cards !== nextSignals.cards),
+    };
 
     const hasSceneBackground = drawBackground(Pixi, stage, coordinates.STAGE_SIZE, sceneAssets);
     if (!hasSceneBackground) {
       drawTable(Pixi, stage, coordinates.TABLE);
     }
-    drawBoard(Pixi, stage, coordinates.BOARD, tableState);
-    drawSeats(Pixi, stage, coordinates.SEAT_POSITIONS, tableState, sceneAssets);
-    drawPot(Pixi, stage, coordinates.TABLE, tableState);
+    drawBoard(Pixi, scene, coordinates.BOARD, tableState, animationFlags);
+    drawSeats(Pixi, scene, coordinates.SEAT_POSITIONS, tableState, sceneAssets);
+    drawPot(Pixi, scene, coordinates.TABLE, tableState, animationFlags);
     drawDealerButton(Pixi, stage, coordinates.SEAT_POSITIONS);
-    drawHeroCards(Pixi, stage, coordinates, tableState);
+    drawHeroCards(Pixi, scene, coordinates, tableState, animationFlags);
+    drawFeedbackFlash(Pixi, scene, coordinates.STAGE_SIZE, tableState, animationFlags);
   }
 
   function normalizeTableState(tableState) {
@@ -262,11 +274,12 @@
     stage.addChild(tableLayer);
   }
 
-  function drawBoard(Pixi, stage, boardLayout, tableState) {
+  function drawBoard(Pixi, scene, boardLayout, tableState, animationFlags) {
     if (!boardLayout) {
       return;
     }
 
+    const stage = scene.world;
     const cards = Array.isArray(tableState.boardCards) ? tableState.boardCards : normalizeCards(tableState.board || [], [], 5);
     const slotCount = boardLayout.slots || 5;
     const cardWidth = boardLayout.cardWidth || 58;
@@ -287,6 +300,9 @@
       const card = cards[index];
       if (card) {
         drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight);
+        if (animationFlags.cardsChanged) {
+          drawCardPulse(Pixi, scene, x, y, cardWidth, cardHeight);
+        }
       } else {
         drawBoardSlot(Pixi, stage, x, y, cardWidth, cardHeight);
       }
@@ -303,7 +319,8 @@
     }));
   }
 
-  function drawSeats(Pixi, stage, seatPositions, tableState, sceneAssets) {
+  function drawSeats(Pixi, scene, seatPositions, tableState, sceneAssets) {
+    const stage = scene.world;
     Object.entries(seatPositions).forEach(([seat, position]) => {
       const seatContainer = new Pixi.Container();
       seatContainer.x = position.x;
@@ -354,6 +371,9 @@
           statusHeight,
         });
       }
+      if (seatView.isActing) {
+        drawActiveSeatPulse(Pixi, scene, seatContainer, avatarRadius, seatView);
+      }
 
       const seatText = createText(Pixi, markerText, {
         fill: seatView.isFolded ? 0xd9bd88 : 0xffdf96,
@@ -380,6 +400,12 @@
       statusText.x = statusTextX;
       statusText.y = textOffset.statusY;
       seatContainer.addChild(statusText);
+      drawRecentActionBadge(Pixi, seatContainer, seatView, {
+        plaqueX,
+        statusWidth,
+        statusTextX,
+        y: textOffset.statusY + 27,
+      });
 
       stage.addChild(seatContainer);
     });
@@ -419,6 +445,21 @@
     }));
   }
 
+  function drawActiveSeatPulse(Pixi, scene, container, avatarRadius, seatView) {
+    const pulse = createShape(Pixi, (graphics) => {
+      strokeEllipse(graphics, 0, 0, avatarRadius + 22, avatarRadius + 22, getSeatGlowColor(seatView), 0.36, 3);
+      strokeEllipse(graphics, 0, 0, avatarRadius + 30, avatarRadius + 30, getSeatGlowColor(seatView), 0.16, 2);
+    });
+    pulse.alpha = 0.7;
+    container.addChild(pulse);
+    addSceneAnimation(scene, (elapsedMs) => {
+      const wave = (Math.sin(elapsedMs / 260) + 1) / 2;
+      pulse.alpha = 0.3 + (wave * 0.44);
+      pulse.scale.set(1 + (wave * 0.045));
+      return true;
+    });
+  }
+
   function drawSeatStatusBacking(Pixi, container, seatView, layout) {
     const {
       plaqueX,
@@ -431,6 +472,37 @@
     }));
   }
 
+  function drawRecentActionBadge(Pixi, container, seatView, layout) {
+    const label = getRecentActionLabel(seatView);
+    if (!label) {
+      return;
+    }
+
+    const color = getActionBadgeColor(label);
+    const badgeWidth = Math.max(58, Math.min(116, (label.length * 6.5) + 24));
+    const badgeX = layout.statusTextX - (badgeWidth / 2);
+    const badgeY = layout.y;
+
+    container.addChild(createShape(Pixi, (graphics) => {
+      drawRoundedRect(graphics, badgeX + 3, badgeY + 3, badgeWidth, 22, 9, 0x000000, 0.2);
+      drawRoundedRect(graphics, badgeX, badgeY, badgeWidth, 22, 9, 0x090604, 0.78);
+      drawRoundedRect(graphics, badgeX + 7, badgeY + 4, badgeWidth - 14, 5, 5, color, 0.2);
+      strokeRoundedRect(graphics, badgeX, badgeY, badgeWidth, 22, 9, color, 0.52, 1.4);
+    }));
+
+    const badgeText = createText(Pixi, label, {
+      fill: 0xffefc4,
+      fontFamily: "Arial, sans-serif",
+      fontSize: 10,
+      fontWeight: "800",
+      align: "center",
+    });
+    badgeText.anchor.set(0.5);
+    badgeText.x = layout.statusTextX;
+    badgeText.y = badgeY + 11;
+    container.addChild(badgeText);
+  }
+
   function getSeatFrameTextOffset(seatView) {
     return seatView.isLeft
       ? { markerY: -18, statusY: 28 }
@@ -441,7 +513,8 @@
     return sceneAssets?.avatarTextures?.[seat] || null;
   }
 
-  function drawPot(Pixi, stage, table, tableState) {
+  function drawPot(Pixi, scene, table, tableState, animationFlags) {
+    const stage = scene.world;
     const label = tableState.potLabel ? `Pot ${tableState.potLabel}` : `Pot ${Number(tableState.potBb || 0).toFixed(1)}bb`;
     const potColors = getPotChipColors(tableState);
     drawChipStack(Pixi, stage, table.centerX - 124, table.centerY - 24, potColors.primary, 1.02);
@@ -468,6 +541,9 @@
     potText.x = table.centerX;
     potText.y = table.centerY - 23;
     stage.addChild(potText);
+    if (animationFlags.potChanged) {
+      drawPotPulse(Pixi, scene, table);
+    }
   }
 
   function drawDealerButton(Pixi, stage, seatPositions) {
@@ -499,7 +575,8 @@
     stage.addChild(dealerText);
   }
 
-  function drawHeroCards(Pixi, stage, coordinates, tableState) {
+  function drawHeroCards(Pixi, scene, coordinates, tableState, animationFlags) {
+    const stage = scene.world;
     const heroPosition = coordinates.SEAT_POSITIONS[tableState.heroSeat] || { x: 800, y: 690, side: "right" };
     const cardOffset = coordinates.HERO_CARD_OFFSETS[heroPosition.side] || coordinates.HERO_CARD_OFFSETS.right;
     const style = coordinates.SEAT_STYLE || {};
@@ -512,6 +589,9 @@
       const x = heroPosition.x + cardOffset.x + (index * (cardWidth + cardGap));
       const y = heroPosition.y + cardOffset.y;
       drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight);
+      if (animationFlags.cardsChanged) {
+        drawCardPulse(Pixi, scene, x, y, cardWidth, cardHeight);
+      }
     });
   }
 
@@ -613,6 +693,57 @@
     drawCardCorner(Pixi, stage, card, x + 7, y + 5, suitColor, false);
     drawCardCorner(Pixi, stage, card, x + width - 7, y + height - 5, suitColor, true);
     drawCardPips(Pixi, stage, card, x, y, width, height, suitColor);
+  }
+
+  function drawCardPulse(Pixi, scene, x, y, width, height) {
+    const pulse = createShape(Pixi, (graphics) => {
+      strokeRoundedRect(graphics, x - 4, y - 4, width + 8, height + 8, 10, 0xffdf95, 0.74, 2.5);
+      strokeRoundedRect(graphics, x - 9, y - 9, width + 18, height + 18, 13, 0xffffff, 0.28, 1.5);
+    });
+    scene.world.addChild(pulse);
+    addSceneAnimation(scene, (elapsedMs) => {
+      const progress = Math.min(1, elapsedMs / 780);
+      pulse.alpha = 1 - progress;
+      pulse.scale.set(1 + (progress * 0.08));
+      return progress < 1;
+    });
+  }
+
+  function drawPotPulse(Pixi, scene, table) {
+    const pulse = createShape(Pixi, (graphics) => {
+      strokeRoundedRect(graphics, table.centerX - 100, table.centerY - 54, 200, 64, 23, 0xffdf95, 0.7, 2.5);
+      strokeEllipse(graphics, table.centerX, table.centerY - 20, 150, 36, 0xffffff, 0.18, 1.5);
+    });
+    scene.world.addChild(pulse);
+    addSceneAnimation(scene, (elapsedMs) => {
+      const progress = Math.min(1, elapsedMs / 900);
+      pulse.alpha = 1 - progress;
+      pulse.scale.set(1 + (progress * 0.06));
+      return progress < 1;
+    });
+  }
+
+  function drawFeedbackFlash(Pixi, scene, stageSize, tableState, animationFlags) {
+    if (!animationFlags.feedbackChanged) {
+      return;
+    }
+
+    const feedback = tableState.feedbackState || "waiting";
+    const color = feedback === "correct"
+      ? 0x3ad1a0
+      : feedback === "mixed"
+        ? 0xd6a84a
+        : 0xd65f4a;
+    const flash = createShape(Pixi, (graphics) => {
+      drawRect(graphics, 0, 0, stageSize.width, stageSize.height, color, 0.16);
+      strokeRoundedRect(graphics, 172, 108, stageSize.width - 344, stageSize.height - 210, 28, color, 0.5, 4);
+    });
+    scene.world.addChild(flash);
+    addSceneAnimation(scene, (elapsedMs) => {
+      const progress = Math.min(1, elapsedMs / 720);
+      flash.alpha = 1 - progress;
+      return progress < 1;
+    });
   }
 
   function drawCardCorner(Pixi, stage, card, x, y, suitColor, isRotated) {
@@ -897,6 +1028,35 @@
     return [response.action, response.amountLabel].filter(Boolean).join(" ");
   }
 
+  function getRecentActionLabel(seatView) {
+    const label = String(seatView.actionLabel || seatView.caption || "").trim();
+    if (seatView.isFolded && !seatView.isVillainRecent) {
+      return "";
+    }
+
+    if (!label || /waiting/i.test(label) || /hero to act/i.test(label)) {
+      return "";
+    }
+
+    return truncateLabel(label, 18);
+  }
+
+  function getActionBadgeColor(label) {
+    if (/fold/i.test(label)) {
+      return 0xd06a55;
+    }
+
+    if (/call|limp|check/i.test(label)) {
+      return 0x39b99a;
+    }
+
+    if (/raise|bet|jam|squeeze|iso/i.test(label)) {
+      return 0xb889ff;
+    }
+
+    return 0xd69b42;
+  }
+
   function truncateLabel(label, maxLength) {
     const normalizedLabel = String(label || "Waiting");
     if (normalizedLabel.length <= maxLength) {
@@ -904,6 +1064,47 @@
     }
 
     return `${normalizedLabel.slice(0, Math.max(0, maxLength - 3)).trim()}...`;
+  }
+
+  function getRenderSignals(tableState) {
+    return {
+      pot: `${tableState.potLabel || ""}|${Number(tableState.potBb || 0).toFixed(2)}`,
+      feedback: tableState.feedbackState || "waiting",
+      cards: [
+        ...(tableState.heroCards || []).map(formatCardLabel),
+        "|",
+        ...(tableState.boardCards || tableState.board || []).map(formatCardLabel),
+      ].join(","),
+    };
+  }
+
+  function clearSceneAnimations(scene) {
+    if (!scene?.animations?.length || !scene.app?.ticker?.remove) {
+      scene.animations = [];
+      return;
+    }
+
+    scene.animations.forEach((animation) => {
+      scene.app.ticker.remove(animation);
+    });
+    scene.animations = [];
+  }
+
+  function addSceneAnimation(scene, update) {
+    if (!scene?.app?.ticker?.add || !scene?.app?.ticker?.remove) {
+      return;
+    }
+
+    const startedAt = Date.now();
+    const animation = () => {
+      const shouldContinue = update(Date.now() - startedAt);
+      if (shouldContinue === false) {
+        scene.app.ticker.remove(animation);
+        scene.animations = scene.animations.filter((entry) => entry !== animation);
+      }
+    };
+    scene.animations.push(animation);
+    scene.app.ticker.add(animation);
   }
 
   function getSeatFillColor(seatView) {

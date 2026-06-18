@@ -207,6 +207,34 @@ Remaining blockers:
 4. Animation-event parity is still not fully normalized through the adapter.
 5. Pixi remains behind `ENABLE_PIXI_TABLE = false`.
 
+## Pixi Action Feedback Animation QA - 2026-06-18
+
+Result: pass for first Pixi action badges and safe visual animation parity hooks. `ENABLE_PIXI_TABLE` was temporarily set to `true` for inspection and restored to `false` before validation and commit.
+
+Checked desktop viewports:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+Findings:
+
+- Pixi now renders compact recent-action badges for meaningful action labels such as opens, calls, raises, 3-bets, 4-bets, jams, squeezes, and iso-raises.
+- Routine `Waiting`, `Hero to act`, and non-recent folded captions do not get duplicate action badges, which keeps 1366 x 768 readable.
+- Active seats receive a subtle ticker-driven pulse around the avatar/frame.
+- Pot, hero-card, board-card, and feedback flashes are driven from safe previous-vs-current render signatures and no-op when prior state is unavailable.
+- Correct, mixed, and wrong feedback flashes are supported through normalized `feedbackState`; screenshot QA did not force an answered state, so interaction QA should still verify the live flash colors.
+- Pot/card pulses are short-lived overlays; still screenshots mainly verify that their setup does not destabilize layout.
+- QA captured working Pixi canvases at 1920 x 1080, 1440 x 900, and 1366 x 768. The browser reported headless software WebGL warnings only.
+
+Remaining blockers:
+
+1. Live answer interaction QA should verify correct, mixed, and wrong flashes during actual answer transitions.
+2. Pot/card pulse timing should be checked with real state transitions, not only static screenshot capture.
+3. Card and chip visuals are still primitives, not production assets.
+4. Board slots still need postflop QA with actual three-, four-, and five-card boards.
+5. Pixi remains behind `ENABLE_PIXI_TABLE = false`.
+
 ## What Works
 
 - The Pixi scaffold loads and renders when `ENABLE_PIXI_TABLE` is temporarily set to `true`.

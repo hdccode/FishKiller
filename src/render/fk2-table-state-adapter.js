@@ -63,6 +63,8 @@
       },
       potLabel: tableState.potLabel || "",
       potBb: Number(tableState.potBb || tableState.bettingSummary?.pot || 0),
+      feedbackState: normalizeFeedbackState(tableState),
+      selectedAction: tableState.selectedAction || tableState.question?.selected || "",
       actions: normalizeLegalActions(tableState),
       actionsBySeat,
       seats: SEAT_ORDER.map((seat) => seatMap[seat]),
@@ -138,6 +140,23 @@
       disabled: Boolean(action.disabled),
       selected: action.id === tableState.selectedAction || action.option === tableState.selectedAction,
     }));
+  }
+
+  function normalizeFeedbackState(tableState) {
+    if (tableState.feedbackState) {
+      return tableState.feedbackState;
+    }
+
+    const question = tableState.question;
+    if (!question?.answered) {
+      return "waiting";
+    }
+
+    if (question.isCorrect) {
+      return "correct";
+    }
+
+    return question.isMixed ? "mixed" : "wrong";
   }
 
   function normalizeCards(cards, fallbackCards) {

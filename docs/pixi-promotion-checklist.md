@@ -9,8 +9,8 @@ Current decision: keep the DOM table as the production default and continue Pixi
 - Fix and repeatedly verify Pixi first-render stability at 1920 x 1080, 1440 x 900, and 1366 x 768.
 - Tune Pixi stage scale, seat offsets, hero-card offsets, pot/chip placement, and dealer-button placement until they match DOM readability at small desktop sizes.
 - Replace primitive card and chip visuals with production-quality assets or a final approved renderer-native visual spec.
-- Extend the renderer-facing state adapter until DOM and Pixi consume the same animation events and postflop decision states.
-- Prove action-state parity for hero-to-act, villain action, folded, waiting, recent action, and disabled action-control states.
+- Extend the renderer-facing state adapter until DOM and Pixi consume postflop decision states and any future action-animation event payloads.
+- Prove full interaction parity for correct/incorrect feedback flashes, pot/card update pulses, and disabled action-control states.
 
 ## Required DOM Parity
 
@@ -21,6 +21,8 @@ Current decision: keep the DOM table as the production default and continue Pixi
 - Empty board slots render in the center felt when no community cards exist; filled board-card primitives render in those same slots.
 - Dealer button does not overlap cards, seat plaques, or action labels.
 - Action labels and available choices match the DOM renderer for the same training spot.
+- Recent-action badges render for meaningful call/raise/bet/jam/squeeze labels without duplicating routine waiting/folded captions.
+- Active seat, answer feedback, pot changes, and card changes have subtle Pixi-only visual pulses that are safe when state is missing.
 - Bottom action controls, feedback band, stats header, and range modal behavior remain unaffected by Pixi mode.
 - DOM fallback can be restored by setting `ENABLE_PIXI_TABLE = false` without data migration or gameplay changes.
 
@@ -48,6 +50,7 @@ Each viewport must be checked in DOM and Pixi mode for:
 - Pot, stack, dealer-button readability
 - Hero, acting, folded, waiting, and recent-action states
 - Action label parity
+- Answer feedback flash, pot pulse, active-seat pulse, and card update pulse
 - No overlap with action controls or the feedback band
 
 Promotion should also include a folded-state sweep and at least one postflop board-card screenshot with three, four, and five community cards.
