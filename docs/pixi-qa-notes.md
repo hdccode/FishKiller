@@ -14,6 +14,34 @@ Checked desktop viewports:
 - 1440 x 900
 - 1366 x 768
 
+## Pixi Local Default Trial - 2026-06-18
+
+Decision: pass. Pixi can be committed as the local default with `ENABLE_PIXI_TABLE = true`.
+
+Pixi default QA:
+
+- 1920 x 1080: pass. One Pixi canvas mounted, start hand rendered, answer feedback appeared, range modal opened, continue advanced the session, and session summary opened.
+- 1440 x 900: pass. One Pixi canvas mounted and the full trainer flow completed with correct/correction feedback states observed.
+- 1366 x 768: pass. One Pixi canvas mounted and the full trainer flow completed; layout remains dense but usable.
+
+Fallback verification:
+
+- `ENABLE_PIXI_TABLE` was temporarily restored to `false`.
+- DOM fallback QA at 1920 x 1080, 1440 x 900, and 1366 x 768 showed zero Pixi canvases and a usable trainer flow.
+- Start hand, answer feedback, range-table modal, continue, and session summary remained functional through the DOM renderer.
+
+Notes:
+
+- Pixi loaded from `/third_party/pixi/pixi.min.mjs`; the previous CDN/network blocker did not recur.
+- Browser output only showed headless/software WebGL warnings during Pixi QA.
+- The automated helper can mislabel an intended "correct" answer when strategy frequencies are all zero, so exact answer-grading semantics still need human spot checks. This did not block the renderer default trial because both Pixi and DOM flows remained interactive and stable.
+
+Remaining visual blockers:
+
+1. Primitive card and chip visuals still need production assets or final approval.
+2. Postflop board-card states still need live three-, four-, and five-card QA.
+3. 1366 x 768 should receive a human readability pass after longer repeated sessions.
+
 ## Pixi Promotion Readiness Review - 2026-06-18
 
 Recommendation: no local default trial yet. Keep the DOM table as the production default and continue Pixi behind `ENABLE_PIXI_TABLE = false`.

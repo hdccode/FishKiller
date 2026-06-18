@@ -2,7 +2,25 @@
 
 Date: 2026-06-18
 
-Current decision: keep the DOM table as the production default and continue Pixi behind `ENABLE_PIXI_TABLE = false`.
+Current decision: Pixi is the local default with `ENABLE_PIXI_TABLE = true`; the DOM renderer remains the reversible fallback by setting the flag to `false`.
+
+## Local Default Trial - 2026-06-18
+
+Decision: pass for making Pixi the local default. `ENABLE_PIXI_TABLE` can be committed as `true` after the local runtime and full-flow checks passed.
+
+Verification:
+
+- Pixi default full-flow QA mounted one canvas at 1920 x 1080, 1440 x 900, and 1366 x 768.
+- The trainer flow reached start hand, answer feedback, range modal, continue, and session summary with Pixi active.
+- The Pixi runtime loaded from `/third_party/pixi/pixi.min.mjs`; no CDN or network fetch errors appeared.
+- Browser messages were limited to headless/software WebGL warnings.
+- Restoring `ENABLE_PIXI_TABLE = false` brought back the DOM fallback path with zero Pixi canvases at all three viewports, and the same trainer flow remained usable.
+
+Remaining blockers before calling Pixi fully promoted:
+
+- Primitive card and chip visuals still need production assets or final visual approval.
+- Postflop board-card states still need real three-, four-, and five-card board QA.
+- A human visual pass should confirm small-desktop density and action-label readability after repeated sessions.
 
 ## Promotion Readiness Review - 2026-06-18
 
@@ -36,9 +54,8 @@ Verification:
 - The trainer flow reached start hand, answer feedback, range modal, continue, and session summary with Pixi active.
 - The original network/CDN error did not recur; only headless/software WebGL warnings were reported.
 
-Follow-up before any default trial:
+Follow-up after local runtime verification:
 
-- Keep `ENABLE_PIXI_TABLE = false` in committed code.
 - Re-run promotion QA after every Pixi renderer change with external network unavailable.
 - Continue treating visual parity, primitive card/chip assets, and postflop board QA as promotion blockers.
 
@@ -95,8 +112,8 @@ Promotion should also include a folded-state sweep and at least one postflop boa
 
 ## Rollback Plan
 
-1. Leave `ENABLE_PIXI_TABLE = false` as the default until promotion is explicitly approved.
-2. If Pixi is promoted and a visual or state regression appears, set `ENABLE_PIXI_TABLE = false` and redeploy to restore the DOM table.
+1. Keep `ENABLE_PIXI_TABLE` as the single rollback switch.
+2. If a visual or state regression appears, set `ENABLE_PIXI_TABLE = false` and redeploy to restore the DOM table.
 3. Keep the DOM renderer code path intact until Pixi has passed repeated QA on production-like data and assets.
 4. Treat Pixi promotion as reversible; do not remove DOM table CSS, markup, or state plumbing in the promotion commit.
 5. Record rollback reason, viewport, screenshot path, and affected table state in `docs/pixi-qa-notes.md`.

@@ -1,19 +1,19 @@
 # Pixi Table Scene Migration
 
-This branch keeps the existing DOM poker table as the production renderer and adds a disabled PixiJS proof-of-concept path for the FK2 table scene.
+This branch uses PixiJS as the local default table renderer while keeping the existing DOM poker table as a reversible fallback.
 
 ## Current Hybrid Approach
 
-- `src/ui/table-view.js` remains the live DOM table renderer.
+- `src/ui/table-view.js` remains the DOM fallback table renderer.
 - `app.js` still builds the existing `tableState` from trainer state, range data, seat state, cards, pot, and feedback.
 - `src/render/fk2-table-scene.js` can render a separate Pixi canvas from that same `tableState`.
 - `src/render/fk2-scene-coordinates.js` owns the fixed 1600 x 900 Pixi stage coordinates.
 - `index.html` includes a `#pixi-table-scene` mount inside the existing `.table-stage`.
-- The feature flag `ENABLE_PIXI_TABLE` in `app.js` defaults to `false`, so the current DOM table remains visible and gameplay is unchanged.
+- The feature flag `ENABLE_PIXI_TABLE` in `app.js` defaults to `true` after the local default trial. Setting it to `false` restores the DOM table without gameplay changes.
 
 ## Scene Ownership Decision
 
-When `ENABLE_PIXI_TABLE` is temporarily enabled, Pixi now owns the full FK2 table-scene plate. The renderer loads `assets/FishKiller2.2.png` into the fixed 1600 x 900 world and cover-fits it behind the live placeholder overlays.
+When `ENABLE_PIXI_TABLE` is enabled, Pixi owns the full FK2 table-scene plate. The renderer loads `assets/FishKiller2.2.png` into the fixed 1600 x 900 world and cover-fits it behind the live placeholder overlays.
 
 The DOM still owns the top HUD, action buttons, feedback dock, range table modal, and all trainer controls. This keeps the Pixi migration scoped to the table scene while the existing DOM trainer remains the production fallback.
 
@@ -25,13 +25,13 @@ The proof of concept uses a browser dynamic import from the vendored local Pixi 
 
 `third_party/pixi/pixi.min.mjs`
 
-That keeps the experiment offline-safe while it remains disabled. Because `ENABLE_PIXI_TABLE` is `false`, PixiJS is not loaded during normal app use.
+That keeps the renderer offline-safe and avoids any CDN dependency.
 
 If the proof of concept graduates, switch to a package-managed dependency and a bundler/build step only after the rendering boundary is proven.
 
-## How To Enable Locally
+## How To Toggle Locally
 
-1. In `app.js`, temporarily set:
+1. To run Pixi, keep:
 
    ```js
    const ENABLE_PIXI_TABLE = true;
@@ -45,7 +45,7 @@ If the proof of concept graduates, switch to a package-managed dependency and a 
 
 3. Open `http://127.0.0.1:4173/` and enter the 6-max preflop trainer.
 
-When enabled, the Pixi canvas is shown inside `.table-stage` and the DOM `.table-visual` is hidden. If Pixi fails to load or render, the code logs a warning and keeps the DOM fallback visible.
+To restore the DOM fallback, set `ENABLE_PIXI_TABLE = false`. When enabled, the Pixi canvas is shown inside `.table-stage` and the DOM `.table-visual` is hidden. If Pixi fails to load or render, the code logs a warning and keeps the DOM fallback visible.
 
 ## Proof-Of-Concept Layers
 

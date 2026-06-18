@@ -10,7 +10,7 @@ const FULL_HAND_STREETS = ["preflop", "flop", "turn", "river"];
 const SOLVER_EQUITY_SAMPLES = 42;
 const SOLVER_RANGE_SAMPLE_SIZE = 72;
 const POSTFLOP_SOLVER_ENABLED = false;
-const ENABLE_PIXI_TABLE = false;
+const ENABLE_PIXI_TABLE = true;
 const TABLE_ACTION_ANIMATION_MS = 850;
 const TABLE_ACTION_ANIMATION_STAGGER_MS = 820;
 
