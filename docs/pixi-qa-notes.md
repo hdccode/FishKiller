@@ -14,6 +14,42 @@ Checked desktop viewports:
 - 1440 x 900
 - 1366 x 768
 
+## Pixi Promotion Readiness Review - 2026-06-18
+
+Recommendation: no local default trial yet. Keep the DOM table as the production default and continue Pixi behind `ENABLE_PIXI_TABLE = false`.
+
+Result: fail/inconclusive for actual Pixi promotion readiness, pass for DOM fallback safety.
+
+Full trainer flow checked at:
+
+- 1920 x 1080
+- 1440 x 900
+- 1366 x 768
+
+DOM fallback findings:
+
+- Start hand, answer action, incorrect/correction feedback, continue, range-table modal, and session-summary flow all completed at the checked viewports.
+- Correct-feedback behavior was observed during the automated flow at 1440 x 900 and 1366 x 768.
+- The 1920 x 1080 correct-answer attempt landed on another correction state due to helper answer selection, so the flow mechanics passed but that specific correct-feedback color/state needs a live manual recheck.
+- The range table modal opened and closed without stage/layout interference.
+- Session summary opened after the automated failure-review path.
+
+Pixi-enabled findings:
+
+- Pixi could not be promotion-reviewed in this run because the runtime module fetch was blocked: `https://cdn.jsdelivr.net/npm/pixi.js@8.8.1/dist/pixi.mjs` returned `net::ERR_NETWORK_ACCESS_DENIED`.
+- The app failed safely: the Pixi renderer warning was logged, `.pixi-table-enabled` was removed, and the DOM fallback stayed visible and usable.
+- No Pixi canvas mounted in the checked Pixi-enabled run, so active-seat pulse, answer flash, pot pulse, card pulse, and board-slot behavior were not verified with actual Pixi rendering.
+
+Blockers before local default trial:
+
+1. Make the Pixi runtime dependency local/offline-safe, or otherwise prove the pinned Pixi module can load reliably in the target QA/runtime environment.
+2. Rerun the full trainer flow with an actual Pixi canvas mounted at 1920 x 1080, 1440 x 900, and 1366 x 768.
+3. Verify live correct, mixed, and incorrect feedback flashes during actual answer transitions.
+4. Verify pot/card pulse timing and postflop board slots with real state transitions.
+5. Replace or formally approve the remaining primitive card/chip visuals before production promotion.
+
+Next step: do not begin a local Pixi default trial yet. First make Pixi loading independent of external CDN availability, then rerun this promotion-readiness flow against the actual Pixi renderer.
+
 ## Polished Placeholder Manual QA - 2026-06-17
 
 Result: pass for the disabled polished-placeholder scaffold, with Pixi still not ready for promotion. `ENABLE_PIXI_TABLE` was temporarily set to `true` for inspection and restored to `false` before validation and commit.

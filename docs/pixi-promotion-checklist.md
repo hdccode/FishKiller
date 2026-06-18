@@ -4,8 +4,31 @@ Date: 2026-06-18
 
 Current decision: keep the DOM table as the production default and continue Pixi behind `ENABLE_PIXI_TABLE = false`.
 
+## Promotion Readiness Review - 2026-06-18
+
+Decision: no local default trial yet. Continue Pixi behind `ENABLE_PIXI_TABLE = false`.
+
+Latest full-flow QA could not verify the live Pixi renderer because the browser was unable to fetch the CDN Pixi module in the network-restricted environment:
+
+- `https://cdn.jsdelivr.net/npm/pixi.js@8.8.1/dist/pixi.mjs`
+- Browser error: `net::ERR_NETWORK_ACCESS_DENIED`
+- App behavior: `renderTableScene(...)` failed safely and kept the DOM table fallback visible.
+
+Promotion-readiness result:
+
+- DOM fallback full trainer flow passed at 1920 x 1080, 1440 x 900, and 1366 x 768.
+- Pixi-enabled fallback safety passed at the same viewports because the DOM table remained usable when Pixi failed to load.
+- Actual Pixi full-flow readiness is fail/inconclusive until the renderer can load without depending on external network access during QA.
+
+Next required step before a local default trial:
+
+- Bundle, vendor, or otherwise make the Pixi runtime dependency locally reliable.
+- Rerun the full trainer flow with an actual Pixi canvas present at 1920 x 1080, 1440 x 900, and 1366 x 768.
+- Verify correct/incorrect feedback flashes, pot/card pulses, range modal behavior, continue behavior, and session summary with Pixi active.
+
 ## Blockers Before Pixi Default
 
+- Make the Pixi runtime dependency local/offline-safe or prove the target runtime can reliably load the pinned Pixi module.
 - Fix and repeatedly verify Pixi first-render stability at 1920 x 1080, 1440 x 900, and 1366 x 768.
 - Tune Pixi stage scale, seat offsets, hero-card offsets, pot/chip placement, and dealer-button placement until they match DOM readability at small desktop sizes.
 - Replace primitive card and chip visuals with production-quality assets or a final approved renderer-native visual spec.
