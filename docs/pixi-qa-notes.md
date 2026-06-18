@@ -158,6 +158,27 @@ QA artifact paths:
 - DOM screenshots: `.tmp-edge-cdp-pixi-qa/screenshots/dom-1920x1080.png`, `.tmp-edge-cdp-pixi-qa/screenshots/dom-1440x900.png`, `.tmp-edge-cdp-pixi-qa/screenshots/dom-1366x768.png`
 - Pixi screenshots: `.tmp-edge-cdp-pixi-qa/screenshots/pixi-1920x1080.png`, `.tmp-edge-cdp-pixi-qa/screenshots/pixi-1440x900.png`, `.tmp-edge-cdp-pixi-qa/screenshots/pixi-1366x768.png`
 
+## Pixi First-Render Stability Check - 2026-06-18
+
+Recommendation remains unchanged: keep the DOM table as the production default and continue Pixi behind `ENABLE_PIXI_TABLE = false`.
+
+Findings:
+
+- The 1920 x 1080 issue reproduced as a capture-timing problem in the ignored Playwright helper, not as a gameplay or committed renderer-state failure.
+- On a cold Pixi run, the first 1920 x 1080 capture can happen before the CDN Pixi module finishes loading and before the canvas is mounted. The helper reported `.pixi-table-scene` visible but `canvasCount: 0`.
+- Later viewports in the same run mounted a canvas successfully, consistent with the module/assets being warm after the first viewport.
+- The committed app already keeps the DOM table visible until `renderTableScene(...)` resolves and only then applies `.pixi-table-enabled`, so a slow Pixi load should not replace the DOM fallback with a blank user-facing stage.
+- No app code fix was committed because the root cause sits in ignored QA tooling. The durable fix is to make the Pixi capture helper wait for `#pixi-table-scene canvas` and at least one settled animation frame before screenshotting.
+- A subsequent warmed Pixi QA run did mount a 1920 x 1080 canvas and rendered seats, avatars, hero cards, pot/chip primitives, and dealer button successfully.
+- This finding does not change gameplay or make Pixi default.
+
+QA follow-up:
+
+- Repair or promote a tracked Pixi QA helper that waits for canvas mount instead of sleeping for a fixed timeout.
+- Run the Pixi capture helper at least three consecutive times at 1920 x 1080 before considering the first-render blocker fully closed.
+- Continue comparing against DOM at 1920 x 1080, 1440 x 900, and 1366 x 768.
+- Treat primitive card/chip assets, board slots, small-desktop scale, and shared renderer-state parity as remaining promotion blockers.
+
 ## What Works
 
 - The Pixi scaffold loads and renders when `ENABLE_PIXI_TABLE` is temporarily set to `true`.
