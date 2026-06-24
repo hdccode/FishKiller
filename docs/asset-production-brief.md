@@ -1,17 +1,42 @@
 # Pixi Asset Production Brief
 
-Date: 2026-06-17
+Date: 2026-06-24
 
 Branch: `deploy-demo`
 
 ## Scope
 
-This brief defines the real art needed before Pixi can replace its polished placeholder primitives for avatars, cards, chips, and seat frames. It is an asset-production document only:
+This brief defines the real art needed now that the Pixi FK2 table is the default table renderer on `deploy-demo`.
+It is an asset-production document only:
 
 - Do not change gameplay.
-- Do not enable Pixi by default.
-- Keep `ENABLE_PIXI_TABLE = false` until a later implementation/QA pass.
+- Do not change app/runtime code during this production asset planning pass.
+- Keep `ENABLE_PIXI_TABLE = true`; the DOM table remains the reversible fallback path if a later rollback is needed.
 - Do not mix unrelated styles, legacy crops, or experimental extracted assets into the Pixi runtime set.
+
+## Pixi Default Review - 2026-06-24
+
+Verified checkout:
+
+- Remote: `https://github.com/hdccode/FishKiller.git`
+- Branch: `deploy-demo`
+- HEAD: `fcc0d60 fix: harden Pixi default trainer flow`
+- Runtime flag: `ENABLE_PIXI_TABLE = true`
+
+Viewport review:
+
+| Viewport | Result | Notes |
+| --- | --- | --- |
+| 1920 x 1080 | Pass for Pixi default review | One Pixi canvas mounted; FK2 scene, six seats, avatars, seat frames, primitive cards, primitive chips, empty board slots, dealer button, and DOM action/feedback controls were visible. |
+| 1440 x 900 | Pass for Pixi default review | One Pixi canvas mounted; table remains readable, with primitive chips/cards/slots clearly visible as the main production gap. |
+| 1366 x 768 | Pass with density caution | One Pixi canvas mounted; scene fits without scroll overflow, but final assets must preserve small-desktop readability. |
+
+Current renderer status:
+
+- FK2 background is texture-backed via `assets/FishKiller2.2.png`.
+- Seat avatar portraits are texture-backed via `assets/avatars/seat-*.png`.
+- Seat chrome is texture-backed via `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png`.
+- Cards, chips, board slots, dealer button, and visual state overlays remain renderer primitives and need final production assets or explicit final approval.
 
 ## Runtime Folder And Naming
 
@@ -36,16 +61,16 @@ Use lowercase, hyphenated filenames. Keep source files, generation references, a
 
 ## Priority Order
 
-1. Seat frame/chrome set
-   Create the minimum left/right shell assets Pixi needs to stop drawing generic medallions and plaques.
-2. Avatar portrait set
-   Produce or finalize six matched portraits in the same lighting/style, then wire them into the seat frames.
-3. Card deck slice
+1. Card deck slice
    Add the full face atlas, card back, and shadow so hero cards and future board cards can leave placeholder primitives.
-4. Chip and table prop set
+2. Chip and table prop set
    Add pot pile, chip stacks, dealer button, and shadows for pot display and future chip movement.
-5. State overlays
-   Add active/folded glow/shadow overlays only after the base frames and avatars are visually stable.
+3. Board slot and community-card treatment
+   Replace the current primitive empty slots with final board-slot art, then use the card atlas for flop/turn/river cards.
+4. State overlays
+   Add active, folded, recent-action, pot-pulse, card-pulse, and answer-feedback overlays only after base props are visually stable.
+5. Seat frame and avatar runtime finalization
+   Promote or replace the current prototype FKSeat frames and avatar PNGs with final runtime filenames after small-desktop approval.
 
 ## Required Seat Frame Assets
 
@@ -92,9 +117,25 @@ Avatar notes:
 
 Card notes:
 
+- This is the highest-priority asset slice after the 2026-06-24 Pixi default review.
 - Use high-contrast rank/suit corners and a restrained luxury deck treatment.
 - Red suits must be readable on the warm/dark FK2 scene.
 - Card faces should survive display around 50 x 70 px in the current Pixi scaffold and scale up cleanly later.
+- The same atlas must serve hero cards and community cards so board cards do not diverge from hole-card style.
+
+## Required Board Slot Assets
+
+| Filename | Target Dimensions | Format | Background | Requirement |
+| --- | ---: | --- | --- | --- |
+| `assets/runtime/fk2/board-slot-empty.png` | 96 x 132 | PNG/WebP with alpha | Transparent | Empty community-card slot frame for the five center-felt slots. Must be readable but quiet behind cards. |
+| `assets/runtime/fk2/board-slot-shadow.png` | 128 x 48 | PNG/WebP with alpha | Transparent | Soft board-slot contact shadow compatible with both empty slots and filled board cards. |
+| `assets/runtime/fk2/board-slot-highlight.png` | 112 x 148 | PNG/WebP with alpha | Transparent | Optional subtle highlight/pulse overlay for newly revealed flop/turn/river cards. |
+
+Board slot notes:
+
+- Current Pixi board slots are primitives, visible even in preflop scenes.
+- Final slot art must remain centered and legible at 1366 x 768 without stealing attention from hero cards.
+- Filled community cards should use `cards-atlas.webp`; do not create a separate board-only deck style.
 
 ## Required Chip And Prop Assets
 
@@ -109,23 +150,42 @@ Card notes:
 
 Chip notes:
 
+- This is the second-priority asset slice after cards. Current Pixi chips and dealer button are clearly renderer primitives.
 - Use the FK2 palette: teal/jade, brass/gold, muted red, dark blue/slate accent. Avoid bright primary casino chips.
 - Chips need readable silhouettes at small sizes; do not over-detail the edge marks.
 - Pot pile must leave room for renderer text and should not obscure table action labels.
+
+## Required State Overlay Assets
+
+| Filename | Target Dimensions | Format | Background | Requirement |
+| --- | ---: | --- | --- | --- |
+| `assets/runtime/fk2/overlay-seat-active.png` | 384 x 384 | PNG/WebP with alpha | Transparent | Warm active-seat ring/glow. Must sit behind or around seat frame without covering text. |
+| `assets/runtime/fk2/overlay-seat-folded.png` | 384 x 384 | PNG/WebP with alpha | Transparent | Low-contrast folded dimmer/shadow, preserving portrait readability. |
+| `assets/runtime/fk2/overlay-recent-action.png` | 256 x 64 | PNG/WebP with alpha | Transparent | Backing plate for recent action badges such as call, raise, 3-bet, squeeze, and jam. No baked text. |
+| `assets/runtime/fk2/overlay-feedback-correct.png` | 1600 x 900 | PNG/WebP with alpha | Transparent | Optional full-table correct-answer flash treatment. |
+| `assets/runtime/fk2/overlay-feedback-mixed.png` | 1600 x 900 | PNG/WebP with alpha | Transparent | Optional full-table mixed-answer flash treatment. |
+| `assets/runtime/fk2/overlay-feedback-wrong.png` | 1600 x 900 | PNG/WebP with alpha | Transparent | Optional full-table wrong-answer flash treatment. |
+
+Overlay notes:
+
+- Current Pixi active-seat, folded, recent-action, card-pulse, pot-pulse, and feedback effects are primitive shapes.
+- Prefer renderer primitives if they are approved visually; produce overlay textures only where art direction requires richer effects.
+- No overlay should bake labels, action text, pot values, seat names, or card ranks.
 
 ## Ready Versus Missing Summary
 
 Ready for an integration prototype:
 
 - `assets/FishKiller2.2.png` scene background.
-- Existing transparent avatar PNGs in `assets/avatars/`.
-- Existing transparent FKSeat frame references in `assets/FKSeat/`.
+- Existing transparent avatar PNGs in `assets/avatars/`, already loaded by Pixi.
+- Existing transparent FKSeat frame references in `assets/FKSeat/`, already loaded by Pixi.
 - Existing lightweight `fk2_*` medallion/plaque references.
 
 Missing for production Pixi runtime:
 
+- Full card atlas, atlas metadata, card back, and card shadow.
+- Board-slot empty frame, board-slot shadow, and optional board reveal highlight.
+- Chip stacks, pot pile, dealer button, and chip shadow.
+- Final active/folded/recent-action/feedback overlays, if renderer primitives are not approved.
 - Final `assets/runtime/fk2/` seat frame filenames.
 - Final matched avatar portrait set with runtime filenames.
-- Full card atlas, atlas metadata, card back, and card shadow.
-- Chip stacks, pot pile, dealer button, and chip shadow.
-- Final active/folded overlays, if renderer effects are not enough.

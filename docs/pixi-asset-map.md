@@ -1,16 +1,47 @@
 # Pixi Asset Map
 
-Date: 2026-06-17
+Date: 2026-06-24
 
 Branch: `deploy-demo`
 
 ## Current Direction
 
-Pixi is still disabled by default. When `ENABLE_PIXI_TABLE` is enabled locally, the renderer owns only the table scene while the DOM keeps the HUD, action buttons, feedback dock, and trainer controls.
+Pixi is the default table renderer on `deploy-demo` with `ENABLE_PIXI_TABLE = true`.
+The renderer owns the FK2 table scene while the DOM keeps the HUD, action buttons, feedback dock, range modal, and trainer controls.
+The DOM table remains the reversible fallback path if `ENABLE_PIXI_TABLE` is set to `false`.
 
 This map records which committed assets are suitable for the Pixi migration and which production assets are still missing.
 
 See `docs/asset-production-brief.md` for the production filenames, target dimensions, transparency requirements, and style rules for the final Pixi runtime asset set.
+
+## Pixi Default Verification - 2026-06-24
+
+Verified repo state:
+
+- Remote: `https://github.com/hdccode/FishKiller.git`
+- Branch: `deploy-demo`
+- HEAD: `fcc0d60 fix: harden Pixi default trainer flow`
+- Pixi runtime: `third_party/pixi/pixi.min.mjs`
+- Renderer files: `src/render/fk2-table-scene.js`, `src/render/fk2-table-state-adapter.js`, `src/render/fk2-scene-coordinates.js`
+
+Viewport review:
+
+| Viewport | Canvas | Status |
+| --- | ---: | --- |
+| 1920 x 1080 | 1 Pixi canvas | Pass. FK2 table fills the scene; primitive cards, chips, board slots, dealer button, and overlays remain visible. |
+| 1440 x 900 | 1 Pixi canvas | Pass. Scene remains readable; remaining primitive assets are clearly the production gap. |
+| 1366 x 768 | 1 Pixi canvas | Pass with density caution. Scene fits without scroll overflow; final assets must preserve small-desktop readability. |
+
+Remaining primitive visuals after this review:
+
+| Primitive Visual | Current Pixi Fallback | Final Asset Need |
+| --- | --- | --- |
+| Hero and future board cards | Renderer-drawn card rectangles, rank/suit text, pips, bevel, and primitive shadow | Full card face atlas, atlas JSON, card back, and reusable card shadow. |
+| Chip stacks and pot pile | Renderer-drawn chip circles/stacks around pot label | Small/medium/large chip stack textures, pot pile texture, and chip shadow. |
+| Dealer button | Renderer-drawn button circle with `D` text | `dealer-button.webp` with alpha, no baked seat label. |
+| Board slots | Renderer-drawn five empty card slots on center felt | Empty board-slot frame, slot shadow, optional reveal highlight; filled slots should use the card atlas. |
+| Active/folded/recent-action overlays | Renderer-drawn rings, dimming, and badge backing shapes | Optional overlay textures if primitives are not visually approved. |
+| Pot/card/feedback pulses | Renderer-drawn transient outline/flash shapes | Optional richer pulse overlays if primitives are not visually approved. |
 
 ## Usable Scene Assets
 
@@ -55,21 +86,40 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 
 | Asset | Dimensions | Status | Notes |
 | --- | ---: | --- | --- |
-| `assets/runtime/fk2/cards-atlas.webp` | 3120 x 1344 target | Missing | No real card face atlas is committed yet. Pixi uses improved renderer-drawn card primitives for hero cards. |
+| `assets/runtime/fk2/cards-atlas.webp` | 3120 x 1344 target | Missing; highest priority | No real card face atlas is committed yet. Pixi uses improved renderer-drawn card primitives for hero cards and would use the same primitive renderer for board cards. |
 | `assets/runtime/fk2/cards-atlas.json` | N/A | Missing | No atlas metadata is committed yet. |
 | `assets/runtime/fk2/card-back-fk2.webp` | 240 x 336 target | Missing | No card back is committed yet. Not needed for current hero-card display. |
 | `assets/runtime/fk2/card-shadow.png` | 256 x 96 target | Missing | No reusable card shadow asset is committed yet. Pixi draws primitive shadows. |
+
+## Board Slot Assets
+
+| Asset | Dimensions | Status | Notes |
+| --- | ---: | --- | --- |
+| `assets/runtime/fk2/board-slot-empty.png` | 96 x 132 target | Missing; primitive fallback implemented | Pixi currently renders five primitive empty board slots in the center felt. |
+| `assets/runtime/fk2/board-slot-shadow.png` | 128 x 48 target | Missing | Pixi currently draws primitive slot/card shadows. |
+| `assets/runtime/fk2/board-slot-highlight.png` | 112 x 148 target | Optional/missing | Use only if final reveal/pulse art should exceed renderer primitives. |
 
 ## Chip And Table Prop Assets
 
 | Asset | Dimensions | Status | Notes |
 | --- | ---: | --- | --- |
-| `assets/runtime/fk2/chip-stack-small.webp` | 256 x 256 target | Missing | No real chip stack asset is committed yet. Pixi uses improved renderer-drawn chip stacks around the pot. |
+| `assets/runtime/fk2/chip-stack-small.webp` | 256 x 256 target | Missing; second priority | No real chip stack asset is committed yet. Pixi uses improved renderer-drawn chip stacks around the pot. |
 | `assets/runtime/fk2/chip-stack-medium.webp` | 384 x 384 target | Missing | No real medium chip stack asset is committed yet. |
 | `assets/runtime/fk2/chip-stack-large.webp` | 512 x 512 target | Missing | No real large chip stack asset is committed yet. |
 | `assets/runtime/fk2/chip-pile-pot.webp` | 512 x 256 target | Missing | No real pot pile asset is committed yet. Pixi uses primitive chip clusters flanking the pot label. |
 | `assets/runtime/fk2/dealer-button.webp` | 128 x 128 target | Missing | No dealer-button asset is committed yet. Pixi uses a subtle primitive dealer button near the BTN seat. |
 | `assets/runtime/fk2/chip-shadow.png` | 256 x 96 target | Missing | No reusable chip shadow asset is committed yet. Pixi draws primitive chip shadows. |
+
+## Overlay Assets
+
+| Asset | Dimensions | Status | Notes |
+| --- | ---: | --- | --- |
+| `assets/runtime/fk2/overlay-seat-active.png` | 384 x 384 target | Optional/missing | Pixi currently draws active-seat pulse rings. Produce only if final art direction needs textured glow. |
+| `assets/runtime/fk2/overlay-seat-folded.png` | 384 x 384 target | Optional/missing | Pixi currently dims folded seats with primitive alpha/shape treatment. |
+| `assets/runtime/fk2/overlay-recent-action.png` | 256 x 64 target | Optional/missing | Pixi currently draws recent-action badge backing shapes and renderer text. |
+| `assets/runtime/fk2/overlay-feedback-correct.png` | 1600 x 900 target | Optional/missing | Pixi currently draws full-table correct flash primitives. |
+| `assets/runtime/fk2/overlay-feedback-mixed.png` | 1600 x 900 target | Optional/missing | Pixi currently draws full-table mixed flash primitives. |
+| `assets/runtime/fk2/overlay-feedback-wrong.png` | 1600 x 900 target | Optional/missing | Pixi currently draws full-table wrong flash primitives. |
 
 ## Missing Production Assets
 
@@ -86,8 +136,8 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 | Chip contact shadow | `chip-shadow.png` | Missing; primitive fallback improved | Pixi uses primitive chip shadow shapes. |
 | Action icons for Fold / Call / Raise / 3-bet / 4-bet / Jam / Squeeze | Future DOM/Pixi icon set | Missing | DOM action buttons still own action controls. |
 | HUD icons/textures | Future DOM/Pixi icon set | Missing | DOM HUD still owns session stats. |
-| Board/community-card texture slots | Uses `cards-atlas.webp` plus board slot coordinates | Missing | Not modeled in Pixi yet. |
-| Correct/incorrect feedback effects | Future feedback effect set | Missing | DOM feedback dock still owns answer feedback. |
+| Board/community-card texture slots | Uses `cards-atlas.webp` plus board slot coordinates | Primitive slots implemented; production assets missing | Pixi renders five primitive empty slots; filled board cards should use the card atlas when postflop state is QA-ready. |
+| Correct/mixed/incorrect feedback effects | Future feedback effect set | Primitive fallback implemented | DOM feedback dock owns feedback text; Pixi supports primitive table flash overlays. |
 
 ## Ready For Prototype Integration
 
@@ -105,13 +155,14 @@ These prototype assets should not be renamed into final runtime paths until they
 - Use `assets/FishKiller2.2.png` as the FK2 scene plate.
 - Load the existing DOM avatar PNGs into Pixi seat medallions, with primitive fill fallback if texture loading fails.
 - Use FKSeat frame textures for Pixi seat chrome, with primitive fallback if texture loading fails.
-- Use improved Pixi primitives for hero cards, chip stacks, dealer button, avatar fills, and state trims in the interim.
+- Use improved Pixi primitives for hero cards, board slots, chip stacks, dealer button, avatar fills, action badges, feedback flashes, and state trims in the interim.
 - Avoid loading unsuitable non-alpha screenshot crops or top-level legacy FK assets into Pixi.
 - Keep all poker logic and action behavior outside Pixi.
 
 ## Recommended Next Asset Slice
 
-1. Promote or replace FKSeat frame textures and avatar portraits with final `assets/runtime/fk2/` production filenames.
-2. Add final active/folded overlays once the frame/avatar pairing is stable.
-3. Replace the primitive card renderer with a small generated card-face atlas.
-4. Add chip/dealer-button prop textures once the pot/seat/card positions are stable.
+1. Replace the primitive card renderer with a full card-face atlas, atlas metadata, card back, and card shadow.
+2. Add chip stack, pot pile, dealer button, and chip shadow textures.
+3. Replace primitive board slots and confirm filled board-card rendering uses the same card atlas.
+4. Add active/folded/recent-action/feedback overlay textures only if primitive effects are not approved.
+5. Promote or replace FKSeat frame textures and avatar portraits with final `assets/runtime/fk2/` production filenames after the high-visibility card/chip gaps are closed.
