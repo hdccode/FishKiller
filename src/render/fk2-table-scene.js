@@ -295,9 +295,9 @@
     const isEmptyBoard = !cards.some(Boolean);
 
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawRoundedRect(graphics, startX - 18, y - 18, totalWidth + 36, cardHeight + 36, 24, 0x000000, isEmptyBoard ? 0.07 : 0.16);
-      drawRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0x0b130e, isEmptyBoard ? 0.1 : 0.24);
-      strokeRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0xd69b42, isEmptyBoard ? 0.08 : 0.18, 1.5);
+      drawRoundedRect(graphics, startX - 18, y - 18, totalWidth + 36, cardHeight + 36, 24, 0x000000, isEmptyBoard ? 0.045 : 0.16);
+      drawRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0x0b130e, isEmptyBoard ? 0.07 : 0.24);
+      strokeRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0xd69b42, isEmptyBoard ? 0.045 : 0.18, 1.5);
     }));
 
     for (let index = 0; index < slotCount; index += 1) {
@@ -316,11 +316,11 @@
 
   function drawBoardSlot(Pixi, stage, x, y, width, height, isSubtle = false) {
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawEllipse(graphics, x + (width / 2) + 2, y + height + 6, width * 0.42, 7, 0x000000, isSubtle ? 0.08 : 0.18);
-      drawRoundedRect(graphics, x, y, width, height, 8, 0x07100c, isSubtle ? 0.18 : 0.42);
-      drawRoundedRect(graphics, x + 5, y + 6, width - 10, height - 12, 6, 0xf2d28a, isSubtle ? 0.018 : 0.035);
-      strokeRoundedRect(graphics, x, y, width, height, 8, 0xd69b42, isSubtle ? 0.13 : 0.28, 1.5);
-      strokeRoundedRect(graphics, x + 5, y + 5, width - 10, height - 10, 5, 0xffefb8, isSubtle ? 0.04 : 0.08, 1);
+      drawEllipse(graphics, x + (width / 2) + 2, y + height + 6, width * 0.42, 7, 0x000000, isSubtle ? 0.045 : 0.18);
+      drawRoundedRect(graphics, x, y, width, height, 8, 0x07100c, isSubtle ? 0.11 : 0.42);
+      drawRoundedRect(graphics, x + 5, y + 6, width - 10, height - 12, 6, 0xf2d28a, isSubtle ? 0.012 : 0.035);
+      strokeRoundedRect(graphics, x, y, width, height, 8, 0xd69b42, isSubtle ? 0.08 : 0.28, 1.5);
+      strokeRoundedRect(graphics, x + 5, y + 5, width - 10, height - 10, 5, 0xffefb8, isSubtle ? 0.025 : 0.08, 1);
     }));
   }
 
@@ -582,10 +582,11 @@
 
   function drawHeroCards(Pixi, scene, coordinates, tableState, animationFlags) {
     const stage = scene.world;
-    const heroPosition = coordinates.SEAT_POSITIONS[tableState.heroSeat] || { x: 800, y: 690, side: "right" };
-    const cardOffset = coordinates.HERO_CARD_OFFSETS[tableState.heroSeat]
-      || coordinates.HERO_CARD_OFFSETS[heroPosition.side]
-      || coordinates.HERO_CARD_OFFSETS.right;
+    const cardAnchor = coordinates.HERO_CARD_ANCHORS?.[tableState.heroSeat];
+    if (!cardAnchor) {
+      return;
+    }
+
     const style = coordinates.SEAT_STYLE || {};
     const cardWidth = style.cardWidth || 50;
     const cardHeight = style.cardHeight || 70;
@@ -593,8 +594,8 @@
     const cards = normalizeCards(tableState.heroCards);
 
     cards.slice(0, 2).forEach((card, index) => {
-      const x = heroPosition.x + cardOffset.x + (index * (cardWidth + cardGap));
-      const y = heroPosition.y + cardOffset.y;
+      const x = cardAnchor.x + (index * (cardWidth + cardGap));
+      const y = cardAnchor.y;
       drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight);
       if (animationFlags.cardsChanged) {
         drawCardPulse(Pixi, scene, x, y, cardWidth, cardHeight);

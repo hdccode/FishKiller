@@ -31,15 +31,13 @@
     feltRadiusY: 142,
   });
 
-  const HERO_CARD_OFFSETS = Object.freeze({
-    UTG: Object.freeze({ x: -166, y: -4 }),
-    HJ: Object.freeze({ x: 120, y: -4 }),
-    CO: Object.freeze({ x: -240, y: -122 }),
-    BTN: Object.freeze({ x: -230, y: -92 }),
-    SB: Object.freeze({ x: 96, y: -92 }),
-    BB: Object.freeze({ x: 188, y: -122 }),
-    left: Object.freeze({ x: -240, y: -122 }),
-    right: Object.freeze({ x: 188, y: -122 }),
+  const HERO_CARD_ANCHORS = Object.freeze({
+    UTG: Object.freeze({ x: 488, y: 286 }),
+    HJ: Object.freeze({ x: 1082, y: 286 }),
+    CO: Object.freeze({ x: 982, y: 374 }),
+    BTN: Object.freeze({ x: 746, y: 596 }),
+    SB: Object.freeze({ x: 762, y: 596 }),
+    BB: Object.freeze({ x: 488, y: 374 }),
   });
 
   const BOARD = Object.freeze({
@@ -58,9 +56,9 @@
     plaqueHeight: 40,
     statusWidth: 104,
     statusHeight: 26,
-    cardWidth: 46,
-    cardHeight: 64,
-    cardGap: 7,
+    cardWidth: 41,
+    cardHeight: 57,
+    cardGap: 5,
   });
 
   return Object.freeze({
@@ -68,7 +66,7 @@
     SCENE_FRAME,
     SEAT_POSITIONS,
     TABLE,
-    HERO_CARD_OFFSETS,
+    HERO_CARD_ANCHORS,
     BOARD,
     SEAT_STYLE,
   });
