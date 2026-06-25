@@ -9,6 +9,7 @@
   const FK2_SCENE_BACKGROUND_SRC = "assets/runtime/fk2/FKBack3.png";
   const SEAT_FRAME_RIGHT_SRC = "assets/FKSeat/FKFrame_transparent.png";
   const SEAT_FRAME_LEFT_SRC = "assets/FKSeat/FKFrameLeft_transparent.png";
+  const CARD_MANIFEST_URL = "assets/runtime/cards/card-manifest.json";
   const AVATAR_SRC_BY_SEAT = Object.freeze({
     UTG: "assets/avatars/seat-shark.png",
     HJ: "assets/avatars/seat-octopus.png",
@@ -38,6 +39,12 @@
     spade: "\u2660",
     spades: "\u2660",
     s: "\u2660",
+  });
+  const SUIT_CODE_BY_SYMBOL = Object.freeze({
+    "\u2665": "h",
+    "\u2666": "d",
+    "\u2663": "c",
+    "\u2660": "s",
   });
   let sceneAssetsPromise = null;
   const sceneByMount = new WeakMap();
@@ -78,12 +85,14 @@
         loadOptionalTexture(Pixi, SEAT_FRAME_RIGHT_SRC, "right seat frame"),
         loadOptionalTexture(Pixi, SEAT_FRAME_LEFT_SRC, "left seat frame"),
         loadAvatarTextures(Pixi),
-      ]).then(([backgroundTexture, seatFrameRightTexture, seatFrameLeftTexture, avatarTextures]) => (
+        loadCardAssets(Pixi),
+      ]).then(([backgroundTexture, seatFrameRightTexture, seatFrameLeftTexture, avatarTextures, cardAssets]) => (
         {
           backgroundTexture,
           seatFrameRightTexture,
           seatFrameLeftTexture,
           avatarTextures,
+          ...cardAssets,
         }
       ));
     }
@@ -96,6 +105,51 @@
     return Promise.all(avatarEntries.map(([seat, src]) => (
       loadOptionalTexture(Pixi, src, `${seat} avatar`).then((texture) => [seat, texture])
     ))).then((entries) => Object.fromEntries(entries.filter(([, texture]) => texture)));
+  }
+
+  function loadCardAssets(Pixi) {
+    return loadCardManifest()
+      .then((manifest) => {
+        const faceEntries = Object.entries(manifest.faces || {});
+        const faceTexturesPromise = Promise.all(faceEntries.map(([code, src]) => (
+          loadTexture(Pixi, src)
+            .then((texture) => [normalizeCardAssetCode(code), texture])
+            .catch((error) => {
+              console.warn(`Pixi card texture failed to load for ${code}; using primitive fallback.`, error);
+              return null;
+            })
+        )));
+        const backTexturePromise = manifest.backs?.default
+          ? loadOptionalTexture(Pixi, manifest.backs.default, "card back")
+          : Promise.resolve(null);
+
+        return Promise.all([faceTexturesPromise, backTexturePromise]).then(([faceTextures, cardBackTexture]) => ({
+          cardManifest: manifest,
+          cardTextures: Object.fromEntries(faceTextures.filter(Boolean)),
+          cardBackTexture,
+        }));
+      })
+      .catch((error) => {
+        console.warn("Pixi card manifest failed to load; using primitive card fallback.", error);
+        return {
+          cardManifest: null,
+          cardTextures: {},
+          cardBackTexture: null,
+        };
+      });
+  }
+
+  async function loadCardManifest() {
+    if (typeof fetch !== "function") {
+      throw new Error("Fetch API is unavailable for Pixi card manifest loading.");
+    }
+
+    const response = await fetch(CARD_MANIFEST_URL, { cache: "force-cache" });
+    if (!response.ok) {
+      throw new Error(`Card manifest request failed with HTTP ${response.status}.`);
+    }
+
+    return response.json();
   }
 
   function loadOptionalTexture(Pixi, src, label) {
@@ -221,11 +275,11 @@
     if (!hasSceneBackground) {
       drawTable(Pixi, stage, coordinates.TABLE);
     }
-    drawBoard(Pixi, scene, coordinates.BOARD, tableState, animationFlags);
+    drawBoard(Pixi, scene, coordinates.BOARD, tableState, animationFlags, sceneAssets);
     drawSeats(Pixi, scene, coordinates.SEAT_POSITIONS, tableState, sceneAssets);
     drawPot(Pixi, scene, coordinates.TABLE, tableState, animationFlags);
     drawDealerButton(Pixi, stage, coordinates.SEAT_POSITIONS);
-    drawHeroCards(Pixi, scene, coordinates, tableState, animationFlags);
+    drawHeroCards(Pixi, scene, coordinates, tableState, animationFlags, sceneAssets);
     drawFeedbackFlash(Pixi, scene, coordinates.STAGE_SIZE, tableState, animationFlags);
   }
 
@@ -278,7 +332,7 @@
     stage.addChild(tableLayer);
   }
 
-  function drawBoard(Pixi, scene, boardLayout, tableState, animationFlags) {
+  function drawBoard(Pixi, scene, boardLayout, tableState, animationFlags, sceneAssets) {
     if (!boardLayout) {
       return;
     }
@@ -304,7 +358,9 @@
       const x = startX + (index * (cardWidth + gap));
       const card = cards[index];
       if (card) {
-        drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight);
+        drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight, {
+          texture: getCardTexture(sceneAssets, card),
+        });
         if (animationFlags.cardsChanged) {
           drawCardPulse(Pixi, scene, x, y, cardWidth, cardHeight);
         }
@@ -580,7 +636,7 @@
     stage.addChild(dealerText);
   }
 
-  function drawHeroCards(Pixi, scene, coordinates, tableState, animationFlags) {
+  function drawHeroCards(Pixi, scene, coordinates, tableState, animationFlags, sceneAssets) {
     const stage = scene.world;
     const cardAnchor = coordinates.HERO_CARD_ANCHORS?.[tableState.heroSeat];
     if (!cardAnchor) {
@@ -596,7 +652,10 @@
     cards.slice(0, 2).forEach((card, index) => {
       const x = cardAnchor.x + (index * (cardWidth + cardGap));
       const y = cardAnchor.y;
-      drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight, { emphasis: "hero" });
+      drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight, {
+        emphasis: "hero",
+        texture: getCardTexture(sceneAssets, card),
+      });
       if (animationFlags.cardsChanged) {
         drawCardPulse(Pixi, scene, x, y, cardWidth, cardHeight);
       }
@@ -684,7 +743,44 @@
     }));
   }
 
+  function getCardTexture(sceneAssets, card) {
+    const cardCode = formatCardAssetCode(card);
+    return cardCode ? sceneAssets?.cardTextures?.[cardCode] || null : null;
+  }
+
+  function formatCardAssetCode(card) {
+    const normalizedCard = normalizeCard(card);
+    const rankCode = normalizeCardRankCode(normalizedCard.rank);
+    const suitCode = SUIT_CODE_BY_SYMBOL[normalizedCard.suitSymbol] || "";
+    return rankCode && suitCode ? `${rankCode}${suitCode}` : "";
+  }
+
+  function normalizeCardAssetCode(code) {
+    const rawCode = String(code || "").trim();
+    if (!rawCode) {
+      return "";
+    }
+
+    const suitCode = rawCode.slice(-1).toLowerCase();
+    const rankCode = normalizeCardRankCode(rawCode.slice(0, -1));
+    return rankCode && suitCode ? `${rankCode}${suitCode}` : "";
+  }
+
+  function normalizeCardRankCode(rank) {
+    const normalizedRank = String(rank || "").trim().toUpperCase();
+    if (normalizedRank === "10") {
+      return "T";
+    }
+
+    return normalizedRank[0] || "";
+  }
+
   function drawPlayingCard(Pixi, stage, card, x, y, width, height, options = {}) {
+    if (options.texture) {
+      drawPlayingCardImage(Pixi, stage, options.texture, x, y, width, height, options);
+      return;
+    }
+
     const suitColor = card.isRed ? 0xae1f27 : 0x17201d;
     const cardLayer = new Pixi.Container();
     cardLayer.x = x;
@@ -713,6 +809,29 @@
     drawCardCorner(Pixi, cardLayer, card, Math.max(7, width * 0.16), Math.max(5, height * 0.08), suitColor, false, width, height);
     drawCardCorner(Pixi, cardLayer, card, width - Math.max(7, width * 0.16), height - Math.max(6, height * 0.08), suitColor, true, width, height);
     drawCardPips(Pixi, cardLayer, card, width, height, suitColor, options);
+  }
+
+  function drawPlayingCardImage(Pixi, stage, texture, x, y, width, height, options = {}) {
+    const cardLayer = new Pixi.Container();
+    cardLayer.x = x;
+    cardLayer.y = y;
+    stage.addChild(cardLayer);
+
+    const shadowAlpha = options.emphasis === "hero" ? 0.38 : 0.32;
+    cardLayer.addChild(createShape(Pixi, (graphics) => {
+      drawEllipse(graphics, (width / 2) + 3, height + 7, width * 0.5, Math.max(7, height * 0.12), 0x000000, shadowAlpha);
+      drawRoundedRect(graphics, 5, 8, width, height, Math.max(8, width * 0.16), 0x000000, 0.22);
+    }));
+
+    const cardSprite = new Pixi.Sprite(texture);
+    cardSprite.width = width;
+    cardSprite.height = height;
+    cardLayer.addChild(cardSprite);
+
+    cardLayer.addChild(createShape(Pixi, (graphics) => {
+      strokeRoundedRect(graphics, 0, 0, width, height, Math.max(7, width * 0.16), 0x2f1c10, 0.34, 1.4);
+      strokeRoundedRect(graphics, 3, 3, width - 6, height - 6, Math.max(5, width * 0.12), 0xffffff, 0.24, 1);
+    }));
   }
 
   function drawCardPulse(Pixi, scene, x, y, width, height) {

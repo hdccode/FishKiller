@@ -14,19 +14,23 @@ This map records which committed assets are suitable for the Pixi migration and 
 
 See `docs/asset-production-brief.md` for the production filenames, target dimensions, transparency requirements, and style rules for the final Pixi runtime asset set.
 
-## Pixi Card Visual Upgrade - 2026-06-25
+## Pixi Card Image Asset Import - 2026-06-25
 
 Card asset scan:
 
-- No committed card face atlas, card back, atlas JSON, or reusable card-shadow asset was found.
-- Pixi therefore continues to use renderer-drawn card primitives for both hero cards and board cards.
+- Imported 52 public-domain/WTFPL face-card SVGs from `notpeter/Vector-Playing-Cards` into `assets/runtime/cards/faces/`.
+- Added `assets/runtime/cards/card-manifest.json` with short-code mappings such as `Ah`, `Ks`, `Td`, and `7c`.
+- Added FishKiller-authored `assets/runtime/cards/back.svg`.
+- No card atlas or reusable card-shadow image is committed yet.
 
-Current primitive card renderer:
+Current card renderer:
 
+- Pixi loads `assets/runtime/cards/card-manifest.json` with the scene assets and resolves card textures by short code.
+- Hero cards and board cards use imported SVG image textures when available.
+- Primitive card rendering remains as fallback if the manifest or a specific face texture fails to load.
 - Hero cards render from the per-seat anchors in `src/render/fk2-scene-coordinates.js`; the current table and seat layout is unchanged.
 - Hero cards are drawn slightly larger in `src/render/fk2-table-scene.js` (`41 x 57` base style rendered at about `45 x 63`) with a wider `9px` gap.
-- Board cards use the same upgraded `drawPlayingCard` primitive at the board-slot size.
-- The primitive face now uses stronger contact shadows, a darker outer keyline, layered cream face, inner bevel, proportional rank/suit corners, suit-colored pips, and a subtle center rank/suit mark.
+- The renderer keeps primitive contact shadows and bevel overlays around the imported SVG face textures.
 
 Viewport and state QA:
 
@@ -64,7 +68,7 @@ Remaining primitive visuals after this pass:
 
 | Primitive Visual | Current Pixi Fallback | Final Asset Need |
 | --- | --- | --- |
-| Hero and board cards | Upgraded renderer-drawn card primitives with proportional rank/suit corners, pips, bevel, center marks, and primitive shadow | Full card face atlas, atlas JSON, card back, and reusable card shadow. |
+| Hero and board cards | Imported SVG face textures via manifest, with upgraded primitive fallback and primitive shadow/bevel overlay | Optional card face atlas/atlas JSON for batching, plus reusable card shadow if primitive shadows are not approved. |
 | Chip stacks and pot pile | Renderer-drawn chip circles/stacks around pot label | Small/medium/large chip stack textures, pot pile texture, and chip shadow. |
 | Board slots | Renderer-drawn five empty card slots on center felt | Empty board-slot frame, slot shadow, optional reveal highlight; filled slots should use the card atlas. |
 | Dealer button | Renderer-drawn button circle with `D` text | `dealer-button.webp` with alpha, no baked seat label. |
@@ -144,9 +148,12 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 
 | Asset | Dimensions | Status | Notes |
 | --- | ---: | --- | --- |
-| `assets/runtime/fk2/cards-atlas.webp` | 3120 x 1344 target | Missing; highest priority | No real card face atlas is committed yet. Pixi uses upgraded renderer-drawn card primitives for hero cards and board cards. |
-| `assets/runtime/fk2/cards-atlas.json` | N/A | Missing | No atlas metadata is committed yet. |
-| `assets/runtime/fk2/card-back-fk2.webp` | 240 x 336 target | Missing | No card back is committed yet. Not needed for current hero-card display. |
+| `assets/runtime/cards/faces/*.svg` | 52 SVG faces | Implemented | Imported from `notpeter/Vector-Playing-Cards` and renamed to FishKiller short card codes. |
+| `assets/runtime/cards/card-manifest.json` | N/A | Implemented | Maps short card codes such as `Ah`, `Ks`, `Td`, and `7c` to face SVG files. |
+| `assets/runtime/cards/back.svg` | 240 x 336 SVG | Implemented | FishKiller-authored card back for future facedown-card states. |
+| `assets/runtime/fk2/cards-atlas.webp` | 3120 x 1344 target | Optional/missing | No packed atlas is committed yet. Pixi currently uses individual SVG textures. |
+| `assets/runtime/fk2/cards-atlas.json` | N/A | Optional/missing | No atlas metadata is committed yet. |
+| `assets/runtime/fk2/card-back-fk2.webp` | 240 x 336 target | Superseded for now | `assets/runtime/cards/back.svg` is the current runtime back. |
 | `assets/runtime/fk2/card-shadow.png` | 256 x 96 target | Missing | No reusable card shadow asset is committed yet. Pixi draws stronger primitive contact shadows. |
 
 ## Board Slot Assets
@@ -186,8 +193,8 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 | Production seat frames | `seat-frame-right.png`, `seat-frame-left.png`, optional hero variants | Prototype implemented; final runtime files missing | Pixi loads `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png`, with primitive fallback if texture loading fails. |
 | Active/folded seat overlays | `seat-glow-active.png`, `seat-glow-folded.png` | Missing | Pixi uses primitive glow/dimming. |
 | Matched avatar runtime set | `avatar-utg-shark.webp`, `avatar-hj-octopus.webp`, `avatar-co-turtle.webp`, `avatar-btn-blue-shark.webp`, `avatar-sb-dolphin.webp`, `avatar-bb-angler.webp` | Prototype implemented; final runtime files missing | Pixi loads the existing `assets/avatars/seat-*.png` portraits into circular masks, with primitive fill fallback if texture loading fails. |
-| Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Missing; primitive fallback upgraded | Pixi renders deck-like primitives with proportional rank/suit corners, pips, bevels, center marks, and shadows. |
-| Card back texture | `card-back-fk2.webp` | Missing | Not needed yet for hero-card display. |
+| Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Optional/missing | Pixi now uses 52 imported individual SVG face textures; atlas remains a future batching/production packaging option. |
+| Card back texture | `card-back-fk2.webp` | Runtime SVG implemented | `assets/runtime/cards/back.svg` is available for future facedown states. |
 | Card contact shadow | `card-shadow.png` | Missing; primitive fallback upgraded | Pixi uses stronger primitive contact shadow shapes. |
 | Chip stack / pot pile props | `chip-stack-small.webp`, `chip-stack-medium.webp`, `chip-stack-large.webp`, `chip-pile-pot.webp` | Missing; primitive fallback improved | Pixi renders layered chip-stack primitives around the pot label. |
 | Dealer button prop | `dealer-button.webp` | Missing; primitive fallback implemented | Pixi renders a subtle primitive dealer button near the BTN seat. |
