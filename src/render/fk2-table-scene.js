@@ -65,7 +65,7 @@
     const renderState = normalizeTableState(tableState);
     const scene = await getOrCreateScene(Pixi, mount, coordinates.STAGE_SIZE);
     const sceneAssets = await loadSceneAssets(Pixi);
-    updateSceneTransform(scene, mount, coordinates.STAGE_SIZE);
+    updateSceneTransform(scene, mount, coordinates.STAGE_SIZE, coordinates.SCENE_FRAME);
     drawScene(Pixi, scene, coordinates, renderState, sceneAssets);
     scene.previousRenderSignals = getRenderSignals(renderState);
     return scene;
@@ -147,7 +147,7 @@
     return scene;
   }
 
-  function updateSceneTransform(scene, mount, stageSize) {
+  function updateSceneTransform(scene, mount, stageSize, sceneFrame = {}) {
     const bounds = mount.getBoundingClientRect();
     const width = Math.max(1, Math.round(bounds.width));
     const height = Math.max(1, Math.round(bounds.height));
@@ -163,13 +163,17 @@
     }
 
     const scale = Math.min(width / stageSize.width, height / stageSize.height);
-    const scaledWidth = stageSize.width * scale;
-    const scaledHeight = stageSize.height * scale;
+    const zoom = Math.max(0.01, Number(sceneFrame.zoom) || 1);
+    const frameOffsetX = Number(sceneFrame.offsetX) || 0;
+    const frameOffsetY = Number(sceneFrame.offsetY) || 0;
+    const worldScale = scale * zoom;
+    const scaledWidth = stageSize.width * worldScale;
+    const scaledHeight = stageSize.height * worldScale;
     const offsetX = (width - scaledWidth) / 2;
     const offsetY = (height - scaledHeight) / 2;
 
-    scene.world.scale.set(scale);
-    scene.world.position.set(offsetX, offsetY);
+    scene.world.scale.set(worldScale);
+    scene.world.position.set(offsetX + (frameOffsetX * worldScale), offsetY + (frameOffsetY * worldScale));
   }
 
   async function createPixiApplication(Pixi, stageSize) {

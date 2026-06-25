@@ -7,6 +7,12 @@
 })(typeof globalThis !== "undefined" ? globalThis : window, function buildFk2SceneCoordinatesApi() {
   const STAGE_SIZE = Object.freeze({ width: 1600, height: 900 });
 
+  const SCENE_FRAME = Object.freeze({
+    zoom: 1.18,
+    offsetX: 0,
+    offsetY: 34,
+  });
+
   const SEAT_POSITIONS = Object.freeze({
     UTG: Object.freeze({ x: 608, y: 304, side: "right" }),
     HJ: Object.freeze({ x: 992, y: 304, side: "left" }),
@@ -59,6 +65,7 @@
 
   return Object.freeze({
     STAGE_SIZE,
+    SCENE_FRAME,
     SEAT_POSITIONS,
     TABLE,
     HERO_CARD_OFFSETS,

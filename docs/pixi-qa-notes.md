@@ -14,6 +14,27 @@ Checked desktop viewports:
 - 1440 x 900
 - 1366 x 768
 
+## FKBack3 Pixi Framing QA - 2026-06-25
+
+Decision: pass. Keep Pixi as the default with `ENABLE_PIXI_TABLE = true`.
+
+Implementation:
+
+- Kept the committed `assets/runtime/fk2/FKBack3.png` background.
+- Added a Pixi scene frame/camera setting in `src/render/fk2-scene-coordinates.js`: `zoom: 1.18`, `offsetX: 0`, `offsetY: 34`.
+- Updated `src/render/fk2-table-scene.js` so the Pixi world applies the scene-frame zoom and offset after responsive stage fitting.
+- Retained the FKBack3 seat, board, pot, and per-seat hero-card coordinate set; the zoomed frame now brings the lower seats closer to the action row without changing the DOM button layout.
+
+Viewport QA:
+
+- 1920 x 1080: pass. One Pixi canvas mounted; table remains centered; FKBack3 fills more of the stage; lower seats are closer to the action row; board/pot stay centered on felt; hero cards do not cover labels.
+- 1440 x 900: pass. One Pixi canvas mounted; zoomed crop stays balanced; lower seat chrome is anchored to the chair backs; board slots and pot/chips remain readable.
+- 1366 x 768: pass with density caution. One Pixi canvas mounted; table scene is tighter vertically, answer controls stay below the stage, and hero cards remain clear of seat labels.
+
+QA artifacts:
+
+- Final screenshots were captured under `.tmp/fkback3-frame-qa/`.
+
 ## FKBack3 Pixi Background QA - 2026-06-25
 
 Decision: pass. Keep Pixi as the default with `ENABLE_PIXI_TABLE = true`.
