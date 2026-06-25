@@ -1,6 +1,6 @@
 # Pixi Asset Map
 
-Date: 2026-06-24
+Date: 2026-06-25
 
 Branch: `deploy-demo`
 
@@ -13,6 +13,41 @@ The DOM table remains the reversible fallback path if `ENABLE_PIXI_TABLE` is set
 This map records which committed assets are suitable for the Pixi migration and which production assets are still missing.
 
 See `docs/asset-production-brief.md` for the production filenames, target dimensions, transparency requirements, and style rules for the final Pixi runtime asset set.
+
+## FKBack3 Background Integration - 2026-06-25
+
+Active Pixi scene background:
+
+- Runtime path: `assets/runtime/fk2/FKBack3.png`
+- Source dimensions: 1672 x 941
+- Renderer path: `src/render/fk2-table-scene.js`
+- Pixi default: `ENABLE_PIXI_TABLE = true`
+
+Coordinate pass:
+
+- Six seats were retuned in `src/render/fk2-scene-coordinates.js` to sit on the visible chair/table-edge positions in `FKBack3.png`.
+- Hero-card placement now supports per-seat offsets, so top, side, and bottom hero cards can stay near the hero seat without covering neighboring seat chrome.
+- Board slots are centered on the felt at `x: 631`, `y: 358` in the 1600 x 900 Pixi stage.
+- Pot/chip primitives use the retuned table center at `x: 800`, `y: 506`, placing the pot below the board on the lower felt.
+
+Viewport QA:
+
+| Viewport | Canvas | Status |
+| --- | ---: | --- |
+| 1920 x 1080 | 1 Pixi canvas | Pass. Seats align with the FKBack3 chairs/table edge; board and pot are centered; side hero cards clear seat labels. |
+| 1440 x 900 | 1 Pixi canvas | Pass. FKBack3 framing, seat chrome, board slots, hero cards, and pot/chips remain readable. |
+| 1366 x 768 | 1 Pixi canvas | Pass with density caution. Scene remains usable and aligned; surrounding trainer controls are tight but not overlapping the Pixi stage. |
+
+Remaining primitive visuals after this pass:
+
+| Primitive Visual | Current Pixi Fallback | Final Asset Need |
+| --- | --- | --- |
+| Hero and future board cards | Renderer-drawn card rectangles, rank/suit text, pips, bevel, and primitive shadow | Full card face atlas, atlas JSON, card back, and reusable card shadow. |
+| Chip stacks and pot pile | Renderer-drawn chip circles/stacks around pot label | Small/medium/large chip stack textures, pot pile texture, and chip shadow. |
+| Board slots | Renderer-drawn five empty card slots on center felt | Empty board-slot frame, slot shadow, optional reveal highlight; filled slots should use the card atlas. |
+| Dealer button | Renderer-drawn button circle with `D` text | `dealer-button.webp` with alpha, no baked seat label. |
+| Active/folded/recent-action overlays | Renderer-drawn rings, dimming, and badge backing shapes | Optional overlay textures if primitives are not visually approved. |
+| Pot/card/feedback pulses | Renderer-drawn transient outline/flash shapes | Optional richer pulse overlays if primitives are not visually approved. |
 
 ## Pixi Default Verification - 2026-06-24
 
@@ -47,10 +82,11 @@ Remaining primitive visuals after this review:
 
 | Asset | Dimensions | Status | Notes |
 | --- | ---: | --- | --- |
-| `assets/FishKiller2.2.png` | 1586 x 992 | Ready for prototype | Current FK2 scene plate. Clean room/table/rug image with no baked cards, seats, labels, HUD, or buttons. Used by Pixi as the background. |
+| `assets/runtime/fk2/FKBack3.png` | 1672 x 941 | Implemented as active Pixi background | Current FK2 scene plate. Six-chair room/table image with no baked cards, live seat labels, HUD, action buttons, or pot. Used by Pixi as the background. |
+| `assets/FishKiller2.2.png` | 1586 x 992 | Superseded prototype background | Previous FK2 scene plate. Kept as reference now that Pixi uses `FKBack3.png`. |
 | `assets/FishKiller2.png` | 1672 x 941 | Reference only | Target image with baked UI. Do not use as a live gameplay stage. |
 | `assets/FishKiller2.1.png` | 1672 x 941 | Reference only | Previous FK2 stage direction. Kept as reference, not active. |
-| `assets/fishkiller2-stage-bg.png` | 1672 x 562 | Superseded | Cropped/partial stage background with alpha. Superseded by `FishKiller2.2.png` for Pixi. |
+| `assets/fishkiller2-stage-bg.png` | 1672 x 562 | Superseded | Cropped/partial stage background with alpha. Not used by the active FKBack3 Pixi runtime. |
 | `assets/FishKiller1.png` | 1672 x 941 | Out of scope | Alternate skin reference/background. Not part of the Pixi FK2 migration. |
 
 ## Usable Avatar Assets
@@ -143,7 +179,7 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 
 These assets can be used to prove Pixi texture loading and placement before final art production:
 
-1. `assets/FishKiller2.2.png` as the FK2 scene plate.
+1. `assets/runtime/fk2/FKBack3.png` as the active FK2 scene plate.
 2. `assets/avatars/seat-*.png` for live avatar texture loading. These are now wired into the Pixi prototype.
 3. `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png` for combined seat shell testing. These are now wired into the Pixi prototype.
 4. `assets/fk2_medallion_ring_normal.png`, `assets/fk2_position_plaque_blank*.png`, and `assets/fk2_status_plaque_blank.png` for lightweight plaque/ring testing.
@@ -152,7 +188,7 @@ These prototype assets should not be renamed into final runtime paths until they
 
 ## Current Pixi Visual Strategy
 
-- Use `assets/FishKiller2.2.png` as the FK2 scene plate.
+- Use `assets/runtime/fk2/FKBack3.png` as the FK2 scene plate.
 - Load the existing DOM avatar PNGs into Pixi seat medallions, with primitive fill fallback if texture loading fails.
 - Use FKSeat frame textures for Pixi seat chrome, with primitive fallback if texture loading fails.
 - Use improved Pixi primitives for hero cards, board slots, chip stacks, dealer button, avatar fills, action badges, feedback flashes, and state trims in the interim.

@@ -6,7 +6,7 @@
   root.FishKillerFk2TableScene = api;
 })(typeof globalThis !== "undefined" ? globalThis : window, function buildFk2TableSceneApi(root) {
   const PIXI_MODULE_URL = "/third_party/pixi/pixi.min.mjs";
-  const FK2_SCENE_BACKGROUND_SRC = "assets/FishKiller2.2.png";
+  const FK2_SCENE_BACKGROUND_SRC = "assets/runtime/fk2/FKBack3.png";
   const SEAT_FRAME_RIGHT_SRC = "assets/FKSeat/FKFrame_transparent.png";
   const SEAT_FRAME_LEFT_SRC = "assets/FKSeat/FKFrameLeft_transparent.png";
   const AVATAR_SRC_BY_SEAT = Object.freeze({
@@ -578,7 +578,9 @@
   function drawHeroCards(Pixi, scene, coordinates, tableState, animationFlags) {
     const stage = scene.world;
     const heroPosition = coordinates.SEAT_POSITIONS[tableState.heroSeat] || { x: 800, y: 690, side: "right" };
-    const cardOffset = coordinates.HERO_CARD_OFFSETS[heroPosition.side] || coordinates.HERO_CARD_OFFSETS.right;
+    const cardOffset = coordinates.HERO_CARD_OFFSETS[tableState.heroSeat]
+      || coordinates.HERO_CARD_OFFSETS[heroPosition.side]
+      || coordinates.HERO_CARD_OFFSETS.right;
     const style = coordinates.SEAT_STYLE || {};
     const cardWidth = style.cardWidth || 50;
     const cardHeight = style.cardHeight || 70;

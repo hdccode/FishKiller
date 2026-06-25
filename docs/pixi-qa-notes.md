@@ -14,6 +14,35 @@ Checked desktop viewports:
 - 1440 x 900
 - 1366 x 768
 
+## FKBack3 Pixi Background QA - 2026-06-25
+
+Decision: pass. Keep Pixi as the default with `ENABLE_PIXI_TABLE = true`.
+
+Implementation:
+
+- Added `assets/runtime/fk2/FKBack3.png` as the active Pixi background.
+- Updated `src/render/fk2-table-scene.js` to load `assets/runtime/fk2/FKBack3.png`.
+- Retuned `src/render/fk2-scene-coordinates.js` for the FKBack3 table: six seats align with the chairs/table edge, board slots sit centered on the felt, pot/chip primitives sit below the board, and hero-card offsets are now per-seat.
+
+Viewport QA:
+
+- 1920 x 1080: pass. One Pixi canvas mounted; FKBack3 rendered; seats align with the visible chairs/table edge; board slots and pot/chips sit on the felt; side hero cards clear the seat plaques.
+- 1440 x 900: pass. One Pixi canvas mounted; FKBack3 framing remains stable; board/pot/card placement is readable; answer controls stay below the stage.
+- 1366 x 768: pass with density caution. One Pixi canvas mounted; scene remains aligned without incoherent overlap; trainer controls are tight but usable below the stage.
+
+Remaining primitive visuals:
+
+1. Card faces, card backs, and card shadows still use renderer primitives.
+2. Chip stacks, pot pile, and chip shadows still use renderer primitives.
+3. Board slot frames and slot shadows still use renderer primitives.
+4. Dealer button still uses a renderer primitive.
+5. Active/folded/recent-action/feedback overlays still use renderer primitives.
+
+QA artifacts:
+
+- Final screenshots were captured under `.tmp/fkback3-qa/`.
+- Server returned HTTP 200 for `/` and `assets/runtime/fk2/FKBack3.png`.
+
 ## Pixi Local Default Trial - 2026-06-18
 
 Decision: pass. Pixi can be committed as the local default with `ENABLE_PIXI_TABLE = true`.
