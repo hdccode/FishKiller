@@ -52,9 +52,9 @@ Active Pixi scene background:
 Coordinate pass:
 
 - Six seats were retuned in `src/render/fk2-scene-coordinates.js` to sit on the visible chair/table-edge positions in `FKBack3.png`.
-- Hero-card placement now supports per-seat offsets, so top, side, and bottom hero cards can stay near the hero seat without covering neighboring seat chrome.
-- Board slots are centered on the felt at `x: 631`, `y: 382` in the 1600 x 900 Pixi stage.
-- Pot/chip primitives use the retuned table center at `x: 800`, `y: 538`, placing the pot below the board on the lower felt.
+- Hero-card placement uses per-seat anchors centered directly above each avatar, so every hand reads as attached to its seat.
+- Board slots are centered on the felt at `x: 650`, `y: 382` in the 1600 x 900 Pixi stage.
+- Pot/chip primitives use the retuned table center at `x: 800`, `y: 538`, placing a compact layered chip pile below the board and behind the centered pot label.
 
 Viewport QA:
 
@@ -69,7 +69,7 @@ Remaining primitive visuals after this pass:
 | Primitive Visual | Current Pixi Fallback | Final Asset Need |
 | --- | --- | --- |
 | Hero and board cards | Imported SVG face textures via manifest, with upgraded primitive fallback and primitive shadow/bevel overlay | Optional card face atlas/atlas JSON for batching, plus reusable card shadow if primitive shadows are not approved. |
-| Chip stacks and pot pile | Renderer-drawn chip circles/stacks around pot label | Small/medium/large chip stack textures, pot pile texture, and chip shadow. |
+| Chip stacks and pot pile | Renderer-drawn compact layered chip pile with primitive shadows/highlights behind the pot label | Small/medium/large chip stack textures, pot pile texture, and chip shadow if primitive fallback is not approved. |
 | Board slots | Renderer-drawn five empty card slots on center felt | Empty board-slot frame, slot shadow, optional reveal highlight; filled slots should use the card atlas. |
 | Dealer button | Renderer-drawn button circle with `D` text | `dealer-button.webp` with alpha, no baked seat label. |
 | Active/folded/recent-action overlays | Renderer-drawn rings, dimming, and badge backing shapes | Optional overlay textures if primitives are not visually approved. |
@@ -168,12 +168,12 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 
 | Asset | Dimensions | Status | Notes |
 | --- | ---: | --- | --- |
-| `assets/runtime/fk2/chip-stack-small.webp` | 256 x 256 target | Missing; second priority | No real chip stack asset is committed yet. Pixi uses improved renderer-drawn chip stacks around the pot. |
-| `assets/runtime/fk2/chip-stack-medium.webp` | 384 x 384 target | Missing | No real medium chip stack asset is committed yet. |
-| `assets/runtime/fk2/chip-stack-large.webp` | 512 x 512 target | Missing | No real large chip stack asset is committed yet. |
-| `assets/runtime/fk2/chip-pile-pot.webp` | 512 x 256 target | Missing | No real pot pile asset is committed yet. Pixi uses primitive chip clusters flanking the pot label. |
+| `assets/runtime/fk2/chip-stack-small.webp` | 256 x 256 target | Missing; second priority | No real chip stack asset is committed yet. Pixi uses a compact layered primitive chip pile behind the pot label. |
+| `assets/runtime/fk2/chip-stack-medium.webp` | 384 x 384 target | Missing | No real medium chip stack asset is committed yet. Current fallback scales primitive chip layers instead. |
+| `assets/runtime/fk2/chip-stack-large.webp` | 512 x 512 target | Missing | No real large chip stack asset is committed yet. Current fallback keeps the pot pile compact to avoid clutter. |
+| `assets/runtime/fk2/chip-pile-pot.webp` | 512 x 256 target | Missing | No real pot pile asset is committed yet. Pixi uses primitive layered stacks grouped behind the centered pot label. |
 | `assets/runtime/fk2/dealer-button.webp` | 128 x 128 target | Missing | No dealer-button asset is committed yet. Pixi uses a subtle primitive dealer button near the BTN seat. |
-| `assets/runtime/fk2/chip-shadow.png` | 256 x 96 target | Missing | No reusable chip shadow asset is committed yet. Pixi draws primitive chip shadows. |
+| `assets/runtime/fk2/chip-shadow.png` | 256 x 96 target | Missing | No reusable chip shadow asset is committed yet. Pixi draws primitive pile and chip contact shadows. |
 
 ## Overlay Assets
 
@@ -196,9 +196,9 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 | Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Optional/missing | Pixi now uses 52 imported individual SVG face textures; atlas remains a future batching/production packaging option. |
 | Card back texture | `card-back-fk2.webp` | Runtime SVG implemented | `assets/runtime/cards/back.svg` is available for future facedown states. |
 | Card contact shadow | `card-shadow.png` | Missing; primitive fallback upgraded | Pixi uses stronger primitive contact shadow shapes. |
-| Chip stack / pot pile props | `chip-stack-small.webp`, `chip-stack-medium.webp`, `chip-stack-large.webp`, `chip-pile-pot.webp` | Missing; primitive fallback improved | Pixi renders layered chip-stack primitives around the pot label. |
+| Chip stack / pot pile props | `chip-stack-small.webp`, `chip-stack-medium.webp`, `chip-stack-large.webp`, `chip-pile-pot.webp` | Missing; primitive fallback improved | Pixi renders a compact layered primitive chip pile behind the pot label. |
 | Dealer button prop | `dealer-button.webp` | Missing; primitive fallback implemented | Pixi renders a subtle primitive dealer button near the BTN seat. |
-| Chip contact shadow | `chip-shadow.png` | Missing; primitive fallback improved | Pixi uses primitive chip shadow shapes. |
+| Chip contact shadow | `chip-shadow.png` | Missing; primitive fallback improved | Pixi uses primitive pile and chip contact shadow shapes. |
 | Action icons for Fold / Call / Raise / 3-bet / 4-bet / Jam / Squeeze | Future DOM/Pixi icon set | Missing | DOM action buttons still own action controls. |
 | HUD icons/textures | Future DOM/Pixi icon set | Missing | DOM HUD still owns session stats. |
 | Board/community-card texture slots | Uses `cards-atlas.webp` plus board slot coordinates | Primitive slots implemented; production assets missing | Pixi renders five primitive empty slots; filled board cards should use the card atlas when postflop state is QA-ready. |

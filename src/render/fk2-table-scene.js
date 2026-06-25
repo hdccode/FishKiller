@@ -578,17 +578,14 @@
     const stage = scene.world;
     const label = tableState.potLabel ? `Pot ${tableState.potLabel}` : `Pot ${Number(tableState.potBb || 0).toFixed(1)}bb`;
     const potColors = getPotChipColors(tableState);
-    drawChipStack(Pixi, stage, table.centerX - 108, table.centerY - 18, potColors.primary, 0.74);
-    drawChipStack(Pixi, stage, table.centerX - 76, table.centerY - 16, potColors.secondary, 0.62);
-    drawChipStack(Pixi, stage, table.centerX + 76, table.centerY - 16, 0x2f4050, 0.62);
-    drawChipStack(Pixi, stage, table.centerX + 108, table.centerY - 18, 0x365f85, 0.7);
+    drawPotChipPile(Pixi, stage, table.centerX, table.centerY - 14, potColors);
 
     const potBadge = createShape(Pixi, (graphics) => {
-      drawRoundedRect(graphics, table.centerX - 78, table.centerY - 39, 156, 40, 16, 0x000000, 0.16);
-      drawRoundedRect(graphics, table.centerX - 68, table.centerY - 39, 136, 34, 15, 0x090604, 0.68);
-      drawRoundedRect(graphics, table.centerX - 58, table.centerY - 34, 116, 7, 7, 0xffd27a, 0.045);
-      strokeRoundedRect(graphics, table.centerX - 68, table.centerY - 39, 136, 34, 15, 0xd69b42, 0.38, 1.4);
-      strokeRoundedRect(graphics, table.centerX - 62, table.centerY - 33, 124, 23, 12, 0xffefb8, 0.06, 1);
+      drawRoundedRect(graphics, table.centerX - 80, table.centerY - 40, 160, 42, 16, 0x000000, 0.2);
+      drawRoundedRect(graphics, table.centerX - 68, table.centerY - 39, 136, 34, 15, 0x090604, 0.76);
+      drawRoundedRect(graphics, table.centerX - 58, table.centerY - 34, 116, 7, 7, 0xffd27a, 0.055);
+      strokeRoundedRect(graphics, table.centerX - 68, table.centerY - 39, 136, 34, 15, 0xd69b42, 0.42, 1.4);
+      strokeRoundedRect(graphics, table.centerX - 62, table.centerY - 33, 124, 23, 12, 0xffefb8, 0.08, 1);
     });
     stage.addChild(potBadge);
 
@@ -652,10 +649,9 @@
 
     cards.slice(0, 2).forEach((card, index) => {
       const x = cardAnchor.x + (index * (cardWidth + cardGap));
-      const y = cardAnchor.y + (index === 0 ? 2 : 0);
+      const y = cardAnchor.y;
       drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight, {
         emphasis: "hero",
-        rotation: index === 0 ? -0.032 : 0.032,
         texture: getCardTexture(sceneAssets, card),
       });
       if (animationFlags.cardsChanged) {
@@ -785,7 +781,7 @@
 
     const suitColor = card.isRed ? 0xae1f27 : 0x17201d;
     const cardLayer = new Pixi.Container();
-    positionCardLayer(cardLayer, x, y, width, height, options.rotation);
+    positionCardLayer(cardLayer, x, y);
     stage.addChild(cardLayer);
 
     const radius = Math.max(7, Math.round(width * 0.16));
@@ -815,36 +811,35 @@
 
   function drawPlayingCardImage(Pixi, stage, texture, x, y, width, height, options = {}) {
     const cardLayer = new Pixi.Container();
-    positionCardLayer(cardLayer, x, y, width, height, options.rotation);
+    positionCardLayer(cardLayer, x, y);
     stage.addChild(cardLayer);
 
     const shadowAlpha = options.emphasis === "hero" ? 0.38 : 0.32;
+    const cornerRadius = Math.max(7, width * 0.16);
     cardLayer.addChild(createShape(Pixi, (graphics) => {
       drawEllipse(graphics, (width / 2) + 4, height + 8, width * 0.56, Math.max(8, height * 0.13), 0x000000, shadowAlpha);
       drawEllipse(graphics, (width / 2) + 1, height + 4, width * 0.42, Math.max(5, height * 0.08), 0x000000, 0.16);
-      drawRoundedRect(graphics, 5, 8, width, height, Math.max(8, width * 0.16), 0x000000, 0.26);
+      drawRoundedRect(graphics, 5, 8, width, height, Math.max(8, cornerRadius), 0x000000, 0.26);
     }));
 
     const cardSprite = new Pixi.Sprite(texture);
     cardSprite.width = width;
     cardSprite.height = height;
+    const cardMask = createShape(Pixi, (graphics) => {
+      drawRoundedRect(graphics, 0, 0, width, height, cornerRadius, 0xffffff, 1);
+    });
+    cardSprite.mask = cardMask;
+    cardLayer.addChild(cardMask);
     cardLayer.addChild(cardSprite);
 
     cardLayer.addChild(createShape(Pixi, (graphics) => {
-      strokeRoundedRect(graphics, 0, 0, width, height, Math.max(7, width * 0.16), 0x2f1c10, 0.5, 1.6);
+      strokeRoundedRect(graphics, 0, 0, width, height, cornerRadius, 0x2f1c10, 0.5, 1.6);
       strokeRoundedRect(graphics, 2, 2, width - 4, height - 4, Math.max(5, width * 0.12), 0xffffff, 0.3, 1);
       strokeRoundedRect(graphics, 4, 4, width - 8, height - 8, Math.max(4, width * 0.1), 0x0b0805, 0.12, 1);
     }));
   }
 
-  function positionCardLayer(cardLayer, x, y, width, height, rotation = 0) {
-    if (rotation) {
-      cardLayer.pivot.set(width / 2, height / 2);
-      cardLayer.position.set(x + (width / 2), y + (height / 2));
-      cardLayer.rotation = rotation;
-      return;
-    }
-
+  function positionCardLayer(cardLayer, x, y) {
     cardLayer.position.set(x, y);
   }
 
@@ -1086,33 +1081,45 @@
     return pipLayouts[rankValue] || pipLayouts[2];
   }
 
-  function drawChipStack(Pixi, stage, x, y, color, scale = 1) {
-    const shadowWidth = 23 * scale;
+  function drawPotChipPile(Pixi, stage, centerX, centerY, colors) {
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawEllipse(graphics, x + (10 * scale), y + (18 * scale), shadowWidth, 8 * scale, 0x000000, 0.25);
+      drawEllipse(graphics, centerX, centerY + 28, 86, 17, 0x000000, 0.2);
+      drawEllipse(graphics, centerX - 4, centerY + 17, 60, 10, 0xffdf95, 0.035);
     }));
 
-    drawChip(Pixi, stage, x, y + (14 * scale), color, 0.84, scale);
-    drawChip(Pixi, stage, x + (7 * scale), y + (7 * scale), color, 0.92, scale);
-    drawChip(Pixi, stage, x + (15 * scale), y, color, 0.98, scale);
+    drawChipStack(Pixi, stage, centerX - 42, centerY + 7, colors.secondary, 0.5, 2);
+    drawChipStack(Pixi, stage, centerX - 22, centerY - 1, colors.primary, 0.58, 3);
+    drawChipStack(Pixi, stage, centerX + 2, centerY + 8, 0x2f4050, 0.48, 2);
+    drawChipStack(Pixi, stage, centerX + 25, centerY - 2, colors.primary, 0.56, 3);
+    drawChipStack(Pixi, stage, centerX + 45, centerY + 7, 0x365f85, 0.5, 2);
+  }
+
+  function drawChipStack(Pixi, stage, x, y, color, scale = 1, layers = 3) {
+    const layerGap = 4.2 * scale;
+    for (let index = layers - 1; index >= 0; index -= 1) {
+      drawChip(Pixi, stage, x, y + (index * layerGap), color, 0.74 + ((layers - index) * 0.06), scale);
+    }
   }
 
   function drawChip(Pixi, stage, x, y, color, alpha, scale = 1) {
-    const radiusX = 15 * scale;
-    const radiusY = 9 * scale;
-    const stripeLength = 7 * scale;
-    const stripeWidth = 3 * scale;
+    const radiusX = 17 * scale;
+    const radiusY = 10 * scale;
+    const sideHeight = 5 * scale;
+    const stripeLength = 7.2 * scale;
+    const stripeWidth = 3.2 * scale;
 
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawEllipse(graphics, x + (1.5 * scale), y + (5 * scale), radiusX, radiusY, 0x000000, 0.22);
-      drawEllipse(graphics, x, y, radiusX, radiusX, color, alpha);
-      drawEllipse(graphics, x - (2 * scale), y - (4 * scale), radiusX * 0.5, radiusY * 0.36, 0xffffff, 0.14);
-      strokeEllipse(graphics, x, y, radiusX + scale, radiusX + scale, 0xffd27a, 0.64, 2 * scale);
-      strokeEllipse(graphics, x, y, radiusX * 0.58, radiusX * 0.58, 0xffffff, 0.22, 1.4 * scale);
-      drawRoundedRect(graphics, x - (stripeWidth / 2), y - (radiusX + 1), stripeWidth, stripeLength, 2 * scale, 0xf7e3b0, 0.5);
-      drawRoundedRect(graphics, x - (stripeWidth / 2), y + radiusX - stripeLength + 1, stripeWidth, stripeLength, 2 * scale, 0xf7e3b0, 0.44);
-      drawRoundedRect(graphics, x - radiusX + 1, y - (stripeWidth / 2), stripeLength, stripeWidth, 2 * scale, 0xf7e3b0, 0.44);
-      drawRoundedRect(graphics, x + radiusX - stripeLength - 1, y - (stripeWidth / 2), stripeLength, stripeWidth, 2 * scale, 0xf7e3b0, 0.44);
+      drawEllipse(graphics, x + (1.5 * scale), y + (sideHeight + (5 * scale)), radiusX * 0.9, radiusY * 0.74, 0x000000, 0.16);
+      drawRoundedRect(graphics, x - radiusX, y, radiusX * 2, sideHeight, radiusY * 0.5, 0x120b07, 0.58);
+      drawEllipse(graphics, x, y + sideHeight, radiusX, radiusY, 0x140c08, 0.5);
+      drawEllipse(graphics, x, y, radiusX, radiusY, color, alpha);
+      drawEllipse(graphics, x - (3 * scale), y - (3 * scale), radiusX * 0.48, radiusY * 0.34, 0xffffff, 0.14);
+      strokeEllipse(graphics, x, y, radiusX + (0.5 * scale), radiusY + (0.5 * scale), 0xffd27a, 0.54, 1.4 * scale);
+      strokeEllipse(graphics, x, y, radiusX * 0.56, radiusY * 0.56, 0xffffff, 0.22, 1.1 * scale);
+      drawRoundedRect(graphics, x - (stripeWidth / 2), y - radiusY, stripeWidth, stripeLength, 2 * scale, 0xf7e3b0, 0.52);
+      drawRoundedRect(graphics, x - (stripeWidth / 2), y + radiusY - stripeLength, stripeWidth, stripeLength, 2 * scale, 0xf7e3b0, 0.42);
+      drawRoundedRect(graphics, x - radiusX + 1, y - (stripeWidth / 2), stripeLength, stripeWidth, 2 * scale, 0xf7e3b0, 0.42);
+      drawRoundedRect(graphics, x + radiusX - stripeLength - 1, y - (stripeWidth / 2), stripeLength, stripeWidth, 2 * scale, 0xf7e3b0, 0.42);
     }));
   }
 

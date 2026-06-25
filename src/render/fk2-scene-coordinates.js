@@ -45,12 +45,12 @@
   });
 
   const HERO_CARD_ANCHORS = Object.freeze({
-    UTG: Object.freeze({ x: 400, y: 286 }),
-    HJ: Object.freeze({ x: 1078, y: 286 }),
-    CO: Object.freeze({ x: 1002, y: 374 }),
-    BTN: Object.freeze({ x: 804, y: 596 }),
-    SB: Object.freeze({ x: 674, y: 596 }),
-    BB: Object.freeze({ x: 476, y: 374 }),
+    UTG: Object.freeze({ x: 470, y: 135 }),
+    HJ: Object.freeze({ x: 1008, y: 135 }),
+    CO: Object.freeze({ x: 1267, y: 281 }),
+    BTN: Object.freeze({ x: 1069, y: 517 }),
+    SB: Object.freeze({ x: 409, y: 517 }),
+    BB: Object.freeze({ x: 211, y: 281 }),
   });
 
   const BOARD = Object.freeze({

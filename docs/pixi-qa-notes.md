@@ -14,6 +14,34 @@ Checked desktop viewports:
 - 1440 x 900
 - 1366 x 768
 
+## Pixi Chip/Pot Primitive Polish QA - 2026-06-25
+
+Decision: pass for compact primitive chip/pot fallback, pending manual visual screenshot review on the live localhost build.
+
+Implementation:
+
+- No committed real chip stack, pot pile, or chip-shadow image assets were found in the runtime asset tree.
+- Replaced the four separated pot chip stacks with one compact layered primitive chip pile drawn behind the centered pot badge.
+- Upgraded chip primitives with smaller stacked oval chips, subtle side depth, stripe marks, chip highlights, and contact shadows.
+- Slightly strengthened the pot badge backing so the centered pot label remains the visual priority over the chip pile.
+- Preserved the current FKBack3 table, avatar, board, and hero-card layout.
+
+QA method:
+
+- Automated screenshot capture was not used for this pass because the current working flow is to leave localhost running for manual screenshots and feedback.
+- Code/server checks and coordinate-projection QA were run against preflop plus 3-, 4-, and 5-card board states at 1920 x 1080, 1440 x 900, and 1366 x 768.
+
+Viewport/state QA:
+
+- 1920 x 1080: pass. Compact chip pile sits below the board and behind the pot badge; pot label remains centered/readable; preflop and 3/4/5-card board strips remain in-frame.
+- 1440 x 900: pass. Chip pile remains grouped rather than scattered; board cards and pot label keep clear hierarchy.
+- 1366 x 768: pass with density caution. Chip pile, pot badge, and board-card zones remain visible without colliding with HUD or action controls.
+
+Remaining risks:
+
+1. Chip visuals are still renderer primitives, not production chip image assets.
+2. Manual screenshot review should confirm that the compact pile reads well against `FKBack3.png` at small desktop size.
+
 ## Pixi Card Image Asset Import QA - 2026-06-25
 
 Decision: pass for imported card image assets with primitive fallback, pending manual visual screenshot review on the live localhost build.
