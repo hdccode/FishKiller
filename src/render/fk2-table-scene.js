@@ -292,11 +292,12 @@
     const totalWidth = (slotCount * cardWidth) + ((slotCount - 1) * gap);
     const startX = boardLayout.x || 800 - (totalWidth / 2);
     const y = boardLayout.y || 312;
+    const isEmptyBoard = !cards.some(Boolean);
 
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawRoundedRect(graphics, startX - 18, y - 18, totalWidth + 36, cardHeight + 36, 24, 0x000000, 0.16);
-      drawRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0x0b130e, 0.24);
-      strokeRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0xd69b42, 0.18, 1.5);
+      drawRoundedRect(graphics, startX - 18, y - 18, totalWidth + 36, cardHeight + 36, 24, 0x000000, isEmptyBoard ? 0.07 : 0.16);
+      drawRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0x0b130e, isEmptyBoard ? 0.1 : 0.24);
+      strokeRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0xd69b42, isEmptyBoard ? 0.08 : 0.18, 1.5);
     }));
 
     for (let index = 0; index < slotCount; index += 1) {
@@ -308,18 +309,18 @@
           drawCardPulse(Pixi, scene, x, y, cardWidth, cardHeight);
         }
       } else {
-        drawBoardSlot(Pixi, stage, x, y, cardWidth, cardHeight);
+        drawBoardSlot(Pixi, stage, x, y, cardWidth, cardHeight, isEmptyBoard);
       }
     }
   }
 
-  function drawBoardSlot(Pixi, stage, x, y, width, height) {
+  function drawBoardSlot(Pixi, stage, x, y, width, height, isSubtle = false) {
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawEllipse(graphics, x + (width / 2) + 2, y + height + 6, width * 0.42, 7, 0x000000, 0.18);
-      drawRoundedRect(graphics, x, y, width, height, 8, 0x07100c, 0.42);
-      drawRoundedRect(graphics, x + 5, y + 6, width - 10, height - 12, 6, 0xf2d28a, 0.035);
-      strokeRoundedRect(graphics, x, y, width, height, 8, 0xd69b42, 0.28, 1.5);
-      strokeRoundedRect(graphics, x + 5, y + 5, width - 10, height - 10, 5, 0xffefb8, 0.08, 1);
+      drawEllipse(graphics, x + (width / 2) + 2, y + height + 6, width * 0.42, 7, 0x000000, isSubtle ? 0.08 : 0.18);
+      drawRoundedRect(graphics, x, y, width, height, 8, 0x07100c, isSubtle ? 0.18 : 0.42);
+      drawRoundedRect(graphics, x + 5, y + 6, width - 10, height - 12, 6, 0xf2d28a, isSubtle ? 0.018 : 0.035);
+      strokeRoundedRect(graphics, x, y, width, height, 8, 0xd69b42, isSubtle ? 0.13 : 0.28, 1.5);
+      strokeRoundedRect(graphics, x + 5, y + 5, width - 10, height - 10, 5, 0xffefb8, isSubtle ? 0.04 : 0.08, 1);
     }));
   }
 
@@ -521,29 +522,29 @@
     const stage = scene.world;
     const label = tableState.potLabel ? `Pot ${tableState.potLabel}` : `Pot ${Number(tableState.potBb || 0).toFixed(1)}bb`;
     const potColors = getPotChipColors(tableState);
-    drawChipStack(Pixi, stage, table.centerX - 124, table.centerY - 24, potColors.primary, 1.02);
-    drawChipStack(Pixi, stage, table.centerX - 86, table.centerY - 20, potColors.secondary, 0.86);
-    drawChipStack(Pixi, stage, table.centerX + 86, table.centerY - 20, 0x2f4050, 0.86);
-    drawChipStack(Pixi, stage, table.centerX + 122, table.centerY - 24, 0x365f85, 0.96);
+    drawChipStack(Pixi, stage, table.centerX - 116, table.centerY - 21, potColors.primary, 0.84);
+    drawChipStack(Pixi, stage, table.centerX - 82, table.centerY - 18, potColors.secondary, 0.7);
+    drawChipStack(Pixi, stage, table.centerX + 82, table.centerY - 18, 0x2f4050, 0.7);
+    drawChipStack(Pixi, stage, table.centerX + 116, table.centerY - 21, 0x365f85, 0.8);
 
     const potBadge = createShape(Pixi, (graphics) => {
-      drawRoundedRect(graphics, table.centerX - 88, table.centerY - 42, 176, 46, 18, 0x000000, 0.26);
-      drawRoundedRect(graphics, table.centerX - 78, table.centerY - 43, 156, 40, 17, 0x090604, 0.88);
-      drawRoundedRect(graphics, table.centerX - 67, table.centerY - 37, 134, 10, 8, 0xffd27a, 0.1);
-      strokeRoundedRect(graphics, table.centerX - 78, table.centerY - 43, 156, 40, 17, 0xd69b42, 0.68, 2);
-      strokeRoundedRect(graphics, table.centerX - 72, table.centerY - 37, 144, 28, 14, 0xffefb8, 0.12, 1);
+      drawRoundedRect(graphics, table.centerX - 82, table.centerY - 40, 164, 42, 17, 0x000000, 0.2);
+      drawRoundedRect(graphics, table.centerX - 72, table.centerY - 40, 144, 36, 16, 0x090604, 0.78);
+      drawRoundedRect(graphics, table.centerX - 61, table.centerY - 35, 122, 8, 8, 0xffd27a, 0.07);
+      strokeRoundedRect(graphics, table.centerX - 72, table.centerY - 40, 144, 36, 16, 0xd69b42, 0.52, 1.6);
+      strokeRoundedRect(graphics, table.centerX - 66, table.centerY - 34, 132, 25, 13, 0xffefb8, 0.09, 1);
     });
     stage.addChild(potBadge);
 
     const potText = createText(Pixi, label, {
       fill: 0xffdf96,
       fontFamily: "Arial, sans-serif",
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: "700",
     });
     potText.anchor.set(0.5);
     potText.x = table.centerX;
-    potText.y = table.centerY - 23;
+    potText.y = table.centerY - 22;
     stage.addChild(potText);
     if (animationFlags.potChanged) {
       drawPotPulse(Pixi, scene, table);

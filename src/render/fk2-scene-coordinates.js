@@ -14,12 +14,12 @@
   });
 
   const SEAT_POSITIONS = Object.freeze({
-    UTG: Object.freeze({ x: 608, y: 298, side: "right" }),
-    HJ: Object.freeze({ x: 992, y: 298, side: "left" }),
-    CO: Object.freeze({ x: 1328, y: 444, side: "left" }),
-    BTN: Object.freeze({ x: 1036, y: 680, side: "left" }),
-    SB: Object.freeze({ x: 564, y: 680, side: "right" }),
-    BB: Object.freeze({ x: 272, y: 444, side: "right" }),
+    UTG: Object.freeze({ x: 608, y: 276, side: "right" }),
+    HJ: Object.freeze({ x: 992, y: 276, side: "left" }),
+    CO: Object.freeze({ x: 1328, y: 422, side: "left" }),
+    BTN: Object.freeze({ x: 1036, y: 658, side: "left" }),
+    SB: Object.freeze({ x: 564, y: 658, side: "right" }),
+    BB: Object.freeze({ x: 272, y: 422, side: "right" }),
   });
 
   const TABLE = Object.freeze({
@@ -32,14 +32,14 @@
   });
 
   const HERO_CARD_OFFSETS = Object.freeze({
-    UTG: Object.freeze({ x: -190, y: -8 }),
-    HJ: Object.freeze({ x: 122, y: -8 }),
-    CO: Object.freeze({ x: -318, y: -86 }),
-    BTN: Object.freeze({ x: -258, y: -102 }),
-    SB: Object.freeze({ x: 126, y: -102 }),
-    BB: Object.freeze({ x: 210, y: -86 }),
-    left: Object.freeze({ x: -318, y: -86 }),
-    right: Object.freeze({ x: 210, y: -86 }),
+    UTG: Object.freeze({ x: -166, y: -4 }),
+    HJ: Object.freeze({ x: 120, y: -4 }),
+    CO: Object.freeze({ x: -240, y: -122 }),
+    BTN: Object.freeze({ x: -230, y: -92 }),
+    SB: Object.freeze({ x: 96, y: -92 }),
+    BB: Object.freeze({ x: 188, y: -122 }),
+    left: Object.freeze({ x: -240, y: -122 }),
+    right: Object.freeze({ x: 188, y: -122 }),
   });
 
   const BOARD = Object.freeze({
@@ -58,9 +58,9 @@
     plaqueHeight: 40,
     statusWidth: 104,
     statusHeight: 26,
-    cardWidth: 50,
-    cardHeight: 70,
-    cardGap: 8,
+    cardWidth: 46,
+    cardHeight: 64,
+    cardGap: 7,
   });
 
   return Object.freeze({
