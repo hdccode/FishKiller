@@ -14,12 +14,12 @@
   });
 
   const SEAT_POSITIONS = Object.freeze({
-    UTG: Object.freeze({ x: 608, y: 320, side: "right" }),
-    HJ: Object.freeze({ x: 992, y: 320, side: "left" }),
-    CO: Object.freeze({ x: 1328, y: 466, side: "left" }),
-    BTN: Object.freeze({ x: 1036, y: 702, side: "left" }),
-    SB: Object.freeze({ x: 564, y: 702, side: "right" }),
-    BB: Object.freeze({ x: 272, y: 466, side: "right" }),
+    UTG: Object.freeze({ x: 608, y: 298, side: "right" }),
+    HJ: Object.freeze({ x: 992, y: 298, side: "left" }),
+    CO: Object.freeze({ x: 1328, y: 444, side: "left" }),
+    BTN: Object.freeze({ x: 1036, y: 680, side: "left" }),
+    SB: Object.freeze({ x: 564, y: 680, side: "right" }),
+    BB: Object.freeze({ x: 272, y: 444, side: "right" }),
   });
 
   const TABLE = Object.freeze({
