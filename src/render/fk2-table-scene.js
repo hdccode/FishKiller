@@ -644,9 +644,10 @@
     }
 
     const style = coordinates.SEAT_STYLE || {};
-    const cardWidth = Math.round((style.cardWidth || 50) * 1.1);
-    const cardHeight = Math.round((style.cardHeight || 70) * 1.1);
-    const cardGap = Math.round((style.cardGap || 8) + 4);
+    const cardSize = coordinates.CARD_SIZES?.hero || {};
+    const cardWidth = cardSize.width || style.cardWidth || 50;
+    const cardHeight = cardSize.height || style.cardHeight || 70;
+    const cardGap = cardSize.gap || style.cardGap || 8;
     const cards = normalizeCards(tableState.heroCards);
 
     cards.slice(0, 2).forEach((card, index) => {

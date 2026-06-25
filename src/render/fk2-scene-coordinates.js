@@ -31,21 +31,34 @@
     feltRadiusY: 142,
   });
 
+  const CARD_SIZES = Object.freeze({
+    hero: Object.freeze({
+      width: 56,
+      height: 81,
+      gap: 10,
+    }),
+    board: Object.freeze({
+      width: 52,
+      height: 75,
+      gap: 10,
+    }),
+  });
+
   const HERO_CARD_ANCHORS = Object.freeze({
-    UTG: Object.freeze({ x: 411, y: 286 }),
-    HJ: Object.freeze({ x: 1159, y: 286 }),
-    CO: Object.freeze({ x: 982, y: 374 }),
-    BTN: Object.freeze({ x: 840, y: 596 }),
-    SB: Object.freeze({ x: 668, y: 596 }),
-    BB: Object.freeze({ x: 488, y: 374 }),
+    UTG: Object.freeze({ x: 400, y: 286 }),
+    HJ: Object.freeze({ x: 1078, y: 286 }),
+    CO: Object.freeze({ x: 1002, y: 374 }),
+    BTN: Object.freeze({ x: 804, y: 596 }),
+    SB: Object.freeze({ x: 674, y: 596 }),
+    BB: Object.freeze({ x: 476, y: 374 }),
   });
 
   const BOARD = Object.freeze({
-    x: 631,
+    x: 650,
     y: 382,
-    cardWidth: 58,
-    cardHeight: 78,
-    gap: 12,
+    cardWidth: CARD_SIZES.board.width,
+    cardHeight: CARD_SIZES.board.height,
+    gap: CARD_SIZES.board.gap,
     slots: 5,
   });
 
@@ -66,6 +79,7 @@
     SCENE_FRAME,
     SEAT_POSITIONS,
     TABLE,
+    CARD_SIZES,
     HERO_CARD_ANCHORS,
     BOARD,
     SEAT_STYLE,
