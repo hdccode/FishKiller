@@ -8,23 +8,23 @@
   const STAGE_SIZE = Object.freeze({ width: 1600, height: 900 });
 
   const SCENE_FRAME = Object.freeze({
-    zoom: 1.18,
+    zoom: 1.2,
     offsetX: 0,
-    offsetY: 34,
+    offsetY: 68,
   });
 
   const SEAT_POSITIONS = Object.freeze({
-    UTG: Object.freeze({ x: 608, y: 304, side: "right" }),
-    HJ: Object.freeze({ x: 992, y: 304, side: "left" }),
-    CO: Object.freeze({ x: 1328, y: 452, side: "left" }),
-    BTN: Object.freeze({ x: 1036, y: 674, side: "left" }),
-    SB: Object.freeze({ x: 564, y: 674, side: "right" }),
-    BB: Object.freeze({ x: 272, y: 452, side: "right" }),
+    UTG: Object.freeze({ x: 608, y: 320, side: "right" }),
+    HJ: Object.freeze({ x: 992, y: 320, side: "left" }),
+    CO: Object.freeze({ x: 1328, y: 466, side: "left" }),
+    BTN: Object.freeze({ x: 1036, y: 702, side: "left" }),
+    SB: Object.freeze({ x: 564, y: 702, side: "right" }),
+    BB: Object.freeze({ x: 272, y: 466, side: "right" }),
   });
 
   const TABLE = Object.freeze({
     centerX: 800,
-    centerY: 506,
+    centerY: 538,
     radiusX: 520,
     radiusY: 228,
     feltRadiusX: 390,
@@ -32,19 +32,19 @@
   });
 
   const HERO_CARD_OFFSETS = Object.freeze({
-    UTG: Object.freeze({ x: 92, y: -34 }),
-    HJ: Object.freeze({ x: -200, y: -34 }),
-    CO: Object.freeze({ x: -318, y: -76 }),
-    BTN: Object.freeze({ x: -258, y: -110 }),
-    SB: Object.freeze({ x: 126, y: -110 }),
-    BB: Object.freeze({ x: 210, y: -76 }),
-    left: Object.freeze({ x: -318, y: -76 }),
-    right: Object.freeze({ x: 210, y: -76 }),
+    UTG: Object.freeze({ x: -190, y: -8 }),
+    HJ: Object.freeze({ x: 122, y: -8 }),
+    CO: Object.freeze({ x: -318, y: -86 }),
+    BTN: Object.freeze({ x: -258, y: -102 }),
+    SB: Object.freeze({ x: 126, y: -102 }),
+    BB: Object.freeze({ x: 210, y: -86 }),
+    left: Object.freeze({ x: -318, y: -86 }),
+    right: Object.freeze({ x: 210, y: -86 }),
   });
 
   const BOARD = Object.freeze({
     x: 631,
-    y: 358,
+    y: 382,
     cardWidth: 58,
     cardHeight: 78,
     gap: 12,
