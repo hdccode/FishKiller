@@ -652,9 +652,10 @@
 
     cards.slice(0, 2).forEach((card, index) => {
       const x = cardAnchor.x + (index * (cardWidth + cardGap));
-      const y = cardAnchor.y;
+      const y = cardAnchor.y + (index === 0 ? 2 : 0);
       drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight, {
         emphasis: "hero",
+        rotation: index === 0 ? -0.032 : 0.032,
         texture: getCardTexture(sceneAssets, card),
       });
       if (animationFlags.cardsChanged) {
@@ -784,8 +785,7 @@
 
     const suitColor = card.isRed ? 0xae1f27 : 0x17201d;
     const cardLayer = new Pixi.Container();
-    cardLayer.x = x;
-    cardLayer.y = y;
+    positionCardLayer(cardLayer, x, y, width, height, options.rotation);
     stage.addChild(cardLayer);
 
     const radius = Math.max(7, Math.round(width * 0.16));
@@ -793,8 +793,9 @@
     const bevelAlpha = options.emphasis === "hero" ? 0.54 : 0.46;
 
     cardLayer.addChild(createShape(Pixi, (graphics) => {
-      drawEllipse(graphics, (width / 2) + 3, height + 7, width * 0.5, Math.max(7, height * 0.12), 0x000000, shadowAlpha);
-      drawRoundedRect(graphics, 5, 8, width, height, radius + 1, 0x000000, 0.34);
+      drawEllipse(graphics, (width / 2) + 4, height + 8, width * 0.56, Math.max(8, height * 0.13), 0x000000, shadowAlpha);
+      drawEllipse(graphics, (width / 2) + 1, height + 4, width * 0.42, Math.max(5, height * 0.08), 0x000000, 0.18);
+      drawRoundedRect(graphics, 5, 8, width, height, radius + 1, 0x000000, 0.38);
       drawRoundedRect(graphics, 0, 0, width, height, radius, 0x2d1c11, 0.92);
       drawRoundedRect(graphics, 1.5, 1.5, width - 3, height - 3, Math.max(5, radius - 1), 0xf4e3c3, 1);
       drawRoundedRect(graphics, 3.5, 3.5, width - 7, height - 7, Math.max(4, radius - 2), 0xfffcf3, 0.98);
@@ -814,14 +815,14 @@
 
   function drawPlayingCardImage(Pixi, stage, texture, x, y, width, height, options = {}) {
     const cardLayer = new Pixi.Container();
-    cardLayer.x = x;
-    cardLayer.y = y;
+    positionCardLayer(cardLayer, x, y, width, height, options.rotation);
     stage.addChild(cardLayer);
 
     const shadowAlpha = options.emphasis === "hero" ? 0.38 : 0.32;
     cardLayer.addChild(createShape(Pixi, (graphics) => {
-      drawEllipse(graphics, (width / 2) + 3, height + 7, width * 0.5, Math.max(7, height * 0.12), 0x000000, shadowAlpha);
-      drawRoundedRect(graphics, 5, 8, width, height, Math.max(8, width * 0.16), 0x000000, 0.22);
+      drawEllipse(graphics, (width / 2) + 4, height + 8, width * 0.56, Math.max(8, height * 0.13), 0x000000, shadowAlpha);
+      drawEllipse(graphics, (width / 2) + 1, height + 4, width * 0.42, Math.max(5, height * 0.08), 0x000000, 0.16);
+      drawRoundedRect(graphics, 5, 8, width, height, Math.max(8, width * 0.16), 0x000000, 0.26);
     }));
 
     const cardSprite = new Pixi.Sprite(texture);
@@ -830,9 +831,21 @@
     cardLayer.addChild(cardSprite);
 
     cardLayer.addChild(createShape(Pixi, (graphics) => {
-      strokeRoundedRect(graphics, 0, 0, width, height, Math.max(7, width * 0.16), 0x2f1c10, 0.34, 1.4);
-      strokeRoundedRect(graphics, 3, 3, width - 6, height - 6, Math.max(5, width * 0.12), 0xffffff, 0.24, 1);
+      strokeRoundedRect(graphics, 0, 0, width, height, Math.max(7, width * 0.16), 0x2f1c10, 0.5, 1.6);
+      strokeRoundedRect(graphics, 2, 2, width - 4, height - 4, Math.max(5, width * 0.12), 0xffffff, 0.3, 1);
+      strokeRoundedRect(graphics, 4, 4, width - 8, height - 8, Math.max(4, width * 0.1), 0x0b0805, 0.12, 1);
     }));
+  }
+
+  function positionCardLayer(cardLayer, x, y, width, height, rotation = 0) {
+    if (rotation) {
+      cardLayer.pivot.set(width / 2, height / 2);
+      cardLayer.position.set(x + (width / 2), y + (height / 2));
+      cardLayer.rotation = rotation;
+      return;
+    }
+
+    cardLayer.position.set(x, y);
   }
 
   function drawCardPulse(Pixi, scene, x, y, width, height) {
