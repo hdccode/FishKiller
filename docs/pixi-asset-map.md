@@ -14,6 +14,28 @@ This map records which committed assets are suitable for the Pixi migration and 
 
 See `docs/asset-production-brief.md` for the production filenames, target dimensions, transparency requirements, and style rules for the final Pixi runtime asset set.
 
+## Pixi Card Visual Upgrade - 2026-06-25
+
+Card asset scan:
+
+- No committed card face atlas, card back, atlas JSON, or reusable card-shadow asset was found.
+- Pixi therefore continues to use renderer-drawn card primitives for both hero cards and board cards.
+
+Current primitive card renderer:
+
+- Hero cards render from the per-seat anchors in `src/render/fk2-scene-coordinates.js`; the current table and seat layout is unchanged.
+- Hero cards are drawn slightly larger in `src/render/fk2-table-scene.js` (`41 x 57` base style rendered at about `45 x 63`) with a wider `9px` gap.
+- Board cards use the same upgraded `drawPlayingCard` primitive at the board-slot size.
+- The primitive face now uses stronger contact shadows, a darker outer keyline, layered cream face, inner bevel, proportional rank/suit corners, suit-colored pips, and a subtle center rank/suit mark.
+
+Viewport and state QA:
+
+| Viewport | Hero Seats | Board States | Status |
+| --- | --- | --- | --- |
+| 1920 x 1080 | UTG, HJ, CO, BTN, SB, BB | Preflop, flop, turn, river | Pass by coordinate projection and server smoke check. Cards remain in-frame and clear of board/pot collision zones. |
+| 1440 x 900 | UTG, HJ, CO, BTN, SB, BB | Preflop, flop, turn, river | Pass by coordinate projection and server smoke check. Hero cards remain anchored to seats; board cards stay centered. |
+| 1366 x 768 | UTG, HJ, CO, BTN, SB, BB | Preflop, flop, turn, river | Pass with density caution by coordinate projection and server smoke check. Manual visual review on localhost is still recommended before final asset approval. |
+
 ## FKBack3 Background Integration - 2026-06-25
 
 Active Pixi scene background:
@@ -27,8 +49,8 @@ Coordinate pass:
 
 - Six seats were retuned in `src/render/fk2-scene-coordinates.js` to sit on the visible chair/table-edge positions in `FKBack3.png`.
 - Hero-card placement now supports per-seat offsets, so top, side, and bottom hero cards can stay near the hero seat without covering neighboring seat chrome.
-- Board slots are centered on the felt at `x: 631`, `y: 358` in the 1600 x 900 Pixi stage.
-- Pot/chip primitives use the retuned table center at `x: 800`, `y: 506`, placing the pot below the board on the lower felt.
+- Board slots are centered on the felt at `x: 631`, `y: 382` in the 1600 x 900 Pixi stage.
+- Pot/chip primitives use the retuned table center at `x: 800`, `y: 538`, placing the pot below the board on the lower felt.
 
 Viewport QA:
 
@@ -42,7 +64,7 @@ Remaining primitive visuals after this pass:
 
 | Primitive Visual | Current Pixi Fallback | Final Asset Need |
 | --- | --- | --- |
-| Hero and future board cards | Renderer-drawn card rectangles, rank/suit text, pips, bevel, and primitive shadow | Full card face atlas, atlas JSON, card back, and reusable card shadow. |
+| Hero and board cards | Upgraded renderer-drawn card primitives with proportional rank/suit corners, pips, bevel, center marks, and primitive shadow | Full card face atlas, atlas JSON, card back, and reusable card shadow. |
 | Chip stacks and pot pile | Renderer-drawn chip circles/stacks around pot label | Small/medium/large chip stack textures, pot pile texture, and chip shadow. |
 | Board slots | Renderer-drawn five empty card slots on center felt | Empty board-slot frame, slot shadow, optional reveal highlight; filled slots should use the card atlas. |
 | Dealer button | Renderer-drawn button circle with `D` text | `dealer-button.webp` with alpha, no baked seat label. |
@@ -122,10 +144,10 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 
 | Asset | Dimensions | Status | Notes |
 | --- | ---: | --- | --- |
-| `assets/runtime/fk2/cards-atlas.webp` | 3120 x 1344 target | Missing; highest priority | No real card face atlas is committed yet. Pixi uses improved renderer-drawn card primitives for hero cards and would use the same primitive renderer for board cards. |
+| `assets/runtime/fk2/cards-atlas.webp` | 3120 x 1344 target | Missing; highest priority | No real card face atlas is committed yet. Pixi uses upgraded renderer-drawn card primitives for hero cards and board cards. |
 | `assets/runtime/fk2/cards-atlas.json` | N/A | Missing | No atlas metadata is committed yet. |
 | `assets/runtime/fk2/card-back-fk2.webp` | 240 x 336 target | Missing | No card back is committed yet. Not needed for current hero-card display. |
-| `assets/runtime/fk2/card-shadow.png` | 256 x 96 target | Missing | No reusable card shadow asset is committed yet. Pixi draws primitive shadows. |
+| `assets/runtime/fk2/card-shadow.png` | 256 x 96 target | Missing | No reusable card shadow asset is committed yet. Pixi draws stronger primitive contact shadows. |
 
 ## Board Slot Assets
 
@@ -164,9 +186,9 @@ Older top-level `FKFrame.png`, `FKFrameLeft.png`, `FKHero.png`, `FKPos.png`, and
 | Production seat frames | `seat-frame-right.png`, `seat-frame-left.png`, optional hero variants | Prototype implemented; final runtime files missing | Pixi loads `assets/FKSeat/FKFrame_transparent.png` and `assets/FKSeat/FKFrameLeft_transparent.png`, with primitive fallback if texture loading fails. |
 | Active/folded seat overlays | `seat-glow-active.png`, `seat-glow-folded.png` | Missing | Pixi uses primitive glow/dimming. |
 | Matched avatar runtime set | `avatar-utg-shark.webp`, `avatar-hj-octopus.webp`, `avatar-co-turtle.webp`, `avatar-btn-blue-shark.webp`, `avatar-sb-dolphin.webp`, `avatar-bb-angler.webp` | Prototype implemented; final runtime files missing | Pixi loads the existing `assets/avatars/seat-*.png` portraits into circular masks, with primitive fill fallback if texture loading fails. |
-| Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Missing; primitive fallback improved | Pixi renders deck-like primitives with suit-colored corner labels, suit pips, bevels, and shadows. |
+| Card face atlas | `cards-atlas.webp`, `cards-atlas.json` | Missing; primitive fallback upgraded | Pixi renders deck-like primitives with proportional rank/suit corners, pips, bevels, center marks, and shadows. |
 | Card back texture | `card-back-fk2.webp` | Missing | Not needed yet for hero-card display. |
-| Card contact shadow | `card-shadow.png` | Missing; primitive fallback improved | Pixi uses primitive card shadow shapes. |
+| Card contact shadow | `card-shadow.png` | Missing; primitive fallback upgraded | Pixi uses stronger primitive contact shadow shapes. |
 | Chip stack / pot pile props | `chip-stack-small.webp`, `chip-stack-medium.webp`, `chip-stack-large.webp`, `chip-pile-pot.webp` | Missing; primitive fallback improved | Pixi renders layered chip-stack primitives around the pot label. |
 | Dealer button prop | `dealer-button.webp` | Missing; primitive fallback implemented | Pixi renders a subtle primitive dealer button near the BTN seat. |
 | Chip contact shadow | `chip-shadow.png` | Missing; primitive fallback improved | Pixi uses primitive chip shadow shapes. |

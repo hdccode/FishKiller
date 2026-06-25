@@ -588,15 +588,15 @@
     }
 
     const style = coordinates.SEAT_STYLE || {};
-    const cardWidth = style.cardWidth || 50;
-    const cardHeight = style.cardHeight || 70;
-    const cardGap = style.cardGap || 8;
+    const cardWidth = Math.round((style.cardWidth || 50) * 1.1);
+    const cardHeight = Math.round((style.cardHeight || 70) * 1.1);
+    const cardGap = Math.round((style.cardGap || 8) + 4);
     const cards = normalizeCards(tableState.heroCards);
 
     cards.slice(0, 2).forEach((card, index) => {
       const x = cardAnchor.x + (index * (cardWidth + cardGap));
       const y = cardAnchor.y;
-      drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight);
+      drawPlayingCard(Pixi, stage, card, x, y, cardWidth, cardHeight, { emphasis: "hero" });
       if (animationFlags.cardsChanged) {
         drawCardPulse(Pixi, scene, x, y, cardWidth, cardHeight);
       }
@@ -684,23 +684,35 @@
     }));
   }
 
-  function drawPlayingCard(Pixi, stage, card, x, y, width, height) {
-    const suitColor = card.isRed ? 0xb62224 : 0x151b19;
+  function drawPlayingCard(Pixi, stage, card, x, y, width, height, options = {}) {
+    const suitColor = card.isRed ? 0xae1f27 : 0x17201d;
+    const cardLayer = new Pixi.Container();
+    cardLayer.x = x;
+    cardLayer.y = y;
+    stage.addChild(cardLayer);
 
-    stage.addChild(createShape(Pixi, (graphics) => {
-      drawEllipse(graphics, x + (width / 2) + 3, y + height + 7, width * 0.44, 8, 0x000000, 0.28);
-      drawRoundedRect(graphics, x + 5, y + 8, width, height, 8, 0x000000, 0.32);
-      drawRoundedRect(graphics, x, y, width, height, 8, 0xf0e3c8, 1);
-      drawRoundedRect(graphics, x + 2, y + 2, width - 4, height - 4, 7, 0xfffbef, 0.96);
-      drawRoundedRect(graphics, x + 5, y + 6, width - 10, height - 12, 5, 0xf9f2df, 0.62);
-      drawRoundedRect(graphics, x + 6, y + height - 14, width - 12, 8, 5, 0xd4c4a6, 0.24);
-      strokeRoundedRect(graphics, x, y, width, height, 8, 0x3b2412, 0.58, 2);
-      strokeRoundedRect(graphics, x + 4, y + 4, width - 8, height - 8, 5, 0xffffff, 0.34, 1);
+    const radius = Math.max(7, Math.round(width * 0.16));
+    const shadowAlpha = options.emphasis === "hero" ? 0.38 : 0.32;
+    const bevelAlpha = options.emphasis === "hero" ? 0.54 : 0.46;
+
+    cardLayer.addChild(createShape(Pixi, (graphics) => {
+      drawEllipse(graphics, (width / 2) + 3, height + 7, width * 0.5, Math.max(7, height * 0.12), 0x000000, shadowAlpha);
+      drawRoundedRect(graphics, 5, 8, width, height, radius + 1, 0x000000, 0.34);
+      drawRoundedRect(graphics, 0, 0, width, height, radius, 0x2d1c11, 0.92);
+      drawRoundedRect(graphics, 1.5, 1.5, width - 3, height - 3, Math.max(5, radius - 1), 0xf4e3c3, 1);
+      drawRoundedRect(graphics, 3.5, 3.5, width - 7, height - 7, Math.max(4, radius - 2), 0xfffcf3, 0.98);
+      drawRoundedRect(graphics, 6, 6, width - 12, Math.max(10, height * 0.2), Math.max(4, radius - 3), 0xffffff, 0.34);
+      drawRoundedRect(graphics, 6, height - Math.max(15, height * 0.23), width - 12, Math.max(9, height * 0.13), Math.max(4, radius - 3), 0xd4c4a6, 0.18);
+      drawRoundedRect(graphics, 4, 4, 4, height - 8, 3, 0xffffff, 0.18);
+      drawRoundedRect(graphics, width - 8, 5, 4, height - 10, 3, 0x9c7c55, 0.12);
+      strokeRoundedRect(graphics, 0, 0, width, height, radius, 0x2f1c10, 0.72, 2);
+      strokeRoundedRect(graphics, 3, 3, width - 6, height - 6, Math.max(5, radius - 2), 0xffffff, bevelAlpha, 1);
+      strokeRoundedRect(graphics, 5, 5, width - 10, height - 10, Math.max(4, radius - 3), suitColor, 0.08, 1);
     }));
 
-    drawCardCorner(Pixi, stage, card, x + 7, y + 5, suitColor, false);
-    drawCardCorner(Pixi, stage, card, x + width - 7, y + height - 5, suitColor, true);
-    drawCardPips(Pixi, stage, card, x, y, width, height, suitColor);
+    drawCardCorner(Pixi, cardLayer, card, Math.max(7, width * 0.16), Math.max(5, height * 0.08), suitColor, false, width, height);
+    drawCardCorner(Pixi, cardLayer, card, width - Math.max(7, width * 0.16), height - Math.max(6, height * 0.08), suitColor, true, width, height);
+    drawCardPips(Pixi, cardLayer, card, width, height, suitColor, options);
   }
 
   function drawCardPulse(Pixi, scene, x, y, width, height) {
@@ -754,19 +766,21 @@
     });
   }
 
-  function drawCardCorner(Pixi, stage, card, x, y, suitColor, isRotated) {
+  function drawCardCorner(Pixi, stage, card, x, y, suitColor, isRotated, width, height) {
+    const rankFontSize = Math.round(Math.max(15, Math.min(23, width * 0.38)));
+    const suitFontSize = Math.round(Math.max(12, Math.min(18, width * 0.29)));
     const rankText = createText(Pixi, card.rank, {
       fill: suitColor,
-      fontFamily: "Georgia, serif",
-      fontSize: 17,
-      fontWeight: "800",
+      fontFamily: "Georgia, 'Times New Roman', serif",
+      fontSize: rankFontSize,
+      fontWeight: "900",
       align: "center",
     });
     const suitText = createText(Pixi, card.suitSymbol, {
       fill: suitColor,
-      fontFamily: "Georgia, serif",
-      fontSize: 13,
-      fontWeight: "800",
+      fontFamily: "Georgia, 'Times New Roman', serif",
+      fontSize: suitFontSize,
+      fontWeight: "900",
       align: "center",
     });
     rankText.anchor.set(0.5, 0);
@@ -774,7 +788,7 @@
     rankText.x = x;
     rankText.y = y;
     suitText.x = x;
-    suitText.y = y + 16;
+    suitText.y = y + Math.round(height * 0.2);
 
     if (isRotated) {
       rankText.rotation = Math.PI;
@@ -785,51 +799,55 @@
     stage.addChild(suitText);
   }
 
-  function drawCardPips(Pixi, stage, card, x, y, width, height, suitColor) {
+  function drawCardPips(Pixi, stage, card, width, height, suitColor, options = {}) {
     const rankValue = getCardRankValue(card.rank);
     const pipPositions = getCardPipPositions(rankValue);
+    const isHeroCard = options.emphasis === "hero";
+
     pipPositions.forEach((position) => {
       const pip = createText(Pixi, card.suitSymbol, {
         fill: suitColor,
-        fontFamily: "Georgia, serif",
-        fontSize: position.large ? 24 : 15,
-        fontWeight: "800",
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: Math.round(position.large ? Math.max(21, width * 0.54) : Math.max(13, width * 0.28)),
+        fontWeight: "900",
         align: "center",
       });
       pip.anchor.set(0.5);
-      pip.x = x + (width * position.x);
-      pip.y = y + (height * position.y);
+      pip.x = width * position.x;
+      pip.y = height * position.y;
       if (position.rotated) {
         pip.rotation = Math.PI;
       }
       stage.addChild(pip);
     });
 
-    if (rankValue > 10) {
+    if (rankValue > 10 || isHeroCard) {
       const rankMark = createText(Pixi, card.rank, {
         fill: suitColor,
-        fontFamily: "Georgia, serif",
-        fontSize: 21,
-        fontWeight: "800",
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: Math.round(Math.max(17, Math.min(30, width * 0.48))),
+        fontWeight: "900",
         align: "center",
       });
       rankMark.anchor.set(0.5);
-      rankMark.x = x + (width / 2);
-      rankMark.y = y + (height / 2);
+      rankMark.alpha = rankValue > 10 ? 0.92 : 0.78;
+      rankMark.x = width / 2;
+      rankMark.y = height / 2;
       stage.addChild(rankMark);
     }
 
-    const label = formatCardLabel(card);
-    const smallLabel = createText(Pixi, label, {
+    const centerSuit = createText(Pixi, card.suitSymbol, {
       fill: suitColor,
-      fontFamily: "Georgia, serif",
-      fontSize: 9,
-      fontWeight: "800",
+      fontFamily: "Georgia, 'Times New Roman', serif",
+      fontSize: Math.round(Math.max(18, Math.min(32, width * 0.52))),
+      fontWeight: "900",
+      align: "center",
     });
-    smallLabel.anchor.set(0.5);
-    smallLabel.x = x + (width / 2);
-    smallLabel.y = y + height - 11;
-    stage.addChild(smallLabel);
+    centerSuit.anchor.set(0.5);
+    centerSuit.alpha = rankValue > 10 ? 0.18 : 0.12;
+    centerSuit.x = width / 2;
+    centerSuit.y = height / 2;
+    stage.addChild(centerSuit);
   }
 
   function getCardRankValue(rank) {

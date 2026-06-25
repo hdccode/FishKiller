@@ -14,6 +14,34 @@ Checked desktop viewports:
 - 1440 x 900
 - 1366 x 768
 
+## Pixi Card Visual Upgrade QA - 2026-06-25
+
+Decision: pass for the current primitive renderer, pending manual visual screenshot review on the live localhost build.
+
+Implementation:
+
+- No real card atlas, card back, atlas JSON, or card-shadow asset is committed, so this pass upgraded the renderer primitives instead of loading image assets.
+- `src/render/fk2-table-scene.js` now draws hero and board cards through the same upgraded `drawPlayingCard` path.
+- Hero cards remain anchored to each seat through `HERO_CARD_ANCHORS`; the current table and seat coordinate layout was not moved during this card pass.
+- Hero cards render slightly larger than the base coordinate style and use a wider gap between the two cards.
+- Card faces now have stronger contact shadows, a darker outer keyline, layered cream face, inner bevel, proportional corner rank/suit text, suit pips, and a subtle center rank/suit mark.
+
+QA method:
+
+- Automated screenshot capture was not used for this pass because the current working flow is to leave localhost running for manual screenshots and feedback.
+- Code/server checks and coordinate-projection QA were run against the active Pixi frame at 1920 x 1080, 1440 x 900, and 1366 x 768.
+
+Viewport/state QA:
+
+- 1920 x 1080: pass. UTG, HJ, CO, BTN, SB, and BB hero-card boxes project in-frame and remain clear of board/pot zones; preflop, flop, turn, and river board-card zones project in-frame.
+- 1440 x 900: pass. All six hero-card anchors remain in-frame; 3-, 4-, and 5-card board states use the upgraded card primitive without moving the board slots.
+- 1366 x 768: pass with density caution. All six hero-card boxes and board-card zones remain in-frame; manual screenshot review should still verify small-desktop text polish.
+
+Remaining risks:
+
+1. The renderer still uses primitives; final production approval still needs `cards-atlas.webp`, `cards-atlas.json`, `card-back-fk2.webp`, and `card-shadow.png`.
+2. Manual screenshot review should verify perceived readability, not only coordinate safety, before closing the card-art slice.
+
 ## FKBack3 Pixi Framing QA - 2026-06-25
 
 Decision: pass. Keep Pixi as the default with `ENABLE_PIXI_TABLE = true`.

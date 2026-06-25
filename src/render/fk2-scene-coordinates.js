@@ -14,11 +14,11 @@
   });
 
   const SEAT_POSITIONS = Object.freeze({
-    UTG: Object.freeze({ x: 608, y: 276, side: "right" }),
-    HJ: Object.freeze({ x: 992, y: 276, side: "left" }),
+    UTG: Object.freeze({ x: 531, y: 276, side: "right" }),
+    HJ: Object.freeze({ x: 1069, y: 276, side: "left" }),
     CO: Object.freeze({ x: 1328, y: 422, side: "left" }),
-    BTN: Object.freeze({ x: 1036, y: 658, side: "left" }),
-    SB: Object.freeze({ x: 564, y: 658, side: "right" }),
+    BTN: Object.freeze({ x: 1130, y: 658, side: "left" }),
+    SB: Object.freeze({ x: 470, y: 658, side: "right" }),
     BB: Object.freeze({ x: 272, y: 422, side: "right" }),
   });
 
@@ -32,11 +32,11 @@
   });
 
   const HERO_CARD_ANCHORS = Object.freeze({
-    UTG: Object.freeze({ x: 488, y: 286 }),
-    HJ: Object.freeze({ x: 1082, y: 286 }),
+    UTG: Object.freeze({ x: 411, y: 286 }),
+    HJ: Object.freeze({ x: 1159, y: 286 }),
     CO: Object.freeze({ x: 982, y: 374 }),
-    BTN: Object.freeze({ x: 746, y: 596 }),
-    SB: Object.freeze({ x: 762, y: 596 }),
+    BTN: Object.freeze({ x: 840, y: 596 }),
+    SB: Object.freeze({ x: 668, y: 596 }),
     BB: Object.freeze({ x: 488, y: 374 }),
   });
 
