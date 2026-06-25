@@ -10,6 +10,14 @@
   const SEAT_FRAME_RIGHT_SRC = "assets/FKSeat/FKFrame_transparent.png";
   const SEAT_FRAME_LEFT_SRC = "assets/FKSeat/FKFrameLeft_transparent.png";
   const CARD_MANIFEST_URL = "assets/runtime/cards/card-manifest.json";
+  const CHIP_SRC_BY_ID = Object.freeze({
+    blue: "assets/runtime/chips/FKChip2.png",
+    stackShort: "assets/runtime/chips/FKChip3.png",
+    stackTall: "assets/runtime/chips/FKChip4.png",
+    pile: "assets/runtime/chips/FKChip5.png",
+    shadow: "assets/runtime/chips/FKChip6.png",
+    red: "assets/runtime/chips/FKChips.png",
+  });
   const AVATAR_SRC_BY_SEAT = Object.freeze({
     UTG: "assets/avatars/seat-shark.png",
     HJ: "assets/avatars/seat-octopus.png",
@@ -86,12 +94,14 @@
         loadOptionalTexture(Pixi, SEAT_FRAME_LEFT_SRC, "left seat frame"),
         loadAvatarTextures(Pixi),
         loadCardAssets(Pixi),
-      ]).then(([backgroundTexture, seatFrameRightTexture, seatFrameLeftTexture, avatarTextures, cardAssets]) => (
+        loadChipTextures(Pixi),
+      ]).then(([backgroundTexture, seatFrameRightTexture, seatFrameLeftTexture, avatarTextures, cardAssets, chipTextures]) => (
         {
           backgroundTexture,
           seatFrameRightTexture,
           seatFrameLeftTexture,
           avatarTextures,
+          chipTextures,
           ...cardAssets,
         }
       ));
@@ -104,6 +114,13 @@
     const avatarEntries = Object.entries(AVATAR_SRC_BY_SEAT);
     return Promise.all(avatarEntries.map(([seat, src]) => (
       loadOptionalTexture(Pixi, src, `${seat} avatar`).then((texture) => [seat, texture])
+    ))).then((entries) => Object.fromEntries(entries.filter(([, texture]) => texture)));
+  }
+
+  function loadChipTextures(Pixi) {
+    const chipEntries = Object.entries(CHIP_SRC_BY_ID);
+    return Promise.all(chipEntries.map(([id, src]) => (
+      loadOptionalTexture(Pixi, src, `${id} chip`).then((texture) => [id, texture])
     ))).then((entries) => Object.fromEntries(entries.filter(([, texture]) => texture)));
   }
 
@@ -277,7 +294,7 @@
     }
     drawBoard(Pixi, scene, coordinates.BOARD, tableState, animationFlags, sceneAssets);
     drawSeats(Pixi, scene, coordinates.SEAT_POSITIONS, tableState, sceneAssets);
-    drawPot(Pixi, scene, coordinates.TABLE, tableState, animationFlags);
+    drawPot(Pixi, scene, coordinates.TABLE, tableState, animationFlags, sceneAssets);
     drawDealerButton(Pixi, stage, coordinates.SEAT_POSITIONS);
     drawHeroCards(Pixi, scene, coordinates, tableState, animationFlags, sceneAssets);
     drawFeedbackFlash(Pixi, scene, coordinates.STAGE_SIZE, tableState, animationFlags);
@@ -574,11 +591,11 @@
     return sceneAssets?.avatarTextures?.[seat] || null;
   }
 
-  function drawPot(Pixi, scene, table, tableState, animationFlags) {
+  function drawPot(Pixi, scene, table, tableState, animationFlags, sceneAssets) {
     const stage = scene.world;
     const label = tableState.potLabel ? `Pot ${tableState.potLabel}` : `Pot ${Number(tableState.potBb || 0).toFixed(1)}bb`;
     const potColors = getPotChipColors(tableState);
-    drawPotChipPile(Pixi, stage, table.centerX, table.centerY - 14, potColors);
+    drawPotChipPile(Pixi, stage, table.centerX, table.centerY - 14, potColors, sceneAssets);
 
     const potBadge = createShape(Pixi, (graphics) => {
       drawRoundedRect(graphics, table.centerX - 80, table.centerY - 40, 160, 42, 16, 0x000000, 0.2);
@@ -1081,7 +1098,13 @@
     return pipLayouts[rankValue] || pipLayouts[2];
   }
 
-  function drawPotChipPile(Pixi, stage, centerX, centerY, colors) {
+  function drawPotChipPile(Pixi, stage, centerX, centerY, colors, sceneAssets) {
+    const chipTextures = sceneAssets?.chipTextures || {};
+    if (chipTextures.pile && chipTextures.red && chipTextures.blue) {
+      drawPotChipSpritePile(Pixi, stage, centerX, centerY, chipTextures);
+      return;
+    }
+
     stage.addChild(createShape(Pixi, (graphics) => {
       drawEllipse(graphics, centerX, centerY + 28, 86, 17, 0x000000, 0.2);
       drawEllipse(graphics, centerX - 4, centerY + 17, 60, 10, 0xffdf95, 0.035);
@@ -1092,6 +1115,36 @@
     drawChipStack(Pixi, stage, centerX + 2, centerY + 8, 0x2f4050, 0.48, 2);
     drawChipStack(Pixi, stage, centerX + 25, centerY - 2, colors.primary, 0.56, 3);
     drawChipStack(Pixi, stage, centerX + 45, centerY + 7, 0x365f85, 0.5, 2);
+  }
+
+  function drawPotChipSpritePile(Pixi, stage, centerX, centerY, chipTextures) {
+    if (chipTextures.shadow) {
+      drawChipSprite(Pixi, stage, chipTextures.shadow, centerX, centerY + 31, 122, 42, 0.24);
+    } else {
+      stage.addChild(createShape(Pixi, (graphics) => {
+        drawEllipse(graphics, centerX, centerY + 28, 86, 17, 0x000000, 0.2);
+      }));
+    }
+
+    drawChipSprite(Pixi, stage, chipTextures.blue, centerX - 54, centerY + 11, 58, 58, 0.74);
+    if (chipTextures.stackShort) {
+      drawChipSprite(Pixi, stage, chipTextures.stackShort, centerX - 28, centerY + 6, 72, 72, 0.8);
+    }
+    if (chipTextures.stackTall) {
+      drawChipSprite(Pixi, stage, chipTextures.stackTall, centerX + 28, centerY + 3, 78, 78, 0.78);
+    }
+    drawChipSprite(Pixi, stage, chipTextures.red, centerX + 55, centerY + 11, 58, 58, 0.74);
+    drawChipSprite(Pixi, stage, chipTextures.pile, centerX + 1, centerY + 15, 118, 118, 0.82);
+  }
+
+  function drawChipSprite(Pixi, stage, texture, x, y, width, height, alpha = 1) {
+    const sprite = new Pixi.Sprite(texture);
+    sprite.anchor.set(0.5);
+    sprite.position.set(x, y);
+    sprite.width = width;
+    sprite.height = height;
+    sprite.alpha = alpha;
+    stage.addChild(sprite);
   }
 
   function drawChipStack(Pixi, stage, x, y, color, scale = 1, layers = 3) {

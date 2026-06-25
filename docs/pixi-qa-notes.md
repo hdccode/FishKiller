@@ -14,6 +14,34 @@ Checked desktop viewports:
 - 1440 x 900
 - 1366 x 768
 
+## Pixi Chip Asset Integration QA - 2026-06-25
+
+Decision: pass for FKChip PNG sprite integration, pending manual visual screenshot review on the live localhost build.
+
+Implementation:
+
+- Added `FKChips.png` and `FKChip2.png` through `FKChip6.png` to `assets/runtime/chips/`.
+- `src/render/fk2-table-scene.js` now loads those chip textures with the scene assets.
+- Replaced the active pot chip primitive path with a compact sprite pile using the red/blue single chips, short/tall stack sprites, the multi-chip pile sprite, and the shadow sprite.
+- Preserved the existing pot center, pot badge, pot label position, table layout, avatar layout, and card layout.
+- Kept the primitive chip pile as fallback if required chip textures fail to load.
+
+QA method:
+
+- Automated screenshot capture was not used for this pass because the current working flow is to leave localhost running for manual screenshots and feedback.
+- Code/server checks, direct asset HTTP checks, and coordinate-projection QA were run for 1920 x 1080, 1440 x 900, and 1366 x 768.
+
+Viewport/state QA:
+
+- 1920 x 1080: pass. Compact chip sprite pile projects below the board and behind the centered pot label; preflop and 3/4/5-card board zones remain in-frame.
+- 1440 x 900: pass. Pot label stays centered/readable over the sprite pile; chip shadow remains subtle.
+- 1366 x 768: pass with density caution. Pot pile, badge, and board zones remain visible without action-row or HUD collision.
+
+Remaining risks:
+
+1. The FKChip PNGs are large source images; future packaging may want optimized WebP or atlas exports.
+2. Manual screenshot review should confirm the sprite pile scale against `FKBack3.png`.
+
 ## Pixi Chip/Pot Primitive Polish QA - 2026-06-25
 
 Decision: pass for compact primitive chip/pot fallback, pending manual visual screenshot review on the live localhost build.
