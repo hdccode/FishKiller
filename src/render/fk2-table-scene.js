@@ -295,9 +295,9 @@
     const isEmptyBoard = !cards.some(Boolean);
 
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawRoundedRect(graphics, startX - 18, y - 18, totalWidth + 36, cardHeight + 36, 24, 0x000000, isEmptyBoard ? 0.045 : 0.16);
-      drawRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0x0b130e, isEmptyBoard ? 0.07 : 0.24);
-      strokeRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0xd69b42, isEmptyBoard ? 0.045 : 0.18, 1.5);
+      drawRoundedRect(graphics, startX - 18, y - 18, totalWidth + 36, cardHeight + 36, 24, 0x000000, isEmptyBoard ? 0.028 : 0.16);
+      drawRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0x0b130e, isEmptyBoard ? 0.045 : 0.24);
+      strokeRoundedRect(graphics, startX - 8, y - 10, totalWidth + 16, cardHeight + 20, 18, 0xd69b42, isEmptyBoard ? 0.028 : 0.18, 1.5);
     }));
 
     for (let index = 0; index < slotCount; index += 1) {
@@ -316,11 +316,11 @@
 
   function drawBoardSlot(Pixi, stage, x, y, width, height, isSubtle = false) {
     stage.addChild(createShape(Pixi, (graphics) => {
-      drawEllipse(graphics, x + (width / 2) + 2, y + height + 6, width * 0.42, 7, 0x000000, isSubtle ? 0.045 : 0.18);
-      drawRoundedRect(graphics, x, y, width, height, 8, 0x07100c, isSubtle ? 0.11 : 0.42);
-      drawRoundedRect(graphics, x + 5, y + 6, width - 10, height - 12, 6, 0xf2d28a, isSubtle ? 0.012 : 0.035);
-      strokeRoundedRect(graphics, x, y, width, height, 8, 0xd69b42, isSubtle ? 0.08 : 0.28, 1.5);
-      strokeRoundedRect(graphics, x + 5, y + 5, width - 10, height - 10, 5, 0xffefb8, isSubtle ? 0.025 : 0.08, 1);
+      drawEllipse(graphics, x + (width / 2) + 2, y + height + 6, width * 0.42, 7, 0x000000, isSubtle ? 0.028 : 0.18);
+      drawRoundedRect(graphics, x, y, width, height, 8, 0x07100c, isSubtle ? 0.065 : 0.42);
+      drawRoundedRect(graphics, x + 5, y + 6, width - 10, height - 12, 6, 0xf2d28a, isSubtle ? 0.006 : 0.035);
+      strokeRoundedRect(graphics, x, y, width, height, 8, 0xd69b42, isSubtle ? 0.045 : 0.28, 1.5);
+      strokeRoundedRect(graphics, x + 5, y + 5, width - 10, height - 10, 5, 0xffefb8, isSubtle ? 0.014 : 0.08, 1);
     }));
   }
 
@@ -522,24 +522,24 @@
     const stage = scene.world;
     const label = tableState.potLabel ? `Pot ${tableState.potLabel}` : `Pot ${Number(tableState.potBb || 0).toFixed(1)}bb`;
     const potColors = getPotChipColors(tableState);
-    drawChipStack(Pixi, stage, table.centerX - 116, table.centerY - 21, potColors.primary, 0.84);
-    drawChipStack(Pixi, stage, table.centerX - 82, table.centerY - 18, potColors.secondary, 0.7);
-    drawChipStack(Pixi, stage, table.centerX + 82, table.centerY - 18, 0x2f4050, 0.7);
-    drawChipStack(Pixi, stage, table.centerX + 116, table.centerY - 21, 0x365f85, 0.8);
+    drawChipStack(Pixi, stage, table.centerX - 108, table.centerY - 18, potColors.primary, 0.74);
+    drawChipStack(Pixi, stage, table.centerX - 76, table.centerY - 16, potColors.secondary, 0.62);
+    drawChipStack(Pixi, stage, table.centerX + 76, table.centerY - 16, 0x2f4050, 0.62);
+    drawChipStack(Pixi, stage, table.centerX + 108, table.centerY - 18, 0x365f85, 0.7);
 
     const potBadge = createShape(Pixi, (graphics) => {
-      drawRoundedRect(graphics, table.centerX - 82, table.centerY - 40, 164, 42, 17, 0x000000, 0.2);
-      drawRoundedRect(graphics, table.centerX - 72, table.centerY - 40, 144, 36, 16, 0x090604, 0.78);
-      drawRoundedRect(graphics, table.centerX - 61, table.centerY - 35, 122, 8, 8, 0xffd27a, 0.07);
-      strokeRoundedRect(graphics, table.centerX - 72, table.centerY - 40, 144, 36, 16, 0xd69b42, 0.52, 1.6);
-      strokeRoundedRect(graphics, table.centerX - 66, table.centerY - 34, 132, 25, 13, 0xffefb8, 0.09, 1);
+      drawRoundedRect(graphics, table.centerX - 78, table.centerY - 39, 156, 40, 16, 0x000000, 0.16);
+      drawRoundedRect(graphics, table.centerX - 68, table.centerY - 39, 136, 34, 15, 0x090604, 0.68);
+      drawRoundedRect(graphics, table.centerX - 58, table.centerY - 34, 116, 7, 7, 0xffd27a, 0.045);
+      strokeRoundedRect(graphics, table.centerX - 68, table.centerY - 39, 136, 34, 15, 0xd69b42, 0.38, 1.4);
+      strokeRoundedRect(graphics, table.centerX - 62, table.centerY - 33, 124, 23, 12, 0xffefb8, 0.06, 1);
     });
     stage.addChild(potBadge);
 
     const potText = createText(Pixi, label, {
       fill: 0xffdf96,
       fontFamily: "Arial, sans-serif",
-      fontSize: 18,
+      fontSize: 17,
       fontWeight: "700",
     });
     potText.anchor.set(0.5);
