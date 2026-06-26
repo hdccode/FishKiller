@@ -39,8 +39,8 @@ const TABLES = {
     shortLabel: "HU",
     subtitle: "Starter heads-up drills using the legacy scenario pack.",
     seats: [
-      { seat: "SB / BTN", x: "50%", y: "18%" },
-      { seat: "BB", x: "50%", y: "82%" },
+      { seat: "SB / BTN", x: "50%", y: "76%" },
+      { seat: "BB", x: "50%", y: "33%" },
     ],
   },
   three: {
@@ -49,9 +49,9 @@ const TABLES = {
     shortLabel: "3M",
     subtitle: "Starter 3-max drills using the legacy scenario pack.",
     seats: [
-      { seat: "BTN", x: "50%", y: "16%" },
-      { seat: "SB", x: "24%", y: "76%" },
-      { seat: "BB", x: "76%", y: "76%" },
+      { seat: "BTN", x: "50%", y: "32%" },
+      { seat: "SB", x: "34%", y: "76.5%" },
+      { seat: "BB", x: "66%", y: "76.5%" },
     ],
   },
   six: {
@@ -60,12 +60,12 @@ const TABLES = {
     shortLabel: "6M",
     subtitle: "Flagship 56-spot preflop trainer for RFI, facing-open, defense, 3-bet, facing 3-bet, facing 4-bet, BvB limp, iso vs limp, and squeeze.",
     seats: [
-      { seat: "UTG", x: "18%", y: "40%" },
-      { seat: "HJ", x: "33%", y: "17%" },
-      { seat: "CO", x: "67%", y: "17%" },
-      { seat: "BTN", x: "82%", y: "40%" },
-      { seat: "SB", x: "66%", y: "80%" },
-      { seat: "BB", x: "34%", y: "80%" },
+      { seat: "UTG", x: "21.5%", y: "57%" },
+      { seat: "HJ", x: "36%", y: "33.5%" },
+      { seat: "CO", x: "64%", y: "33.5%" },
+      { seat: "BTN", x: "78.5%", y: "57%" },
+      { seat: "SB", x: "64%", y: "76%" },
+      { seat: "BB", x: "36%", y: "76%" },
     ],
   },
   nine: {
@@ -74,15 +74,15 @@ const TABLES = {
     shortLabel: "9M",
     subtitle: "Starter full-ring drills using the legacy scenario pack.",
     seats: [
-      { seat: "UTG", x: "12%", y: "46%" },
-      { seat: "UTG+1", x: "20%", y: "24%" },
-      { seat: "MP", x: "38%", y: "12%" },
-      { seat: "LJ", x: "58%", y: "12%" },
-      { seat: "HJ", x: "76%", y: "24%" },
-      { seat: "CO", x: "87%", y: "46%" },
-      { seat: "BTN", x: "77%", y: "75%" },
-      { seat: "SB", x: "50%", y: "85%" },
-      { seat: "BB", x: "23%", y: "75%" },
+      { seat: "UTG", x: "17%", y: "59%" },
+      { seat: "UTG+1", x: "24.5%", y: "42%" },
+      { seat: "MP", x: "39%", y: "32%" },
+      { seat: "LJ", x: "61%", y: "32%" },
+      { seat: "HJ", x: "75.5%", y: "42%" },
+      { seat: "CO", x: "83%", y: "59%" },
+      { seat: "BTN", x: "70%", y: "75.5%" },
+      { seat: "SB", x: "50%", y: "77%" },
+      { seat: "BB", x: "30%", y: "75.5%" },
     ],
   },
 };
@@ -5023,7 +5023,53 @@ function renderTableVisual(scenario, bettingSummary = createBettingSummary(scena
     `;
   }).join("");
 
-  elements.tableVisual.innerHTML = `${boardMarkup}${potMarkup}${responseMarkup}${showdownMarkup}${seatMarkup}`;
+  elements.tableVisual.innerHTML = `
+    <div class="fk2-table-scene" aria-hidden="true"></div>
+    <div class="table-dom-layer">
+      ${boardMarkup}
+      ${potMarkup}
+      ${responseMarkup}
+      ${showdownMarkup}
+      ${seatMarkup}
+    </div>
+  `;
+  renderMarineTableScene(scenario, layout, bettingSummary, spot, question, villainResponse, seatStates);
+}
+
+function renderMarineTableScene(scenario, layout, bettingSummary, spot, question, villainResponse, seatStates = {}) {
+  const sceneHost = elements.tableVisual?.querySelector(".fk2-table-scene");
+  if (!sceneHost || !window.FK2_TABLE_SCENE?.render) {
+    return;
+  }
+
+  const coordinateApi = window.FK2_SCENE_COORDINATES;
+  const dealerSeat = coordinateApi?.getDealerSeat
+    ? coordinateApi.getDealerSeat(scenario.tableSize, layout.seats, scenario.heroSeat)
+    : getDefaultDealerSeat(layout, scenario.heroSeat);
+
+  window.FK2_TABLE_SCENE.render(sceneHost, {
+    tableSize: scenario.tableSize,
+    seats: layout.seats.map((seatConfig) => {
+      const seatState = seatStates[seatConfig.seat] || {};
+      return {
+        ...seatConfig,
+        status: seatState.status || "",
+      };
+    }),
+    heroSeat: scenario.heroSeat,
+    activeSeat: villainResponse?.seat || scenario.heroSeat,
+    dealerSeat,
+    street: spot?.street || "preflop",
+    potLabel: getTablePotLabel(bettingSummary, spot, question),
+  });
+}
+
+function getDefaultDealerSeat(layout, heroSeat = "") {
+  return layout.seats.find((seatConfig) => seatConfig.seat === "BTN")?.seat ||
+    layout.seats.find((seatConfig) => seatConfig.seat === "SB / BTN")?.seat ||
+    heroSeat ||
+    layout.seats[0]?.seat ||
+    "";
 }
 
 function createVillainResponseMarkup(response) {
