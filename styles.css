@@ -1924,6 +1924,306 @@ select {
   background: rgba(255, 255, 255, 0.04);
 }
 
+.table-hero-cards {
+  position: absolute;
+  left: 50%;
+  top: 65%;
+  z-index: 5;
+  display: flex;
+  gap: clamp(0.35rem, 1vw, 0.7rem);
+  transform: translate(-50%, -50%);
+}
+
+.table-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: clamp(44px, 5vw, 62px);
+  height: clamp(62px, 7vw, 88px);
+  padding: 0.42rem;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 78% 18%, rgba(76, 174, 255, 0.16), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(222, 236, 240, 0.99));
+  color: #121a20;
+  font-family: "Rockwell", "Georgia", serif;
+  font-size: clamp(1.15rem, 2vw, 1.58rem);
+  font-weight: 800;
+  line-height: 1;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 14px 20px rgba(0, 0, 0, 0.34);
+}
+
+.table-card .board-suit {
+  font-size: 0.95em;
+}
+
+.lesson-active {
+  background: #000;
+}
+
+.lesson-active .app-shell {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.lesson-active .app-topbar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 35;
+  display: flex;
+  min-height: 5rem;
+  padding: 0.8rem 1.2rem;
+  border: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.52) 72%, transparent);
+  box-shadow: none;
+}
+
+.lesson-active .brand-copy span {
+  color: var(--gold-strong);
+}
+
+.lesson-active .brand-copy strong {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lesson-active .profile-button {
+  display: none;
+}
+
+.lesson-active .workspace,
+.lesson-active .trainer-grid,
+.lesson-active .scenario-panel {
+  min-height: 100vh;
+}
+
+.lesson-active .trainer-grid {
+  display: block;
+}
+
+.lesson-active .scenario-panel {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.lesson-active .scenario-topline {
+  position: fixed;
+  top: 0.85rem;
+  right: 1rem;
+  z-index: 38;
+  width: min(520px, 44vw);
+  min-height: 3.3rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 1px solid rgba(240, 187, 89, 0.24);
+  border-right: 1px solid rgba(240, 187, 89, 0.18);
+  background: rgba(0, 5, 10, 0.52);
+  backdrop-filter: blur(10px);
+}
+
+.lesson-active .scenario-card {
+  position: fixed;
+  inset: 0;
+  display: block;
+  min-height: 100vh;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: #000;
+}
+
+.lesson-active .scenario-card::after {
+  display: none;
+}
+
+.lesson-active .table-visual {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.lesson-active .scenario-meta {
+  position: fixed;
+  top: 5.2rem;
+  left: 1rem;
+  z-index: 24;
+  max-width: min(470px, 42vw);
+  padding: 0.45rem 0.65rem;
+  border: 1px solid rgba(240, 187, 89, 0.22);
+  border-radius: 8px;
+  background: rgba(0, 5, 10, 0.52);
+  backdrop-filter: blur(10px);
+}
+
+.lesson-active .betting-line {
+  position: fixed;
+  top: 5.15rem;
+  left: 50%;
+  z-index: 24;
+  justify-content: center;
+  width: min(720px, 48vw);
+  transform: translateX(-50%);
+}
+
+.lesson-active .cards-row,
+.lesson-active #scenario-title,
+.lesson-active .scenario-copy {
+  display: none;
+}
+
+.lesson-active .fact-grid {
+  position: fixed;
+  left: 1rem;
+  bottom: 1.25rem;
+  z-index: 26;
+  display: grid;
+  grid-template-columns: 1fr;
+  width: min(320px, 22vw);
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid rgba(240, 187, 89, 0.34);
+  border-radius: 8px;
+  background: rgba(0, 8, 12, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+.lesson-active .fact-card {
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+}
+
+.lesson-active .fact-card:last-child {
+  border-bottom: 0;
+}
+
+.lesson-active .table-pot-badge {
+  top: 46%;
+  min-width: 7rem;
+  border-radius: 8px;
+  background: rgba(0, 8, 12, 0.66);
+}
+
+.lesson-active .board-zone {
+  top: 43%;
+}
+
+.lesson-active .table-hero-cards {
+  top: 63%;
+}
+
+.lesson-active .board-card,
+.lesson-active .table-card {
+  border-radius: 7px;
+}
+
+.lesson-active .seat-marker {
+  border-color: rgba(240, 187, 89, 0.56);
+  background:
+    linear-gradient(180deg, rgba(4, 12, 18, 0.86), rgba(0, 2, 5, 0.94));
+  color: var(--gold-strong);
+}
+
+.lesson-active .seat-caption {
+  color: #f3cf86;
+}
+
+.lesson-active .answer-grid {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  z-index: 34;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  width: min(860px, 52vw);
+  gap: 1rem;
+  transform: translateX(-50%);
+}
+
+.lesson-active .preflop-drill-selector {
+  display: none;
+}
+
+.lesson-active .answer-button {
+  min-height: 5rem;
+  padding: 0.95rem 1.1rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 16px 30px rgba(0, 0, 0, 0.34);
+}
+
+.lesson-active .answer-button[data-action="fold"] {
+  background:
+    linear-gradient(180deg, rgba(120, 20, 20, 0.96), rgba(52, 3, 5, 0.98));
+  border-color: rgba(255, 100, 84, 0.62);
+}
+
+.lesson-active .answer-button[data-action="call"] {
+  background:
+    linear-gradient(180deg, rgba(20, 104, 58, 0.96), rgba(2, 46, 24, 0.98));
+  border-color: rgba(89, 222, 144, 0.58);
+}
+
+.lesson-active .answer-button[data-action="raise"] {
+  background:
+    linear-gradient(180deg, rgba(16, 74, 128, 0.96), rgba(2, 25, 54, 0.98));
+  border-color: rgba(92, 174, 255, 0.62);
+}
+
+.lesson-active .answer-button strong {
+  font-family: "Georgia", "Cambria", serif;
+  font-size: clamp(1.05rem, 1.5vw, 1.45rem);
+  letter-spacing: 0.02em;
+}
+
+.lesson-active .answer-button span {
+  color: rgba(245, 247, 250, 0.76);
+}
+
+.lesson-active .feedback-band {
+  position: fixed;
+  left: 50%;
+  bottom: 6.95rem;
+  z-index: 33;
+  width: min(860px, 52vw);
+  padding: 0.72rem 0.9rem;
+  border-radius: 8px;
+  background: rgba(0, 8, 12, 0.68);
+  backdrop-filter: blur(10px);
+  transform: translateX(-50%);
+}
+
+.lesson-active .side-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 1.25rem;
+  z-index: 27;
+  display: grid;
+  width: min(300px, 22vw);
+}
+
+.lesson-active .side-panel .panel {
+  border-color: rgba(240, 187, 89, 0.34);
+  border-radius: 8px;
+  background: rgba(0, 8, 12, 0.72);
+  backdrop-filter: blur(12px);
+}
+
 .side-panel {
   display: grid;
   gap: 1.2rem;
@@ -2447,6 +2747,20 @@ select {
     width: 100%;
     justify-content: start;
   }
+
+  .lesson-active .scenario-topline {
+    width: min(460px, 48vw);
+  }
+
+  .lesson-active .fact-grid,
+  .lesson-active .side-panel {
+    display: none;
+  }
+
+  .lesson-active .answer-grid,
+  .lesson-active .feedback-band {
+    width: min(860px, calc(100vw - 2rem));
+  }
 }
 
 @media (max-width: 760px) {
@@ -2518,5 +2832,42 @@ select {
 
   .table-visual {
     min-height: 300px;
+  }
+
+  .lesson-active .app-topbar {
+    min-height: 4.4rem;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .lesson-active .scenario-topline {
+    top: 4.4rem;
+    right: 0.65rem;
+    left: 0.65rem;
+    width: auto;
+  }
+
+  .lesson-active .scenario-meta,
+  .lesson-active .betting-line {
+    display: none;
+  }
+
+  .lesson-active .answer-grid {
+    bottom: 0.75rem;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .lesson-active .answer-button {
+    min-height: 4.1rem;
+  }
+
+  .lesson-active .feedback-band {
+    bottom: 14.2rem;
+    max-height: 7rem;
+    overflow: auto;
+  }
+
+  .lesson-active .table-hero-cards {
+    top: 61%;
   }
 }

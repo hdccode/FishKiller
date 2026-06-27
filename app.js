@@ -39,8 +39,8 @@ const TABLES = {
     shortLabel: "HU",
     subtitle: "Starter heads-up drills using the legacy scenario pack.",
     seats: [
-      { seat: "SB / BTN", x: "50%", y: "76%" },
-      { seat: "BB", x: "50%", y: "33%" },
+      { seat: "SB / BTN", x: "50%", y: "70%" },
+      { seat: "BB", x: "50%", y: "28%" },
     ],
   },
   three: {
@@ -49,9 +49,9 @@ const TABLES = {
     shortLabel: "3M",
     subtitle: "Starter 3-max drills using the legacy scenario pack.",
     seats: [
-      { seat: "BTN", x: "50%", y: "32%" },
-      { seat: "SB", x: "34%", y: "76.5%" },
-      { seat: "BB", x: "66%", y: "76.5%" },
+      { seat: "BTN", x: "50%", y: "27%" },
+      { seat: "SB", x: "34%", y: "70%" },
+      { seat: "BB", x: "66%", y: "70%" },
     ],
   },
   six: {
@@ -60,12 +60,12 @@ const TABLES = {
     shortLabel: "6M",
     subtitle: "Flagship 56-spot preflop trainer for RFI, facing-open, defense, 3-bet, facing 3-bet, facing 4-bet, BvB limp, iso vs limp, and squeeze.",
     seats: [
-      { seat: "UTG", x: "21.5%", y: "57%" },
-      { seat: "HJ", x: "36%", y: "33.5%" },
-      { seat: "CO", x: "64%", y: "33.5%" },
-      { seat: "BTN", x: "78.5%", y: "57%" },
-      { seat: "SB", x: "64%", y: "76%" },
-      { seat: "BB", x: "36%", y: "76%" },
+      { seat: "UTG", x: "17.5%", y: "50%" },
+      { seat: "HJ", x: "35.5%", y: "28%" },
+      { seat: "CO", x: "64.5%", y: "28%" },
+      { seat: "BTN", x: "82.5%", y: "50%" },
+      { seat: "SB", x: "64%", y: "70%" },
+      { seat: "BB", x: "36%", y: "70%" },
     ],
   },
   nine: {
@@ -74,15 +74,15 @@ const TABLES = {
     shortLabel: "9M",
     subtitle: "Starter full-ring drills using the legacy scenario pack.",
     seats: [
-      { seat: "UTG", x: "17%", y: "59%" },
-      { seat: "UTG+1", x: "24.5%", y: "42%" },
-      { seat: "MP", x: "39%", y: "32%" },
-      { seat: "LJ", x: "61%", y: "32%" },
-      { seat: "HJ", x: "75.5%", y: "42%" },
-      { seat: "CO", x: "83%", y: "59%" },
-      { seat: "BTN", x: "70%", y: "75.5%" },
-      { seat: "SB", x: "50%", y: "77%" },
-      { seat: "BB", x: "30%", y: "75.5%" },
+      { seat: "UTG", x: "15.5%", y: "52%" },
+      { seat: "UTG+1", x: "24%", y: "36%" },
+      { seat: "MP", x: "39%", y: "26%" },
+      { seat: "LJ", x: "61%", y: "26%" },
+      { seat: "HJ", x: "76%", y: "36%" },
+      { seat: "CO", x: "84.5%", y: "52%" },
+      { seat: "BTN", x: "70%", y: "70%" },
+      { seat: "SB", x: "50%", y: "74%" },
+      { seat: "BB", x: "30%", y: "70%" },
     ],
   },
 };
@@ -2767,6 +2767,7 @@ function renderPreflopRangeAnswers(question) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "answer-button";
+    button.dataset.action = getAnswerActionTheme(action.id);
 
     if (question.answered) {
       if (action.id === preferredActionId) {
@@ -4999,6 +5000,7 @@ function renderTableVisual(scenario, bettingSummary = createBettingSummary(scena
   const villainResponse = question?.villainReturnResponse || question?.villainResponse || null;
   const responseMarkup = villainResponse ? createVillainResponseMarkup(villainResponse) : "";
   const showdownMarkup = question?.showdownResult ? createShowdownMarkup(question.showdownResult) : "";
+  const heroCardsMarkup = createTableHeroCardsMarkup(getTableHeroCards(scenario, spot));
 
   const seatMarkup = layout.seats.map((seatConfig) => {
     const actor = actorMap[seatConfig.seat];
@@ -5028,6 +5030,7 @@ function renderTableVisual(scenario, bettingSummary = createBettingSummary(scena
     <div class="table-dom-layer">
       ${boardMarkup}
       ${potMarkup}
+      ${heroCardsMarkup}
       ${responseMarkup}
       ${showdownMarkup}
       ${seatMarkup}
@@ -5070,6 +5073,43 @@ function getDefaultDealerSeat(layout, heroSeat = "") {
     heroSeat ||
     layout.seats[0]?.seat ||
     "";
+}
+
+function getTableHeroCards(scenario, spot) {
+  if (Array.isArray(spot?.heroCards) && spot.heroCards.length === 2) {
+    return spot.heroCards;
+  }
+
+  if (Array.isArray(scenario?.heroCards) && scenario.heroCards.length === 2) {
+    return scenario.heroCards;
+  }
+
+  if (scenario?.heroHand) {
+    return getHeroCardsForScenario(scenario);
+  }
+
+  return [];
+}
+
+function createTableHeroCardsMarkup(cards) {
+  if (!Array.isArray(cards) || cards.length !== 2) {
+    return "";
+  }
+
+  return `
+    <div class="table-hero-cards" aria-label="Hero hole cards">
+      ${cards.map((card) => createTableCardMarkup(card)).join("")}
+    </div>
+  `;
+}
+
+function createTableCardMarkup(card) {
+  return `
+    <div class="table-card">
+      <span>${card.rank}</span>
+      <span class="board-suit suit-${card.suit.id}">${card.suit.symbol}</span>
+    </div>
+  `;
 }
 
 function createVillainResponseMarkup(response) {
@@ -5472,11 +5512,19 @@ function renderAnswers(spot, question) {
     : showRaiseResponseOptions
     ? question.raiseResponse
     : question.selected;
+  const actionSpot = review
+    ? getDecisionReviewSpot(spot, question, review)
+    : showFinalRaiseResponseOptions
+    ? question.finalRaiseSpot
+    : showRaiseResponseOptions
+    ? question.raiseSpot
+    : spot;
 
   options.forEach((option) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "answer-button";
+    button.dataset.action = getAnswerActionTheme(getActionForOption(actionSpot, option)?.id || option);
 
     if (question.answered || review) {
       if (option === correctAction) {
@@ -5495,6 +5543,14 @@ function renderAnswers(spot, question) {
     button.addEventListener("click", () => answerCurrentQuestion(option));
     elements.answerGrid.appendChild(button);
   });
+}
+
+function getAnswerActionTheme(actionId = "") {
+  const normalized = String(actionId).toLowerCase();
+  if (normalized.includes("fold")) return "fold";
+  if (normalized.includes("call") || normalized.includes("check") || normalized.includes("limp")) return "call";
+  if (normalized.includes("raise") || normalized.includes("bet") || normalized.includes("jam") || normalized.includes("squeeze")) return "raise";
+  return "neutral";
 }
 
 function getDecisionReviewOptions(question, review) {

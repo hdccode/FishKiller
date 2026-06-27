@@ -4,20 +4,18 @@
   const DEFAULT_ASSETS = {
     images: {
       background: "assets/runtime/marine/marine-background.png",
-      seatFrame: "assets/runtime/marine/seat-frame.png",
-      dealerButton: "assets/runtime/marine/dealer-button.png",
-      avatars: {
-        shark: "assets/runtime/marine/avatar-shark.png",
-        octopus: "assets/runtime/marine/avatar-octopus.png",
-        turtle: "assets/runtime/marine/avatar-turtle.png",
-        dolphin: "assets/runtime/marine/avatar-dolphin.png",
-        marlin: "assets/runtime/marine/avatar-marlin.png",
-        anglerfish: "assets/runtime/marine/avatar-anglerfish.png",
-      },
     },
   };
 
   const instances = new WeakMap();
+  const AVATAR_COLORS = {
+    shark: { fill: "#15344a", glow: "#65c7f7" },
+    octopus: { fill: "#3a2152", glow: "#d38cff" },
+    turtle: { fill: "#244b34", glow: "#99d88d" },
+    dolphin: { fill: "#183f5c", glow: "#79d8ff" },
+    marlin: { fill: "#123c61", glow: "#5eb7ff" },
+    anglerfish: { fill: "#3b2e18", glow: "#f2c15f" },
+  };
 
   function render(host, model = {}) {
     if (!host) {
@@ -117,34 +115,10 @@
     const background = getPixiSprite(PIXI, sprites, "background", assets.images.background);
     coverPixiSprite(background, width, height, 0.5, 0.56);
     root.addChild(background);
+    drawPixiPotPile(PIXI, root, width, height);
 
     const seats = getRenderSeats(model);
-    seats.sort((a, b) => a.y - b.y).forEach((seat) => {
-      const group = new PIXI.Container();
-      const x = seat.x * width;
-      const y = seat.y * height;
-      const frameWidth = getFrameWidth(width, height);
-      const frameHeight = frameWidth * 1.18;
-      const avatarSize = frameWidth * 0.76;
-      const frame = getPixiSprite(PIXI, sprites, `frame-${seat.seat}`, assets.images.seatFrame);
-      const avatar = getPixiSprite(PIXI, sprites, `avatar-${seat.seat}`, assets.images.avatars[seat.avatar] || assets.images.avatars.shark);
-
-      avatar.anchor.set(0.5);
-      avatar.width = avatarSize;
-      avatar.height = avatarSize;
-      avatar.x = x;
-      avatar.y = y;
-
-      frame.anchor.set(0.5, 0.33);
-      frame.width = frameWidth;
-      frame.height = frameHeight;
-      frame.x = x;
-      frame.y = y;
-
-      group.addChild(avatar);
-      group.addChild(frame);
-      root.addChild(group);
-    });
+    seats.sort((a, b) => a.y - b.y).forEach((seat) => drawPixiSeat(PIXI, root, seat, width, height, model));
 
     drawPixiDealerButton(PIXI, root, sprites, width, height, model, seats);
   }
@@ -168,22 +142,62 @@
   }
 
   function drawPixiDealerButton(PIXI, root, sprites, width, height, model, seats) {
-    const assets = getAssets();
     const dealerSeat = model.dealerSeat || getCoordinateApi().getDealerSeat(model.tableSize, model.seats, model.heroSeat);
     const dealer = seats.find((seat) => seat.seat === dealerSeat);
     if (!dealer) {
       return;
     }
 
-    const button = getPixiSprite(PIXI, sprites, "dealer-button", assets.images.dealerButton);
     const size = clamp(Math.min(width, height) * 0.07, 34, 58);
     const point = getDealerButtonPoint(dealer, width, height, size);
-    button.anchor.set(0.5);
-    button.width = size;
-    button.height = size;
-    button.x = point.x;
-    button.y = point.y;
+    const button = new PIXI.Graphics();
+    drawPixiCircle(button, point.x, point.y, size * 0.5, 0x06121d, 0.94);
+    drawPixiRing(button, point.x, point.y, size * 0.5, 0xf0bb59, 2.2, 0.95);
+    drawPixiRing(button, point.x, point.y, size * 0.38, 0x6f4716, 1.2, 0.82);
     root.addChild(button);
+  }
+
+  function drawPixiSeat(PIXI, root, seat, width, height, model) {
+    const group = new PIXI.Container();
+    const x = seat.x * width;
+    const y = seat.y * height;
+    const frameWidth = getFrameWidth(width, height);
+    const avatarSize = frameWidth * 0.74;
+    const active = seat.seat === model.activeSeat || seat.seat === model.heroSeat;
+    const palette = AVATAR_COLORS[seat.avatar] || AVATAR_COLORS.shark;
+    const graphics = new PIXI.Graphics();
+
+    drawPixiEllipse(graphics, x, y + frameWidth * 0.17, frameWidth * 0.44, frameWidth * 0.26, active ? 0xf0bb59 : 0x000000, active ? 0.17 : 0.28);
+    drawPixiCircle(graphics, x, y, avatarSize * 0.5, parseColor(palette.fill), seat.status === "folded" ? 0.52 : 0.98);
+    drawPixiCircle(graphics, x - avatarSize * 0.13, y - avatarSize * 0.16, avatarSize * 0.22, parseColor(palette.glow), seat.status === "folded" ? 0.12 : 0.26);
+    drawPixiRing(graphics, x, y, frameWidth * 0.42, 0x0a0f13, frameWidth * 0.1, 0.98);
+    drawPixiRing(graphics, x, y, frameWidth * 0.46, 0xf2c46b, frameWidth * 0.035, seat.status === "folded" ? 0.42 : 0.95);
+    drawPixiRing(graphics, x, y, frameWidth * 0.35, 0xbf7b2d, frameWidth * 0.02, seat.status === "folded" ? 0.32 : 0.78);
+    group.addChild(graphics);
+    root.addChild(group);
+  }
+
+  function drawPixiPotPile(PIXI, root, width, height) {
+    const graphics = new PIXI.Graphics();
+    const x = width * 0.5;
+    const y = height * 0.545;
+    const size = clamp(width * 0.03, 21, 38);
+
+    drawPixiEllipse(graphics, x, y + size * 0.72, size * 2.3, size * 0.58, 0x000000, 0.28);
+    [
+      { x: -1.25, y: 0.05, color: 0x174f86 },
+      { x: -0.45, y: -0.18, color: 0xa92f27 },
+      { x: 0.38, y: -0.05, color: 0x123a6b },
+      { x: 1.12, y: 0.12, color: 0xd09a36 },
+      { x: -0.02, y: 0.45, color: 0x0d253f },
+    ].forEach((chip) => {
+      const cx = x + chip.x * size;
+      const cy = y + chip.y * size;
+      drawPixiEllipse(graphics, cx, cy, size * 0.46, size * 0.22, chip.color, 0.98);
+      drawPixiRing(graphics, cx, cy, size * 0.46, 0xf0bb59, 1.4, 0.82);
+      drawPixiEllipse(graphics, cx, cy - size * 0.04, size * 0.24, size * 0.1, 0x080d12, 0.9);
+    });
+    root.addChild(graphics);
   }
 
   function createCanvasScene(host) {
@@ -233,55 +247,35 @@
     }
 
     drawCanvasVignette(context, width, height);
+    drawCanvasPotPile(context, width, height);
 
     const seats = getRenderSeats(model).sort((a, b) => a.y - b.y);
-    seats.forEach((seat) => drawCanvasSeat(context, images, assets, seat, width, height, model));
-    drawCanvasDealerButton(context, images, assets, model, seats, width, height);
+    seats.forEach((seat) => drawCanvasSeat(context, seat, width, height, model));
+    drawCanvasDealerButton(context, model, seats, width, height);
   }
 
-  function drawCanvasSeat(context, images, assets, seat, width, height, model) {
-    const frame = loadImage(images, assets.images.seatFrame, () => rerenderFromContext(context, model));
-    const avatarPath = assets.images.avatars[seat.avatar] || assets.images.avatars.shark;
-    const avatar = loadImage(images, avatarPath, () => rerenderFromContext(context, model));
+  function drawCanvasSeat(context, seat, width, height, model) {
     const x = seat.x * width;
     const y = seat.y * height;
     const frameWidth = getFrameWidth(width, height);
-    const frameHeight = frameWidth * 1.18;
     const avatarSize = frameWidth * 0.74;
     const active = seat.seat === model.activeSeat || seat.seat === model.heroSeat;
 
     context.save();
     context.globalAlpha = seat.status === "folded" ? 0.58 : 1;
     drawSeatGlow(context, x, y, frameWidth, active);
-
-    if (avatar.loaded) {
-      context.save();
-      context.beginPath();
-      context.arc(x, y, avatarSize * 0.48, 0, Math.PI * 2);
-      context.clip();
-      drawCoverImage(context, avatar.image, x - avatarSize / 2, y - avatarSize / 2, avatarSize, avatarSize, 0.5, 0.46);
-      context.restore();
-    } else {
-      drawAvatarFallback(context, x, y, avatarSize);
-    }
-
-    if (frame.loaded) {
-      context.drawImage(frame.image, x - frameWidth / 2, y - frameHeight * 0.33, frameWidth, frameHeight);
-    } else {
-      drawFrameFallback(context, x, y, frameWidth, frameHeight);
-    }
-
+    drawAvatarFallback(context, x, y, avatarSize, seat.avatar);
+    drawFrameFallback(context, x, y, frameWidth);
     context.restore();
   }
 
-  function drawCanvasDealerButton(context, images, assets, model, seats, width, height) {
+  function drawCanvasDealerButton(context, model, seats, width, height) {
     const dealerSeat = model.dealerSeat || getCoordinateApi().getDealerSeat(model.tableSize, model.seats, model.heroSeat);
     const dealer = seats.find((seat) => seat.seat === dealerSeat);
     if (!dealer) {
       return;
     }
 
-    const button = loadImage(images, assets.images.dealerButton, () => rerenderFromContext(context, model));
     const size = clamp(Math.min(width, height) * 0.072, 34, 60);
     const point = getDealerButtonPoint(dealer, width, height, size);
 
@@ -289,18 +283,56 @@
     context.shadowColor = "rgba(0, 0, 0, 0.44)";
     context.shadowBlur = 14;
     context.shadowOffsetY = 8;
-    if (button.loaded) {
-      context.drawImage(button.image, point.x - size / 2, point.y - size / 2, size, size);
-    } else {
-      context.beginPath();
-      context.arc(point.x, point.y, size / 2, 0, Math.PI * 2);
-      context.fillStyle = "#06121d";
-      context.fill();
-      context.strokeStyle = "#f0bb59";
-      context.lineWidth = 2;
-      context.stroke();
-    }
+    context.beginPath();
+    context.arc(point.x, point.y, size / 2, 0, Math.PI * 2);
+    context.fillStyle = "rgba(6, 18, 29, 0.94)";
+    context.fill();
+    context.lineWidth = 2.2;
+    context.strokeStyle = "rgba(240, 187, 89, 0.95)";
+    context.stroke();
+    context.shadowColor = "transparent";
+    context.beginPath();
+    context.arc(point.x, point.y, size * 0.36, 0, Math.PI * 2);
+    context.lineWidth = 1.2;
+    context.strokeStyle = "rgba(142, 91, 28, 0.82)";
+    context.stroke();
     context.restore();
+  }
+
+  function drawCanvasPotPile(context, width, height) {
+    const size = clamp(width * 0.03, 21, 38);
+    const x = width * 0.5;
+    const y = height * 0.545;
+
+    context.save();
+    context.globalAlpha = 0.96;
+    context.beginPath();
+    context.ellipse(x, y + size * 0.72, size * 2.3, size * 0.58, 0, 0, Math.PI * 2);
+    context.fillStyle = "rgba(0, 0, 0, 0.28)";
+    context.fill();
+
+    [
+      { x: -1.25, y: 0.05, color: "#174f86" },
+      { x: -0.45, y: -0.18, color: "#a92f27" },
+      { x: 0.38, y: -0.05, color: "#123a6b" },
+      { x: 1.12, y: 0.12, color: "#d09a36" },
+      { x: -0.02, y: 0.45, color: "#0d253f" },
+    ].forEach((chip) => drawCanvasChip(context, x + chip.x * size, y + chip.y * size, size, chip.color));
+    context.restore();
+  }
+
+  function drawCanvasChip(context, x, y, size, color) {
+    context.beginPath();
+    context.ellipse(x, y, size * 0.46, size * 0.22, 0, 0, Math.PI * 2);
+    context.fillStyle = color;
+    context.fill();
+    context.lineWidth = 1.4;
+    context.strokeStyle = "rgba(240, 187, 89, 0.82)";
+    context.stroke();
+    context.beginPath();
+    context.ellipse(x, y - size * 0.04, size * 0.24, size * 0.1, 0, 0, Math.PI * 2);
+    context.fillStyle = "rgba(8, 13, 18, 0.9)";
+    context.fill();
   }
 
   function rerenderFromContext(context, model) {
@@ -408,27 +440,80 @@
     context.restore();
   }
 
-  function drawAvatarFallback(context, x, y, size) {
+  function drawAvatarFallback(context, x, y, size, avatarKey = "shark") {
     context.save();
+    const palette = AVATAR_COLORS[avatarKey] || AVATAR_COLORS.shark;
     const gradient = context.createRadialGradient(x - size * 0.15, y - size * 0.18, size * 0.1, x, y, size * 0.52);
-    gradient.addColorStop(0, "#245f80");
-    gradient.addColorStop(1, "#06121d");
+    gradient.addColorStop(0, palette.glow);
+    gradient.addColorStop(1, palette.fill);
     context.beginPath();
     context.arc(x, y, size * 0.48, 0, Math.PI * 2);
     context.fillStyle = gradient;
     context.fill();
+    context.beginPath();
+    context.arc(x + size * 0.12, y - size * 0.1, size * 0.09, 0, Math.PI * 2);
+    context.fillStyle = "rgba(255, 246, 207, 0.22)";
+    context.fill();
     context.restore();
   }
 
-  function drawFrameFallback(context, x, y, width, height) {
+  function drawFrameFallback(context, x, y, width) {
     context.save();
-    context.strokeStyle = "#c89445";
-    context.lineWidth = Math.max(2, width * 0.04);
+    context.strokeStyle = "rgba(9, 15, 19, 0.96)";
+    context.lineWidth = Math.max(6, width * 0.1);
     context.beginPath();
     context.arc(x, y, width * 0.38, 0, Math.PI * 2);
     context.stroke();
-    context.strokeRect(x - width * 0.43, y + height * 0.24, width * 0.86, height * 0.28);
+    context.strokeStyle = "rgba(242, 196, 107, 0.95)";
+    context.lineWidth = Math.max(2, width * 0.035);
+    context.beginPath();
+    context.arc(x, y, width * 0.46, 0, Math.PI * 2);
+    context.stroke();
+    context.strokeStyle = "rgba(191, 123, 45, 0.78)";
+    context.lineWidth = Math.max(1.2, width * 0.02);
+    context.beginPath();
+    context.arc(x, y, width * 0.35, 0, Math.PI * 2);
+    context.stroke();
     context.restore();
+  }
+
+  function drawPixiCircle(graphics, x, y, radius, color, alpha) {
+    if (typeof graphics.circle === "function" && typeof graphics.fill === "function") {
+      graphics.circle(x, y, radius);
+      graphics.fill({ color, alpha });
+      return;
+    }
+
+    graphics.beginFill(color, alpha);
+    graphics.drawCircle(x, y, radius);
+    graphics.endFill();
+  }
+
+  function drawPixiEllipse(graphics, x, y, radiusX, radiusY, color, alpha) {
+    if (typeof graphics.ellipse === "function" && typeof graphics.fill === "function") {
+      graphics.ellipse(x, y, radiusX, radiusY);
+      graphics.fill({ color, alpha });
+      return;
+    }
+
+    graphics.beginFill(color, alpha);
+    graphics.drawEllipse(x, y, radiusX, radiusY);
+    graphics.endFill();
+  }
+
+  function drawPixiRing(graphics, x, y, radius, color, width, alpha) {
+    if (typeof graphics.circle === "function" && typeof graphics.stroke === "function") {
+      graphics.circle(x, y, radius);
+      graphics.stroke({ color, width, alpha });
+      return;
+    }
+
+    graphics.lineStyle(width, color, alpha);
+    graphics.drawCircle(x, y, radius);
+  }
+
+  function parseColor(color) {
+    return Number.parseInt(String(color).replace("#", ""), 16);
   }
 
   function attachResize(host, onResize) {
