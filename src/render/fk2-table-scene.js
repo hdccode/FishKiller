@@ -4,6 +4,39 @@
   const DEFAULT_ASSETS = {
     images: {
       background: "assets/runtime/marine/marine-background.png",
+      seatFrame: "assets/runtime/marine/seat-frame-v3_1.png",
+      avatars: {
+        shark: "assets/runtime/marine/avatar-shark-v3_1.png",
+        octopus: "assets/runtime/marine/avatar-octopus-v3_1.png",
+        turtle: "assets/runtime/marine/avatar-turtle-v3_1.png",
+        dolphin: "assets/runtime/marine/avatar-dolphin-v3_1.png",
+        marlin: "assets/runtime/marine/avatar-swordfish-v3_1.png",
+        swordfish: "assets/runtime/marine/avatar-swordfish-v3_1.png",
+        anglerfish: "assets/runtime/marine/avatar-anglerfish-v3_1.png",
+      },
+      chips: {
+        potPile: "assets/runtime/marine/chip-pot-pile-v4_4.png",
+        shadow: "assets/runtime/marine/chip-shadow-v3_1.png",
+      },
+    },
+    production: {
+      background: "assets/runtime/marine/marine-background.png",
+      character: {
+        shark: "assets/runtime/marine/avatar-shark-v3_1.png",
+        octopus: "assets/runtime/marine/avatar-octopus-v3_1.png",
+        turtle: "assets/runtime/marine/avatar-turtle-v3_1.png",
+        dolphin: "assets/runtime/marine/avatar-dolphin-v3_1.png",
+        marlin: "assets/runtime/marine/avatar-swordfish-v3_1.png",
+        swordfish: "assets/runtime/marine/avatar-swordfish-v3_1.png",
+        anglerfish: "assets/runtime/marine/avatar-anglerfish-v3_1.png",
+      },
+      frame: {
+        main: "assets/runtime/marine/seat-frame-v3_1.png",
+      },
+      chip: {
+        potPile: "assets/runtime/marine/chip-pot-pile-v4_4.png",
+        shadow: "assets/runtime/marine/chip-shadow-v3_1.png",
+      },
     },
   };
 
@@ -115,10 +148,10 @@
     const background = getPixiSprite(PIXI, sprites, "background", assets.images.background);
     coverPixiSprite(background, width, height, 0.5, 0.56);
     root.addChild(background);
-    drawPixiPotPile(PIXI, root, width, height);
+    drawPixiPotPile(PIXI, root, sprites, width, height);
 
     const seats = getRenderSeats(model);
-    seats.sort((a, b) => a.y - b.y).forEach((seat) => drawPixiSeat(PIXI, root, seat, width, height, model));
+    seats.sort((a, b) => a.y - b.y).forEach((seat) => drawPixiSeat(PIXI, root, sprites, seat, width, height, model));
 
     drawPixiDealerButton(PIXI, root, sprites, width, height, model, seats);
   }
@@ -141,6 +174,14 @@
     sprite.y = (height - sprite.height) * focusY;
   }
 
+  function containPixiSprite(sprite, maxWidth, maxHeight) {
+    const sourceWidth = sprite.texture.width || maxWidth;
+    const sourceHeight = sprite.texture.height || maxHeight;
+    const scale = Math.min(maxWidth / sourceWidth, maxHeight / sourceHeight);
+    sprite.width = sourceWidth * scale;
+    sprite.height = sourceHeight * scale;
+  }
+
   function drawPixiDealerButton(PIXI, root, sprites, width, height, model, seats) {
     const dealerSeat = model.dealerSeat || getCoordinateApi().getDealerSeat(model.tableSize, model.seats, model.heroSeat);
     const dealer = seats.find((seat) => seat.seat === dealerSeat);
@@ -157,7 +198,71 @@
     root.addChild(button);
   }
 
-  function drawPixiSeat(PIXI, root, seat, width, height, model) {
+  function drawPixiSeat(PIXI, root, sprites, seat, width, height, model) {
+    const production = getProductionAssets();
+    const framePath = production.frame?.main || getAssets().images?.seatFrame;
+    const avatarPath = getCharacterAssetPath(seat.avatar);
+
+    if (framePath || avatarPath) {
+      drawPixiAssetSeat(PIXI, root, sprites, seat, width, height, model, framePath, avatarPath);
+      return;
+    }
+
+    drawPixiPrimitiveSeat(PIXI, root, seat, width, height, model);
+  }
+
+  function drawPixiAssetSeat(PIXI, root, sprites, seat, width, height, model, framePath, avatarPath) {
+    const group = new PIXI.Container();
+    const x = seat.x * width;
+    const y = seat.y * height;
+    const frameWidth = getFrameWidth(width, height);
+    const avatarSize = frameWidth * 0.74;
+    const active = seat.seat === model.activeSeat || seat.seat === model.heroSeat;
+    const foldedAlpha = seat.status === "folded" ? 0.55 : 1;
+    const glow = new PIXI.Graphics();
+
+    drawPixiEllipse(glow, x, y + frameWidth * 0.18, frameWidth * 0.48, frameWidth * 0.34, active ? 0xf0bb59 : 0x000000, active ? 0.18 : 0.26);
+    group.addChild(glow);
+
+    if (avatarPath) {
+      const avatar = getPixiSprite(PIXI, sprites, `avatar-${seat.seat}-${seat.avatar}`, avatarPath);
+      const mask = new PIXI.Graphics();
+
+      drawPixiCircle(mask, x, y, frameWidth * 0.33, 0xffffff, 1);
+      mask.renderable = false;
+      avatar.anchor.set(0.5);
+      avatar.alpha = foldedAlpha;
+      containPixiSprite(avatar, avatarSize, avatarSize);
+      avatar.x = x;
+      avatar.y = y;
+      avatar.mask = mask;
+      group.addChild(mask);
+      group.addChild(avatar);
+    } else {
+      const avatarFallback = new PIXI.Graphics();
+      drawPixiAvatarFallback(avatarFallback, x, y, avatarSize, seat.avatar, seat.status === "folded");
+      group.addChild(avatarFallback);
+    }
+
+    if (framePath) {
+      const frame = getPixiSprite(PIXI, sprites, `frame-${seat.seat}`, framePath);
+      frame.anchor.set(0.5, 0.335);
+      frame.width = frameWidth;
+      frame.height = frameWidth;
+      frame.x = x;
+      frame.y = y;
+      frame.alpha = foldedAlpha;
+      group.addChild(frame);
+    } else {
+      const frameFallback = new PIXI.Graphics();
+      drawPixiFrameFallback(frameFallback, x, y, frameWidth, seat.status === "folded");
+      group.addChild(frameFallback);
+    }
+
+    root.addChild(group);
+  }
+
+  function drawPixiPrimitiveSeat(PIXI, root, seat, width, height, model) {
     const group = new PIXI.Container();
     const x = seat.x * width;
     const y = seat.y * height;
@@ -177,7 +282,41 @@
     root.addChild(group);
   }
 
-  function drawPixiPotPile(PIXI, root, width, height) {
+  function drawPixiPotPile(PIXI, root, sprites, width, height) {
+    const chipAssets = getProductionAssets().chip || {};
+    if (chipAssets.potPile) {
+      drawPixiAssetPotPile(PIXI, root, sprites, width, height, chipAssets);
+      return;
+    }
+
+    drawPixiPrimitivePotPile(PIXI, root, width, height);
+  }
+
+  function drawPixiAssetPotPile(PIXI, root, sprites, width, height, chipAssets) {
+    const x = width * 0.5;
+    const y = height * 0.545;
+    const potWidth = clamp(width * 0.12, 100, 210);
+    const potHeight = potWidth * 0.62;
+
+    if (chipAssets.shadow) {
+      const shadow = getPixiSprite(PIXI, sprites, "chip-shadow-v3_1", chipAssets.shadow);
+      shadow.anchor.set(0.5);
+      shadow.alpha = 0.56;
+      containPixiSprite(shadow, potWidth * 1.35, potHeight * 0.6);
+      shadow.x = x;
+      shadow.y = y + potHeight * 0.28;
+      root.addChild(shadow);
+    }
+
+    const pile = getPixiSprite(PIXI, sprites, "chip-pot-pile-v4_4", chipAssets.potPile);
+    pile.anchor.set(0.5);
+    containPixiSprite(pile, potWidth, potHeight);
+    pile.x = x;
+    pile.y = y;
+    root.addChild(pile);
+  }
+
+  function drawPixiPrimitivePotPile(PIXI, root, width, height) {
     const graphics = new PIXI.Graphics();
     const x = width * 0.5;
     const y = height * 0.545;
@@ -247,14 +386,19 @@
     }
 
     drawCanvasVignette(context, width, height);
-    drawCanvasPotPile(context, width, height);
+    drawCanvasPotPile(context, images, assets, width, height, model);
 
     const seats = getRenderSeats(model).sort((a, b) => a.y - b.y);
-    seats.forEach((seat) => drawCanvasSeat(context, seat, width, height, model));
+    seats.forEach((seat) => drawCanvasSeat(context, images, assets, seat, width, height, model));
     drawCanvasDealerButton(context, model, seats, width, height);
   }
 
-  function drawCanvasSeat(context, seat, width, height, model) {
+  function drawCanvasSeat(context, images, assets, seat, width, height, model) {
+    const production = getProductionAssets();
+    const framePath = production.frame?.main || assets.images?.seatFrame;
+    const avatarPath = getCharacterAssetPath(seat.avatar);
+    const frame = loadOptionalImage(images, framePath, () => rerenderFromContext(context, model));
+    const avatar = loadOptionalImage(images, avatarPath, () => rerenderFromContext(context, model));
     const x = seat.x * width;
     const y = seat.y * height;
     const frameWidth = getFrameWidth(width, height);
@@ -264,8 +408,22 @@
     context.save();
     context.globalAlpha = seat.status === "folded" ? 0.58 : 1;
     drawSeatGlow(context, x, y, frameWidth, active);
-    drawAvatarFallback(context, x, y, avatarSize, seat.avatar);
-    drawFrameFallback(context, x, y, frameWidth);
+    if (avatar?.loaded) {
+      context.save();
+      context.beginPath();
+      context.arc(x, y, frameWidth * 0.33, 0, Math.PI * 2);
+      context.clip();
+      drawContainImage(context, avatar.image, x, y, avatarSize, avatarSize);
+      context.restore();
+    } else {
+      drawAvatarFallback(context, x, y, avatarSize, seat.avatar);
+    }
+
+    if (frame?.loaded) {
+      context.drawImage(frame.image, x - frameWidth / 2, y - frameWidth * 0.335, frameWidth, frameWidth);
+    } else {
+      drawFrameFallback(context, x, y, frameWidth);
+    }
     context.restore();
   }
 
@@ -299,7 +457,31 @@
     context.restore();
   }
 
-  function drawCanvasPotPile(context, width, height) {
+  function drawCanvasPotPile(context, images, assets, width, height, model) {
+    const chipAssets = getProductionAssets().chip || assets.images?.chips || {};
+    const pile = loadOptionalImage(images, chipAssets.potPile, () => rerenderFromContext(context, model));
+    const shadow = loadOptionalImage(images, chipAssets.shadow, () => rerenderFromContext(context, model));
+    if (pile?.loaded) {
+      const x = width * 0.5;
+      const y = height * 0.545;
+      const potWidth = clamp(width * 0.12, 100, 210);
+      const potHeight = potWidth * 0.62;
+
+      context.save();
+      if (shadow?.loaded) {
+        context.globalAlpha = 0.56;
+        drawContainImage(context, shadow.image, x, y + potHeight * 0.28, potWidth * 1.35, potHeight * 0.6);
+        context.globalAlpha = 1;
+      }
+      drawContainImage(context, pile.image, x, y, potWidth, potHeight);
+      context.restore();
+      return;
+    }
+
+    drawCanvasPrimitivePotPile(context, width, height);
+  }
+
+  function drawCanvasPrimitivePotPile(context, width, height) {
     const size = clamp(width * 0.03, 21, 38);
     const x = width * 0.5;
     const y = height * 0.545;
@@ -385,6 +567,26 @@
     return global.FK2_MARINE_ASSETS || DEFAULT_ASSETS;
   }
 
+  function getProductionAssets() {
+    const assets = getAssets();
+    return assets.production || {
+      background: assets.images?.background,
+      character: assets.images?.avatars || {},
+      frame: {
+        main: assets.images?.seatFrame,
+      },
+      chip: assets.images?.chips || {},
+      dealer: {
+        button: assets.images?.dealerButton || null,
+      },
+    };
+  }
+
+  function getCharacterAssetPath(avatarKey = "shark") {
+    const characters = getProductionAssets().character || {};
+    return characters[avatarKey] || characters.shark || "";
+  }
+
   function loadImage(images, path, onLoad) {
     if (!images.has(path)) {
       const image = new Image();
@@ -400,6 +602,10 @@
     return images.get(path);
   }
 
+  function loadOptionalImage(images, path, onLoad) {
+    return path ? loadImage(images, path, onLoad) : null;
+  }
+
   function drawCoverImage(context, image, x, y, width, height, focusX = 0.5, focusY = 0.5) {
     const scale = Math.max(width / image.width, height / image.height);
     const sourceWidth = width / scale;
@@ -408,6 +614,13 @@
     const sourceY = clamp((image.height - sourceHeight) * focusY, 0, Math.max(0, image.height - sourceHeight));
 
     context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, x, y, width, height);
+  }
+
+  function drawContainImage(context, image, centerX, centerY, maxWidth, maxHeight) {
+    const scale = Math.min(maxWidth / image.width, maxHeight / image.height);
+    const width = image.width * scale;
+    const height = image.height * scale;
+    context.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
   }
 
   function drawFallbackBackground(context, width, height) {
@@ -475,6 +688,18 @@
     context.arc(x, y, width * 0.35, 0, Math.PI * 2);
     context.stroke();
     context.restore();
+  }
+
+  function drawPixiAvatarFallback(graphics, x, y, size, avatarKey = "shark", folded = false) {
+    const palette = AVATAR_COLORS[avatarKey] || AVATAR_COLORS.shark;
+    drawPixiCircle(graphics, x, y, size * 0.48, parseColor(palette.fill), folded ? 0.52 : 0.98);
+    drawPixiCircle(graphics, x - size * 0.13, y - size * 0.16, size * 0.22, parseColor(palette.glow), folded ? 0.12 : 0.26);
+  }
+
+  function drawPixiFrameFallback(graphics, x, y, width, folded = false) {
+    drawPixiRing(graphics, x, y, width * 0.42, 0x0a0f13, width * 0.1, folded ? 0.48 : 0.98);
+    drawPixiRing(graphics, x, y, width * 0.46, 0xf2c46b, width * 0.035, folded ? 0.42 : 0.95);
+    drawPixiRing(graphics, x, y, width * 0.35, 0xbf7b2d, width * 0.02, folded ? 0.32 : 0.78);
   }
 
   function drawPixiCircle(graphics, x, y, radius, color, alpha) {

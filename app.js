@@ -307,6 +307,7 @@ const elements = {
   splashStartButton: document.getElementById("splash-start-button"),
   profileMenuButton: document.getElementById("profile-menu-button"),
   profileMenu: document.getElementById("profile-menu"),
+  profileAvatars: document.querySelectorAll(".profile-avatar"),
   profileLevelDisplay: document.getElementById("profile-level-display"),
   profileXpText: document.getElementById("profile-xp-text"),
   profileXpFill: document.getElementById("profile-xp-fill"),
@@ -1642,9 +1643,11 @@ function renderTopline() {
   elements.profileXpFill.style.width = `${totalProgress}%`;
   elements.profileHeartMeter.innerHTML = renderHeartIcons(state.hearts);
   elements.profileHeartMeter.setAttribute("aria-label", `${state.hearts} of ${MAX_HEARTS} hearts`);
+  renderProfileAvatars();
   elements.heartsDisplay.textContent = `${state.hearts} / ${MAX_HEARTS}`;
   elements.heartsTimer.textContent = state.hearts >= MAX_HEARTS ? "Full stack ready" : `Next heart in ${formatDuration(timeUntilNextHeart(state))}`;
-  elements.boostDisplay.textContent = String(state.xpBoostSessions);
+  elements.boostDisplay.classList.add("has-fk-asset");
+  elements.boostDisplay.innerHTML = `${FKChip("anchor", { decorative: true, className: "resource-chip-icon" })}<span>${state.xpBoostSessions}</span>`;
   elements.boostSubtitle.textContent = state.xpBoostSessions > 0 ? "Next main session gets +25%" : "Earned from quests";
 
   if (activeSession) {
@@ -1701,6 +1704,139 @@ function renderHeartIcons(count) {
     const stateClass = index < count ? "filled" : "empty";
     return `<span class="profile-heart ${stateClass}" aria-hidden="true"></span>`;
   }).join("");
+}
+
+function renderProfileAvatars() {
+  const portrait = FKCharacterPortrait("dolphin", {
+    decorative: true,
+    className: "profile-fk-portrait",
+  });
+
+  elements.profileAvatars.forEach((avatar) => {
+    avatar.classList.add("asset-backed");
+    avatar.innerHTML = portrait || "PK";
+  });
+}
+
+function FKAssetImage(src, alt = "", options = {}) {
+  if (!src) {
+    return "";
+  }
+
+  const className = ["fk-asset-image", options.className || ""].filter(Boolean).join(" ");
+  const decorative = options.decorative || alt === "";
+  const altText = decorative ? "" : escapeAttribute(alt);
+  const ariaHidden = decorative ? ` aria-hidden="true"` : "";
+
+  return `<img class="${className}" src="${escapeAttribute(src)}" alt="${altText}" loading="lazy" decoding="async"${ariaHidden}>`;
+}
+
+function FKCharacterPortrait(character = "dolphin", options = {}) {
+  const src = getFKCharacterAsset(character);
+  const label = options.alt || `${character} character portrait`;
+  const image = FKAssetImage(src, label, {
+    decorative: options.decorative,
+    className: "fk-character-portrait-image",
+  });
+
+  if (!image) {
+    return "";
+  }
+
+  return `<span class="fk-character-portrait ${options.className || ""}">${image}</span>`;
+}
+
+function FKChip(kind = "anchor", options = {}) {
+  const src = getFKChipAsset(kind);
+  const label = options.alt || `${kind} casino chip`;
+  return FKAssetImage(src, label, {
+    decorative: options.decorative,
+    className: ["fk-chip", options.className || ""].filter(Boolean).join(" "),
+  });
+}
+
+function FKChipStack(size = "small", options = {}) {
+  const normalized = size === "large" ? "stackTall" : size === "medium" ? "stackMedium" : "stackSmall";
+  const src = getFKChipAsset(normalized);
+  const label = options.alt || `${size} chip stack`;
+  return FKAssetImage(src, label, {
+    decorative: options.decorative,
+    className: ["fk-chip-stack", options.className || ""].filter(Boolean).join(" "),
+  });
+}
+
+function FKRewardDisplay(reward, claimed = false) {
+  const label = claimed ? "Claimed" : reward.label;
+  const chipMarkup = reward.type === "boost"
+    ? FKChipStack("small", { decorative: true })
+    : FKChip(reward.type === "xp" ? "helm" : "anchor", { decorative: true });
+
+  return `
+    <span class="fk-reward-display">
+      ${chipMarkup}
+      <span>${label}</span>
+    </span>
+  `;
+}
+
+function FKFramePanel(content = "", options = {}) {
+  const framePath = getFKProductionAssets().frame?.main || "";
+  if (!framePath) {
+    return content;
+  }
+
+  return `
+    <span class="fk-frame-panel ${options.className || ""}">
+      ${FKAssetImage(framePath, "", { decorative: true, className: "fk-frame-panel-image" })}
+      <span class="fk-frame-panel-content">${content}</span>
+    </span>
+  `;
+}
+
+function getFKProductionAssets() {
+  return window.FK2_MARINE_ASSETS?.production || {};
+}
+
+function getFKCharacterAsset(character = "dolphin") {
+  const characters = getFKProductionAssets().character || {};
+  return characters[character] || characters.dolphin || characters.shark || "";
+}
+
+function getFKChipAsset(kind = "anchor") {
+  const chips = getFKProductionAssets().chip || {};
+  const aliases = {
+    single: "anchor",
+    blue: "anchor",
+    red: "helm",
+    gold: "anchor",
+    small: "stackSmall",
+    medium: "stackMedium",
+    large: "stackTall",
+    tall: "stackTall",
+  };
+  const resolved = aliases[kind] || kind;
+  return chips[resolved] || chips.anchor || chips.stackSmall || "";
+}
+
+function getRewardChipStackSize(reward) {
+  if (reward.xp >= 650) {
+    return "large";
+  }
+
+  if (reward.xp >= 320) {
+    return "medium";
+  }
+
+  return "small";
+}
+
+function escapeAttribute(value) {
+  return String(value).replace(/[&"<>]/g, (character) => ({
+    "&": "&amp;",
+    "\"": "&quot;",
+    "<": "&lt;",
+    ">": "&gt;",
+  }[character]));
 }
 
 function renderTableSizes() {
@@ -1794,7 +1930,7 @@ function renderQuests() {
           <h3>${quest.title}</h3>
           <p>${quest.description}</p>
         </div>
-        <span class="quest-reward">${claimed ? "Claimed" : quest.reward.label}</span>
+        <span class="quest-reward">${FKRewardDisplay(quest.reward, claimed)}</span>
       </div>
       <div class="quest-bottom">
         <span>${current} / ${quest.target}</span>
@@ -1815,14 +1951,18 @@ function renderRewards() {
     const unlocked = isCardStyleUnlocked(reward.id);
     const selected = state.cardStyle === reward.id;
     const progress = Math.min(100, Math.round((state.totalXp / Math.max(1, reward.xp)) * 100));
+    const stackSize = getRewardChipStackSize(reward);
     const card = document.createElement("button");
     card.type = "button";
     card.className = `reward-card${unlocked ? " unlocked" : " locked"}${selected ? " active" : ""}`;
     card.disabled = !unlocked;
     card.innerHTML = `
-      <div class="reward-preview card-style-${reward.id}">
-        <span>A</span>
-        <span>&spades;</span>
+      <div class="reward-preview-shell">
+        <div class="reward-preview card-style-${reward.id}">
+          <span>A</span>
+          <span>&spades;</span>
+        </div>
+        ${FKChipStack(stackSize, { decorative: true, className: "reward-chip-stack" })}
       </div>
       <div class="reward-copy">
         <strong>${reward.name}</strong>
